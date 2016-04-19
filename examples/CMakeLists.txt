@@ -1,0 +1,3 @@
+add_executable(letmecreate_test_proximity proximity/main.c)
+target_link_libraries(letmecreate_test_proximity letmecreate_click letmecreate_core)
+install(TARGETS letmecreate_test_proximity RUNTIME DESTINATION bin)
