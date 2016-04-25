@@ -3,6 +3,11 @@
 
 #include <stdint.h>
 
+typedef enum MIKROBUS_I2C_BUS {
+    MIKROBUS_I2C_BUS_1,
+    MIKROBUS_I2C_BUS_2
+} MIKROBUS_I2C_BUS;
+
 int i2c_init(const uint8_t bus_index);
 int i2c_select_bus(const uint8_t bus_index);
 int i2c_write(const uint16_t slave_address, const uint8_t *buffer, const uint32_t count);

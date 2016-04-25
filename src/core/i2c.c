@@ -8,10 +8,6 @@
 #define MIKROBUS_I2C_PATH_1 "/dev/i2c-0"
 #define MIKROBUS_I2C_PATH_2 "/dev/i2c-1"
 
-enum MIKROBUS_I2C_BUS {
-    MIKROBUS_I2C_BUS_1,
-    MIKROBUS_I2C_BUS_2
-};
 
 static int fds[] = { -1, -1 };
 static uint8_t current_bus_index = MIKROBUS_I2C_BUS_1;

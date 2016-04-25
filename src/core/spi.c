@@ -10,10 +10,6 @@
 #define MIKROBUS_SPI_PATH_1 "/dev/spidev32766.2"
 #define MIKROBUS_SPI_PATH_2 "/dev/spidev32766.3"
 
-enum MIKROBUS_SPI_BUS {
-    MIKROBUS_SPI_BUS_1,
-    MIKROBUS_SPI_BUS_2
-};
 
 static int fds[] = { -1, -1 };
 static uint8_t current_bus_index = MIKROBUS_SPI_BUS_1;
