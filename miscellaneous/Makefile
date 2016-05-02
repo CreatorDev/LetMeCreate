@@ -21,14 +21,15 @@ CMAKE_OPTIONS = \
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
 	$(CP) LetMeCreate/* $(PKG_BUILD_DIR)/
-	rm -Rf CMakeFiles/
-	rm -f Makefile
-	rm -f cmake_install.cmake
-	rm -Rf lib/
-	rm -Rf examples/CMakeFiles/
-	rm -f examples/Makefile
-	rm -f examples/cmake_install.cmake
-	rm -Rf examples/bin
+	rm -Rf $(PKG_BUILD_DIR)/CMakeFiles/
+	rm -f $(PKG_BUILD_DIR)/CMakeCache.txt
+	rm -f $(PKG_BUILD_DIR)/Makefile
+	rm -f $(PKG_BUILD_DIR)/cmake_install.cmake
+	rm -Rf $(PKG_BUILD_DIR)/lib/
+	rm -Rf $(PKG_BUILD_DIR)/examples/CMakeFiles/
+	rm -f $(PKG_BUILD_DIR)/examples/Makefile
+	rm -f $(PKG_BUILD_DIR)/examples/cmake_install.cmake
+	rm -Rf $(PKG_BUILD_DIR)/examples/bin
 endef
 
 define Package/letmecreate/install
