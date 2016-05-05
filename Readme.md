@@ -26,7 +26,7 @@ $ git clone https://github.com/IMGCreator/openwrt.git
 $ mkdir -p custom/letmecreate
 $ cd custom/letmecreate
 $ git clone https://github.com/francois-berder/LetMeCreate.git
-$ cp LetMeCreate/miscellaneous/Makefile .
+$ cp LetMeCreate/miscellaneous/Makefile.devel Makefile
 ```
 
 To register the feed in openwrt, open feeds.conf.default and add this line:
