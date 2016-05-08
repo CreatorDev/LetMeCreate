@@ -16,17 +16,15 @@ static uint8_t last_address_bit = 0;
 int thermo3_click_enable(const uint8_t add_bit)
 {
     uint8_t buffer[3];
-    int ret;
+    int ret = -1;
 
     last_address_bit = add_bit;
 
     buffer[0] = CONFIGURATION_REG_ADDRESS;
     buffer[1] = 0;
     buffer[2] = CONVERSION_RATE;
-    ret = i2c_write(TMP102_ADDRESS, buffer, sizeof(buffer));
-    if (ret >= 0) {
+    if ((ret = i2c_write(TMP102_ADDRESS, buffer, sizeof(buffer))) >= 0)
         enabled = true;
-    }
 
     return ret;
 }
@@ -36,19 +34,14 @@ int thermo3_click_get_temperature(float *temperature)
     uint8_t buffer[2];
     int ret;
 
-    if (temperature == NULL) {
+    if (temperature == NULL)
         return -1;
-    }
 
-    ret = i2c_write_byte(TMP102_ADDRESS, TEMPERATURE_REG_ADDRESS);
-    if (ret < 0) {
+    if ((ret = i2c_write_byte(TMP102_ADDRESS, TEMPERATURE_REG_ADDRESS)) < 0)
         return -1;
-    }
 
-    ret = i2c_read(TMP102_ADDRESS, buffer, sizeof(buffer));
-    if (ret < 0) {
+    if ((ret = i2c_read(TMP102_ADDRESS, buffer, sizeof(buffer))) < 0)
         return -1;
-    }
 
     *temperature = (float)(buffer[0]);
     *temperature += ((float)(buffer[1] >> 4)) * 0.0625f;
@@ -59,15 +52,13 @@ int thermo3_click_get_temperature(float *temperature)
 int thermo3_click_disable(void)
 {
     uint8_t buffer[3];
-    int ret;
+    int ret = -1;
 
     buffer[0] = CONFIGURATION_REG_ADDRESS;
     buffer[1] = SHUTDOWN_MODE;
     buffer[2] = 0;
-    ret = i2c_write(TMP102_ADDRESS, buffer, sizeof(buffer));
-    if (ret >= 0) {
+    if ((ret = i2c_write(TMP102_ADDRESS, buffer, sizeof(buffer))) >= 0)
         enabled = false;
-    }
 
     return ret;
 }

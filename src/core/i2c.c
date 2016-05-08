@@ -34,11 +34,10 @@ static int i2c_select_slave(const int fd, const uint16_t address)
 
 int i2c_init(const uint8_t bus_index)
 {
-    const char *i2c_path;
+    const char *i2c_path = NULL;
 
-    if (check_bus_index(bus_index) < 0) {
+    if (check_bus_index(bus_index) < 0)
         return -1;
-    }
 
     switch (bus_index) {
     case MIKROBUS_I2C_BUS_1:
@@ -49,12 +48,10 @@ int i2c_init(const uint8_t bus_index)
         break;
     }
 
-    if (fds[bus_index] >= 0) {
+    if (fds[bus_index] >= 0)
         return 0;
-    }
 
-    fds[bus_index] = open(i2c_path, O_RDWR);
-    if (fds[bus_index] < 0) {
+    if ((fds[bus_index] = open(i2c_path, O_RDWR)) < 0) {
         fprintf(stderr, "I2C error: cannot open device for bus %d\n", bus_index);
         return -1;
     }
@@ -88,14 +85,11 @@ int i2c_write(const uint16_t slave_address, const uint8_t *buffer, const uint32_
         return -1;
     }
 
-    if (count == 0) {
+    if (count == 0)
         return 0;
-    }
 
-    ret = i2c_select_slave(fd, slave_address);
-    if (ret < 0) {
+    if ((ret = i2c_select_slave(fd, slave_address)) < 0)
         return ret;
-    }
 
     nbBytesSent = 0;
     while (nbBytesSent < count) {
@@ -127,14 +121,11 @@ int i2c_read(const uint16_t slave_address, uint8_t *buffer, const uint32_t count
         return -1;
     }
 
-    if (count == 0) {
+    if (count == 0)
         return 0;
-    }
 
-    ret = i2c_select_slave(fd, slave_address);
-    if (ret < 0) {
+    if ((ret = i2c_select_slave(fd, slave_address)) < 0)
         return ret;
-    }
 
     nbBytesReceived = 0;
     while (nbBytesReceived < count) {
@@ -162,12 +153,11 @@ int i2c_read_byte(const uint16_t slave_address, uint8_t *data)
 
 int i2c_release(const uint8_t bus_index)
 {
-    if (check_bus_index(bus_index) < 0) {
+    if (check_bus_index(bus_index) < 0)
         return -1;
-    }
 
     if (fds[bus_index] >= 0) {
-        close(fds[bus_index]);  
+        close(fds[bus_index]);
         fds[bus_index] = -1;
     }
 

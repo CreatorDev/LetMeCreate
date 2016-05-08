@@ -17,32 +17,27 @@
 #define COMMAND_PROX_DATA_RDY   (0x20)
 
 /* Configuration */
-#define PROXIMITY_RATE 1        /* 3.90625 measurements per second */
-#define LED_CURRENT 4           /* 40mA */
+#define PROXIMITY_RATE          (1)         /* 3.90625 measurements per second */
+#define LED_CURRENT             (4)         /* 40mA */
 
 static bool enabled = false;
 
 int proximity_click_enable(void)
 {
-    int ret;
+    int ret = -1;
 
-    ret = i2c_write_register(VCNL4010_ADDRESS, PROXRATE_REG, PROXIMITY_RATE);
-    if (ret < 0) {
+    if ((ret = i2c_write_register(VCNL4010_ADDRESS, PROXRATE_REG, PROXIMITY_RATE)) < 0)
         return ret;
-    }
 
     /* Set LED to 40mA */
-    ret = i2c_write_register(VCNL4010_ADDRESS, LED_REG, LED_CURRENT);
-    if (ret < 0) {
+    if ((ret = i2c_write_register(VCNL4010_ADDRESS, LED_REG, LED_CURRENT)) < 0)
         return ret;
-    }
 
     /* Enable periodic proximity measurements */
     ret = i2c_write_register(VCNL4010_ADDRESS, COMMAND_REG,
                              COMMAND_SELFTIMED_EN | COMMAND_PROX_EN);
-    if (ret < 0) {
+    if (ret < 0)
         return ret;
-    }
 
     enabled = true;
 
@@ -55,24 +50,20 @@ int proximity_click_get_measure(uint16_t *measure)
     bool measure_available = false;
     uint8_t value;
 
-    if (measure == NULL) {
+    if (measure == NULL)
         return -1;
-    }
 
-    if (enabled == false) {
+    if (enabled == false)
         return -1;
-    }
 
     /* Wait until measure is available */
     while (measure_available == false) {
         ret = i2c_read_register(VCNL4010_ADDRESS, COMMAND_REG, &value);
-        if (ret < 0) {
+        if (ret < 0)
             return -1;
-        }
 
-        if (value & COMMAND_PROX_DATA_RDY) {
+        if (value & COMMAND_PROX_DATA_RDY)
             measure_available = true;
-        }
     }
 
     return i2c_read_16b_register(VCNL4010_ADDRESS, PROX_RESULT_LOW_REG, PROX_RESULT_HIGH_REG, measure);
@@ -80,12 +71,10 @@ int proximity_click_get_measure(uint16_t *measure)
 
 int proximity_click_disable(void)
 {
-    int ret;
+    int ret = -1;
 
-    ret = i2c_write_register(VCNL4010_ADDRESS, COMMAND_REG, 0);
-    if (ret >= 0) {
+    if ((ret = i2c_write_register(VCNL4010_ADDRESS, COMMAND_REG, 0)) >= 0)
         enabled = false;
-    }
 
     return ret;
 }
