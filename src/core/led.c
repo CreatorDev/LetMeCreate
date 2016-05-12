@@ -36,7 +36,7 @@ int led_initialize(void)
             continue;
 
         if (snprintf(path, sizeof(path), LED_DEVICE_FILE_PATH, i+1) < 0) {
-            fprintf(stderr, "led: Failed to build device file path for led \n", i);
+            fprintf(stderr, "led: Failed to build device file path for led %d\n", i);
             return -1;
         }
 
