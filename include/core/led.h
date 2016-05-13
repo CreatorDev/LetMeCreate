@@ -27,29 +27,36 @@ typedef enum LED_INDEX {
 int led_init(void);
 
 /**
- * @brief Switch on some LEDS.
+ * @brief Switch on some LED'S.
  *
- * @param[in] led_mask
+ * @param[in] mask
  * @return 0 if successful, -1 otherwise
  */
-int led_switch_on(const uint8_t led_mask);
+int led_switch_on(const uint8_t mask);
 
 /**
  * @brief Switch off some LED'S.
  *
- * @param[in] led_mask
+ * @param[in] mask
  * @return 0 if successful, -1 otherwise
  */
-int led_switch_off(const uint8_t led_mask);
+int led_switch_off(const uint8_t mask);
 
 /**
  * @brief Switch on/off each LED depending on corresponding bit in @p led_value
  *
- * @param[in] led_mask
- * @param[in] led_value
+ * Each bit of the mask represents a LED. Only LED's whose corresponding bit in mask is set to 1
+ * will be switched on or off by this function depending on corresponding bit .
+ *
+ * For instance, to turn on LED_2 you have to set bit 2 of mask to 1 and bit 2 of value to 1. So,
+ * mask  = LED_2
+ * value = 0x04
+ *
+ * @param[in] mask
+ * @param[in] value
  * @return 0 if successful, -1 otherwise
  */
-int led_set(const uint8_t led_mask, const uint8_t led_value);
+int led_set(const uint8_t mask, const uint8_t value);
 
 /**
  * @brief Close file descriptors for each LED.

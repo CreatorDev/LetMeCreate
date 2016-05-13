@@ -59,26 +59,26 @@ int led_init(void)
     return 0;
 }
 
-int led_switch_on(const uint8_t led_mask)
+int led_switch_on(const uint8_t mask)
 {
-    return led_set(led_mask, 0xFF);
+    return led_set(mask, 0xFF);
 }
 
-int led_switch_off(const uint8_t led_mask)
+int led_switch_off(const uint8_t mask)
 {
-    return led_set(led_mask, 0);
+    return led_set(mask, 0);
 }
 
-int led_set(const uint8_t led_mask, const uint8_t led_value)
+int led_set(const uint8_t mask, const uint8_t value)
 {
     int i = 0, tmp = 1;
 
     for (; i < NB_LEDS; ++i, tmp <<= 1) {
-        if ((led_mask & tmp) == 0)
+        if ((mask & tmp) == 0)
             continue;
 
-        if (led_set_value(i, led_value & led_mask) < 0) {
-            fprintf(stderr, "Failed to switch %s led %d\n", (led_value & led_mask) ? "on" : "off", i);
+        if (led_set_value(i, value & mask) < 0) {
+            fprintf(stderr, "Failed to switch %s led %d\n", (value & mask) ? "on" : "off", i);
             return -1;
         }
     }
