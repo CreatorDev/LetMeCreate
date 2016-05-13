@@ -1,3 +1,10 @@
+/**
+ * @file led.h
+ * @author Francois Berder
+ * @date 2016
+ * @copyright 3-clause BSD
+ */
+
 #ifndef __LETMECREATE_CORE_LED_H__
 #define __LETMECREATE_CORE_LED_H__
 
@@ -13,10 +20,40 @@ typedef enum LED_INDEX {
     LED_6 = 0x40
 } LED_INDEX;
 
+/**
+ * @brief Initialise file descriptors for each LED. Switch off all LEDS.
+ * @return 0 if successful, -1 otherwise
+ */
 int led_initialize(void);
+
+/**
+ * @brief Switch on some LEDS.
+ *
+ * @param[in] led_mask
+ * @return 0 if successful, -1 otherwise
+ */
 int led_switch_on(const uint8_t led_mask);
+
+/**
+ * @brief Switch off some LEDS.
+ *
+ * @param[in] led_mask
+ * @return 0 if successful, -1 otherwise
+ */
 int led_switch_off(const uint8_t led_mask);
+
+/**
+ * @brief Switch on/off each LED depending on corresponding bit in @p led_value
+ *
+ * @param[in] led_mask
+ * @param[in] led_value
+ * @return 0 if successfull, -1 otherwise
+ */
 int led_set(const uint8_t led_mask, const uint8_t led_value);
+
+/**
+ * @brief Close file descriptors for each LED.
+ */
 void led_release(void);
 
 #endif
