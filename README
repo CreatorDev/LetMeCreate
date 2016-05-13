@@ -1,9 +1,10 @@
-LetMeCreate is small collection of wrappers for some interfaces of the Ci-40, and some click 
+LetMeCreate is a small collection of wrappers for some interfaces of the Ci-40, and some click
 boards.
 
 Interfaces supported:
   * I2C
   * SPI
+  * LED's
 
 Clicks supported:
   * thermo3
