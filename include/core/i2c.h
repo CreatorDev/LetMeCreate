@@ -17,12 +17,12 @@ typedef enum MIKROBUS_I2C_BUS {
 
 
 /**
- * @brief Initialize a I²C bus.
+ * @brief Initialise a I²C bus.
  *
  * This function creates a new file descriptor for the device file associated with a I²C bus of the
- * Ci-40. If the bus is already initialized, nothing is done.
+ * Ci-40. If the bus is already initialised, nothing is done.
  *
- * @param[in] bus_index index of the bus to initialize (must be 0 or 1)
+ * @param[in] bus_index index of the bus to initialise (must be 0 or 1)
  * @return Returns -1 if it fails, otherwise it returns 0.
  */
 int i2c_init(const uint8_t bus_index);
@@ -30,10 +30,10 @@ int i2c_init(const uint8_t bus_index);
 /**
  * @brief Select the current bus.
  *
- * All following read/write will use the selected bus. The bus selected must be initialized before
+ * All following read/write will use the selected bus. The bus selected must be initialised before
  * calling this function.
  *
- * @param[in] bus_index index of the bus to initialize (must be 0 or 1)
+ * @param[in] bus_index index of the bus to initialise (must be 0 or 1)
  * @return Returns -1 if it fails, otherwise it returns 0.
  */
 int i2c_select_bus(const uint8_t bus_index);
@@ -42,7 +42,7 @@ int i2c_select_bus(const uint8_t bus_index);
  * @brief Send some data to a slave.
  *
  * This sends some data to the slave. The buffer must be non-null and the current bus selected must
- * be initialized before calling this function.
+ * be initialised before calling this function.
  *
  * @param[in] slave_address Address (7-bit or 10-bit) of the slave
  * @param[in] buffer Array of bytes to send
@@ -55,7 +55,7 @@ int i2c_write(const uint16_t slave_address, const uint8_t *buffer, const uint32_
  * @brief Read data from a slave.
  *
  * This function sends some data to the slave. The buffer must be non-null and the current bus
- * selected must be initialized before calling this function.
+ * selected must be initialised before calling this function.
  *
  * @param[in] slave_address Address (7-bit or 10-bit) of the slave to read from
  * @param[out] buffer Allocated memory where data is stored (must be non-null)

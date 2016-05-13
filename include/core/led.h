@@ -21,7 +21,7 @@ typedef enum LED_INDEX {
 } LED_INDEX;
 
 /**
- * @brief Initialise file descriptors for each LED. Switch off all LEDS.
+ * @brief Initialise file descriptors for each LED. Switch off all LED'S.
  * @return 0 if successful, -1 otherwise
  */
 int led_initialize(void);
@@ -35,7 +35,7 @@ int led_initialize(void);
 int led_switch_on(const uint8_t led_mask);
 
 /**
- * @brief Switch off some LEDS.
+ * @brief Switch off some LED'S.
  *
  * @param[in] led_mask
  * @return 0 if successful, -1 otherwise
@@ -47,7 +47,7 @@ int led_switch_off(const uint8_t led_mask);
  *
  * @param[in] led_mask
  * @param[in] led_value
- * @return 0 if successfull, -1 otherwise
+ * @return 0 if successful, -1 otherwise
  */
 int led_set(const uint8_t led_mask, const uint8_t led_value);
 

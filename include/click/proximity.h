@@ -13,7 +13,7 @@
 /**
  * @brief Enable the proximity click.
  *
- * @return Returns 0 if successfull, otherwise it returns -1.
+ * @return 0 if successful, otherwise it returns -1.
  */
 int proximity_click_enable(void);
 
@@ -23,14 +23,14 @@ int proximity_click_enable(void);
  * The proximity click must be enabled before calling this function.
  *
  * @param[out] measure Pointer to a 16-bit variable to retrieve the output from the click (must not be null)
- * @return Returns 0 if successfull, otherwise it returns -1.
+ * @return 0 if successful, otherwise it returns -1.
  */
 int proximity_click_get_measure(uint16_t *measure);
 
 /**
  * @brief Shutdown the proximity click.
  *
- * @return Returns 0 if successfull, otherwise it returns -1.
+ * @return 0 if successful, otherwise it returns -1.
  */
 int proximity_click_disable(void);
 
