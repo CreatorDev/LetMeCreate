@@ -6,3 +6,4 @@ examples/Makefile
 examples/bin/
 examples/cmake_install.cmake
 lib/
+doc/
