@@ -61,34 +61,12 @@ int led_initialize(void)
 
 int led_switch_on(const uint8_t led_mask)
 {
-    int i = 0, tmp = 1;
-
-    for (; i < NB_LEDS; ++i, tmp <<= 1) {
-        if (led_mask & tmp) {
-            if (led_set_value(i, 1) < 0) {
-                fprintf(stderr, "Failed to switch on led %d\n", i);
-                return -1;
-            }
-        }
-    }
-
-    return 0;
+    return led_set(led_mask, 0xFF);
 }
 
 int led_switch_off(const uint8_t led_mask)
 {
-    int i = 0, tmp = 1;
-
-    for (; i < NB_LEDS; ++i, tmp <<= 1) {
-        if (led_mask & tmp) {
-            if (led_set_value(i, 0) < 0) {
-                fprintf(stderr, "Failed to switch off led %d\n", i);
-                return -1;
-            }
-        }
-    }
-
-    return 0;
+    return led_set(led_mask, 0);
 }
 
 int led_set(const uint8_t led_mask, const uint8_t led_value)
