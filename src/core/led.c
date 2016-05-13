@@ -26,7 +26,7 @@ static int led_set_value(const uint8_t led_index, const uint8_t value)
     return write(fds[led_index], str, 2);
 }
 
-int led_initialize(void)
+int led_init(void)
 {
     int i = 0;
     char path[255];

@@ -24,7 +24,7 @@ typedef enum LED_INDEX {
  * @brief Initialise file descriptors for each LED. Switch off all LED'S.
  * @return 0 if successful, -1 otherwise
  */
-int led_initialize(void);
+int led_init(void);
 
 /**
  * @brief Switch on some LEDS.
