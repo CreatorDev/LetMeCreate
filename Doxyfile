@@ -1,0 +1,6 @@
+PROJECT_NAME           = "LetMeCreate"
+PROJECT_BRIEF          = "This library implements some wrappers for the Ci-40."
+OUTPUT_DIRECTORY       = "doc"
+INPUT                  = include/
+FILE_PATTERNS          = *.h
+RECURSIVE              = YES
