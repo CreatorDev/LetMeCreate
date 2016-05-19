@@ -6,6 +6,7 @@ Interface supported:
   - I²C
   - SPI
   - LED's
+  - Switch
 
 MikroClick board supported:
   - Thermo3
@@ -33,7 +34,7 @@ Copy the Makefile to the right location:
 $ cp LetMeCreate/miscellaneous/Makefile.devel Makefile
 ```
 
-To register the feed in openwrt, go back in openwrt folder and open feeds.conf.default. 
+To register the feed in openwrt, go back in openwrt folder and open feeds.conf.default.
 Add this line:
 ```
 src-link custom /change/this/path/to/the/location/of/ci-40/custom/directory/

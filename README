@@ -5,6 +5,7 @@ Interfaces supported:
   * I2C
   * SPI
   * LED's
+  * Switch
 
 Clicks supported:
   * thermo3
