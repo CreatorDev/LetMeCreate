@@ -18,9 +18,33 @@ enum SWITCH_EVENT {
     SWITCH_2_RELEASED   = 0x08
 };
 
+/**
+ * @brief Start a thread monitoring switch events
+ *
+ * @return 0 if succesful, -1 otherwise.
+ */
 int switch_init(void);
+
+/**
+ * @brief Attach a callback to switch events
+ *
+ * @param event_mask Events which will trigger a call to callback function
+ * @param callback Pointer to a function (must not be null)
+ * @return ID of the callback, -1 if it fails.
+ */
 int switch_add_callback(const uint8_t event_mask, void (*callback)(void));
+
+/**
+ * @brief Remove a callback
+ *
+ * @param callback_id ID of the callback to remove
+ * @return 0 if successful, -1 otherwise
+ */
 int switch_remove_callback(const int callback_ID);
+
+/**
+ * @brief Stop monitoring switch events
+ */
 void switch_release(void);
 
 #endif
