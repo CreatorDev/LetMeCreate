@@ -6,6 +6,7 @@ Interfaces supported:
   * SPI
   * LED's
   * Switch
+  * GPIO (Mikrobus only)
 
 Clicks supported:
   * thermo3

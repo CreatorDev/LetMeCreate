@@ -7,6 +7,7 @@ Interface supported:
   - SPI
   - LED's
   - Switch
+  - GPIO (Mikrobus only)
 
 MikroClick board supported:
   - Thermo3
