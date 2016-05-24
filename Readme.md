@@ -5,6 +5,7 @@ This library is a collection of small wrappers for some interfaces of the Ci-40.
 Interface supported:
   - I²C
   - SPI
+  - UART
   - LED's
   - Switch
   - GPIO (Mikrobus only)

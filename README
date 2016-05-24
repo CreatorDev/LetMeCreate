@@ -4,6 +4,7 @@ boards.
 Interfaces supported:
   * I2C
   * SPI
+  * UART
   * LED's
   * Switch
   * GPIO (Mikrobus only)
