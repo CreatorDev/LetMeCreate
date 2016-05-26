@@ -9,6 +9,7 @@ Interface supported:
   - LED's
   - Switch
   - GPIO (Mikrobus only)
+  - PWM
 
 MikroClick board supported:
   - Thermo3
