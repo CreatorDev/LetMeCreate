@@ -11,14 +11,14 @@
 
 #include <stdint.h>
 
+
 enum GPIO_PIN {
-    MIKROBUS_1_AN,
-    MIKROBUS_1_RST,
-    MIKROBUS_1_INT,
-    MIKROBUS_2_AN,
-    MIKROBUS_2_RST,
-    MIKROBUS_2_INT,
-    GPIO_CNT
+    MIKROBUS_1_AN  = 22,
+    MIKROBUS_1_RST = 23,
+    MIKROBUS_1_INT = 21,
+    MIKROBUS_2_AN  = 25,
+    MIKROBUS_2_RST = 27,
+    MIKROBUS_2_INT = 24
 };
 
 enum GPIO_DIR {

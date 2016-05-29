@@ -15,29 +15,26 @@
 #define GPIO_PATH_FORMAT        "/sys/class/gpio/gpio%d/%s"
 
 
-static int gpio_pin_no[GPIO_CNT] = {
-22,    /* MIKROBUS_1_AN */
-23,    /* MIKROBUS_1_RST */
-21,    /* MIKROBUS_1_INT */
-25,    /* MIKROBUS_2_AN */
-27,    /* MIKROBUS_2_RST */
-24     /* MIKROBUS_2_INT */
-};
-
 static bool check_pin(const uint8_t pin)
 {
-    if (pin >= GPIO_CNT) {
+    switch (pin) {
+    case MIKROBUS_1_AN:
+    case MIKROBUS_1_RST:
+    case MIKROBUS_1_INT:
+    case MIKROBUS_2_AN:
+    case MIKROBUS_2_RST:
+    case MIKROBUS_2_INT:
+        return true;
+    default:
         fprintf(stderr, "Invalid gpio pin.\n");
         return false;
     }
-
-    return true;
 }
 
 static bool create_gpio_path(char *path, const uint8_t gpio_pin, const char *file_name)
 {
-    if (snprintf(path, MAX_STR_LENGTH, GPIO_PATH_FORMAT, gpio_pin_no[gpio_pin], file_name) < 0) {
-        fprintf(stderr, "gpio: Could not create path for accessing %s of gpio %d.\n", file_name, gpio_pin_no[gpio_pin]);
+    if (snprintf(path, MAX_STR_LENGTH, GPIO_PATH_FORMAT, gpio_pin, file_name) < 0) {
+        fprintf(stderr, "gpio: Could not create path for accessing %s of gpio %d.\n", file_name, gpio_pin);
         return false;
     }
 
@@ -120,7 +117,7 @@ int gpio_init(const uint8_t gpio_pin)
     if (check_gpio_initialised(gpio_pin))
         return 0;
 
-    return export_pin(GPIO_DIR_BASE_PATH, gpio_pin_no[gpio_pin]);
+    return export_pin(GPIO_DIR_BASE_PATH, gpio_pin);
 }
 
 int gpio_set_direction(const uint8_t gpio_pin, const uint8_t dir)
@@ -128,7 +125,7 @@ int gpio_set_direction(const uint8_t gpio_pin, const uint8_t dir)
     char str[4];
 
     if (!check_pin(gpio_pin)) {
-        fprintf(stderr, "Cannot set direction to invalid pin %d\n", gpio_pin_no[gpio_pin]);
+        fprintf(stderr, "Cannot set direction to invalid pin %d\n", gpio_pin);
         return -1;
     }
 
@@ -137,12 +134,12 @@ int gpio_set_direction(const uint8_t gpio_pin, const uint8_t dir)
     } else if (dir == GPIO_INPUT) {
         strcpy(str, "in");
     } else {
-        fprintf(stderr, "gpio: Cannot set gpio %d to invalid direction.\n", gpio_pin_no[gpio_pin]);
+        fprintf(stderr, "gpio: Cannot set gpio %d to invalid direction.\n", gpio_pin);
         return -1;
     }
 
     if (!check_gpio_initialised(gpio_pin)) {
-        fprintf(stderr, "gpio: Cannot set direction of uninitialised gpio %d\n", gpio_pin_no[gpio_pin]);
+        fprintf(stderr, "gpio: Cannot set direction of uninitialised gpio %d\n", gpio_pin);
         return -1;
     }
 
@@ -157,7 +154,7 @@ int gpio_get_direction(const uint8_t gpio_pin, uint8_t *dir)
         return -1;
 
     if (dir == NULL) {
-        fprintf(stderr, "gpio: Cannot store direction of pin %d to null variable.\n", gpio_pin_no[gpio_pin]);
+        fprintf(stderr, "gpio: Cannot store direction of pin %d to null variable.\n", gpio_pin);
         return -1;
     }
 
@@ -172,7 +169,7 @@ int gpio_get_direction(const uint8_t gpio_pin, uint8_t *dir)
     } else if (strncmp(value, "in", 2) == 0) {
         *dir = GPIO_INPUT;
     } else {
-        fprintf(stderr, "gpio: Invalid direction read from gpio %d.\n", gpio_pin_no[gpio_pin]);
+        fprintf(stderr, "gpio: Invalid direction read from gpio %d.\n", gpio_pin);
         return -1;
     }
 
@@ -206,7 +203,7 @@ int gpio_get_value(const uint8_t gpio_pin, uint32_t *value)
         return -1;
 
     if (value == NULL) {
-        fprintf(stderr, "gpio: Cannot store value of pin %d to null variable.\n", gpio_pin_no[gpio_pin]);
+        fprintf(stderr, "gpio: Cannot store value of pin %d to null variable.\n", gpio_pin);
         return -1;
     }
 
@@ -224,6 +221,6 @@ int gpio_release(const uint8_t gpio_pin)
     if (!check_gpio_initialised(gpio_pin))
         return 0;
 
-    return unexport_pin(GPIO_DIR_BASE_PATH, gpio_pin_no[gpio_pin]);
+    return unexport_pin(GPIO_DIR_BASE_PATH, gpio_pin);
 }
 
