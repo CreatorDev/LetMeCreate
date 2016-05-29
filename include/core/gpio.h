@@ -18,7 +18,28 @@ enum GPIO_PIN {
     MIKROBUS_1_INT = 21,
     MIKROBUS_2_AN  = 25,
     MIKROBUS_2_RST = 27,
-    MIKROBUS_2_INT = 24
+    MIKROBUS_2_INT = 24,
+
+    GPIO_14        = 14,
+    GPIO_21        = 21,
+    GPIO_22        = 22,
+    GPIO_23        = 23,
+    GPIO_24        = 24,
+    GPIO_25        = 25,
+    GPIO_27        = 27,
+    GPIO_31        = 31,
+    GPIO_75        = 75,
+    GPIO_88        = 88,
+    GPIO_89        = 89,
+
+    /** GPIO on Raspberry Pi interface only */
+    GPIO_72        = 72,
+    GPIO_80        = 80,
+    GPIO_81        = 81,
+    GPIO_82        = 82,
+    GPIO_83        = 83,
+    GPIO_84        = 84,
+    GPIO_85        = 85
 };
 
 enum GPIO_DIR {

@@ -18,12 +18,24 @@
 static bool check_pin(const uint8_t pin)
 {
     switch (pin) {
-    case MIKROBUS_1_AN:
-    case MIKROBUS_1_RST:
-    case MIKROBUS_1_INT:
-    case MIKROBUS_2_AN:
-    case MIKROBUS_2_RST:
-    case MIKROBUS_2_INT:
+    case GPIO_14:
+    case GPIO_21:
+    case GPIO_22:
+    case GPIO_23:
+    case GPIO_24:
+    case GPIO_25:
+    case GPIO_27:
+    case GPIO_31:
+    case GPIO_75:
+    case GPIO_88:
+    case GPIO_89:
+    case GPIO_72:
+    case GPIO_80:
+    case GPIO_81:
+    case GPIO_82:
+    case GPIO_83:
+    case GPIO_84:
+    case GPIO_85:
         return true;
     default:
         fprintf(stderr, "Invalid gpio pin.\n");
