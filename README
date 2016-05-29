@@ -9,6 +9,7 @@ Interfaces supported:
   * Switch
   * GPIO (Mikrobus only)
   * PWM
+  * ADC
 
 Clicks supported:
   * thermo3

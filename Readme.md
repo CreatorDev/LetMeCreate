@@ -10,6 +10,7 @@ Interface supported:
   - Switch
   - GPIO (Mikrobus only)
   - PWM
+  - ADC
 
 MikroClick board supported:
   - Thermo3
