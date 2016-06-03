@@ -19,6 +19,9 @@ enum UART_DEVICE {
 
 /** UART baudrates  */
 enum UART_BAUDRATE {
+    UART_BD_1200    = 1200,
+    UART_BD_2400    = 2400,
+    UART_BD_4800    = 4800,
     UART_BD_9600    = 9600,
     UART_BD_19200   = 19200,
     UART_BD_38400   = 38400,

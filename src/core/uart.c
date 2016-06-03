@@ -36,6 +36,15 @@ int uart_init(const uint8_t uart_device, const uint32_t baudrate)
         return -1;
 
     switch(baudrate) {
+    case UART_BD_1200:
+        speed = B1200;
+        break;
+    case UART_BD_2400:
+        speed = B2400;
+        break;
+    case UART_BD_4800:
+        speed = B4800;
+        break;
     case UART_BD_9600:
         speed = B9600;
         break;
