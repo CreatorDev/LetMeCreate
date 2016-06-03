@@ -83,7 +83,7 @@ int spi_select_bus(const uint8_t bus_index)
 int spi_transfer(const uint8_t *tx_buffer, uint8_t *rx_buffer, const uint32_t count)
 {
     int ret, fd;
-    struct spi_ioc_transfer tr[1];
+    struct spi_ioc_transfer tr;
 
     fd = fds[current_bus_index];
     if (fd < 0)  {
@@ -94,11 +94,10 @@ int spi_transfer(const uint8_t *tx_buffer, uint8_t *rx_buffer, const uint32_t co
     if (count == 0)
         return 0;
 
-    memset(tr, 0, sizeof(tr));
-
-    tr[0].tx_buf = (unsigned long)tx_buffer;
-    tr[0].rx_buf = (unsigned long)rx_buffer;
-    tr[0].len = count;
+    memset(&tr, 0, sizeof(tr));
+    tr.tx_buf = (const unsigned long)tx_buffer;
+    tr.rx_buf = (unsigned long)rx_buffer;
+    tr.len = count;
 
     ret = ioctl(fd, SPI_IOC_MESSAGE(1), &tr);
     if(ret < 0) {
