@@ -36,7 +36,7 @@ static void process_event(const uint8_t switch_event)
 
     pthread_mutex_lock(&mutex);
     cur = callback_list_head;
-    while (cur != NULL) {
+    while (cur) {
         if (cur->event_mask & switch_event)
             cur->f();
 
@@ -61,7 +61,7 @@ static void* switch_update(void *arg)
             fprintf(stderr, "switch: Error while polling file descriptor\n");
             continue;
         } else if (ret == 0) {
-            continue; 
+            continue;
         } else {
             if (read(fd, &event, sizeof(event)) != sizeof(event)) {
                 fprintf(stderr, "switch: Error while reading event from file descriptor\n");
@@ -140,17 +140,21 @@ int switch_add_callback(const uint8_t event_mask, void (*callback)(void))
     entry->f = callback;
     entry->next = NULL;
 
-    pthread_mutex_lock(&mutex);
+
     if (callback_list_head == NULL) {
+        pthread_mutex_lock(&mutex);
         callback_list_head = entry;
+        pthread_mutex_unlock(&mutex);
     }
     else {
         struct switch_callback *last = callback_list_head;
-        while (last->next != NULL)
+        while (last->next)
             last = last->next;
+
+        pthread_mutex_lock(&mutex);
         last->next = entry;
+        pthread_mutex_unlock(&mutex);
     }
-    pthread_mutex_unlock(&mutex);
 
     return entry->ID;
 }
@@ -172,29 +176,32 @@ int switch_remove_callback(const int callback_ID)
     if (callback_list_head == NULL)
         return -1;
 
-    pthread_mutex_lock(&mutex);
     entry = callback_list_head;
-    while (entry != NULL) {
-        if (entry->ID == callback_ID) {
-            prev->next = entry->next;
-            free(entry);
-            pthread_mutex_unlock(&mutex);
-            return 0;
-        }
+    while (entry) {
+        if (entry->ID == callback_ID)
+            break;
 
         prev = entry;
         entry = entry->next;
     }
+    if (entry == NULL)
+        return -1;
+
+    pthread_mutex_lock(&mutex);
+    if (prev)
+        prev->next = entry->next;
+    else
+        callback_list_head = entry->next;
     pthread_mutex_unlock(&mutex);
 
-    return -1;
+    free(entry);
+
+    return 0;
 }
 
 void switch_release(void)
 {
     if (fd >= 0) {
-        struct switch_callback *entry = NULL, *tmp = NULL;
-
         running = false;
         pthread_join(thread, NULL);
         close(fd);
@@ -202,12 +209,10 @@ void switch_release(void)
         pthread_mutex_destroy(&mutex);
 
         /* Delete any entries in callback list */
-        entry = callback_list_head;
-        while (entry != NULL) {
-            tmp = entry->next;
-            free(entry);
-            entry = tmp;
+        while (callback_list_head) {
+            struct switch_callback *tmp = callback_list_head;
+            callback_list_head = callback_list_head->next;
+            free(tmp);
         }
-        callback_list_head = NULL;
     }
 }
