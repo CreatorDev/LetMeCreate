@@ -8,13 +8,16 @@ Interface supported:
   - UART
   - LED's
   - Switch
-  - GPIO (Mikrobus only)
+  - GPIO (Mikrobus and Raspberry Pi interfaces)
   - PWM
   - ADC
 
 MikroClick board supported:
   - Thermo3
   - Proximity
+  - Motion
+
+Examples are installed in /usr/bin/letmecreate_examples.
 
 ## Integration in Openwrt
 
