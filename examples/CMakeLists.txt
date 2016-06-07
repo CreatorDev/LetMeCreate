@@ -5,3 +5,7 @@ install(TARGETS letmecreate_test_proximity RUNTIME DESTINATION bin)
 add_executable(letmecreate_test_thermo3 thermo3/main.c)
 target_link_libraries(letmecreate_test_thermo3 letmecreate_click letmecreate_core)
 install(TARGETS letmecreate_test_thermo3 RUNTIME DESTINATION bin)
+
+add_executable(letmecreate_test_relay2 relay2/main.c)
+target_link_libraries(letmecreate_test_relay2 letmecreate_click letmecreate_core)
+install(TARGETS letmecreate_test_relay2 RUNTIME DESTINATION bin)
