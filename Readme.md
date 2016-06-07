@@ -17,6 +17,7 @@ MikroClick board supported:
   - Proximity
   - Motion
   - Relay2
+  - Joystick
 
 Examples are installed in /usr/bin/letmecreate_examples.
 
