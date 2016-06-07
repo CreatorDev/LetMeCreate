@@ -16,9 +16,11 @@
 enum GPIO_PIN {
     MIKROBUS_1_AN  = 22,
     MIKROBUS_1_RST = 23,
+    MIKROBUS_1_PWM = 73,
     MIKROBUS_1_INT = 21,
     MIKROBUS_2_AN  = 25,
     MIKROBUS_2_RST = 27,
+    MIKROBUS_2_PWM = 74,
     MIKROBUS_2_INT = 24,
 
     GPIO_14        = 14,
@@ -29,6 +31,8 @@ enum GPIO_PIN {
     GPIO_25        = 25,
     GPIO_27        = 27,
     GPIO_31        = 31,
+    GPIO_73        = 73,
+    GPIO_74        = 74,
     GPIO_75        = 75,
     GPIO_88        = 88,
     GPIO_89        = 89,

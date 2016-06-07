@@ -26,6 +26,8 @@ static bool check_pin(const uint8_t pin)
     case GPIO_25:
     case GPIO_27:
     case GPIO_31:
+    case GPIO_73:
+    case GPIO_74:
     case GPIO_75:
     case GPIO_88:
     case GPIO_89:
