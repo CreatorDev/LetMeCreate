@@ -12,6 +12,7 @@
 #include <stdint.h>
 
 
+/** GPIO pin number */
 enum GPIO_PIN {
     MIKROBUS_1_AN  = 22,
     MIKROBUS_1_RST = 23,
@@ -32,7 +33,7 @@ enum GPIO_PIN {
     GPIO_88        = 88,
     GPIO_89        = 89,
 
-    /** GPIO on Raspberry Pi interface only */
+    /* GPIO on Raspberry Pi interface only */
     GPIO_72        = 72,
     GPIO_80        = 80,
     GPIO_81        = 81,
@@ -42,6 +43,7 @@ enum GPIO_PIN {
     GPIO_85        = 85
 };
 
+/** GPIO direction */
 enum GPIO_DIR {
     GPIO_OUTPUT,
     GPIO_INPUT
