@@ -12,7 +12,8 @@
 #include <stdint.h>
 #include "gpio.h"
 
-enum INPUT_EVENT {
+/** Event on GPIO */
+enum GPIO_EVENT {
     GPIO_RAISING   = 0x01,
     GPIO_FALLING   = 0x02,
     GPIO_EDGE      = 0x03
