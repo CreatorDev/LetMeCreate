@@ -10,9 +10,36 @@
 
 #include <stdint.h>
 
+/**
+ * @brief Enable relay 1 on Relay2 Click.
+ *
+ * @param[in] mikrobus_index Index of the mikrobus (see #MIKROBUS_INDEX)
+ * @return 0 if successful, -1 otherwise
+ */
 int relay2_click_enable_relay_1(const uint8_t mikrobus_index);
+
+/**
+ * @brief Disable relay 1 on Relay2 Click.
+ *
+ * @param[in] mikrobus_index Index of the mikrobus (see #MIKROBUS_INDEX)
+ * @return 0 if successful, -1 otherwise
+ */
 int relay2_click_disable_relay_1(const uint8_t mikrobus_index);
+
+/**
+ * @brief Enable relay 2 on Relay2 Click.
+ *
+ * @param[in] mikrobus_index Index of the mikrobus (see #MIKROBUS_INDEX)
+ * @return 0 if successful, -1 otherwise
+ */
 int relay2_click_enable_relay_2(const uint8_t mikrobus_index);
+
+/**
+ * @brief Disable relay 2 on Relay2 Click.
+ *
+ * @param[in] mikrobus_index Index of the mikrobus (see #MIKROBUS_INDEX)
+ * @return 0 if successful, -1 otherwise
+ */
 int relay2_click_disable_relay_2(const uint8_t mikrobus_index);
 
 #endif
