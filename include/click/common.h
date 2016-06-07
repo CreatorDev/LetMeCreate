@@ -1,5 +1,5 @@
 /**
- * @file common.h
+ * @file include/click/common.h
  * @author Francois Berder
  * @date 2016
  * @copyright 3-clause BSD
