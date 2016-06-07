@@ -11,7 +11,7 @@
 #include <stdint.h>
 
 /** Index of LED's */
-typedef enum LED_INDEX {
+enum LED_INDEX {
     LED_0 = 0x01,
     LED_1 = 0x02,
     LED_2 = 0x04,
@@ -20,7 +20,7 @@ typedef enum LED_INDEX {
     LED_5 = 0x20,
     LED_6 = 0x40,
     LED_HEARTBEAT=0x80
-} LED_INDEX;
+};
 
 /**
  * @brief Initialise file descriptors for each LED. Configure all LEDS in on/off mode. Switch off
