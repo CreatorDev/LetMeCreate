@@ -11,6 +11,7 @@
 
 #include <stdint.h>
 
+/** Event that can be triggered by the two switches */
 enum SWITCH_EVENT {
     SWITCH_1_PRESSED    = 0x01,
     SWITCH_1_RELEASED   = 0x02,
@@ -37,7 +38,7 @@ int switch_add_callback(const uint8_t event_mask, void (*callback)(void));
 /**
  * @brief Remove a callback
  *
- * @param callback_id ID of the callback to remove
+ * @param callback_ID ID of the callback to remove
  * @return 0 if successful, -1 otherwise
  */
 int switch_remove_callback(const int callback_ID);
