@@ -10,22 +10,16 @@
 
 #include <stdint.h>
 
-typedef enum MIKROBUS_I2C_BUS {
-    MIKROBUS_I2C_BUS_1,
-    MIKROBUS_I2C_BUS_2
-} MIKROBUS_I2C_BUS;
-
-
 /**
  * @brief Initialise a I²C bus.
  *
  * This function creates a new file descriptor for the device file associated with a I²C bus of the
  * Ci-40. If the bus is already initialised, nothing is done.
  *
- * @param[in] bus_index index of the bus to initialise (must be 0 or 1)
+ * @param[in] mikrobus_index index of the bus to initialise (see #MIKROBUS_INDEX)
  * @return Returns -1 if it fails, otherwise it returns 0.
  */
-int i2c_init(const uint8_t bus_index);
+int i2c_init(const uint8_t mikrobus_index);
 
 /**
  * @brief Select the current bus.
@@ -33,10 +27,10 @@ int i2c_init(const uint8_t bus_index);
  * All following read/write will use the selected bus. The bus selected must be initialised before
  * calling this function.
  *
- * @param[in] bus_index index of the bus to initialise (must be 0 or 1)
+ * @param[in] mikrobus_index index of the bus to initialise (see #MIKROBUS_INDEX)
  * @return Returns -1 if it fails, otherwise it returns 0.
  */
-int i2c_select_bus(const uint8_t bus_index);
+int i2c_select_bus(const uint8_t mikrobus_index);
 
 /**
  * @brief Send some data to a slave.
@@ -85,9 +79,9 @@ int i2c_read_byte(const uint16_t slave_address, uint8_t *data);
 /**
  * @brief Close the file descriptor associated with this bus.
  *
- * @param[in] bus_index Index of the bus to release
+ * @param[in] mikrobus_index Index of the bus to release (see #MIKROBUS_INDEX)
  * @return Returns -1 if the bus index is invalid (greater than 1), otherwise it returns 0.
  */
-int i2c_release(const uint8_t bus_index);
+int i2c_release(const uint8_t mikrobus_index);
 
 #endif
