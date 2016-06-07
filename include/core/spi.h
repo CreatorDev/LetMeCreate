@@ -11,32 +11,25 @@
 
 #include <stdint.h>
 
-
-typedef enum MIKROBUS_SPI_BUS {
-    MIKROBUS_SPI_BUS_1,
-    MIKROBUS_SPI_BUS_2
-} MIKROBUS_SPI_BUS;
-
-
 /**
  * @brief Initialise a SPI bus of the Ci-40.
  *
  * It creates a new file descriptor.
  * If the bus is already initialised, nothing is done and it returns 0.
  *
- * @param[in] bus_index Index of the bus to initialise (0 or 1)
+ * @param[in] mikrobus_index Index of the bus to initialise (see #MIKROBUS_INDEX)
  * @param[in] mode Mode of the SPI bus (mode 0, 1, 2 or 3)
  * @return -1 if it failed, otherwise a positive number if successful.
  */
-int spi_init(const uint8_t bus_index, const uint32_t mode);
+int spi_init(const uint8_t mikrobus_index, const uint32_t mode);
 
 /**
  * @brief Select the bus to use.
  *
- * @param[in] bus_index Index of the bus to select (must be 0 or 1)
- * @return -1 if @p bus_index is invalid, otherwise it returns 0.
+ * @param[in] mikrobus_index Index of the bus to select (see #MIKROBUS_INDEX)
+ * @return -1 if @p mikrobus_index is invalid, otherwise it returns 0.
  */
-int spi_select_bus(const uint8_t bus_index);
+int spi_select_bus(const uint8_t mikrobus_index);
 
 /**
  * @brief Make a transfer of bytes over SPI.
@@ -55,9 +48,9 @@ int spi_transfer(const uint8_t *tx_buffer, uint8_t *rx_buffer, const uint32_t co
 /**
  * @brief Close the file descriptor associated with this bus.
  *
- * @param[in] bus_index Index of the bus to release (0 or 1)
+ * @param[in] mikrobus_index Index of the bus to release (see #MIKROBUS_INDEX)
  * @return 0 if successful, otherwise it returns -1.
  */
-int spi_release(const uint8_t bus_index);
+int spi_release(const uint8_t mikrobus_index);
 
 #endif
