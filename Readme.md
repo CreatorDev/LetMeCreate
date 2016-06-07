@@ -16,6 +16,7 @@ MikroClick board supported:
   - Thermo3
   - Proximity
   - Motion
+  - Relay2
 
 Examples are installed in /usr/bin/letmecreate_examples.
 
