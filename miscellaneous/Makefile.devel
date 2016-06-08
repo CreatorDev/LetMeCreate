@@ -38,6 +38,9 @@ define Package/letmecreate/install
 
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/lib/*.so $(1)/usr/lib/
+	
+	$(INSTALL_DIR) $(1)/usr/include/letmecreate
+	$(CP) $(PKG_BUILD_DIR)/include/* $(1)/usr/include/letmecreate
 endef
 
 $(eval $(call BuildPackage,letmecreate))
