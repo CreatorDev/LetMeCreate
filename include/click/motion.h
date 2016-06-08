@@ -26,7 +26,7 @@ int motion_click_enable(const uint8_t mikrobus_index);
  *
  * @param[in] mikrobus_index Index of the mikrobus used by the click board (see #MIKROBUS_INDEX)
  * @param[in] callback Function to call if movement is detected
- * @return ID of the callback. Use gpio_monitor_remove_callback to detach your callback.
+ * @return ID of the callback. Use #gpio_monitor_remove_callback to detach your callback.
  */
 int motion_click_attach_callback(const uint8_t mikrobus_index, void(*callback)(uint8_t));
 
