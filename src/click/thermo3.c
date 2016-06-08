@@ -12,6 +12,7 @@
 #define CONFIGURATION_REG_ADDRESS       (0x01)
 #define TEMPERATURE_HIGH_REG_ADDRESS    (0x03)
 
+#define DEGREES_CELCIUS_PER_LSB         (0.0625f)
 #define SHUTDOWN_MODE           (0x01)
 #define CONVERSION_RATE         (0xC0)
 
@@ -22,35 +23,48 @@ static int alarm_callback_ID = -1;
 int thermo3_click_enable(const uint8_t add_bit)
 {
     uint8_t buffer[3];
-    int ret = -1;
 
     last_address_bit = add_bit;
 
     buffer[0] = CONFIGURATION_REG_ADDRESS;
     buffer[1] = 0;
     buffer[2] = CONVERSION_RATE;
-    if ((ret = i2c_write(TMP102_ADDRESS, buffer, sizeof(buffer))) >= 0)
-        enabled = true;
+    if (i2c_write(TMP102_ADDRESS, buffer, sizeof(buffer)) < 0) {
+        fprintf(stderr, "thermo3: Failed to configure and enable sensor.\n");
+        return -1;
+    }
 
-    return ret;
+    enabled = true;
+
+    return 0;
 }
 
 int thermo3_click_get_temperature(float *temperature)
 {
     uint8_t buffer[2];
-    int ret;
 
-    if (temperature == NULL)
+    if (temperature == NULL) {
+        fprintf(stderr, "thermo3: Cannot store temperature using null pointer.\n");
         return -1;
+    }
 
-    if ((ret = i2c_write_byte(TMP102_ADDRESS, TEMPERATURE_REG_ADDRESS)) < 0)
+    if (enabled == false) {
+        fprintf(stderr, "thermo3: Cannot get temperature from disabled sensor.\n");
         return -1;
+    }
 
-    if ((ret = i2c_read(TMP102_ADDRESS, buffer, sizeof(buffer))) < 0)
+    if (i2c_write_byte(TMP102_ADDRESS, TEMPERATURE_REG_ADDRESS) < 0) {
+        fprintf(stderr, "thermo3: Failed to request temperature from sensor.\n");
         return -1;
+    }
+
+    if (i2c_read(TMP102_ADDRESS, buffer, sizeof(buffer)) < 0) {
+        fprintf(stderr, "thermo3: Failed to read temperature from sensor.\n");
+        return -1;
+    }
 
     *temperature = (float)(buffer[0]);
-    *temperature += ((float)(buffer[1] >> 4)) * 0.0625f;
+    *temperature += ((float)(buffer[1] >> 4)) * DEGREES_CELCIUS_PER_LSB;
 
     return 0;
 }
@@ -93,7 +107,7 @@ int thermo3_click_set_alarm(const uint8_t mikrobus_index, const float threshold,
 
     buffer[0] = TEMPERATURE_HIGH_REG_ADDRESS;
     buffer[1] = (uint8_t)(threshold);
-    buffer[2] = (threshold - (float)(buffer[1])) / 0.0625f;
+    buffer[2] = (threshold - (float)(buffer[1])) / DEGREES_CELCIUS_PER_LSB;
     buffer[2] <<= 4;
     printf("buffer[1]=%d", buffer[1]);
     printf("buffer[2]=%d", buffer[2]);
@@ -114,13 +128,16 @@ int thermo3_click_set_alarm(const uint8_t mikrobus_index, const float threshold,
 int thermo3_click_disable(void)
 {
     uint8_t buffer[3];
-    int ret = -1;
 
     buffer[0] = CONFIGURATION_REG_ADDRESS;
     buffer[1] = SHUTDOWN_MODE;
     buffer[2] = 0;
-    if ((ret = i2c_write(TMP102_ADDRESS, buffer, sizeof(buffer))) >= 0)
-        enabled = false;
+    if (i2c_write(TMP102_ADDRESS, buffer, sizeof(buffer)) < 0) {
+        fprintf(stderr, "thermo3: Failed to shutdown sensor.\n");
+        return -1;
+    }
+
+    enabled = false;
 
     if (alarm_callback_ID >= 0) {
         if (gpio_monitor_remove_callback(alarm_callback_ID) < 0) {
@@ -130,5 +147,5 @@ int thermo3_click_disable(void)
         alarm_callback_ID = -1;
     }
 
-    return ret;
+    return 0;
 }
