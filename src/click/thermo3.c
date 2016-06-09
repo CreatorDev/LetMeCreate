@@ -109,8 +109,6 @@ int thermo3_click_set_alarm(const uint8_t mikrobus_index, const float threshold,
     buffer[1] = (uint8_t)(threshold);
     buffer[2] = (threshold - (float)(buffer[1])) / DEGREES_CELCIUS_PER_LSB;
     buffer[2] <<= 4;
-    printf("buffer[1]=%d", buffer[1]);
-    printf("buffer[2]=%d", buffer[2]);
     if (i2c_write(TMP102_ADDRESS, buffer, sizeof(buffer)) < 0) {
         fprintf(stderr, "thermo3: Failed to set threshold on sensor.\n");
         return -1;
