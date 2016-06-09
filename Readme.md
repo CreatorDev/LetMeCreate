@@ -18,6 +18,7 @@ MikroClick board supported:
   - Motion
   - Relay2
   - Joystick
+  - Air quality
 
 Examples are installed in /usr/bin/letmecreate_examples.
 
