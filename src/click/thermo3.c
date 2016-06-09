@@ -18,7 +18,6 @@
 
 static bool enabled = false;
 static uint8_t last_address_bit = 0;
-static int alarm_callback_ID = -1;
 
 int thermo3_click_enable(const uint8_t add_bit)
 {
@@ -73,6 +72,7 @@ int thermo3_click_set_alarm(const uint8_t mikrobus_index, const float threshold,
 {
     uint8_t alarm_pin = 0;
     uint8_t buffer[3];
+    int alarm_callback_ID = -1;
 
     if (callback == NULL) {
         fprintf(stderr, "thermo3: Cannot set alarm using null callback.\n");
@@ -89,14 +89,6 @@ int thermo3_click_set_alarm(const uint8_t mikrobus_index, const float threshold,
     default:
         fprintf(stderr, "thermo3: Invalid mikrobus index.\n");
         return -1;
-    }
-
-    if (alarm_callback_ID >= 0) {
-        if (gpio_monitor_remove_callback(alarm_callback_ID) < 0) {
-            fprintf(stderr, "thermo3: Failed to remove old alarm callback.\n");
-            return -1;
-        }
-        alarm_callback_ID = -1;
     }
 
     if (gpio_init(alarm_pin) < 0
@@ -136,14 +128,6 @@ int thermo3_click_disable(void)
     }
 
     enabled = false;
-
-    if (alarm_callback_ID >= 0) {
-        if (gpio_monitor_remove_callback(alarm_callback_ID) < 0) {
-            fprintf(stderr, "thermo3: Failed to remove old alarm callback.\n");
-            return -1;
-        }
-        alarm_callback_ID = -1;
-    }
 
     return 0;
 }
