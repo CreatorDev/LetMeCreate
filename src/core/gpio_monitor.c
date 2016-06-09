@@ -225,9 +225,8 @@ static int remove_inotify_watch(const uint8_t gpio_pin)
     return 0;
 }
 
-static int remove_gpio_watch(const int callbackID)
+static void remove_gpio_watch(const int callbackID)
 {
-    bool removed = false;
     struct gpio_watch *cur = gpio_watch_list_head;
     struct gpio_watch *prev = NULL;
 
@@ -246,10 +245,7 @@ static int remove_gpio_watch(const int callbackID)
         pthread_mutex_unlock(&gpio_watch_mutex);
 
         free(cur);
-        removed = true;
     }
-
-    return removed ? 0 : -1;
 }
 
 int gpio_monitor_init(void)
@@ -365,10 +361,7 @@ int gpio_monitor_remove_callback(const int callbackID)
         return -1;
     }
 
-    if (remove_gpio_watch(callbackID) < 0) {
-        fprintf(stderr, "gpio_monitor: Failed to remove gpio watch.\n");
-        return -1;
-    }
+    remove_gpio_watch(callbackID);
 
     /* No more callback associated with gpio, remove inotify watch */
     if (is_gpio_monitored(gpio_pin) == false) {
