@@ -347,7 +347,7 @@ int gpio_monitor_remove_callback(const int callbackID)
     struct gpio_watch *cur = gpio_watch_list_head;
     uint8_t gpio_pin = 0;
 
-    if (callbackID < 0) {
+    if (callbackID < 0 || callbackID >= current_watch_ID) {
         fprintf(stderr, "gpio_monitor: Invalid callback ID.\n");
         return -1;
     }
