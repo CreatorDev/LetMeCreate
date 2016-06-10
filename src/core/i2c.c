@@ -23,7 +23,7 @@ static int i2c_select_slave(const int fd, const uint16_t address)
     return 0;
 }
 
-int i2c_init(const uint8_t mikrobus_index)
+static int i2c_init_bus(const uint8_t mikrobus_index)
 {
     const char *i2c_path = NULL;
 
@@ -34,9 +34,6 @@ int i2c_init(const uint8_t mikrobus_index)
     case MIKROBUS_2:
         i2c_path = MIKROBUS_I2C_PATH_2;
         break;
-    default:
-        fprintf(stderr, "i2c: Invalid bus index.\n");
-        return -1;
     }
 
     if (fds[mikrobus_index] >= 0)
@@ -48,6 +45,27 @@ int i2c_init(const uint8_t mikrobus_index)
     }
 
     return 0;
+}
+
+static void i2c_release_bus(const uint8_t mikrobus_index)
+{
+    switch (mikrobus_index) {
+    case MIKROBUS_1:
+    case MIKROBUS_2:
+        if (fds[mikrobus_index] >= 0) {
+            close(fds[mikrobus_index]);
+            fds[mikrobus_index] = -1;
+        }
+        break;
+    }
+}
+
+int i2c_init(void)
+{
+    if (i2c_init_bus(MIKROBUS_1) < 0)
+        return -1;
+
+    return i2c_init_bus(MIKROBUS_2);
 }
 
 int i2c_select_bus(const uint8_t mikrobus_index)
@@ -152,20 +170,8 @@ int i2c_read_byte(const uint16_t slave_address, uint8_t *data)
     return i2c_read(slave_address, data, 1);
 }
 
-int i2c_release(const uint8_t mikrobus_index)
+void i2c_release(void)
 {
-    switch (mikrobus_index) {
-    case MIKROBUS_1:
-    case MIKROBUS_2:
-        if (fds[mikrobus_index] >= 0) {
-            close(fds[mikrobus_index]);
-            fds[mikrobus_index] = -1;
-        }
-        break;
-    default:
-        fprintf(stderr, "i2c: Invalid bus index.\n");
-        return -1;
-    }
-
-    return 0;
+    i2c_release_bus(MIKROBUS_1);
+    i2c_release_bus(MIKROBUS_2);
 }
