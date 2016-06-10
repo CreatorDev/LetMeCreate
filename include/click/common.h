@@ -41,4 +41,13 @@ int i2c_read_register(const uint16_t address, const uint8_t reg_address, uint8_t
  */
 int i2c_read_16b_register(const uint16_t address, const uint8_t reg_low_address, const uint8_t reg_high_address, uint16_t *data);
 
+/**
+ * @brief Write one byte to a register over SPI.
+ *
+ * @param[in] reg_address Address of the register
+ * @param[in] data New value of the register
+ * @return 0 if successful, -1 otherwise
+ */
+int spi_write_register(const uint8_t reg_address, const uint8_t data);
+
 #endif
