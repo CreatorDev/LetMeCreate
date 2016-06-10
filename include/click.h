@@ -13,6 +13,7 @@
 #include "click/air_quality.h"
 #include "click/common.h"
 #include "click/joystick.h"
+#include "click/led_matrix.h"
 #include "click/motion.h"
 #include "click/proximity.h"
 #include "click/relay2.h"
