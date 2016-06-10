@@ -33,6 +33,13 @@ int i2c_init(const uint8_t mikrobus_index);
 int i2c_select_bus(const uint8_t mikrobus_index);
 
 /**
+ * @brief Get the current mikrobus index.
+ *
+ * @return Current mikrobus index used by I2C (see #MIKROBUS_INDEX)
+ */
+uint8_t i2c_get_current_bus(void);
+
+/**
  * @brief Send some data to a slave.
  *
  * This sends some data to the slave. The buffer must be non-null and the current bus selected must

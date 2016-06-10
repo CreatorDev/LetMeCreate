@@ -70,6 +70,11 @@ int i2c_select_bus(const uint8_t mikrobus_index)
     return 0;
 }
 
+uint8_t i2c_get_current_bus(void)
+{
+    return current_mikrobus_index;
+}
+
 int i2c_write(const uint16_t slave_address, const uint8_t *buffer, const uint32_t count)
 {
     int ret, fd;
