@@ -17,28 +17,12 @@
 static int fds[] = { -1, -1 };
 static uint8_t current_mikrobus_index = MIKROBUS_1;
 
-static int check_mikrobus_index(const uint8_t mikrobus_index)
-{
-    if (mikrobus_index > MIKROBUS_2) {
-        fprintf(stderr, "spi: Invalid bus index.\n");
-        return -1;
-    }
-
-    return 0;
-}
-
 int spi_init(const uint8_t mikrobus_index, const uint32_t mode)
 {
     int fd = -1;
     uint8_t bits_per_word = BITS_PER_WORD;
     uint32_t speed = SPI_SPEED;
     const char *spi_path = NULL;
-
-    if (check_mikrobus_index(mikrobus_index) < 0)
-        return -1;
-
-    if (fds[mikrobus_index] >= 0)
-        return 0;
 
     switch (mikrobus_index) {
     case MIKROBUS_1:
@@ -47,7 +31,13 @@ int spi_init(const uint8_t mikrobus_index, const uint32_t mode)
     case MIKROBUS_2:
         spi_path = MIKROBUS_SPI_PATH_2;
         break;
+    default:
+        fprintf(stderr, "spi: Invalid mikrobus index.\n");
+        return -1;
     }
+
+    if (fds[mikrobus_index] >= 0)
+        return 0;
 
     if ((fd = open(spi_path, O_RDWR)) == -1) {
         fprintf(stderr, "spi: Failed to open device.\n");
@@ -76,10 +66,16 @@ int spi_init(const uint8_t mikrobus_index, const uint32_t mode)
 
 int spi_select_bus(const uint8_t mikrobus_index)
 {
-    if (check_mikrobus_index(mikrobus_index) < 0)
+    switch (mikrobus_index) {
+    case MIKROBUS_1:
+    case MIKROBUS_2:
+        current_mikrobus_index = mikrobus_index;
+        break;
+    default:
+        fprintf(stderr, "spi: Invalid mikrobus index.\n");
         return -1;
+    }
 
-    current_mikrobus_index = mikrobus_index;
     return 0;
 }
 
@@ -117,12 +113,17 @@ int spi_transfer(const uint8_t *tx_buffer, uint8_t *rx_buffer, const uint32_t co
 
 int spi_release(const uint8_t mikrobus_index)
 {
-    if (check_mikrobus_index(mikrobus_index) < 0)
+    switch (mikrobus_index) {
+    case MIKROBUS_1:
+    case MIKROBUS_2:
+        if (fds[mikrobus_index] >= 0) {
+            close(fds[mikrobus_index]);
+            fds[mikrobus_index] = -1;
+        }
+        break;
+    default:
+        fprintf(stderr, "spi: Invalid mikrobus index.\n");
         return -1;
-
-    if (fds[mikrobus_index] >= 0) {
-        close(fds[mikrobus_index]);
-        fds[mikrobus_index] = -1;
     }
 
     return 0;
