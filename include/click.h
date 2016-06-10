@@ -9,6 +9,7 @@
 #ifndef __LETMECREATE_CLICK_H__
 #define __LETMECREATE_CLICK_H__
 
+#include "click/accel.h"
 #include "click/air_quality.h"
 #include "click/common.h"
 #include "click/joystick.h"
