@@ -7,7 +7,7 @@ int main(void)
 {
     uint16_t measure;
 
-    i2c_init(MIKROBUS_1);
+    i2c_init();
     i2c_select_bus(MIKROBUS_1);
 
     proximity_click_enable();
@@ -15,7 +15,7 @@ int main(void)
     printf("measure: %d\n", measure);
     proximity_click_disable();
 
-    i2c_release(MIKROBUS_1);
+    i2c_release();
 
     return 0;
 }

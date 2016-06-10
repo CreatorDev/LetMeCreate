@@ -18,7 +18,6 @@
 
 static bool enabled = false;
 static uint8_t last_address_bit = 0;
-static int alarm_callback_ID = -1;
 
 int thermo3_click_enable(const uint8_t add_bit)
 {
@@ -73,6 +72,7 @@ int thermo3_click_set_alarm(const uint8_t mikrobus_index, const float threshold,
 {
     uint8_t alarm_pin = 0;
     uint8_t buffer[3];
+    int alarm_callback_ID = -1;
 
     if (callback == NULL) {
         fprintf(stderr, "thermo3: Cannot set alarm using null callback.\n");
@@ -91,14 +91,6 @@ int thermo3_click_set_alarm(const uint8_t mikrobus_index, const float threshold,
         return -1;
     }
 
-    if (alarm_callback_ID >= 0) {
-        if (gpio_monitor_remove_callback(alarm_callback_ID) < 0) {
-            fprintf(stderr, "thermo3: Failed to remove old alarm callback.\n");
-            return -1;
-        }
-        alarm_callback_ID = -1;
-    }
-
     if (gpio_init(alarm_pin) < 0
     ||  gpio_set_direction(alarm_pin, GPIO_INPUT) < 0) {
         fprintf(stderr, "thermo3: Failed to configure alert pin as an input.\n");
@@ -109,8 +101,6 @@ int thermo3_click_set_alarm(const uint8_t mikrobus_index, const float threshold,
     buffer[1] = (uint8_t)(threshold);
     buffer[2] = (threshold - (float)(buffer[1])) / DEGREES_CELCIUS_PER_LSB;
     buffer[2] <<= 4;
-    printf("buffer[1]=%d", buffer[1]);
-    printf("buffer[2]=%d", buffer[2]);
     if (i2c_write(TMP102_ADDRESS, buffer, sizeof(buffer)) < 0) {
         fprintf(stderr, "thermo3: Failed to set threshold on sensor.\n");
         return -1;
@@ -138,14 +128,6 @@ int thermo3_click_disable(void)
     }
 
     enabled = false;
-
-    if (alarm_callback_ID >= 0) {
-        if (gpio_monitor_remove_callback(alarm_callback_ID) < 0) {
-            fprintf(stderr, "thermo3: Failed to remove old alarm callback.\n");
-            return -1;
-        }
-        alarm_callback_ID = -1;
-    }
 
     return 0;
 }

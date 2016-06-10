@@ -32,6 +32,13 @@ int spi_init(const uint8_t mikrobus_index, const uint32_t mode);
 int spi_select_bus(const uint8_t mikrobus_index);
 
 /**
+ * @brief Get the current mikrobus index.
+ *
+ * @return Current mikrobus index used by SPI (see #MIKROBUS_INDEX)
+ */
+uint8_t spi_get_current_bus(void);
+
+/**
  * @brief Make a transfer of bytes over SPI.
  *
  * Make a transfer using the currently selected bus. @p tx_buffer and @p rx_buffer can be set to

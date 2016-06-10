@@ -7,7 +7,7 @@ int main(void)
 {
     float temperature = 0.f;
 
-    i2c_init(MIKROBUS_1);
+    i2c_init();
     i2c_select_bus(MIKROBUS_1);
 
     thermo3_click_enable(0);
@@ -15,7 +15,7 @@ int main(void)
     printf("temperature: %.3f°C\n", temperature);
     thermo3_click_disable();
 
-    i2c_release(MIKROBUS_1);
+    i2c_release();
 
     return 0;
 }

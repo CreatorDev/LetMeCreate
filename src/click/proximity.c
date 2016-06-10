@@ -1,5 +1,6 @@
 #include <stddef.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include "click/proximity.h"
 #include "click/common.h"
 
@@ -24,20 +25,24 @@ static bool enabled = false;
 
 int proximity_click_enable(void)
 {
-    int ret = -1;
+    if (enabled)
+        return 0;
 
-    if ((ret = i2c_write_register(VCNL4010_ADDRESS, PROXRATE_REG, PROXIMITY_RATE)) < 0)
-        return ret;
+    if (i2c_write_register(VCNL4010_ADDRESS, PROXRATE_REG, PROXIMITY_RATE) < 0) {
+        fprintf(stderr, "proximity: Failed to set measurement rate.\n");
+        return -1;
+    }
 
-    /* Set LED to 40mA */
-    if ((ret = i2c_write_register(VCNL4010_ADDRESS, LED_REG, LED_CURRENT)) < 0)
-        return ret;
+    if (i2c_write_register(VCNL4010_ADDRESS, LED_REG, LED_CURRENT) < 0) {
+        fprintf(stderr, "proximity: Failed to configure led current.\n");
+        return -1;
+    }
 
-    /* Enable periodic proximity measurements */
-    ret = i2c_write_register(VCNL4010_ADDRESS, COMMAND_REG,
-                             COMMAND_SELFTIMED_EN | COMMAND_PROX_EN);
-    if (ret < 0)
-        return ret;
+    if (i2c_write_register(VCNL4010_ADDRESS, COMMAND_REG,
+                             COMMAND_SELFTIMED_EN | COMMAND_PROX_EN) < 0) {
+        fprintf(stderr, "proximity: Failed to enable sensor.\n");
+        return -1;
+    }
 
     enabled = true;
 
@@ -46,21 +51,25 @@ int proximity_click_enable(void)
 
 int proximity_click_get_measure(uint16_t *measure)
 {
-    int ret;
     bool measure_available = false;
-    uint8_t value;
 
-    if (measure == NULL)
+    if (measure == NULL) {
+        fprintf(stderr, "proximity: Cannot store measure using null pointer.\n");
         return -1;
+    }
 
-    if (enabled == false)
+    if (enabled == false) {
+        fprintf(stderr, "proximity: Cannot get measure from disabled sensor.\n");
         return -1;
+    }
 
-    /* Wait until measure is available */
     while (measure_available == false) {
-        ret = i2c_read_register(VCNL4010_ADDRESS, COMMAND_REG, &value);
-        if (ret < 0)
+        uint8_t value;
+
+        if (i2c_read_register(VCNL4010_ADDRESS, COMMAND_REG, &value) < 0) {
+            fprintf(stderr, "proximity: Failed to read command register.\n");
             return -1;
+        }
 
         if (value & COMMAND_PROX_DATA_RDY)
             measure_available = true;
@@ -71,10 +80,15 @@ int proximity_click_get_measure(uint16_t *measure)
 
 int proximity_click_disable(void)
 {
-    int ret = -1;
+    if (enabled == false)
+        return 0;
 
-    if ((ret = i2c_write_register(VCNL4010_ADDRESS, COMMAND_REG, 0)) >= 0)
-        enabled = false;
+    if (i2c_write_register(VCNL4010_ADDRESS, COMMAND_REG, 0) < 0) {
+        fprintf(stderr, "proximity: Failed to disable sensor.\n");
+        return -1;
+    }
 
-    return ret;
+    enabled = false;
+
+    return 0;
 }

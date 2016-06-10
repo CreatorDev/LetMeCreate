@@ -18,6 +18,9 @@ MikroClick board supported:
   - Motion
   - Relay2
   - Joystick
+  - Air quality
+  - Accel (SPI only)
+  - 8x8R (Led Matrix)
 
 Examples are installed in /usr/bin/letmecreate_examples.
 
