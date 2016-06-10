@@ -28,7 +28,7 @@ int get_led_mask(float perc)
 
 int main()
 {
-    i2c_init(MIKROBUS_1);
+    i2c_init();
     i2c_select_bus(MIKROBUS_1);
     led_init();
 
@@ -48,7 +48,7 @@ int main()
     }
 
     led_release();
-    i2c_release(MIKROBUS_1);
+    i2c_release();
 
     return 0;
 }
