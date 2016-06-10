@@ -13,3 +13,7 @@ install(TARGETS letmecreate_test_relay2 RUNTIME DESTINATION bin)
 add_executable(letmecreate_test_accel accel/main.c)
 target_link_libraries(letmecreate_test_accel letmecreate_click letmecreate_core)
 install(TARGETS letmecreate_test_accel RUNTIME DESTINATION bin)
+
+add_executable(letmecreate_test_led_matrix led_matrix/main.c)
+target_link_libraries(letmecreate_test_led_matrix letmecreate_click letmecreate_core)
+install(TARGETS letmecreate_test_led_matrix RUNTIME DESTINATION bin)
