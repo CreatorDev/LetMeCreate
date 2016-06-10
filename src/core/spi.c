@@ -81,6 +81,11 @@ int spi_select_bus(const uint8_t mikrobus_index)
     return 0;
 }
 
+uint8_t spi_get_current_bus(void)
+{
+    return current_mikrobus_index;
+}
+
 int spi_transfer(const uint8_t *tx_buffer, uint8_t *rx_buffer, const uint32_t count)
 {
     int ret, fd;
