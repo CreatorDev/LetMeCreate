@@ -19,6 +19,7 @@ MikroClick board supported:
   - Relay2
   - Joystick
   - Air quality
+  - Accel (SPI only)
 
 Examples are installed in /usr/bin/letmecreate_examples.
 
