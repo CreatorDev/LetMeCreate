@@ -229,7 +229,7 @@ int pwm_disable(const uint8_t pwm_pin)
         return -1;
     }
 
-    return write_str_pwm_file(pwm_pin, "disable", "0");
+    return write_str_pwm_file(pwm_pin, "enable", "0");
 }
 
 int pwm_release(const uint8_t pwm_pin)
