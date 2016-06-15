@@ -35,7 +35,8 @@ int main(void)
     sigemptyset(&action.sa_mask);
     sigaction (SIGINT, &action, NULL);
 
-    spi_init(MIKROBUS_1, SPI_MODE_3);
+    spi_init();
+    spi_select_bus(MIKROBUS_1);
     accel_click_enable();
 
     printf("Press Ctrl+c to exit program.\n");
@@ -52,7 +53,7 @@ int main(void)
     }
 
     accel_click_disable();
-    spi_release(MIKROBUS_1);
+    spi_release();
 
     return 0;
 }

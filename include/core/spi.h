@@ -12,16 +12,34 @@
 #include <stdint.h>
 
 /**
- * @brief Initialise a SPI bus of the Ci-40.
+ * @brief Initialise all SPI bus of the Ci-40.
  *
- * It creates a new file descriptor.
- * If the bus is already initialised, nothing is done and it returns 0.
+ * Configure all SPI buses:
+ *   - 8 bits per word
+ *   - 1MHz
+ *   - SPI_MODE_3
+ *
+ * @return 0 if successful, -1 otherwise
+ */
+int spi_init(void);
+
+/**
+ * @brief Set the mode of an SPI bus.
  *
  * @param[in] mikrobus_index Index of the bus to initialise (see #MIKROBUS_INDEX)
  * @param[in] mode Mode of the SPI bus (mode 0, 1, 2 or 3)
- * @return -1 if it failed, otherwise a positive number if successful.
+ * @return 0 if successful, -1 otherwise
  */
-int spi_init(const uint8_t mikrobus_index, const uint32_t mode);
+int spi_set_mode(const uint8_t mikrobus_index, const uint32_t mode);
+
+/**
+ * @brief Set the speed of an SPI bus.
+ *
+ * @param[in] mikrobus_index Index of the bus to initialise (see #MIKROBUS_INDEX)
+ * @param[in] speed Speed in Hz of the spi bus
+ * @return 0 if successful, -1 otherwise
+ */
+int spi_set_speed(const uint8_t mikrobus_index, const uint32_t speed);
 
 /**
  * @brief Select the bus to use.
@@ -53,11 +71,10 @@ uint8_t spi_get_current_bus(void);
 int spi_transfer(const uint8_t *tx_buffer, uint8_t *rx_buffer, const uint32_t count);
 
 /**
- * @brief Close the file descriptor associated with this bus.
+ * @brief Close all file descriptors.
  *
- * @param[in] mikrobus_index Index of the bus to release (see #MIKROBUS_INDEX)
  * @return 0 if successful, otherwise it returns -1.
  */
-int spi_release(const uint8_t mikrobus_index);
+int spi_release(void);
 
 #endif

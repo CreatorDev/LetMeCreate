@@ -17,11 +17,12 @@
 static int fds[] = { -1, -1 };
 static uint8_t current_mikrobus_index = MIKROBUS_1;
 
-int spi_init(const uint8_t mikrobus_index, const uint32_t mode)
+static int spi_init_bus(const uint8_t mikrobus_index)
 {
     int fd = -1;
     uint8_t bits_per_word = BITS_PER_WORD;
     uint32_t speed = SPI_SPEED;
+    uint32_t mode = SPI_MODE_3;
     const char *spi_path = NULL;
 
     switch (mikrobus_index) {
@@ -62,6 +63,69 @@ int spi_init(const uint8_t mikrobus_index, const uint32_t mode)
     fds[mikrobus_index] = fd;
 
     return fd;
+}
+
+static int spi_release_bus(const uint8_t mikrobus_index)
+{
+    switch (mikrobus_index) {
+    case MIKROBUS_1:
+    case MIKROBUS_2:
+        if (fds[mikrobus_index] >= 0) {
+            close(fds[mikrobus_index]);
+            fds[mikrobus_index] = -1;
+        }
+        break;
+    default:
+        fprintf(stderr, "spi: Invalid mikrobus index.\n");
+        return -1;
+    }
+
+    return 0;
+}
+
+int spi_init(void)
+{
+    if (spi_init_bus(MIKROBUS_1) < 0) {
+        fprintf(stderr, "spi: Failed to initialise spi on mikrobus 1\n");
+        return -1;
+    }
+
+    if (spi_init_bus(MIKROBUS_2) < 0) {
+        fprintf(stderr, "spi: Failed to initialise spi on mikrobus 2\n");
+        return -1;
+    }
+
+    return 0;
+}
+
+int spi_set_mode(const uint8_t mikrobus_index, const uint32_t mode)
+{
+    if (fds[mikrobus_index] < 0) {
+        fprintf(stderr, "spi: Cannot set mode of uninitialised bus.\n");
+        return -1;
+    }
+
+    if (ioctl(fds[mikrobus_index], SPI_IOC_WR_MODE, &mode) < 0) {
+        fprintf(stderr, "spi: Failed to set mode.\n");
+        return -1;
+    }
+
+    return 0;
+}
+
+int spi_set_speed(const uint8_t mikrobus_index, const uint32_t speed)
+{
+    if (fds[mikrobus_index] < 0) {
+        fprintf(stderr, "spi: Cannot set mode of uninitialised bus.\n");
+        return -1;
+    }
+
+    if (ioctl(fds[mikrobus_index], SPI_IOC_WR_MAX_SPEED_HZ, &speed) < 0) {
+        fprintf(stderr, "spi: Failed to set speed.\n");
+        return -1;
+    }
+
+    return 0;
 }
 
 int spi_select_bus(const uint8_t mikrobus_index)
@@ -111,18 +175,15 @@ int spi_transfer(const uint8_t *tx_buffer, uint8_t *rx_buffer, const uint32_t co
     return 0;
 }
 
-int spi_release(const uint8_t mikrobus_index)
+int spi_release(void)
 {
-    switch (mikrobus_index) {
-    case MIKROBUS_1:
-    case MIKROBUS_2:
-        if (fds[mikrobus_index] >= 0) {
-            close(fds[mikrobus_index]);
-            fds[mikrobus_index] = -1;
-        }
-        break;
-    default:
-        fprintf(stderr, "spi: Invalid mikrobus index.\n");
+    if (spi_release_bus(MIKROBUS_1) < 0) {
+        fprintf(stderr, "spi: Failed to release spi on mikrobus 1\n");
+        return -1;
+    }
+
+    if (spi_release_bus(MIKROBUS_2) < 0) {
+        fprintf(stderr, "spi: Failed to release spi on mikrobus 2\n");
         return -1;
     }
 

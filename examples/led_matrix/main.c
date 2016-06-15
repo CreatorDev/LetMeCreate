@@ -20,7 +20,7 @@ int main(void)
     uint8_t columns[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
     uint8_t cols;
 
-    spi_init(MIKROBUS_1, SPI_MODE_3);
+    spi_init();
     spi_select_bus(MIKROBUS_1);
     led_matrix_click_enable();
     for (cols = 0; cols < 8; ++cols) {
@@ -33,7 +33,7 @@ int main(void)
     }
 
     led_matrix_click_disable();
-    spi_release(MIKROBUS_1);
+    spi_release();
 
     return 0;
 }
