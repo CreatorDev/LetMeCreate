@@ -10,6 +10,10 @@ add_executable(letmecreate_test_relay2 relay2/main.c)
 target_link_libraries(letmecreate_test_relay2 letmecreate_click letmecreate_core)
 install(TARGETS letmecreate_test_relay2 RUNTIME DESTINATION bin)
 
+add_executable(letmecreate_test_joystick joystick/main.c)
+target_link_libraries(letmecreate_test_joystick letmecreate_click letmecreate_core)
+install(TARGETS letmecreate_test_joystick RUNTIME DESTINATION bin)
+
 add_executable(letmecreate_test_accel accel/main.c)
 target_link_libraries(letmecreate_test_accel letmecreate_click letmecreate_core)
 install(TARGETS letmecreate_test_accel RUNTIME DESTINATION bin)
