@@ -15,7 +15,7 @@
 int get_led_mask(float perc)
 {
     int mask = 0;
-    int div = perc/(1.0f / LED_CNT);
+    int div = perc * LED_CNT;
     int i;
     if (div > LED_CNT)
         div = LED_CNT;
