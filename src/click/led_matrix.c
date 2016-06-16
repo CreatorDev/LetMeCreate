@@ -51,7 +51,7 @@ int led_matrix_click_enable(void)
 int led_matrix_click_set_intensity(const uint8_t intensity)
 {
     uint8_t i = intensity;
-    if (intensity <= MAX_INTENSITY)
+    if (intensity > MAX_INTENSITY)
         i = MAX_INTENSITY;
 
     if (spi_write_register(INTENSITY, i) < 0) {
