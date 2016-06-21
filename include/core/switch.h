@@ -45,7 +45,9 @@ int switch_remove_callback(const int callback_ID);
 
 /**
  * @brief Stop monitoring switch events
+ *
+ * @return 0 if successful, -1 otherwise
  */
-void switch_release(void);
+int switch_release(void);
 
 #endif

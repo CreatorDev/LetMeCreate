@@ -199,14 +199,26 @@ int switch_remove_callback(const int callback_ID)
     return 0;
 }
 
-void switch_release(void)
+int switch_release(void)
 {
     if (fd >= 0) {
         running = false;
-        pthread_join(thread, NULL);
-        close(fd);
+        if (pthread_join(thread, NULL) < 0) {
+            fprintf(stderr, "switch: Failed to terminate monitoring thread.\n");
+            return -1;
+        }
+
+        if (pthread_mutex_destroy(&mutex) < 0) {
+            fprintf(stderr, "switch: Failed to destroy mutex.\n");
+            return -1;
+        }
+
+        if (close(fd) < 0) {
+            fprintf(stderr, "switch: Failed to close file descriptor.\n");
+            return -1;
+        }
+
         fd = -1;
-        pthread_mutex_destroy(&mutex);
 
         /* Delete any entries in callback list */
         while (callback_list_head) {
@@ -215,4 +227,6 @@ void switch_release(void)
             free(tmp);
         }
     }
+
+    return 0;
 }
