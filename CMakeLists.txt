@@ -1,8 +1,9 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.8)
 
 project(LetMeCreate)
 
 option(BUILD_EXAMPLES "Build examples" OFF)
+option(BUILD_TESTS "Build tests" OFF)
 
 set(letmecreate_VERSION_MAJOR 0)
 set(letmecreate_VERSION_MINOR 1)
@@ -23,3 +24,7 @@ install(TARGETS letmecreate_click LIBRARY DESTINATION lib)
 if(BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif(BUILD_EXAMPLES)
+
+if(BUILD_TESTS)
+    add_subdirectory(tests)
+endif(BUILD_TESTS)
