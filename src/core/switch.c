@@ -124,6 +124,11 @@ int switch_add_callback(const uint8_t event_mask, void (*callback)(void))
         return -1;
     }
 
+    if ((event_mask & SWITCH_ALL_EVENTS) == 0) {
+        fprintf(stderr, "switch: Invalid event mask.\n");
+        return -1;
+    }
+
     if (callback == NULL) {
         fprintf(stderr, "switch: Cannot add a null callback\n");
         return -1;
