@@ -11,12 +11,6 @@
 
 #include <stdint.h>
 
-/** Index of UART devices */
-enum UART_DEVICE {
-    MIKROBUS_1_UART, /**< UART available on Mikrobus 1 */
-    MIKROBUS_2_UART /**< UART available on Mikrobus 2 and RPI interface */
-};
-
 /** UART baudrates  */
 enum UART_BAUDRATE {
     UART_BD_1200    = 1200,
@@ -33,19 +27,19 @@ enum UART_BAUDRATE {
  *
  * Open a device file and configure it.
  *
- * @param uart_device Index of the device (see #UART_DEVICE for valid indices)
+ * @param mikrobus_index Index of the device (see #MIKROBUS_INDEX)
  * @param baudrate Baudrate of the UART (only values from #UART_BAUDRATE are valid)
  * @return 0 if succesful, -1 otherwise
  */
-int uart_init(const uint8_t uart_device, const uint32_t baudrate);
+int uart_init(const uint8_t mikrobus_index, const uint32_t baudrate);
 
 /**
  * @brief Select the current UART device.
  *
- * @param uart_device Index of the device (see #UART_DEVICE for valid indices)
+ * @param mikrobus_index Index of the device (see #MIKROBUS_INDEX)
  * @return 0 if succesful, -1 otherwise
  */
-int uart_select(const uint8_t uart_device);
+int uart_select(const uint8_t mikrobus_index);
 
 /**
  * @brief Send some data using current UART device.
@@ -70,9 +64,9 @@ int uart_receive(uint8_t *buffer, const uint32_t count);
  *
  * Close device file and restore old parameters.
  *
- * @param uart_device Index of the device (see #UART_DEVICE for valid indices)
+ * @param mikrobus_index Index of the device (see #MIKROBUS_INDEX)
  * @return 0 if succesful, -1 otherwise
  */
-int uart_release(const uint8_t uart_device);
+int uart_release(const uint8_t mikrobus_index);
 
 #endif

@@ -6,6 +6,7 @@
 #include <sys/types.h>
 #include <termios.h>
 #include <unistd.h>
+#include "core/common.h"
 #include "core/uart.h"
 
 #define UART_1_DEVICE_FILE      "/dev/ttySC0"
@@ -13,26 +14,26 @@
 
 static int fds[2] = { -1, -1 };
 static struct termios old_pts[2];
-static uint8_t current_uart_device = MIKROBUS_1_UART;
+static uint8_t current_mikrobus_index = MIKROBUS_1;
 
-static bool check_uart_device(const uint8_t uart_device)
+static bool check_mikrobus_index(const uint8_t mikrobus_index)
 {
-    if (uart_device == MIKROBUS_1_UART)
+    if (mikrobus_index == MIKROBUS_1)
         return true;
-    if (uart_device == MIKROBUS_2_UART)
+    if (mikrobus_index == MIKROBUS_2)
         return true;
 
-    fprintf(stderr, "uart: Invalid uart device\n.");
+    fprintf(stderr, "uart: Invalid mikrobus_index\n.");
     return false;
 }
 
-int uart_init(const uint8_t uart_device, const uint32_t baudrate)
+int uart_init(const uint8_t mikrobus_index, const uint32_t baudrate)
 {
     char *device_file = NULL;
     speed_t speed;
     struct termios pts;
 
-    if (!check_uart_device(uart_device))
+    if (!check_mikrobus_index(mikrobus_index))
         return -1;
 
     switch(baudrate) {
@@ -62,27 +63,27 @@ int uart_init(const uint8_t uart_device, const uint32_t baudrate)
         return -1;
     }
 
-    if (fds[uart_device] >= 0)
+    if (fds[mikrobus_index] >= 0)
         return 0;
 
-    if (uart_device == MIKROBUS_1_UART)
+    if (mikrobus_index == MIKROBUS_1)
         device_file = UART_1_DEVICE_FILE;
     else
         device_file = UART_2_DEVICE_FILE;
 
-    if ((fds[uart_device] = open(device_file, O_RDWR)) < 0) {
+    if ((fds[mikrobus_index] = open(device_file, O_RDWR)) < 0) {
         fprintf(stderr, "uart: Failed to open file descriptor.\n");
         return -1;
     }
 
-    if (tcgetattr(fds[uart_device], &old_pts[uart_device]) < 0) {
+    if (tcgetattr(fds[mikrobus_index], &old_pts[mikrobus_index]) < 0) {
         fprintf(stderr, "uart: Failed to get current parameters.\n");
-        close(fds[uart_device]);
-        fds[uart_device] = -1;
+        close(fds[mikrobus_index]);
+        fds[mikrobus_index] = -1;
         return -1;
     }
 
-    memcpy(&pts, &old_pts[uart_device], sizeof(pts));
+    memcpy(&pts, &old_pts[mikrobus_index], sizeof(pts));
 
     cfsetospeed (&pts, speed);
     cfsetispeed (&pts, speed);
@@ -98,29 +99,29 @@ int uart_init(const uint8_t uart_device, const uint32_t baudrate)
     pts.c_cc[VMIN] = 1;
     pts.c_cc[VTIME] = 0;
 
-    if (tcflush(fds[uart_device], TCIOFLUSH) < 0) {
+    if (tcflush(fds[mikrobus_index], TCIOFLUSH) < 0) {
         fprintf(stderr, "uart: Failed to flush buffer.\n");
-        close(fds[uart_device]);
-        fds[uart_device] = -1;
+        close(fds[mikrobus_index]);
+        fds[mikrobus_index] = -1;
         return -1;
     }
 
-    if (tcsetattr(fds[uart_device], TCSANOW, &pts) < 0) {
+    if (tcsetattr(fds[mikrobus_index], TCSANOW, &pts) < 0) {
         fprintf(stderr, "uart: Failed to set parameters.\n");
-        close(fds[uart_device]);
-        fds[uart_device] = -1;
+        close(fds[mikrobus_index]);
+        fds[mikrobus_index] = -1;
         return -1;
     }
 
     return 0;
 }
 
-int uart_select(const uint8_t uart_device)
+int uart_select(const uint8_t mikrobus_index)
 {
-    if (!check_uart_device(uart_device))
+    if (!check_mikrobus_index(mikrobus_index))
         return -1;
 
-    current_uart_device = uart_device;
+    current_mikrobus_index = mikrobus_index;
 
     return 0;
 }
@@ -137,13 +138,13 @@ int uart_send(const uint8_t *buffer, const uint32_t count)
     if (count == 0)
         return 0;
 
-    if (fds[current_uart_device] < 0) {
-        fprintf(stderr, "uart: device %d must be initialised before sending data.\n", current_uart_device);
+    if (fds[current_mikrobus_index] < 0) {
+        fprintf(stderr, "uart: device %d must be initialised before sending data.\n", current_mikrobus_index);
         return -1;
     }
 
     while (sent_cnt < count) {
-        int ret = write(fds[current_uart_device], &buffer[sent_cnt], count - sent_cnt);
+        int ret = write(fds[current_mikrobus_index], &buffer[sent_cnt], count - sent_cnt);
         if (ret < 0) {
             fprintf(stderr, "uart: Failed to write.\n");
             return -1;
@@ -166,13 +167,13 @@ int uart_receive(uint8_t *buffer, const uint32_t count)
     if (count == 0)
         return 0;
 
-    if (fds[current_uart_device] < 0) {
-        fprintf(stderr, "uart: device %d must be initialised before receiving data.\n", current_uart_device);
+    if (fds[current_mikrobus_index] < 0) {
+        fprintf(stderr, "uart: device %d must be initialised before receiving data.\n", current_mikrobus_index);
         return -1;
     }
 
     while (received_cnt < count) {
-        int ret = read(fds[current_uart_device], &buffer[received_cnt], count - received_cnt);
+        int ret = read(fds[current_mikrobus_index], &buffer[received_cnt], count - received_cnt);
         if (ret < 0) {
             fprintf(stderr, "uart: Failed to read\n");
             return -1;
@@ -183,27 +184,27 @@ int uart_receive(uint8_t *buffer, const uint32_t count)
     return received_cnt;
 }
 
-int uart_release(const uint8_t uart_device)
+int uart_release(const uint8_t mikrobus_index)
 {
-    if (!check_uart_device(uart_device))
+    if (!check_mikrobus_index(mikrobus_index))
         return -1;
 
-    if (fds[uart_device] < 0)
+    if (fds[mikrobus_index] < 0)
         return 0;
 
     /* Flush buffers */
-    if (tcflush(fds[uart_device], TCIOFLUSH) < 0) {
+    if (tcflush(fds[mikrobus_index], TCIOFLUSH) < 0) {
         fprintf(stderr, "uart: Failed to flush buffers.\n");
         return -1;
     }
 
     /* Restore old parameters */
-    if (tcsetattr(fds[uart_device], TCSANOW, &old_pts[uart_device]) < 0) {
+    if (tcsetattr(fds[mikrobus_index], TCSANOW, &old_pts[mikrobus_index]) < 0) {
         fprintf(stderr, "uart: Failed to restore old parameters.\n");
         return -1;
     }
 
-    close(fds[uart_device]);
-    fds[uart_device] = -1;
+    close(fds[mikrobus_index]);
+    fds[mikrobus_index] = -1;
     return 0;
 }
