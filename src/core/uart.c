@@ -116,7 +116,7 @@ int uart_init(const uint8_t mikrobus_index, const uint32_t baudrate)
     return 0;
 }
 
-int uart_select(const uint8_t mikrobus_index)
+int uart_select_bus(const uint8_t mikrobus_index)
 {
     if (!check_mikrobus_index(mikrobus_index))
         return -1;

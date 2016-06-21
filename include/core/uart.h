@@ -39,7 +39,7 @@ int uart_init(const uint8_t mikrobus_index, const uint32_t baudrate);
  * @param mikrobus_index Index of the device (see #MIKROBUS_INDEX)
  * @return 0 if succesful, -1 otherwise
  */
-int uart_select(const uint8_t mikrobus_index);
+int uart_select_bus(const uint8_t mikrobus_index);
 
 /**
  * @brief Send some data using current UART device.
