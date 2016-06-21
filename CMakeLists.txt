@@ -9,7 +9,6 @@ set(letmecreate_VERSION_MINOR 1)
 
 set(CMAKE_C_FLAGS_DEBUG  "${CMAKE_C_FLAGS_DEBUG} -Wall -ggdb3")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/examples/bin)
 
 include_directories(include)
 file(GLOB core_srcs src/core/*.c)
