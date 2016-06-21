@@ -54,6 +54,11 @@ int led_matrix_click_set_intensity(const uint8_t intensity)
     if (intensity > MAX_INTENSITY)
         i = MAX_INTENSITY;
 
+    if (enabled == false) {
+        fprintf(stderr, "led_matrix: Cannot set intensity if disabled.\n");
+        return -1;
+    }
+
     if (spi_write_register(INTENSITY, i) < 0) {
         fprintf(stderr, "led_matrix: Failed to set intensity.\n");
         return -1;
