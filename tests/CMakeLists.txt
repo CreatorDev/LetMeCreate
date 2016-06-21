@@ -6,3 +6,7 @@ add_executable(test_switch test_switch.c $<TARGET_OBJECTS:common>)
 target_link_libraries(test_switch letmecreate_click letmecreate_core)
 install(TARGETS test_switch RUNTIME DESTINATION bin)
 
+add_executable(test_adc test_adc.c $<TARGET_OBJECTS:common>)
+target_link_libraries(test_adc letmecreate_core)
+install(TARGETS test_adc RUNTIME DESTINATION bin)
+

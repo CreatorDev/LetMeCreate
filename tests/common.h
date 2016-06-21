@@ -17,4 +17,9 @@ struct test {
 
 int run_test(struct test test);
 
+void sleep_ms(unsigned int duration);
+
+/* timeout in seconds */
+int wait_for_switch(unsigned int timeout);
+
 #endif
