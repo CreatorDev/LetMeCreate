@@ -128,19 +128,13 @@ int spi_set_speed(const uint8_t mikrobus_index, const uint32_t speed)
     return 0;
 }
 
-int spi_select_bus(const uint8_t mikrobus_index)
+void spi_select_bus(const uint8_t mikrobus_index)
 {
     switch (mikrobus_index) {
     case MIKROBUS_1:
     case MIKROBUS_2:
         current_mikrobus_index = mikrobus_index;
-        break;
-    default:
-        fprintf(stderr, "spi: Invalid mikrobus index.\n");
-        return -1;
     }
-
-    return 0;
 }
 
 uint8_t spi_get_current_bus(void)

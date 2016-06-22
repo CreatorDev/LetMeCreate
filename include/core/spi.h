@@ -44,10 +44,11 @@ int spi_set_speed(const uint8_t mikrobus_index, const uint32_t speed);
 /**
  * @brief Select the bus to use.
  *
+ * If the index given is invalid, the current bus will not change.
+ *
  * @param[in] mikrobus_index Index of the bus to select (see #MIKROBUS_INDEX)
- * @return -1 if @p mikrobus_index is invalid, otherwise it returns 0.
  */
-int spi_select_bus(const uint8_t mikrobus_index);
+void spi_select_bus(const uint8_t mikrobus_index);
 
 /**
  * @brief Get the current mikrobus index.
