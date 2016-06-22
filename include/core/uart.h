@@ -36,7 +36,7 @@ int uart_init(void);
  *
  * If mikrobus_index is not valid, it does not change the current UART device.
  *
- * @param mikrobus_index Index of the device (see #MIKROBUS_INDEX)
+ * @param[in] mikrobus_index Index of the device (see #MIKROBUS_INDEX)
  */
 void uart_select_bus(const uint8_t mikrobus_index);
 
@@ -70,8 +70,8 @@ int uart_get_baudrate(uint32_t *baudrate);
 /**
  * @brief Send some data using current UART device.
  *
- * @param buffer Array of bytes
- * @param count Number of bytes to send
+ * @param[in] buffer Array of bytes
+ * @param[in] count Number of bytes to send
  * @return 0 if successful, -1 otherwise
  */
 int uart_send(const uint8_t *buffer, const uint32_t count);
@@ -79,8 +79,8 @@ int uart_send(const uint8_t *buffer, const uint32_t count);
 /**
  * @brief Receive some data using current UART device.
  *
- * @param buffer Array of bytes
- * @param count Number of bytes to receive
+ * @param[out] buffer Array of bytes
+ * @param[in] count Number of bytes to receive
  * @return 0 if successful, -1 otherwise
  */
 int uart_receive(uint8_t *buffer, const uint32_t count);
