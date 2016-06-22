@@ -138,6 +138,108 @@ int uart_select_bus(const uint8_t mikrobus_index)
     return 0;
 }
 
+int uart_set_baudrate(const uint32_t baudrate)
+{
+    struct termios pts;
+    speed_t speed;
+
+    if (fds[current_mikrobus_index] < 0) {
+        fprintf(stderr, "uart: device %d must be initialised before sending data.\n", current_mikrobus_index);
+        return -1;
+    }
+
+    if (tcgetattr(fds[current_mikrobus_index], &pts) < 0) {
+        fprintf(stderr, "uart: Failed to get current parameters.\n");
+        return -1;
+    }
+
+    switch(baudrate) {
+    case UART_BD_1200:
+        speed = B1200;
+        break;
+    case UART_BD_2400:
+        speed = B2400;
+        break;
+    case UART_BD_4800:
+        speed = B4800;
+        break;
+    case UART_BD_9600:
+        speed = B9600;
+        break;
+    case UART_BD_19200:
+        speed = B19200;
+        break;
+    case UART_BD_38400:
+        speed = B38400;
+        break;
+    case UART_BD_57600:
+        speed = B57600;
+        break;
+    default:
+        fprintf(stderr, "uart: Invalid baudrate.\n");
+        return -1;
+    }
+
+    cfsetospeed(&pts, speed);
+    cfsetispeed(&pts, speed);
+
+    if (tcsetattr(fds[current_mikrobus_index], TCSANOW, &pts) < 0) {
+        fprintf(stderr, "uart: Failed to set baudrate.\n");
+        return -1;
+    }
+
+    return 0;
+}
+
+int uart_get_baudrate(uint32_t *baudrate)
+{
+    struct termios pts;
+
+    if (baudrate == NULL) {
+        fprintf(stderr, "uart: Cannot set baudrate using null pointer.\n");
+        return -1;
+    }
+
+    if (fds[current_mikrobus_index] < 0) {
+        fprintf(stderr, "uart: device %d must be initialised before sending data.\n", current_mikrobus_index);
+        return -1;
+    }
+
+    if (tcgetattr(fds[current_mikrobus_index], &pts) < 0) {
+        fprintf(stderr, "uart: Failed to get current parameters.\n");
+        return -1;
+    }
+
+    switch (cfgetispeed(&pts)) {
+    case B1200:
+        *baudrate = UART_BD_1200;
+        break;
+    case B2400:
+        *baudrate = UART_BD_2400;
+        break;
+    case B4800:
+        *baudrate = UART_BD_4800;
+        break;
+    case B9600:
+        *baudrate = UART_BD_9600;
+        break;
+    case B19200:
+        *baudrate = UART_BD_19200;
+        break;
+    case B38400:
+        *baudrate = UART_BD_38400;
+        break;
+    case B57600:
+        *baudrate = UART_BD_57600;
+        break;
+    default:
+        fprintf(stderr, "uart: UART device use unknown baudrate.\n");
+        return -1;
+    }
+
+    return 0;
+}
+
 int uart_send(const uint8_t *buffer, const uint32_t count)
 {
     uint32_t sent_cnt = 0;

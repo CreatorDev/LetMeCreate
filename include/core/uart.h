@@ -40,6 +40,26 @@ int uart_init(void);
 int uart_select_bus(const uint8_t mikrobus_index);
 
 /**
+ * @brief Set the baudrate of the current UART device.
+ *
+ * The device must be initialised first.
+ *
+ * @param[in] baudrate Set the new baudrate of the UART device (see #UART_BAUDRATE for valid baudrates)
+ * @return 0 if succesful, -1 otherwise
+ */
+int uart_set_baudrate(const uint32_t baudrate);
+
+/**
+ * @brief Get the speed of the current UART device.
+ *
+ * The device must be initialised first.
+ *
+ * @param[out] baudrate Current baudrate of the UART device (must not be null)
+ * @return 0 if succesful, -1 otherwise
+ */
+int uart_get_baudrate(uint32_t *baudrate);
+
+/**
  * @brief Send some data using current UART device.
  *
  * @param buffer Array of bytes
