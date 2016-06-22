@@ -24,7 +24,7 @@ enum MIKROBUS_INDEX {
  *
  * @param[in] path Path to the file (must not be null)
  * @param[in] str String to write (must not be null)
- * @return 0 if succesful, -1 otherwise
+ * @return 0 if successful, -1 otherwise
  */
 int write_str_file(const char *path, const char *str);
 
@@ -33,7 +33,7 @@ int write_str_file(const char *path, const char *str);
  *
  * @param[in] path Path to the file (must not be null)
  * @param[in] value Value to write
- * @return 0 if succesful, -1 otherwise
+ * @return 0 if successful, -1 otherwise
  */
 int write_int_file(const char *path, const uint32_t value);
 
@@ -43,16 +43,16 @@ int write_int_file(const char *path, const uint32_t value);
  * @param[in] path Path to the file (must not be null)
  * @param[out] str
  * @param[in] max_str_length Maximum number of characters to read
- * @return 0 if succesful, -1 otherwise
+ * @return 0 if successful, -1 otherwise
  */
 int read_str_file(const char *path, char *str, const uint32_t max_str_length);
 
 /**
- * @brief Reda integer from a device file.
+ * @brief Read integer from a device file.
  *
  * @param[in] path Path to the file (must not be null)
  * @param[out] value
- * @return 0 if succesful, -1 otherwise
+ * @return 0 if successful, -1 otherwise
  */
 int read_int_file(const char *path, uint32_t *value);
 
@@ -61,7 +61,7 @@ int read_int_file(const char *path, uint32_t *value);
  *
  * @param[in] dir_path Path to the directory containing export/unexport files.
  * @param[in] pin_no Index of the pin to export
- * @return 0 if succesful, -1 otherwise
+ * @return 0 if successful, -1 otherwise
  */
 int export_pin(const char *dir_path, const uint32_t pin_no);
 
@@ -70,7 +70,7 @@ int export_pin(const char *dir_path, const uint32_t pin_no);
  *
  * @param[in] dir_path Path to the directory containing export/unexport files.
  * @param[in] pin_no Index of the pin to unexport
- * @return 0 if succesful, -1 otherwise
+ * @return 0 if successful, -1 otherwise
  */
 int unexport_pin(const char *dir_path, const uint32_t pin_no);
 

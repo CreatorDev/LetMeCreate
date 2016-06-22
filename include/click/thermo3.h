@@ -36,7 +36,7 @@ int thermo3_click_get_temperature(float *temperature);
  * @param[in] mikrobus_index Index of the mikrobus used by the click (see #MIKROBUS_INDEX)
  * @param[in] threshold in degrees Celsius
  * @param[in] callback Function to call if temperature is higher than threshold (must not be null)
- * @return callback ID (positive integer if sucessfull, -1 otherwise.
+ * @return callback ID (positive integer if successful, -1 otherwise.
  */
 int thermo3_click_set_alarm(const uint8_t mikrobus_index, const float threshold, void(*callback)(uint8_t));
 

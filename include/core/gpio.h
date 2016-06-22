@@ -59,7 +59,7 @@ enum GPIO_DIR {
  * This function must be called before doing any operation on this GPIO (except releasing it).
  *
  * @param[in] gpio_pin Index of the GPIO
- * @return 0 if succesful, -1 otherwise
+ * @return 0 if successful, -1 otherwise
  */
 int gpio_init(const uint8_t gpio_pin);
 
@@ -68,7 +68,7 @@ int gpio_init(const uint8_t gpio_pin);
  *
  * @param[in] gpio_pin Index of the GPIO
  * @param[in] dir Direction of the gpio (must be GPIO_OUTPUT or GPIO_INPUT)
- * @return 0 if succesful, -1 otherwise
+ * @return 0 if successful, -1 otherwise
  */
 int gpio_set_direction(const uint8_t gpio_pin, const uint8_t dir);
 
@@ -77,7 +77,7 @@ int gpio_set_direction(const uint8_t gpio_pin, const uint8_t dir);
  *
  * @param[in] gpio_pin Index of the GPIO
  * @param[out] dir Pointer to a variable (must not be null)
- * @return 0 if succesful, -1 otherwise
+ * @return 0 if successful, -1 otherwise
  */
 int gpio_get_direction(const uint8_t gpio_pin, uint8_t *dir);
 
@@ -88,7 +88,7 @@ int gpio_get_direction(const uint8_t gpio_pin, uint8_t *dir);
  *
  * @param[in] gpio_pin Index of the GPIO
  * @param[in] value (0: low, any other value: high)
- * @return 0 if succesful, -1 otherwise
+ * @return 0 if successful, -1 otherwise
  */
 int gpio_set_value(const uint8_t gpio_pin, const uint32_t value);
 
@@ -97,7 +97,7 @@ int gpio_set_value(const uint8_t gpio_pin, const uint32_t value);
  *
  * @param[in] gpio_pin Index of the GPIO
  * @param[out] value Pointer to a variable (must not be null)
- * @return 0 if succesful, -1 otherwise
+ * @return 0 if successful, -1 otherwise
  */
 int gpio_get_value(const uint8_t gpio_pin, uint32_t *value);
 
@@ -105,7 +105,7 @@ int gpio_get_value(const uint8_t gpio_pin, uint32_t *value);
  * @brief Unexport a GPIO.
  *
  * @param gpio_pin Index of the GPIO
- * @return 0 if succesful, -1 otherwise
+ * @return 0 if successful, -1 otherwise
  */
 int gpio_release(const uint8_t gpio_pin);
 

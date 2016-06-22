@@ -14,7 +14,7 @@
 /**
  * @brief Initialise all SPI bus of the Ci-40.
  *
- * Configure all SPI buses:
+ * Configure all SPI bus:
  *   - 8 bits per word
  *   - 1MHz
  *   - SPI_MODE_3
@@ -36,7 +36,7 @@ int spi_set_mode(const uint8_t mikrobus_index, const uint32_t mode);
  * @brief Set the speed of an SPI bus.
  *
  * @param[in] mikrobus_index Index of the bus to initialise (see #MIKROBUS_INDEX)
- * @param[in] speed Speed in Hz of the spi bus
+ * @param[in] speed Speed in Hz of the SPI bus
  * @return 0 if successful, -1 otherwise
  */
 int spi_set_speed(const uint8_t mikrobus_index, const uint32_t speed);

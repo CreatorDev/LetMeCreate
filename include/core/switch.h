@@ -23,7 +23,7 @@ enum SWITCH_EVENT {
 /**
  * @brief Start a thread monitoring switch events
  *
- * @return 0 if succesful, -1 otherwise.
+ * @return 0 if successful, -1 otherwise.
  */
 int switch_init(void);
 
