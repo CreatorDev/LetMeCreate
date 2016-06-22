@@ -23,13 +23,12 @@ int i2c_init(void);
 /**
  * @brief Select the current bus.
  *
- * All following read/write will use the selected bus. The bus selected must be initialised before
- * calling this function.
+ * All following read/write will use the selected bus. If the index given is invalid, the current
+ * bus will not change.
  *
  * @param[in] mikrobus_index index of the bus to initialise (see #MIKROBUS_INDEX)
- * @return Returns -1 if it fails, otherwise it returns 0.
  */
-int i2c_select_bus(const uint8_t mikrobus_index);
+void i2c_select_bus(const uint8_t mikrobus_index);
 
 /**
  * @brief Get the current mikrobus index.

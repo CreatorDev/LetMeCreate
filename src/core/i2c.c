@@ -68,19 +68,13 @@ int i2c_init(void)
     return i2c_init_bus(MIKROBUS_2);
 }
 
-int i2c_select_bus(const uint8_t mikrobus_index)
+void i2c_select_bus(const uint8_t mikrobus_index)
 {
     switch (mikrobus_index) {
     case MIKROBUS_1:
     case MIKROBUS_2:
         current_mikrobus_index = mikrobus_index;
-        break;
-    default:
-        fprintf(stderr, "i2c: Invalid bus index.\n");
-        return -1;
     }
-
-    return 0;
 }
 
 uint8_t i2c_get_current_bus(void)
