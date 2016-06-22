@@ -16,7 +16,9 @@ define Package/letmecreate
 endef
 
 CMAKE_OPTIONS = \
-	-DBUILD_EXAMPLES=ON
+	-DBUILD_EXAMPLES=ON \
+	-DBUILD_TESTS=ON \
+	-DCMAKE_BUILD_TYPE=Debug
 
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
@@ -36,9 +38,12 @@ define Package/letmecreate/install
 	mkdir -p $(1)/usr/bin/letmecreate_examples
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/examples/bin/* $(1)/usr/bin/letmecreate_examples
 
+	mkdir -p $(1)/usr/bin/letmecreate_tests
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tests/bin/* $(1)/usr/bin/letmecreate_tests
+
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/lib/*.so $(1)/usr/lib/
-	
+
 	$(INSTALL_DIR) $(1)/usr/include/letmecreate
 	$(CP) $(PKG_BUILD_DIR)/include/* $(1)/usr/include/letmecreate
 endef
