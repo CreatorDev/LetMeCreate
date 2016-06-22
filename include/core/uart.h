@@ -34,10 +34,11 @@ int uart_init(void);
 /**
  * @brief Select the current UART device.
  *
+ * If mikrobus_index is not valid, it does not change the current uart device.
+ *
  * @param mikrobus_index Index of the device (see #MIKROBUS_INDEX)
- * @return 0 if succesful, -1 otherwise
  */
-int uart_select_bus(const uint8_t mikrobus_index);
+void uart_select_bus(const uint8_t mikrobus_index);
 
 /**
  * @brief Set the baudrate of the current UART device.

@@ -128,14 +128,14 @@ int uart_init(void)
     return 0;
 }
 
-int uart_select_bus(const uint8_t mikrobus_index)
+void uart_select_bus(const uint8_t mikrobus_index)
 {
-    if (!check_mikrobus_index(mikrobus_index))
-        return -1;
-
-    current_mikrobus_index = mikrobus_index;
-
-    return 0;
+    switch (mikrobus_index) {
+    case MIKROBUS_1:
+    case MIKROBUS_2:
+        current_mikrobus_index = mikrobus_index;
+        break;
+    }
 }
 
 int uart_set_baudrate(const uint32_t baudrate)
