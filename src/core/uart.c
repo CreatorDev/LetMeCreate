@@ -27,41 +27,13 @@ static bool check_mikrobus_index(const uint8_t mikrobus_index)
     return false;
 }
 
-int uart_init(const uint8_t mikrobus_index, const uint32_t baudrate)
+static int uart_init_bus(const uint8_t mikrobus_index)
 {
     char *device_file = NULL;
-    speed_t speed;
     struct termios pts;
 
     if (!check_mikrobus_index(mikrobus_index))
         return -1;
-
-    switch(baudrate) {
-    case UART_BD_1200:
-        speed = B1200;
-        break;
-    case UART_BD_2400:
-        speed = B2400;
-        break;
-    case UART_BD_4800:
-        speed = B4800;
-        break;
-    case UART_BD_9600:
-        speed = B9600;
-        break;
-    case UART_BD_19200:
-        speed = B19200;
-        break;
-    case UART_BD_38400:
-        speed = B38400;
-        break;
-    case UART_BD_57600:
-        speed = B57600;
-        break;
-    default:
-        fprintf(stderr, "uart: Invalid baudrate specified\n.");
-        return -1;
-    }
 
     if (fds[mikrobus_index] >= 0)
         return 0;
@@ -84,9 +56,6 @@ int uart_init(const uint8_t mikrobus_index, const uint32_t baudrate)
     }
 
     memcpy(&pts, &old_pts[mikrobus_index], sizeof(pts));
-
-    cfsetospeed (&pts, speed);
-    cfsetispeed (&pts, speed);
 
     pts.c_cflag = (pts.c_cflag & ~CSIZE) | CS8;
     pts.c_cflag &= ~CSTOPB;
@@ -112,6 +81,49 @@ int uart_init(const uint8_t mikrobus_index, const uint32_t baudrate)
         fds[mikrobus_index] = -1;
         return -1;
     }
+
+    return 0;
+}
+
+static int uart_release_bus(const uint8_t mikrobus_index)
+{
+    if (!check_mikrobus_index(mikrobus_index))
+        return -1;
+
+    if (fds[mikrobus_index] < 0)
+        return 0;
+
+    /* Flush buffers */
+    if (tcflush(fds[mikrobus_index], TCIOFLUSH) < 0) {
+        fprintf(stderr, "uart: Failed to flush buffers.\n");
+        return -1;
+    }
+
+    /* Restore old parameters */
+    if (tcsetattr(fds[mikrobus_index], TCSANOW, &old_pts[mikrobus_index]) < 0) {
+        fprintf(stderr, "uart: Failed to restore old parameters.\n");
+        return -1;
+    }
+
+    close(fds[mikrobus_index]);
+    fds[mikrobus_index] = -1;
+    return 0;
+}
+
+int uart_init(void)
+{
+    if (uart_init_bus(MIKROBUS_1) < 0)
+        return -1;
+    uart_select_bus(MIKROBUS_1);
+    if (uart_set_baudrate(UART_BD_9600) < 0)
+        return -1;
+
+    if (uart_init_bus(MIKROBUS_2) < 0)
+        return -1;
+    uart_select_bus(MIKROBUS_2);
+    if (uart_set_baudrate(UART_BD_9600) < 0)
+        return -1;
+    uart_select_bus(MIKROBUS_1);
 
     return 0;
 }
@@ -184,27 +196,10 @@ int uart_receive(uint8_t *buffer, const uint32_t count)
     return received_cnt;
 }
 
-int uart_release(const uint8_t mikrobus_index)
+int uart_release(void)
 {
-    if (!check_mikrobus_index(mikrobus_index))
+    if (uart_release_bus(MIKROBUS_1) < 0)
         return -1;
 
-    if (fds[mikrobus_index] < 0)
-        return 0;
-
-    /* Flush buffers */
-    if (tcflush(fds[mikrobus_index], TCIOFLUSH) < 0) {
-        fprintf(stderr, "uart: Failed to flush buffers.\n");
-        return -1;
-    }
-
-    /* Restore old parameters */
-    if (tcsetattr(fds[mikrobus_index], TCSANOW, &old_pts[mikrobus_index]) < 0) {
-        fprintf(stderr, "uart: Failed to restore old parameters.\n");
-        return -1;
-    }
-
-    close(fds[mikrobus_index]);
-    fds[mikrobus_index] = -1;
-    return 0;
+    return uart_release_bus(MIKROBUS_2);
 }

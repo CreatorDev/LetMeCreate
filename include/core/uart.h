@@ -23,15 +23,13 @@ enum UART_BAUDRATE {
 };
 
 /**
- * @brief Initialise a UART device.
+ * @brief Initialise all UART devices.
  *
- * Open a device file and configure it.
+ * Set the baudrate to 9600. Set current UART device as MIKROBUS_1
  *
- * @param mikrobus_index Index of the device (see #MIKROBUS_INDEX)
- * @param baudrate Baudrate of the UART (only values from #UART_BAUDRATE are valid)
  * @return 0 if succesful, -1 otherwise
  */
-int uart_init(const uint8_t mikrobus_index, const uint32_t baudrate);
+int uart_init(void);
 
 /**
  * @brief Select the current UART device.
@@ -60,13 +58,12 @@ int uart_send(const uint8_t *buffer, const uint32_t count);
 int uart_receive(uint8_t *buffer, const uint32_t count);
 
 /**
- * @brief Release a UART device.
+ * @brief Release all UART devices.
  *
  * Close device file and restore old parameters.
  *
- * @param mikrobus_index Index of the device (see #MIKROBUS_INDEX)
  * @return 0 if succesful, -1 otherwise
  */
-int uart_release(const uint8_t mikrobus_index);
+int uart_release(void);
 
 #endif
