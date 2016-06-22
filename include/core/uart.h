@@ -41,6 +41,13 @@ int uart_init(void);
 void uart_select_bus(const uint8_t mikrobus_index);
 
 /**
+ * @brief Get the current mikrobus index.
+ *
+ * @return Current selected UART device (see #MIKROBUS_INDEX)
+ */
+uint8_t uart_get_current_bus(void);
+
+/**
  * @brief Set the baudrate of the current UART device.
  *
  * The device must be initialised first.

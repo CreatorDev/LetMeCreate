@@ -138,6 +138,11 @@ void uart_select_bus(const uint8_t mikrobus_index)
     }
 }
 
+uint8_t uart_get_current_bus(void)
+{
+    return current_mikrobus_index;
+}
+
 int uart_set_baudrate(const uint32_t baudrate)
 {
     struct termios pts;
