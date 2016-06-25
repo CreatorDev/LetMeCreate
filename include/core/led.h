@@ -22,6 +22,12 @@ enum LED_INDEX {
     LED_HEARTBEAT=0x80
 };
 
+/** Mode of LED's */
+enum LED_MODE {
+    ON_OFF_MODE,
+    TIMER_MODE
+};
+
 /**
  * @brief Initialise file descriptors for each LED. Configure all LEDS in on/off mode. Switch off
  * all LEDs.
@@ -77,6 +83,15 @@ int led_configure_on_off_mode(const uint8_t mask);
  * @return 0 if successful, -1 otherwise
  */
 int led_configure_timer_mode(const uint8_t mask);
+
+/**
+ * @brief Get the mode of a LED.
+ *
+ * @param[in] led_index
+ * @param[out] led_mode Current mode of the LED (see #LED_MODE)
+ * @return 0 if successful, -1 otherwise
+ */
+int led_get_mode(const uint8_t led_index, uint8_t *led_mode);
 
 /**
  * @brief Configure delays for LEDS. LEDS must have been configured in timer mode before.

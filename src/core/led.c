@@ -4,6 +4,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include "core/common.h"
 #include "core/led.h"
 
 
@@ -203,6 +204,34 @@ int led_configure_timer_mode(const uint8_t mask)
             fprintf(stderr, "led: Failed to configure led %d in timer mode\n", i);
             return -1;
         }
+    }
+
+    return 0;
+}
+
+int led_get_mode(const uint8_t led_index, uint8_t *led_mode)
+{
+    char path[MAX_STR_LENGTH];
+    char str[MAX_STR_LENGTH];
+
+    if (led_mode == NULL) {
+        fprintf(stderr, "led: Cannot store mode using null pointer.\n");
+        return -1;
+    }
+
+    if (build_file_path(path, led_index, "trigger") < 0)
+        return -1;
+
+    if (read_str_file(path, str, MAX_STR_LENGTH) < 0)
+        return -1;
+
+    if (strcmp("none", path) == 0)
+        *led_mode = ON_OFF_MODE;
+    else if (strcmp("timer", path) == 0)
+        *led_mode = TIMER_MODE;
+    else {
+        fprintf(stderr, "led: Unknown mode.\n");
+        return -1;
     }
 
     return 0;
