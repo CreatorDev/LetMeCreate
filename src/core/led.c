@@ -10,13 +10,13 @@
 
 #define LED_DEVICE_FILE_PATH                    "/sys/class/leds/marduk:red:user%d/%s"
 #define LED_HEARTBEAT_DEVICE_FILE_PATH          "/sys/class/leds/marduk:red:heartbeat/%s"
-#define NB_LEDS                     (8)
+#define LED_CNT                     (8)
 
-int fds[NB_LEDS] = { -1, -1, -1, -1, -1, -1, -1, -1 };
+int fds[LED_CNT] = { -1, -1, -1, -1, -1, -1, -1, -1 };
 
 static int build_file_path(char *path, const uint8_t led_index, const char *filename)
 {
-    if (led_index >= NB_LEDS) {
+    if (led_index >= LED_CNT) {
         fprintf(stderr, "led: Cannot build device file path for invalid led %d\n", led_index);
         return -1;
     }
@@ -31,7 +31,7 @@ static int build_file_path(char *path, const uint8_t led_index, const char *file
         return -1;
     }
 
-    if(led_index == 7) {
+    if(led_index == LED_HEARTBEAT) {
         if (sprintf(path, LED_HEARTBEAT_DEVICE_FILE_PATH, filename) < 0) {
             fprintf(stderr, "led: Failed to build %s device file path for led heartbeat\n", filename);
             return -1;
@@ -50,7 +50,7 @@ static int set_value(const uint8_t led_index, const uint8_t value)
 {
     char *str = NULL;
 
-    if (led_index > NB_LEDS)
+    if (led_index > LED_CNT)
         return -1;
 
     if (value == 0)
@@ -63,62 +63,30 @@ static int set_value(const uint8_t led_index, const uint8_t value)
 
 static int set_mode(const uint8_t led_index, const char *mode)
 {
-    int fd = -1;
-    char path[255];
+    char path[MAX_STR_LENGTH];
 
     if (build_file_path(path, led_index, "trigger") < 0)
         return -1;
 
-    if ((fd = open(path, O_WRONLY)) < 0) {
-        fprintf(stderr, "led: Failed to open trigger device file for led %d\n", led_index);
-        return -1;
-    }
-    if (write(fd, mode, strlen(mode)+1) < 0) {
-        close(fd);
-        fprintf(stderr, "led: Failed to set mode to %s for led %d\n", mode, led_index);
-        return -1;
-    }
-    close(fd);
-
-    return 0;
+    return write_str_file(path, mode);
 }
 
 static int set_delay(const uint8_t led_index, const char *filename, const uint32_t value)
 {
-    int fd = -1;
-    char path[255];
-    char str[255];
+    char path[MAX_STR_LENGTH];
 
     if (build_file_path(path, led_index, filename) < 0)
         return -1;
 
-    if (snprintf(str, sizeof(str), "%d", value) < 0) {
-        fprintf(stderr, "led: Failed to convert unsigned integer into string\n");
-        return -1;
-    }
-
-    if ((fd = open(path, O_WRONLY)) < 0) {
-        fprintf(stderr, "led: Failed to open %s device file for led %d\n", filename, led_index);
-        return -1;
-    }
-
-    if (write(fd, str, strlen(str)+1) < 0) {
-        fprintf(stderr, "led: Failed to set value for %s for led %d\n", filename, led_index);
-        close(fd);
-        return -1;
-    }
-
-    close(fd);
-
-    return 0;
+    return write_int_file(path, value);
 }
 
 int led_init(void)
 {
     int i = 0;
 
-    for (; i < NB_LEDS; ++i) {
-        char path[255];
+    for (; i < LED_CNT; ++i) {
+        char path[MAX_STR_LENGTH];
 
         if (set_mode(i, "none") < 0)
             return -1;
@@ -162,7 +130,7 @@ int led_set(const uint8_t mask, const uint8_t value)
 {
     int i = 0, tmp = 1;
 
-    for (; i < NB_LEDS; ++i, tmp <<= 1) {
+    for (; i < LED_CNT; ++i, tmp <<= 1) {
         if ((mask & tmp) == 0)
             continue;
 
@@ -179,7 +147,7 @@ int led_configure_on_off_mode(const uint8_t mask)
 {
     int i = 0, tmp = 1;
 
-    for (; i < NB_LEDS; ++i, tmp <<= 1) {
+    for (; i < LED_CNT; ++i, tmp <<= 1) {
         if ((mask & tmp) == 0)
             continue;
 
@@ -196,7 +164,7 @@ int led_configure_timer_mode(const uint8_t mask)
 {
     int i = 0, tmp = 1;
 
-    for (; i < NB_LEDS; ++i, tmp <<= 1) {
+    for (; i < LED_CNT; ++i, tmp <<= 1) {
         if ((mask & tmp) == 0)
             continue;
 
@@ -241,7 +209,7 @@ int led_set_delay(const uint8_t mask, const uint32_t delay_on, const uint32_t de
 {
     int i = 0, tmp = 1;
 
-    for (; i < NB_LEDS; ++i, tmp <<= 1) {
+    for (; i < LED_CNT; ++i, tmp <<= 1) {
         if ((mask & tmp) == 0)
             continue;
 
@@ -257,7 +225,7 @@ int led_release(void)
 {
     int i = 0;
 
-    for (; i < NB_LEDS; ++i) {
+    for (; i < LED_CNT; ++i) {
         if (fds[i] < 0)
             continue;
 
