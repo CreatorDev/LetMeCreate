@@ -224,25 +224,23 @@ int led_set_delay(const uint8_t mask, const uint32_t delay_on, const uint32_t de
     return 0;
 }
 
-void led_release(void)
+int led_release(void)
 {
     int i = 0;
-
-    /* Switch off all LEDS */
-    led_switch_off(LED_0
-                 | LED_1
-                 | LED_2
-                 | LED_3
-                 | LED_4
-                 | LED_5
-                 | LED_6
-                 | LED_HEARTBEAT);
 
     for (; i < NB_LEDS; ++i) {
         if (fds[i] < 0)
             continue;
 
-        close(fds[i]);
+        if (led_switch_off(1 << i) < 0)
+            return -1;
+
+        if (close(fds[i]) < 0) {
+            fprintf(stderr, "led: Failed to close file descriptor for led %d\n", i);
+            return -1;
+        }
         fds[i] = -1;
     }
+
+    return 0;
 }

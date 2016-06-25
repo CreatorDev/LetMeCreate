@@ -89,8 +89,10 @@ int led_configure_timer_mode(const uint8_t mask);
 int led_set_delay(const uint8_t mask, const uint32_t delay_on, const uint32_t delay_off);
 
 /**
- * @brief Close file descriptors for each LED.
+ * @brief Close file descriptors for each LED and switch off all LED's.
+ *
+ * @return 0 if successful, -1 otherwise
  */
-void led_release(void);
+int led_release(void);
 
 #endif
