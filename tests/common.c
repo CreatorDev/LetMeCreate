@@ -18,7 +18,7 @@ int run_test(struct test test)
     printf("----------- %s -----------\n\n", test.name);
 
     for (i = 0; i < test.case_cnt; ++i) {
-        printf("%2u/%2u\t[%s]\n", i+1, test.case_cnt, test.cases[i].name);
+        printf("%2u/%u\t[%s]\n", i+1, test.case_cnt, test.cases[i].name);
 
         if (test.cases[i].test_func()) {
             ++test_passed_cnt;
@@ -34,7 +34,7 @@ int run_test(struct test test)
     else if (test_passed_cnt == 0)
         printf("all tests failed\n");
     else
-        printf("%2u/%2u tests passed\n", test_passed_cnt, test.case_cnt);
+        printf("%2u/%u tests passed\n", test_passed_cnt, test.case_cnt);
 
     if (test_passed_cnt != test.case_cnt)
         return -1;
