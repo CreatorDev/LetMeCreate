@@ -134,8 +134,8 @@ int led_set(const uint8_t mask, const uint8_t value)
         if ((mask & tmp) == 0)
             continue;
 
-        if (set_value(i, value & mask) < 0) {
-            fprintf(stderr, "Failed to switch %s led %d\n", (value & mask) ? "on" : "off", i);
+        if (set_value(i, value & tmp) < 0) {
+            fprintf(stderr, "Failed to switch %s led %d\n", (value & tmp) ? "on" : "off", i);
             return -1;
         }
     }
