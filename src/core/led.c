@@ -31,7 +31,7 @@ static int build_file_path(char *path, const uint8_t led_index, const char *file
         return -1;
     }
 
-    if(led_index == LED_HEARTBEAT) {
+    if(led_index == 7) {
         if (sprintf(path, LED_HEARTBEAT_DEVICE_FILE_PATH, filename) < 0) {
             fprintf(stderr, "led: Failed to build %s device file path for led heartbeat\n", filename);
             return -1;
@@ -181,21 +181,52 @@ int led_get_mode(const uint8_t led_index, uint8_t *led_mode)
 {
     char path[MAX_STR_LENGTH];
     char str[MAX_STR_LENGTH];
+    uint8_t index;
 
     if (led_mode == NULL) {
         fprintf(stderr, "led: Cannot store mode using null pointer.\n");
         return -1;
     }
 
-    if (build_file_path(path, led_index, "trigger") < 0)
+    switch (led_index) {
+    case LED_0:
+        index = 0;
+        break;
+    case LED_1:
+        index = 1;
+        break;
+    case LED_2:
+        index = 2;
+        break;
+    case LED_3:
+        index = 3;
+        break;
+    case LED_4:
+        index = 4;
+        break;
+    case LED_5:
+        index = 5;
+        break;
+    case LED_6:
+        index = 6;
+        break;
+    case LED_HEARTBEAT:
+        index = 7;
+        break;
+    default:
+        fprintf(stderr, "led: Invalid led_index\n");
+        return -1;
+    }
+
+    if (build_file_path(path, index, "trigger") < 0)
         return -1;
 
     if (read_str_file(path, str, MAX_STR_LENGTH) < 0)
         return -1;
 
-    if (strcmp("none", path) == 0)
+    if (strstr(str, "[none]") != NULL)
         *led_mode = ON_OFF_MODE;
-    else if (strcmp("timer", path) == 0)
+    else if (strstr(str, "[timer]") != NULL)
         *led_mode = TIMER_MODE;
     else {
         fprintf(stderr, "led: Unknown mode.\n");
