@@ -5,6 +5,7 @@
 #include "core/switch.h"
 
 static volatile uint8_t switch_status;
+static volatile uint8_t switch_pressed;
 
 int run_test(struct test test)
 {
@@ -83,4 +84,44 @@ void sleep_ms(unsigned int duration)
 
     while (nanosleep(&req, &rem))
         req = rem;
+}
+
+static void switch_1_pressed(void)
+{
+    switch_pressed = SWITCH_1_PRESSED;
+}
+
+static void switch_2_pressed(void)
+{
+    switch_pressed = SWITCH_2_PRESSED;
+}
+
+int ask_question(const char *question, unsigned int timeout)
+{
+    printf("%s\n", question);
+    printf("If yes, press switch 1, otherwise press switch 2.\n");
+
+    if (switch_init() < 0)
+        return -1;
+
+    switch_pressed = 0;
+    if (switch_add_callback(SWITCH_1_PRESSED, switch_1_pressed) < 0
+    ||  switch_add_callback(SWITCH_2_PRESSED, switch_2_pressed) < 0)
+        return -1;
+
+    timeout *= 1000;
+    while (switch_pressed == 0 && timeout > 0) {
+        sleep_ms(50);
+        timeout -= 50;
+    }
+
+    if (switch_release() < 0)
+        return -1;
+
+    if (timeout == 0) {
+        printf("Timeout\n");
+        return -1;
+    }
+
+    return switch_pressed;
 }

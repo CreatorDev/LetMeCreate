@@ -22,4 +22,7 @@ void sleep_ms(unsigned int duration);
 /* timeout in seconds */
 int wait_for_switch(unsigned int timeout);
 
+/* timeout in seconds */
+int ask_question(const char *question, unsigned int timeout);
+
 #endif
