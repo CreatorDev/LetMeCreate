@@ -105,14 +105,7 @@ int led_init(void)
     }
 
     /* Switch off all LEDS */
-    led_switch_off(LED_0
-                 | LED_1
-                 | LED_2
-                 | LED_3
-                 | LED_4
-                 | LED_5
-                 | LED_6
-                 | LED_HEARTBEAT);
+    led_switch_off(ALL_LEDS);
     return 0;
 }
 

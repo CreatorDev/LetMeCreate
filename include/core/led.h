@@ -19,7 +19,8 @@ enum LED_INDEX {
     LED_4 = 0x10,
     LED_5 = 0x20,
     LED_6 = 0x40,
-    LED_HEARTBEAT=0x80
+    LED_HEARTBEAT=0x80,
+    ALL_LEDS = 0xFF
 };
 
 /** Mode of LED's */
