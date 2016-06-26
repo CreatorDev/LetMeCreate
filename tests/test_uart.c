@@ -28,20 +28,6 @@ static bool test_uart_init(void)
     return baudrate == UART_BD_9600;
 }
 
-static bool test_uart_init_twice(void)
-{
-    uint32_t baudrate;
-
-    if (uart_init() < 0)
-        return false;
-    if (uart_get_current_bus() != MIKROBUS_1)
-        return false;
-    if (uart_get_baudrate(&baudrate) < 0)
-        return false;
-
-    return baudrate == UART_BD_9600;
-}
-
 static bool test_uart_send_null_buffer(void)
 {
     return uart_send(NULL, 1) == -1;
@@ -71,11 +57,6 @@ static bool test_uart_set_invalid_baudrate(void)
 }
 
 static bool test_uart_release(void)
-{
-    return uart_release() == 0;
-}
-
-static bool test_uart_release_twice(void)
 {
     return uart_release() == 0;
 }
@@ -183,7 +164,7 @@ int main(void)
     test_uart.cases[1] = init;
 
     /* 3.3 */
-    struct test_case init_twice = { "init twice", test_uart_init_twice };
+    struct test_case init_twice = { "init twice", test_uart_init };
     test_uart.cases[2] = init_twice;
 
     /* 3.4 */
@@ -211,7 +192,7 @@ int main(void)
     test_uart.cases[8] = release;
 
     /* 3.10 */
-    struct test_case release_twice = { "release twice", test_uart_release_twice };
+    struct test_case release_twice = { "release twice", test_uart_release };
     test_uart.cases[9] = release_twice;
 
     /* 3.11 */

@@ -54,11 +54,6 @@ static bool test_switch_init(void)
     return switch_init() == 0;
 }
 
-static bool test_switch_init_twice(void)
-{
-    return switch_init() == 0;
-}
-
 static bool test_switch_add_callback_invalid_mask(void)
 {
     return switch_add_callback(0x0, switch_1_pressed) == -1;
@@ -164,7 +159,7 @@ int main(void)
     test_switch.cases[1] = init;
 
     /* 1.3 */
-    struct test_case init_twice = { "init twice", test_switch_init_twice };
+    struct test_case init_twice = { "init twice", test_switch_init };
     test_switch.cases[2] = init_twice;
 
     /* 1.4 */
