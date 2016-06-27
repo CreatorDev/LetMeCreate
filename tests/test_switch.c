@@ -1,5 +1,8 @@
 /**
- * @brief Implement all tests concerning switch of testing_plan.
+ * @brief Implement section 1 of miscellaneous/testing_plan.
+ * @author Francois Berder
+ * @date 2016
+ * @copyright 3-clause BSD
  */
 
 #include <stdio.h>

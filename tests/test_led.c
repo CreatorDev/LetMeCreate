@@ -1,3 +1,10 @@
+/**
+ * @brief Implement section 4 of miscellaneous/testing_plan.
+ * @author Francois Berder
+ * @date 2016
+ * @copyright 3-clause BSD
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "common.h"
