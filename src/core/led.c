@@ -104,9 +104,7 @@ int led_init(void)
         }
     }
 
-    /* Switch off all LEDS */
-    led_switch_off(ALL_LEDS);
-    return 0;
+    return led_switch_off(ALL_LEDS);
 }
 
 int led_switch_on(const uint8_t mask)
