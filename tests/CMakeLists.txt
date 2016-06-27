@@ -14,3 +14,6 @@ add_executable(test_uart test_uart.c $<TARGET_OBJECTS:common>)
 target_link_libraries(test_uart letmecreate_core)
 install(TARGETS test_uart RUNTIME DESTINATION bin)
 
+add_executable(test_led test_led.c $<TARGET_OBJECTS:common>)
+target_link_libraries(test_led letmecreate_core)
+install(TARGETS test_led RUNTIME DESTINATION bin)
