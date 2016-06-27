@@ -10,7 +10,7 @@
 
 #define LED_DEVICE_FILE_PATH                    "/sys/class/leds/marduk:red:user%d/%s"
 #define LED_HEARTBEAT_DEVICE_FILE_PATH          "/sys/class/leds/marduk:red:heartbeat/%s"
-#define LED_CNT                     (8)
+
 
 int fds[LED_CNT] = { -1, -1, -1, -1, -1, -1, -1, -1 };
 

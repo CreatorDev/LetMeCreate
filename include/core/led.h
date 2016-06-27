@@ -29,6 +29,9 @@ enum LED_MODE {
     TIMER_MODE
 };
 
+/** Number of LEDS */
+#define LED_CNT                     (8)
+
 /**
  * @brief Initialise file descriptors for each LED. Configure all LEDS in on/off mode. Switch off
  * all LEDs.
