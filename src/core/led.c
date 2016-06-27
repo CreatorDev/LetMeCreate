@@ -122,11 +122,20 @@ int led_set(const uint8_t mask, const uint8_t value)
     int i = 0, tmp = 1;
 
     for (; i < LED_CNT; ++i, tmp <<= 1) {
+        uint8_t mode;
         if ((mask & tmp) == 0)
             continue;
 
+        /* Check that led is in ON/OFF mode */
+        if (led_get_mode(tmp, &mode) < 0)
+            return -1;
+        if (mode != ON_OFF_MODE) {
+            fprintf(stderr, "led: Invalid mode of led %d\n", i);
+            return -1;
+        }
+
         if (set_value(i, value & tmp) < 0) {
-            fprintf(stderr, "Failed to switch %s led %d\n", (value & tmp) ? "on" : "off", i);
+            fprintf(stderr, "led: Failed to switch %s led %d\n", (value & tmp) ? "on" : "off", i);
             return -1;
         }
     }
@@ -145,7 +154,7 @@ int led_configure_on_off_mode(const uint8_t mask)
         if (set_mode(i, "none") < 0) {
             fprintf(stderr, "led: Failed to configure led %d in on/off mode\n", i);
             return -1;
-        } 
+        }
     }
 
     return 0;
