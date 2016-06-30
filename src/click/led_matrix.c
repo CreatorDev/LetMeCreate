@@ -16,7 +16,23 @@
 #define NO_DECODE       (0x00)
 #define COL_CNT         (0x08)
 
+#define MIN_DISPLAYED   (0x00)
+#define MAX_DISPLAYED   (0x63)
+
 static bool enabled = false;
+
+static uint8_t display_numbers[10][COL_CNT/2] = {
+    { 0x3C, 0x42, 0x42, 0x3C }, // 0
+    { 0x00, 0x7E, 0x20, 0x10 }, // 1
+    { 0x32, 0x4A, 0x46, 0x22 }, // 2
+    { 0x7E, 0x5A, 0x5A, 0x42 }, // 3
+    { 0x08, 0x7E, 0x28, 0x18 }, // 4
+    { 0x5E, 0x52, 0x52, 0x72 }, // 5
+    { 0x5E, 0x52, 0x52, 0x7E }, // 6
+    { 0x7E, 0x40, 0x40, 0x60 }, // 7
+    { 0x7E, 0x5A, 0x5A, 0x7E }, // 8
+    { 0x7E, 0x52, 0x52, 0x72 }, // 9
+};
 
 int led_matrix_click_enable(void)
 {
@@ -80,6 +96,36 @@ int led_matrix_click_set_column(const uint8_t column_index, const uint8_t data)
     }
 
     return spi_write_register(COL(column_index), data);
+}
+
+int led_matrix_click_display_number(const uint8_t number)
+{
+    int i;
+    int digits[2];
+
+    if(number < MIN_DISPLAYED || number > MAX_DISPLAYED) {
+        fprintf(stderr, "led_matrix: Requested an out of bounds number for display");
+        return -1;
+    }
+
+    digits[0] = number / 10;
+    digits[1] = number % 10;
+
+    uint8_t display[COL_CNT];
+    for(i = 0; i < COL_CNT; i++)
+            display[i] = 0;
+
+    for(i = 0; i < COL_CNT/2; i++)
+            display[i] = display_numbers[digits[1]][i];
+
+    for(i = COL_CNT/2; i < COL_CNT; i++)
+            display[i] = display_numbers[digits[0]][i - COL_CNT/2];
+
+    if(led_matrix_click_set(display) < 0)
+        return -1;
+
+    return 0;
+
 }
 
 int led_matrix_click_set(const uint8_t *columns)

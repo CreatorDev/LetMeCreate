@@ -36,6 +36,15 @@ int led_matrix_click_set_intensity(const uint8_t intensity);
  */
 int led_matrix_click_set_column(const uint8_t column_index, const uint8_t data);
 
+
+/**
+ * @brief Displays a two digit number.
+ *
+ * @param[in] number a number between 0 and 99 which will be displayed
+ * @return 0 if successful, -1 otherwise
+ */
+int led_matrix_click_display_number(const uint8_t number);
+
 /**
  * @brief Switch on/off all LED's.
  *
