@@ -21,3 +21,7 @@ install(TARGETS test_led RUNTIME DESTINATION bin)
 add_executable(test_pwm test_pwm.c $<TARGET_OBJECTS:common>)
 target_link_libraries(test_pwm letmecreate_core)
 install(TARGETS test_pwm RUNTIME DESTINATION bin)
+
+add_executable(test_gpio test_gpio.c $<TARGET_OBJECTS:common>)
+target_link_libraries(test_gpio letmecreate_core)
+install(TARGETS test_gpio RUNTIME DESTINATION bin)
