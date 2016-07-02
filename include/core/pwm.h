@@ -55,13 +55,13 @@ int pwm_get_duty_cycle(const uint8_t mikrobus_index, float *percentage);
 int pwm_set_frequency(const uint8_t mikrobus_index, const uint32_t frequency);
 
 /**
- * @brief Get the frequency.
+ * @brief Get the frequency in Hz
  *
  * @param[in] mikrobus_index Index of the pin (see #MIKROBUS_INDEX)
- * @param[out] frequency Pointer to a floating point variable (must not be null)
+ * @param[out] frequency (must not be null)
  * @return 0 if successful, -1 otherwise
  */
-int pwm_get_frequency(const uint8_t mikrobus_index, float *frequency);
+int pwm_get_frequency(const uint8_t mikrobus_index, uint32_t *frequency);
 
 /**
  * @brief Set the period.

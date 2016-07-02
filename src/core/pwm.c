@@ -202,7 +202,7 @@ int pwm_get_period(const uint8_t mikrobus_index, uint32_t *period)
     return read_int_pwm_file(mikrobus_index, "period", period);
 }
 
-int pwm_get_frequency(const uint8_t mikrobus_index, float *frequency)
+int pwm_get_frequency(const uint8_t mikrobus_index, uint32_t *frequency)
 {
     uint32_t period = 0;
 
@@ -214,7 +214,7 @@ int pwm_get_frequency(const uint8_t mikrobus_index, float *frequency)
     if (pwm_get_period(mikrobus_index, &period) < 0)
         return -1;
 
-    *frequency = 1000000000.f / ((float)period);
+    *frequency = 1000000000/period;
 
     return 0;
 }
