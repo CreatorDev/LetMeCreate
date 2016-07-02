@@ -23,6 +23,7 @@ int main(void)
     spi_init();
     spi_select_bus(MIKROBUS_1);
     led_matrix_click_enable();
+    led_matrix_click_set_intensity(3);
     for (cols = 0; cols < 8; ++cols) {
         uint8_t lines;
         for (lines = 0; lines < 8; ++lines) {
