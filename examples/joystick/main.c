@@ -9,8 +9,6 @@
 #define OFFSET  98
 #define MAXIMUM (OFFSET * 2)
 
-/* We have 7 LEDs + the heartbeat LED which we skip */
-#define LED_CNT 7
 
 int get_led_mask(float perc)
 {
