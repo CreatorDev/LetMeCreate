@@ -88,12 +88,12 @@ void sleep_ms(unsigned int duration)
 
 static void switch_1_pressed(void)
 {
-    switch_pressed = SWITCH_1_PRESSED;
+    switch_pressed = 1;
 }
 
 static void switch_2_pressed(void)
 {
-    switch_pressed = SWITCH_2_PRESSED;
+    switch_pressed = 2;
 }
 
 int ask_question(const char *question, unsigned int timeout)
