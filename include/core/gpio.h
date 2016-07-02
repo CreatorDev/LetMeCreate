@@ -90,7 +90,7 @@ int gpio_get_direction(const uint8_t gpio_pin, uint8_t *dir);
  * @param[in] value (0: low, any other value: high)
  * @return 0 if successful, -1 otherwise
  */
-int gpio_set_value(const uint8_t gpio_pin, const uint32_t value);
+int gpio_set_value(const uint8_t gpio_pin, const uint8_t value);
 
 /**
  * @brief Get the output state of a GPIO.
@@ -99,7 +99,7 @@ int gpio_set_value(const uint8_t gpio_pin, const uint32_t value);
  * @param[out] value Pointer to a variable (must not be null)
  * @return 0 if successful, -1 otherwise
  */
-int gpio_get_value(const uint8_t gpio_pin, uint32_t *value);
+int gpio_get_value(const uint8_t gpio_pin, uint8_t *value);
 
 /**
  * @brief Unexport a GPIO.

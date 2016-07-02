@@ -58,7 +58,7 @@ static uint8_t wd_to_gpio_pin(const int wd)
 
 static int find_event_type(const uint8_t gpio_pin, uint8_t *event_type)
 {
-    uint32_t value;
+    uint8_t value;
 
     if (gpio_get_value(gpio_pin, &value) < 0)
         return -1;
