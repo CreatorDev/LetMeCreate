@@ -32,7 +32,7 @@ int pwm_enable(const uint8_t mikrobus_index);
 /**
  * @brief Set the duty cycle.
  *
- * Notice that the duty cycle will always be at least 48ns long even if you set the duty cycle to 0%.
+ * Notice that the duty cycle will always be at least 45ns long even if you set the duty cycle to 0%.
  *
  * @param[in] mikrobus_index Index of the pin (see #MIKROBUS_INDEX)
  * @param[in] percentage Percentage of the period when pin is high (must in range [0, 100])
@@ -52,7 +52,7 @@ int pwm_get_duty_cycle(const uint8_t mikrobus_index, float *percentage);
 /**
  * @brief Set the frequency.
  *
- * The minimum frequency is 2680.7Hz to 22MHz (approx).
+ * The minimum frequency is 2680.7Hz and the maximum frequency is 22MHz (approx).
  *
  * @param[in] mikrobus_index Index of the pin (see #MIKROBUS_INDEX)
  * @param[in] frequency Frequency of the PWM output in Hertz
