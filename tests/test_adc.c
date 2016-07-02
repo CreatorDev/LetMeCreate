@@ -1,5 +1,5 @@
 /**
- * @brief Implement section 2 of miscellaneous/testing_plan.
+ * @brief Implement ADC section of miscellaneous/testing_plan.
  * @author Francois Berder
  * @date 2016
  * @copyright 3-clause BSD
@@ -7,10 +7,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "common.h"
 #include "core/adc.h"
-
-#define TEST_ADC_CASE_CNT       (8)
 
 static bool check_adc_value(const uint8_t mikrobus_index, const float min, const float max)
 {
@@ -99,43 +98,15 @@ int main(void)
 {
     int ret = -1;
 
-    struct test test_adc = {
-        .name = "adc",
-        .case_cnt = TEST_ADC_CASE_CNT,
-        .cases = malloc(TEST_ADC_CASE_CNT * sizeof(struct test_case))
-    };
-
-    /* 2.1.1 */
-    struct test_case mikrobus_1_gnd = { "Mikrobus 1 ADC - GND", test_adc_mikrobus_1_gnd };
-    test_adc.cases[0] = mikrobus_1_gnd;
-
-    /* 2.1.2 */
-    struct test_case mikrobus_1_3v3 = { "Mikrobus 1 ADC - 3V3", test_adc_mikrobus_1_3v3 };
-    test_adc.cases[1] = mikrobus_1_3v3;
-
-    /* 2.1.3 */
-    struct test_case mikrobus_1_5v = { "Mikrobus 1 ADC - 5V", test_adc_mikrobus_1_5v };
-    test_adc.cases[2] = mikrobus_1_5v;
-
-    /* 2.2.1 */
-    struct test_case mikrobus_2_gnd = { "Mikrobus 2 ADC - GND", test_adc_mikrobus_2_gnd };
-    test_adc.cases[3] = mikrobus_2_gnd;
-
-    /* 2.2.2 */
-    struct test_case mikrobus_2_3v3 = { "Mikrobus 2 ADC - 3V3", test_adc_mikrobus_2_3v3 };
-    test_adc.cases[4] = mikrobus_2_3v3;
-
-    /* 2.2.3 */
-    struct test_case mikrobus_2_5v = { "Mikrobus 2 ADC - 5V", test_adc_mikrobus_2_5v };
-    test_adc.cases[5] = mikrobus_2_5v;
-
-    /* 2.3 */
-    struct test_case invalid_mikrobus_index = { "invalid mikrobus index", test_adc_invalid_mikrobus_index };
-    test_adc.cases[6] = invalid_mikrobus_index;
-
-    /* 2.4 */
-    struct test_case null_value = { "null value", test_adc_null_value };
-    test_adc.cases[7] = null_value;
+    CREATE_TEST(adc, 8)
+    ADD_TEST_CASE(adc, mikrobus_1_gnd);
+    ADD_TEST_CASE(adc, mikrobus_1_3v3);
+    ADD_TEST_CASE(adc, mikrobus_1_5v);
+    ADD_TEST_CASE(adc, mikrobus_2_gnd);
+    ADD_TEST_CASE(adc, mikrobus_2_3v3);
+    ADD_TEST_CASE(adc, mikrobus_2_5v);
+    ADD_TEST_CASE(adc, invalid_mikrobus_index);
+    ADD_TEST_CASE(adc, null_value);
 
     ret = run_test(test_adc);
     free(test_adc.cases);

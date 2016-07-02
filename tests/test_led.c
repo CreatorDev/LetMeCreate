@@ -1,5 +1,5 @@
 /**
- * @brief Implement section 4 of miscellaneous/testing_plan.
+ * @brief Implement LED section of miscellaneous/testing_plan
  * @author Francois Berder
  * @date 2016
  * @copyright 3-clause BSD
@@ -7,10 +7,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "common.h"
 #include "core/led.h"
-
-#define TEST_LED_CASE_CNT        (23)
 
 static bool test_led_switch_on_off_before_init(void)
 {
@@ -40,6 +39,9 @@ static bool test_led_init(void)
     if (led_init() < 0)
         return false;
 
+    if (led_init() < 0)
+        return false;
+
     for (i = 1; i < 0x100; i <<= 1) {
         uint8_t mode;
         if (led_get_mode(i, &mode) < 0)
@@ -53,6 +55,9 @@ static bool test_led_init(void)
 
 static bool test_led_release(void)
 {
+    if (led_release() < 0)
+        return false;
+
     if (led_release() < 0)
         return false;
 
@@ -127,13 +132,13 @@ static bool test_led_timer_mode(void)
     return ask_question("Are all LED's off ?", 30) == 1;
 }
 
-static bool test_led_get_mode_invalid_mode(void)
+static bool test_led_get_mode_invalid_index(void)
 {
     uint8_t mode;
-    return led_get_mode(0x3, &mode) == -1;
+    return led_get_mode(LED_0 | LED_1, &mode) == -1;
 }
 
-static bool test_led_get_mode_null_buffer(void)
+static bool test_led_get_mode_null_var(void)
 {
     return led_get_mode(LED_0, NULL) == -1;
 }
@@ -185,103 +190,30 @@ static bool test_led_configure_on_off_mode(void)
 
 int main(void)
 {
-    int ret;
-    struct test test_led = {
-        .name = "led",
-        .case_cnt = TEST_LED_CASE_CNT,
-        .cases = malloc(TEST_LED_CASE_CNT * sizeof(struct test_case))
-    };
+    int ret = -1;
 
-    /* 4.1 */
-    struct test_case switch_on_off_before_init = { "switch on/off before init", test_led_switch_on_off_before_init };
-    test_led.cases[0] = switch_on_off_before_init;
-
-    /* 4.2 */
-    struct test_case set_before_init = { "set on/off before init", test_led_set_before_init };
-    test_led.cases[1] = set_before_init;
-
-    /* 4.3 */
-    struct test_case set_delay_before_init = { "set delay before init", test_led_set_delay_before_init };
-    test_led.cases[2] = set_delay_before_init;
-
-    /* 4.4 */
-    struct test_case release_before_init = { "release before init", test_led_release_before_init };
-    test_led.cases[3] = release_before_init;
-
-    /* 4.5 */
-    struct test_case init = { "init", test_led_init };
-    test_led.cases[4] = init;
-
-    /* 4.6 */
-    struct test_case init_twice = { "init twice", test_led_init };
-    test_led.cases[5] = init_twice;
-
-    /* 4.7 */
-    struct test_case release = { "release", test_led_release };
-    test_led.cases[6] = release;
-
-    /* 4.8 */
-    struct test_case release_twice = { "release twice", test_led_release };
-    test_led.cases[7] = release_twice;
-
-    /* 4.9 */
-    struct test_case switch_on = { "switch on", test_led_switch_on };
-    test_led.cases[8] = switch_on;
-
-    /* 4.10 */
-    struct test_case switch_off = { "switch off", test_led_switch_off };
-    test_led.cases[9] = switch_off;
-
-    /* 4.11 */
-    struct test_case pattern_1 = { "pattern 1", test_led_pattern_1 };
-    test_led.cases[10] = pattern_1;
-
-    /* 4.12 */
-    struct test_case pattern_2 = { "pattern 2", test_led_pattern_2 };
-    test_led.cases[11] = pattern_2;
-
-    /* 4.13 */
-    struct test_case set_delay_on_off_mode = { "set delay in on/off mode", test_led_set_delay_on_off_mode };
-    test_led.cases[12] = set_delay_on_off_mode;
-
-    /* 4.14 */
-    struct test_case timer_mode = { "timer mode", test_led_timer_mode };
-    test_led.cases[13] = timer_mode;
-
-    /* 4.15 */
-    struct test_case get_mode_invalid_mode = { "get mode invalid index", test_led_get_mode_invalid_mode };
-    test_led.cases[14] = get_mode_invalid_mode;
-
-    /* 4.16 */
-    struct test_case get_mode_null_buffer = { "get mode null buffer", test_led_get_mode_null_buffer };
-    test_led.cases[15] = get_mode_null_buffer;
-
-    /* 4.17 */
-    struct test_case set_delay_slow = { "set delay slow", test_led_set_delay_slow };
-    test_led.cases[16] = set_delay_slow;
-
-    /* 4.18 */
-    struct test_case set_delay_fast = { "set delay fast", test_led_set_delay_fast };
-    test_led.cases[17] = set_delay_fast;
-
-    /* 4.19 */
-    struct test_case switch_on_off_timer_mode = { "switch on/off in timer mode", test_led_switch_on_off_timer_mode };
-    test_led.cases[18] = switch_on_off_timer_mode;
-
-    /* 4.20 */
-    struct test_case set_in_timer_mode = { "set in timer mode", test_led_set_in_timer_mode };
-    test_led.cases[19] = set_in_timer_mode;
-
-    /* 4.21 */
-    struct test_case configure_on_off_mode = { "on/off mode", test_led_configure_on_off_mode };
-    test_led.cases[20] = configure_on_off_mode;
-
-    /* 4.22 */
-    struct test_case switch_on_after_on_off_mode = { "switch on after setting in on/off mode", test_led_switch_on };
-    test_led.cases[21] = switch_on_after_on_off_mode;
-
-    /* 4.23 */
-    test_led.cases[22] = release;
+    CREATE_TEST(led, 21)
+    ADD_TEST_CASE(led, switch_on_off_before_init);
+    ADD_TEST_CASE(led, set_before_init);
+    ADD_TEST_CASE(led, set_delay_before_init);
+    ADD_TEST_CASE(led, release_before_init);
+    ADD_TEST_CASE(led, init);
+    ADD_TEST_CASE(led, release);
+    ADD_TEST_CASE(led, switch_on);
+    ADD_TEST_CASE(led, switch_off);
+    ADD_TEST_CASE(led, pattern_1);
+    ADD_TEST_CASE(led, pattern_2);
+    ADD_TEST_CASE(led, set_delay_on_off_mode);
+    ADD_TEST_CASE(led, timer_mode);
+    ADD_TEST_CASE(led, get_mode_invalid_index);
+    ADD_TEST_CASE(led, get_mode_null_var);
+    ADD_TEST_CASE(led, set_delay_slow);
+    ADD_TEST_CASE(led, set_delay_fast);
+    ADD_TEST_CASE(led, switch_on_off_timer_mode);
+    ADD_TEST_CASE(led, set_in_timer_mode);
+    ADD_TEST_CASE(led, configure_on_off_mode);
+    ADD_TEST_CASE(led, switch_on);
+    ADD_TEST_CASE(led, release);
 
     ret = run_test(test_led);
     free(test_led.cases);

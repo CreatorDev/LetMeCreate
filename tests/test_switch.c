@@ -1,5 +1,5 @@
 /**
- * @brief Implement section 1 of miscellaneous/testing_plan.
+ * @brief Implement SWITCH section of miscellaneous/testing_plan.
  * @author Francois Berder
  * @date 2016
  * @copyright 3-clause BSD
@@ -7,11 +7,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 #include "common.h"
 #include "core/switch.h"
-
-#define TEST_SWITCH_CASE_CNT        (10)
 
 static volatile uint8_t switch_status = 0;
 
@@ -54,7 +53,8 @@ static bool test_switch_add_callback_before_init(void)
 
 static bool test_switch_init(void)
 {
-    return switch_init() == 0;
+    return switch_init() == 0
+        && switch_init() == 0;
 }
 
 static bool test_switch_add_callback_invalid_mask(void)
@@ -131,69 +131,26 @@ static bool test_switch_add_remove_callback(void)
 
 static bool test_switch_release(void)
 {
-    return switch_release() == 0;
-}
-
-static bool test_switch_init_after_release(void)
-{
-    return switch_init() == 0;
-}
-
-static bool test_switch_release_twice(void)
-{
     return switch_release() == 0
         && switch_release() == 0;
 }
 
 int main(void)
 {
-    struct test test_switch = {
-        .name = "switch",
-        .case_cnt = TEST_SWITCH_CASE_CNT,
-        .cases = malloc(TEST_SWITCH_CASE_CNT * sizeof(struct test_case))
-    };
+    int ret = -1;
 
-    /* 1.1 */
-    struct test_case add_callback_before_init = { "add callback before init", test_switch_add_callback_before_init };
-    test_switch.cases[0] = add_callback_before_init;
+    CREATE_TEST(switch, 9)
+    ADD_TEST_CASE(switch, add_callback_before_init);
+    ADD_TEST_CASE(switch, init);
+    ADD_TEST_CASE(switch, add_callback_invalid_mask);
+    ADD_TEST_CASE(switch, add_callback_null_func);
+    ADD_TEST_CASE(switch, remove_callback_invalid_id);
+    ADD_TEST_CASE(switch, add_remove_callback);
+    ADD_TEST_CASE(switch, release);
+    ADD_TEST_CASE(switch, init);
+    ADD_TEST_CASE(switch, release);
 
-    /* 1.2 */
-    struct test_case init = { "init", test_switch_init };
-    test_switch.cases[1] = init;
-
-    /* 1.3 */
-    struct test_case init_twice = { "init twice", test_switch_init };
-    test_switch.cases[2] = init_twice;
-
-    /* 1.4 */
-    struct test_case add_callback_invalid_mask = { "add callback invalid mask", test_switch_add_callback_invalid_mask };
-    test_switch.cases[3] = add_callback_invalid_mask;
-
-    /* 1.5 */
-    struct test_case add_callback_null_func = { "add callback null func", test_switch_add_callback_null_func };
-    test_switch.cases[4] = add_callback_null_func;
-
-    /* 1.6 */
-    struct test_case remove_callback_invalid_id = { "remove callback invalid id", test_switch_remove_callback_invalid_id };
-    test_switch.cases[5] = remove_callback_invalid_id;
-
-    /* 1.7 */
-    struct test_case add_remove_callback = { "add/remove callback", test_switch_add_remove_callback };
-    test_switch.cases[6] = add_remove_callback;
-
-    /* 1.8 */
-    struct test_case release = { "release", test_switch_release };
-    test_switch.cases[7] = release;
-
-    /* 1.9 */
-    struct test_case init_after_release = { "init after release", test_switch_init_after_release };
-    test_switch.cases[8] = init_after_release;
-
-    /* 1.10 */
-    struct test_case release_twice = { "release twice", test_switch_release_twice };
-    test_switch.cases[9] = release_twice;
-
-    int ret = run_test(test_switch);
+    ret = run_test(test_switch);
     free(test_switch.cases);
 
     return ret;

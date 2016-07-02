@@ -1,5 +1,5 @@
 /**
- * @brief Implement section 3 of miscellaneous/testing_plan.
+ * @brief Implement UART section of miscellaneous/testing_plan.
  * @author Francois Berder
  * @date 2016
  * @copyright 3-clause BSD
@@ -7,11 +7,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "common.h"
 #include "core/common.h"
 #include "core/uart.h"
-
-#define TEST_UART_CASE_CNT       (12)
 
 static bool test_uart_send_receive_without_init(void)
 {
@@ -25,6 +24,8 @@ static bool test_uart_init(void)
 {
     uint32_t baudrate;
 
+    if (uart_init() < 0)
+        return false;
     if (uart_init() < 0)
         return false;
     if (uart_get_current_bus() != MIKROBUS_1)
@@ -65,7 +66,8 @@ static bool test_uart_set_invalid_baudrate(void)
 
 static bool test_uart_release(void)
 {
-    return uart_release() == 0;
+    return uart_release() == 0
+        && uart_release() == 0;
 }
 
 static bool test_uart_select_invalid_bus(void)
@@ -156,59 +158,17 @@ int main(void)
 {
     int ret = -1;
 
-    struct test test_uart = {
-        .name = "uart",
-        .case_cnt = TEST_UART_CASE_CNT,
-        .cases = malloc(TEST_UART_CASE_CNT * sizeof(struct test_case))
-    };
-
-    /* 3.1 */
-    struct test_case send_receive_without_init = { "send/receive without init", test_uart_send_receive_without_init };
-    test_uart.cases[0] = send_receive_without_init;
-
-    /* 3.2 */
-    struct test_case init = { "init", test_uart_init };
-    test_uart.cases[1] = init;
-
-    /* 3.3 */
-    struct test_case init_twice = { "init twice", test_uart_init };
-    test_uart.cases[2] = init_twice;
-
-    /* 3.4 */
-    struct test_case send_null_buffer = { "send null buffer", test_uart_send_null_buffer };
-    test_uart.cases[3] = send_null_buffer;
-
-    /* 3.5 */
-    struct test_case send_zero_byte = { "send zero byte", test_uart_send_zero_byte };
-    test_uart.cases[4] = send_zero_byte;
-
-    /* 3.6 */
-    struct test_case receive_null_buffer = { "receive null buffer", test_uart_receive_null_buffer };
-    test_uart.cases[5] = receive_null_buffer;
-
-    /* 3.7 */
-    struct test_case receive_zero_byte = { "receive zero byte", test_uart_receive_zero_byte };
-    test_uart.cases[6] = receive_zero_byte;
-
-    /* 3.8 */
-    struct test_case set_invalid_baudrate = { "set invalid baudrate", test_uart_set_invalid_baudrate };
-    test_uart.cases[7] = set_invalid_baudrate;
-
-    /* 3.9 */
-    struct test_case release = { "release", test_uart_release };
-    test_uart.cases[8] = release;
-
-    /* 3.10 */
-    struct test_case release_twice = { "release twice", test_uart_release };
-    test_uart.cases[9] = release_twice;
-
-    /* 3.11 */
-    struct test_case select_invalid_bus = { "select invalid bus", test_uart_select_invalid_bus };
-    test_uart.cases[10] = select_invalid_bus;
-
-    /* 3.12 */
-    struct test_case send_receive = { "send/receive", test_uart_send_receive };
-    test_uart.cases[11] = send_receive;
+    CREATE_TEST(uart, 10)
+    ADD_TEST_CASE(uart, send_receive_without_init);
+    ADD_TEST_CASE(uart, init);
+    ADD_TEST_CASE(uart, send_null_buffer);
+    ADD_TEST_CASE(uart, send_zero_byte);
+    ADD_TEST_CASE(uart, receive_null_buffer);
+    ADD_TEST_CASE(uart, receive_zero_byte);
+    ADD_TEST_CASE(uart, set_invalid_baudrate);
+    ADD_TEST_CASE(uart, release);
+    ADD_TEST_CASE(uart, select_invalid_bus);
+    ADD_TEST_CASE(uart, send_receive);
 
     ret = run_test(test_uart);
     free(test_uart.cases);
