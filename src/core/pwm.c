@@ -14,23 +14,23 @@
 #define PWM_DEVICE_FILE_BASE_PATH       "/sys/class/pwm/pwmchip0/pwm"
 
 
-static bool check_pwm_pin(const uint8_t pwm_pin)
+static bool check_mikrobus_index(const uint8_t mikrobus_index)
 {
-    if (pwm_pin == MIKROBUS_1_PWM)
+    if (mikrobus_index == MIKROBUS_1)
         return true;
-    if (pwm_pin == MIKROBUS_2_PWM)
+    if (mikrobus_index == MIKROBUS_2)
         return true;
 
     fprintf(stderr, "pwm: Invalid pin.\n");
     return false;
 }
 
-static bool is_pwm_pin_exported(const uint8_t pwm_pin)
+static bool is_pwm_pin_exported(const uint8_t mikrobus_index)
 {
     DIR *dir = NULL;
     char path[MAX_STR_LENGTH];
 
-    if (snprintf(path, MAX_STR_LENGTH, PWM_DEVICE_FILE_BASE_PATH"%d", pwm_pin) < 0)
+    if (snprintf(path, MAX_STR_LENGTH, PWM_DEVICE_FILE_BASE_PATH"%d", mikrobus_index) < 0)
         return false;
 
     dir = opendir(path);
@@ -42,19 +42,19 @@ static bool is_pwm_pin_exported(const uint8_t pwm_pin)
     return true;
 }
 
-static int write_str_pwm_file(const uint8_t pwm_pin, const char *file_name, const char *str)
+static int write_str_pwm_file(const uint8_t mikrobus_index, const char *file_name, const char *str)
 {
     char path[MAX_STR_LENGTH];
 
-    if (snprintf(path, MAX_STR_LENGTH, PWM_DEVICE_FILE_BASE_PATH"%d/%s", pwm_pin, file_name) < 0) {
-        fprintf(stderr, "pwm: Could not write to file %s of pwm pin %d.\n", file_name, pwm_pin);
+    if (snprintf(path, MAX_STR_LENGTH, PWM_DEVICE_FILE_BASE_PATH"%d/%s", mikrobus_index, file_name) < 0) {
+        fprintf(stderr, "pwm: Could not write to file %s of pwm pin %d.\n", file_name, mikrobus_index);
         return -1;
     }
 
     return write_str_file(path, str);
 }
 
-static int write_int_pwm_file(const uint8_t pwm_pin, const char *file_name, const uint32_t value)
+static int write_int_pwm_file(const uint8_t mikrobus_index, const char *file_name, const uint32_t value)
 {
     char str[MAX_STR_LENGTH];
 
@@ -63,55 +63,55 @@ static int write_int_pwm_file(const uint8_t pwm_pin, const char *file_name, cons
         return -1;
     }
 
-    return write_str_pwm_file(pwm_pin, file_name, str);
+    return write_str_pwm_file(mikrobus_index, file_name, str);
 }
 
-static int read_int_pwm_file(const uint8_t pwm_pin, const char *file_name, uint32_t *value)
+static int read_int_pwm_file(const uint8_t mikrobus_index, const char *file_name, uint32_t *value)
 {
     char path[MAX_STR_LENGTH];
 
-    if (snprintf(path, MAX_STR_LENGTH, PWM_DEVICE_FILE_BASE_PATH"%d/%s", pwm_pin, file_name) < 0) {
-        fprintf(stderr, "pwm: Could not read from file %s of pwm pin %d.\n", file_name, pwm_pin);
+    if (snprintf(path, MAX_STR_LENGTH, PWM_DEVICE_FILE_BASE_PATH"%d/%s", mikrobus_index, file_name) < 0) {
+        fprintf(stderr, "pwm: Could not read from file %s of pwm pin %d.\n", file_name, mikrobus_index);
         return -1;
     }
 
     return read_int_file(path, value);
 }
 
-int pwm_init(const uint8_t pwm_pin)
+int pwm_init(const uint8_t mikrobus_index)
 {
-    if (!check_pwm_pin(pwm_pin))
+    if (!check_mikrobus_index(mikrobus_index))
         return -1;
 
-    if (is_pwm_pin_exported(pwm_pin))
+    if (is_pwm_pin_exported(mikrobus_index))
         return 0;
 
-    return export_pin(DEVICE_FILE_BASE_PATH, pwm_pin);
+    return export_pin(DEVICE_FILE_BASE_PATH, mikrobus_index);
 }
 
-int pwm_enable(const uint8_t pwm_pin)
+int pwm_enable(const uint8_t mikrobus_index)
 {
-    if (!check_pwm_pin(pwm_pin))
+    if (!check_mikrobus_index(mikrobus_index))
         return -1;
 
-    if (!is_pwm_pin_exported(pwm_pin)) {
-        fprintf(stderr, "pwm: Invalid operation, pin %d must be initialised first.\n", pwm_pin);
+    if (!is_pwm_pin_exported(mikrobus_index)) {
+        fprintf(stderr, "pwm: Invalid operation, pin %d must be initialised first.\n", mikrobus_index);
         return -1;
     }
 
-    return write_str_pwm_file(pwm_pin, "enable", "1");
+    return write_str_pwm_file(mikrobus_index, "enable", "1");
 }
 
-int pwm_set_duty_cycle(const uint8_t pwm_pin, const float percentage)
+int pwm_set_duty_cycle(const uint8_t mikrobus_index, const float percentage)
 {
     uint32_t duty_cycle = 0;
     uint32_t period = 0;
 
-    if (!check_pwm_pin(pwm_pin))
+    if (!check_mikrobus_index(mikrobus_index))
         return -1;
 
-    if (!is_pwm_pin_exported(pwm_pin)) {
-        fprintf(stderr, "pwm: Invalid operation, pin %d must be initialised first.\n", pwm_pin);
+    if (!is_pwm_pin_exported(mikrobus_index)) {
+        fprintf(stderr, "pwm: Invalid operation, pin %d must be initialised first.\n", mikrobus_index);
         return -1;
     }
 
@@ -121,24 +121,24 @@ int pwm_set_duty_cycle(const uint8_t pwm_pin, const float percentage)
     }
 
     /* Compute duty cycle in nanoseconds from period */
-    if (pwm_get_period(pwm_pin, &period) < 0)
+    if (pwm_get_period(mikrobus_index, &period) < 0)
         return -1;
 
     duty_cycle = period * (percentage / 100.f);
 
-    return write_int_pwm_file(pwm_pin, "duty_cycle", duty_cycle);
+    return write_int_pwm_file(mikrobus_index, "duty_cycle", duty_cycle);
 }
 
-int pwm_get_duty_cycle(const uint8_t pwm_pin, float *percentage)
+int pwm_get_duty_cycle(const uint8_t mikrobus_index, float *percentage)
 {
     uint32_t duty_cycle = 0;
     uint32_t period = 0;
 
-    if (!check_pwm_pin(pwm_pin))
+    if (!check_mikrobus_index(mikrobus_index))
         return -1;
 
-    if (!is_pwm_pin_exported(pwm_pin)) {
-        fprintf(stderr, "pwm: Invalid operation, pin %d must be initialised first.\n", pwm_pin);
+    if (!is_pwm_pin_exported(mikrobus_index)) {
+        fprintf(stderr, "pwm: Invalid operation, pin %d must be initialised first.\n", mikrobus_index);
         return -1;
     }
 
@@ -147,10 +147,10 @@ int pwm_get_duty_cycle(const uint8_t pwm_pin, float *percentage)
         return -1;
     }
 
-    if (read_int_pwm_file(pwm_pin, "period", &period) < 0)
+    if (read_int_pwm_file(mikrobus_index, "period", &period) < 0)
         return -1;
 
-    if (read_int_pwm_file(pwm_pin, "duty_cycle", &duty_cycle) < 0)
+    if (read_int_pwm_file(mikrobus_index, "duty_cycle", &duty_cycle) < 0)
         return -1;
 
     *percentage = ((float)duty_cycle) / ((float)period) * 100.f;
@@ -158,39 +158,39 @@ int pwm_get_duty_cycle(const uint8_t pwm_pin, float *percentage)
     return 0;
 }
 
-int pwm_set_frequency(const uint8_t pwm_pin, const uint32_t frequency)
+int pwm_set_frequency(const uint8_t mikrobus_index, const uint32_t frequency)
 {
-    return pwm_set_period(pwm_pin, 1000000000/frequency);
+    return pwm_set_period(mikrobus_index, 1000000000/frequency);
 }
 
-int pwm_set_period(const uint8_t pwm_pin, const uint32_t period)
+int pwm_set_period(const uint8_t mikrobus_index, const uint32_t period)
 {
     float percentage = 0.f;
 
-    if (!check_pwm_pin(pwm_pin))
+    if (!check_mikrobus_index(mikrobus_index))
         return -1;
 
-    if (!is_pwm_pin_exported(pwm_pin)) {
-        fprintf(stderr, "pwm: Invalid operation, pin %d must be initialised first.\n", pwm_pin);
+    if (!is_pwm_pin_exported(mikrobus_index)) {
+        fprintf(stderr, "pwm: Invalid operation, pin %d must be initialised first.\n", mikrobus_index);
         return -1;
     }
 
-    if (pwm_get_duty_cycle(pwm_pin, &percentage) < 0)
+    if (pwm_get_duty_cycle(mikrobus_index, &percentage) < 0)
         return -1;
 
-    if (write_int_pwm_file(pwm_pin, "period", period) < 0)
+    if (write_int_pwm_file(mikrobus_index, "period", period) < 0)
         return -1;
 
-    return pwm_set_duty_cycle(pwm_pin, percentage);
+    return pwm_set_duty_cycle(mikrobus_index, percentage);
 }
 
-int pwm_get_period(const uint8_t pwm_pin, uint32_t *period)
+int pwm_get_period(const uint8_t mikrobus_index, uint32_t *period)
 {
-    if (!check_pwm_pin(pwm_pin))
+    if (!check_mikrobus_index(mikrobus_index))
         return -1;
 
-    if (!is_pwm_pin_exported(pwm_pin)) {
-        fprintf(stderr, "pwm: Invalid operation, pin %d must be initialised first.\n", pwm_pin);
+    if (!is_pwm_pin_exported(mikrobus_index)) {
+        fprintf(stderr, "pwm: Invalid operation, pin %d must be initialised first.\n", mikrobus_index);
         return -1;
     }
 
@@ -199,10 +199,10 @@ int pwm_get_period(const uint8_t pwm_pin, uint32_t *period)
         return -1;
     }
 
-    return read_int_pwm_file(pwm_pin, "period", period);
+    return read_int_pwm_file(mikrobus_index, "period", period);
 }
 
-int pwm_get_frequency(const uint8_t pwm_pin, float *frequency)
+int pwm_get_frequency(const uint8_t mikrobus_index, float *frequency)
 {
     uint32_t period = 0;
 
@@ -211,7 +211,7 @@ int pwm_get_frequency(const uint8_t pwm_pin, float *frequency)
         return -1;
     }
 
-    if (pwm_get_period(pwm_pin, &period) < 0)
+    if (pwm_get_period(mikrobus_index, &period) < 0)
         return -1;
 
     *frequency = 1000000000.f / ((float)period);
@@ -219,26 +219,26 @@ int pwm_get_frequency(const uint8_t pwm_pin, float *frequency)
     return 0;
 }
 
-int pwm_disable(const uint8_t pwm_pin)
+int pwm_disable(const uint8_t mikrobus_index)
 {
-    if (!check_pwm_pin(pwm_pin))
+    if (!check_mikrobus_index(mikrobus_index))
         return -1;
 
-    if (!is_pwm_pin_exported(pwm_pin)) {
-        fprintf(stderr, "pwm: Invalid operation, pin %d must be initialised first.\n", pwm_pin);
+    if (!is_pwm_pin_exported(mikrobus_index)) {
+        fprintf(stderr, "pwm: Invalid operation, pin %d must be initialised first.\n", mikrobus_index);
         return -1;
     }
 
-    return write_str_pwm_file(pwm_pin, "enable", "0");
+    return write_str_pwm_file(mikrobus_index, "enable", "0");
 }
 
-int pwm_release(const uint8_t pwm_pin)
+int pwm_release(const uint8_t mikrobus_index)
 {
-    if (!check_pwm_pin(pwm_pin))
+    if (!check_mikrobus_index(mikrobus_index))
         return -1;
 
-    if (!is_pwm_pin_exported(pwm_pin))
+    if (!is_pwm_pin_exported(mikrobus_index))
         return 0;
 
-    return unexport_pin(DEVICE_FILE_BASE_PATH, pwm_pin);
+    return unexport_pin(DEVICE_FILE_BASE_PATH, mikrobus_index);
 }
