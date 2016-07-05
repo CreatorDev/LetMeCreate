@@ -55,7 +55,7 @@ static bool create_gpio_path(char *path, const uint8_t gpio_pin, const char *fil
     return true;
 }
 
-static bool check_gpio_initialised(const uint8_t gpio_pin)
+static bool is_gpio_exported(const uint8_t gpio_pin)
 {
     DIR *dir = NULL;
     char path[MAX_STR_LENGTH];
@@ -126,7 +126,7 @@ int gpio_init(const uint8_t gpio_pin)
     if (!check_pin(gpio_pin))
         return -1;
 
-    if (check_gpio_initialised(gpio_pin))
+    if (is_gpio_exported(gpio_pin))
         return 0;
 
     return export_pin(GPIO_DIR_BASE_PATH, gpio_pin);
@@ -150,7 +150,7 @@ int gpio_set_direction(const uint8_t gpio_pin, const uint8_t dir)
         return -1;
     }
 
-    if (!check_gpio_initialised(gpio_pin)) {
+    if (!is_gpio_exported(gpio_pin)) {
         fprintf(stderr, "gpio: Cannot set direction of uninitialised gpio %d\n", gpio_pin);
         return -1;
     }
@@ -170,7 +170,7 @@ int gpio_get_direction(const uint8_t gpio_pin, uint8_t *dir)
         return -1;
     }
 
-    if (!check_gpio_initialised(gpio_pin))
+    if (!is_gpio_exported(gpio_pin))
         return 0;
 
     if (read_str_gpio_file(gpio_pin, "direction", value, MAX_STR_LENGTH) < 0)
@@ -195,7 +195,7 @@ int gpio_set_value(const uint8_t gpio_pin, const uint8_t value)
     if (!check_pin(gpio_pin))
         return -1;
 
-    if (!check_gpio_initialised(gpio_pin))
+    if (!is_gpio_exported(gpio_pin))
         return 0;
 
     if (gpio_get_direction(gpio_pin, &dir) < 0)
@@ -219,7 +219,7 @@ int gpio_get_value(const uint8_t gpio_pin, uint8_t *value)
         return -1;
     }
 
-    if (!check_gpio_initialised(gpio_pin))
+    if (!is_gpio_exported(gpio_pin))
         return 0;
 
     return read_int_gpio_file(gpio_pin, "value", value);
@@ -230,7 +230,7 @@ int gpio_release(const uint8_t gpio_pin)
     if (!check_pin(gpio_pin))
         return -1;
 
-    if (!check_gpio_initialised(gpio_pin))
+    if (!is_gpio_exported(gpio_pin))
         return 0;
 
     return unexport_pin(GPIO_DIR_BASE_PATH, gpio_pin);
