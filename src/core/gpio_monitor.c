@@ -196,7 +196,6 @@ static int add_inotify_watch(const uint8_t gpio_pin)
 
 static int remove_inotify_watch(const uint8_t gpio_pin)
 {
-    int wd = -1;
     struct inotify_watch *prev = NULL;
     struct inotify_watch *cur = inotify_watch_list_head;
     while (cur) {
@@ -208,7 +207,7 @@ static int remove_inotify_watch(const uint8_t gpio_pin)
     if (cur == NULL)
         return -1;
 
-    if (inotify_rm_watch(fd, wd) < 0) {
+    if (inotify_rm_watch(fd, cur->wd) < 0) {
         fprintf(stderr, "gpio_monitor: Failed to remove inotify watch.\n");
         return -1;
     }
