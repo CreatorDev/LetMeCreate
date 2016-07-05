@@ -25,3 +25,7 @@ install(TARGETS test_pwm RUNTIME DESTINATION bin)
 add_executable(test_gpio test_gpio.c $<TARGET_OBJECTS:common>)
 target_link_libraries(test_gpio letmecreate_core)
 install(TARGETS test_gpio RUNTIME DESTINATION bin)
+
+add_executable(test_gpio_monitor test_gpio_monitor.c $<TARGET_OBJECTS:common>)
+target_link_libraries(test_gpio_monitor letmecreate_core)
+install(TARGETS test_gpio_monitor RUNTIME DESTINATION bin)
