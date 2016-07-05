@@ -52,7 +52,7 @@ static bool test_adc_mikrobus_1_5v(void)
     if (wait_for_switch(10) < 0)
         return false;
 
-    return check_adc_value(MIKROBUS_1, 4.97f, 5.03f);
+    return check_adc_value(MIKROBUS_1, 4.9f, 5.1f);
 }
 
 static bool test_adc_mikrobus_2_gnd(void)
@@ -82,7 +82,7 @@ static bool test_adc_mikrobus_2_5v(void)
     if (wait_for_switch(10) < 0)
         return false;
 
-    return check_adc_value(MIKROBUS_2, 4.97f, 5.03f);
+    return check_adc_value(MIKROBUS_2, 4.9f, 5.1f);
 }
 
 static bool test_adc_invalid_mikrobus_index(void)
