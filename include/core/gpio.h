@@ -54,9 +54,9 @@ enum GPIO_DIR {
 };
 
 /**
- * @brief Export a GPIO.
+ * @brief Initialise a GPIO.
  *
- * This function must be called before doing any operation on this GPIO (except releasing it).
+ * Export a GPIO if needed and configure it as an input
  *
  * @param[in] gpio_pin Index of the GPIO
  * @return 0 if successful, -1 otherwise
@@ -102,7 +102,9 @@ int gpio_set_value(const uint8_t gpio_pin, const uint8_t value);
 int gpio_get_value(const uint8_t gpio_pin, uint8_t *value);
 
 /**
- * @brief Unexport a GPIO.
+ * @brief Release a GPIO.
+ *
+ * Unexport a GPIO if needed.
  *
  * @param gpio_pin Index of the GPIO
  * @return 0 if successful, -1 otherwise

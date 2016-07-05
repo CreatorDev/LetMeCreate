@@ -129,7 +129,10 @@ int gpio_init(const uint8_t gpio_pin)
     if (is_gpio_exported(gpio_pin))
         return 0;
 
-    return export_pin(GPIO_DIR_BASE_PATH, gpio_pin);
+    if (export_pin(GPIO_DIR_BASE_PATH, gpio_pin) < 0)
+        return -1;
+
+    return gpio_set_direction(gpio_pin, GPIO_INPUT);
 }
 
 int gpio_set_direction(const uint8_t gpio_pin, const uint8_t dir)
