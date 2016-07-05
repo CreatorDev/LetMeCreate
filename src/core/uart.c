@@ -16,7 +16,7 @@ static int fds[2] = { -1, -1 };
 static struct termios old_pts[2];
 static uint8_t current_mikrobus_index = MIKROBUS_1;
 
-static bool check_mikrobus_index(const uint8_t mikrobus_index)
+static bool check_mikrobus_index(uint8_t mikrobus_index)
 {
     if (mikrobus_index == MIKROBUS_1)
         return true;
@@ -27,7 +27,7 @@ static bool check_mikrobus_index(const uint8_t mikrobus_index)
     return false;
 }
 
-static int uart_init_bus(const uint8_t mikrobus_index)
+static int uart_init_bus(uint8_t mikrobus_index)
 {
     char *device_file = NULL;
     struct termios pts;
@@ -85,7 +85,7 @@ static int uart_init_bus(const uint8_t mikrobus_index)
     return 0;
 }
 
-static int uart_release_bus(const uint8_t mikrobus_index)
+static int uart_release_bus(uint8_t mikrobus_index)
 {
     if (!check_mikrobus_index(mikrobus_index))
         return -1;
@@ -128,7 +128,7 @@ int uart_init(void)
     return 0;
 }
 
-void uart_select_bus(const uint8_t mikrobus_index)
+void uart_select_bus(uint8_t mikrobus_index)
 {
     switch (mikrobus_index) {
     case MIKROBUS_1:
@@ -143,7 +143,7 @@ uint8_t uart_get_current_bus(void)
     return current_mikrobus_index;
 }
 
-int uart_set_baudrate(const uint32_t baudrate)
+int uart_set_baudrate(uint32_t baudrate)
 {
     struct termios pts;
     speed_t speed;
@@ -245,7 +245,7 @@ int uart_get_baudrate(uint32_t *baudrate)
     return 0;
 }
 
-int uart_send(const uint8_t *buffer, const uint32_t count)
+int uart_send(const uint8_t *buffer, uint32_t count)
 {
     uint32_t sent_cnt = 0;
 
@@ -274,7 +274,7 @@ int uart_send(const uint8_t *buffer, const uint32_t count)
     return sent_cnt;
 }
 
-int uart_receive(uint8_t *buffer, const uint32_t count)
+int uart_receive(uint8_t *buffer, uint32_t count)
 {
     uint32_t received_cnt = 0;
 

@@ -19,7 +19,7 @@
  * @param[in] mikrobus_index Index of the pin to initialise (see #MIKROBUS_INDEX)
  * @return 0 if successful, -1 otherwise
  */
-int pwm_init(const uint8_t mikrobus_index);
+int pwm_init(uint8_t mikrobus_index);
 
 /**
  * @brief Enable PWM on a pin.
@@ -27,7 +27,7 @@ int pwm_init(const uint8_t mikrobus_index);
  * @param[in] mikrobus_index Index of the pin (see #MIKROBUS_INDEX)
  * @return 0 if successful, -1 otherwise
  */
-int pwm_enable(const uint8_t mikrobus_index);
+int pwm_enable(uint8_t mikrobus_index);
 
 /**
  * @brief Set the duty cycle.
@@ -38,7 +38,7 @@ int pwm_enable(const uint8_t mikrobus_index);
  * @param[in] percentage Percentage of the period when pin is high (must in range [0, 100])
  * @return 0 if successful, -1 otherwise
  */
-int pwm_set_duty_cycle(const uint8_t mikrobus_index, const float percentage);
+int pwm_set_duty_cycle(uint8_t mikrobus_index, float percentage);
 
 /**
  * @brief Get the duty cycle.
@@ -47,7 +47,7 @@ int pwm_set_duty_cycle(const uint8_t mikrobus_index, const float percentage);
  * @param[out] percentage Pointer to a floating point variable (must not be null)
  * @return 0 if successful, -1 otherwise
  */
-int pwm_get_duty_cycle(const uint8_t mikrobus_index, float *percentage);
+int pwm_get_duty_cycle(uint8_t mikrobus_index, float *percentage);
 
 /**
  * @brief Set the frequency.
@@ -58,7 +58,7 @@ int pwm_get_duty_cycle(const uint8_t mikrobus_index, float *percentage);
  * @param[in] frequency Frequency of the PWM output in Hertz
  * @return 0 if successful, -1 otherwise
  */
-int pwm_set_frequency(const uint8_t mikrobus_index, const uint32_t frequency);
+int pwm_set_frequency(uint8_t mikrobus_index, uint32_t frequency);
 
 /**
  * @brief Get the frequency in Hz
@@ -67,7 +67,7 @@ int pwm_set_frequency(const uint8_t mikrobus_index, const uint32_t frequency);
  * @param[out] frequency (must not be null)
  * @return 0 if successful, -1 otherwise
  */
-int pwm_get_frequency(const uint8_t mikrobus_index, uint32_t *frequency);
+int pwm_get_frequency(uint8_t mikrobus_index, uint32_t *frequency);
 
 /**
  * @brief Set the period.
@@ -78,7 +78,7 @@ int pwm_get_frequency(const uint8_t mikrobus_index, uint32_t *frequency);
  * @param[in] period Period of PWM output in nanoseconds
  * @return 0 if successful, -1 otherwise
  */
-int pwm_set_period(const uint8_t mikrobus_index, const uint32_t period);
+int pwm_set_period(uint8_t mikrobus_index, uint32_t period);
 
 /**
  * @brief Get the frequency.
@@ -87,7 +87,7 @@ int pwm_set_period(const uint8_t mikrobus_index, const uint32_t period);
  * @param[out] period Pointer to an integer (must not be null)
  * @return 0 if successful, -1 otherwise
  */
-int pwm_get_period(const uint8_t mikrobus_index, uint32_t *period);
+int pwm_get_period(uint8_t mikrobus_index, uint32_t *period);
 
 /**
  * @brief Disable PWM output on a pin.
@@ -95,7 +95,7 @@ int pwm_get_period(const uint8_t mikrobus_index, uint32_t *period);
  * @param[in] mikrobus_index Index of the pin (see #MIKROBUS_INDEX)
  * @return 0 if successful, -1 otherwise
  */
-int pwm_disable(const uint8_t mikrobus_index);
+int pwm_disable(uint8_t mikrobus_index);
 
 /**
  * @brief Release a PWM pin.
@@ -103,6 +103,6 @@ int pwm_disable(const uint8_t mikrobus_index);
  * @param[in] mikrobus_index Index of the pin to release (see #MIKROBUS_INDEX)
  * @return 0 if successful, -1 otherwise
  */
-int pwm_release(const uint8_t mikrobus_index);
+int pwm_release(uint8_t mikrobus_index);
 
 #endif

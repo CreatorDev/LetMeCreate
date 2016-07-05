@@ -39,7 +39,7 @@ int write_str_file(const char *path, const char *str)
     return 0;
 }
 
-int write_int_file(const char *path, const uint32_t value)
+int write_int_file(const char *path, uint32_t value)
 {
     char str[MAX_STR_LENGTH];
 
@@ -51,7 +51,7 @@ int write_int_file(const char *path, const uint32_t value)
     return write_str_file(path, str);
 }
 
-int read_str_file(const char *path, char *str, const uint32_t max_str_length)
+int read_str_file(const char *path, char *str, uint32_t max_str_length)
 {
     int fd = -1;
 
@@ -88,7 +88,7 @@ int read_int_file(const char *path, uint32_t *value)
     return 0;
 }
 
-int export_pin(const char *dir_path, const uint32_t pin_no)
+int export_pin(const char *dir_path, uint32_t pin_no)
 {
     int fd = -1;
     char path[MAX_STR_LENGTH];
@@ -120,7 +120,7 @@ int export_pin(const char *dir_path, const uint32_t pin_no)
     return 0;
 }
 
-int unexport_pin(const char *dir_path, const uint32_t pin_no)
+int unexport_pin(const char *dir_path, uint32_t pin_no)
 {
     int fd = -1;
     char path[MAX_STR_LENGTH];

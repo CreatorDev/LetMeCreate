@@ -38,7 +38,7 @@ struct inotify_watch {
 static struct inotify_watch *inotify_watch_list_head = NULL;
 
 
-static uint8_t wd_to_gpio_pin(const int wd)
+static uint8_t wd_to_gpio_pin(int wd)
 {
     uint8_t gpio_pin = 0;
     struct inotify_watch *cur = NULL;
@@ -56,7 +56,7 @@ static uint8_t wd_to_gpio_pin(const int wd)
     return gpio_pin;
 }
 
-static int find_event_type(const uint8_t gpio_pin, uint8_t *event_type)
+static int find_event_type(uint8_t gpio_pin, uint8_t *event_type)
 {
     uint8_t value;
 
@@ -71,7 +71,7 @@ static int find_event_type(const uint8_t gpio_pin, uint8_t *event_type)
     return 0;
 }
 
-static void call_callbacks(const uint8_t gpio_pin, uint8_t event_type)
+static void call_callbacks(uint8_t gpio_pin, uint8_t event_type)
 {
     struct gpio_watch *cur = NULL;
 
@@ -119,7 +119,7 @@ static void* monitor_gpio(void *arg)
     return NULL;
 }
 
-static int enable_gpio_interrupt(const uint8_t gpio_pin)
+static int enable_gpio_interrupt(uint8_t gpio_pin)
 {
     char path[MAX_STR_LENGTH];
 
@@ -129,7 +129,7 @@ static int enable_gpio_interrupt(const uint8_t gpio_pin)
     return write_str_file(path, "both");
 }
 
-static bool is_gpio_monitored(const uint8_t gpio_pin)
+static bool is_gpio_monitored(uint8_t gpio_pin)
 {
     struct gpio_watch *cur = gpio_watch_list_head;
     while (cur) {
@@ -141,7 +141,7 @@ static bool is_gpio_monitored(const uint8_t gpio_pin)
     return false;
 }
 
-static bool has_inotify_watch(const uint8_t gpio_pin)
+static bool has_inotify_watch(uint8_t gpio_pin)
 {
     struct inotify_watch *cur = inotify_watch_list_head;
     while (cur) {
@@ -154,7 +154,7 @@ static bool has_inotify_watch(const uint8_t gpio_pin)
     return false;
 }
 
-static int add_inotify_watch(const uint8_t gpio_pin)
+static int add_inotify_watch(uint8_t gpio_pin)
 {
     struct inotify_watch *watch = NULL;
     char path[MAX_STR_LENGTH];
@@ -194,7 +194,7 @@ static int add_inotify_watch(const uint8_t gpio_pin)
     return 0;
 }
 
-static int remove_inotify_watch(const uint8_t gpio_pin)
+static int remove_inotify_watch(uint8_t gpio_pin)
 {
     struct inotify_watch *prev = NULL;
     struct inotify_watch *cur = inotify_watch_list_head;
@@ -224,7 +224,7 @@ static int remove_inotify_watch(const uint8_t gpio_pin)
     return 0;
 }
 
-static void remove_gpio_watch(const int callbackID)
+static void remove_gpio_watch(int callbackID)
 {
     struct gpio_watch *cur = gpio_watch_list_head;
     struct gpio_watch *prev = NULL;
@@ -277,7 +277,7 @@ int gpio_monitor_init(void)
     return 0;
 }
 
-int gpio_monitor_add_callback(const uint8_t gpio_pin, const uint8_t event_mask, void(*callback)(uint8_t))
+int gpio_monitor_add_callback(uint8_t gpio_pin, uint8_t event_mask, void(*callback)(uint8_t))
 {
     struct gpio_watch *watch = NULL;
 
@@ -337,7 +337,7 @@ int gpio_monitor_add_callback(const uint8_t gpio_pin, const uint8_t event_mask, 
     return watch->ID;
 }
 
-int gpio_monitor_remove_callback(const int callbackID)
+int gpio_monitor_remove_callback(int callbackID)
 {
     struct gpio_watch *cur = gpio_watch_list_head;
     uint8_t gpio_pin = 0;

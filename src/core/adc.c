@@ -5,7 +5,7 @@
 #define ADC_BASE_PATH       "/sys/bus/iio/devices/iio:device0/"
 
 
-int adc_get_value(const uint8_t mikrobus_index, float *value)
+int adc_get_value(uint8_t mikrobus_index, float *value)
 {
     uint32_t tmp = 0;
     char path[MAX_STR_LENGTH];

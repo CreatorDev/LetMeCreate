@@ -14,7 +14,7 @@
 
 int fds[LED_CNT] = { -1, -1, -1, -1, -1, -1, -1, -1 };
 
-static int build_file_path(char *path, const uint8_t led_index, const char *filename)
+static int build_file_path(char *path, uint8_t led_index, const char *filename)
 {
     if (led_index >= LED_CNT) {
         fprintf(stderr, "led: Cannot build device file path for invalid led %d\n", led_index);
@@ -46,7 +46,7 @@ static int build_file_path(char *path, const uint8_t led_index, const char *file
     return 0;
 }
 
-static int set_value(const uint8_t led_index, const uint8_t value)
+static int set_value(uint8_t led_index, uint8_t value)
 {
     char *str = NULL;
 
@@ -61,7 +61,7 @@ static int set_value(const uint8_t led_index, const uint8_t value)
     return write(fds[led_index], str, 2);
 }
 
-static int set_mode(const uint8_t led_index, const char *mode)
+static int set_mode(uint8_t led_index, char *mode)
 {
     char path[MAX_STR_LENGTH];
 
@@ -71,7 +71,7 @@ static int set_mode(const uint8_t led_index, const char *mode)
     return write_str_file(path, mode);
 }
 
-static int set_delay(const uint8_t led_index, const char *filename, const uint32_t value)
+static int set_delay(uint8_t led_index, const char *filename, uint32_t value)
 {
     char path[MAX_STR_LENGTH];
 
@@ -107,17 +107,17 @@ int led_init(void)
     return led_switch_off(ALL_LEDS);
 }
 
-int led_switch_on(const uint8_t mask)
+int led_switch_on(uint8_t mask)
 {
     return led_set(mask, 0xFF);
 }
 
-int led_switch_off(const uint8_t mask)
+int led_switch_off(uint8_t mask)
 {
     return led_set(mask, 0);
 }
 
-int led_set(const uint8_t mask, const uint8_t value)
+int led_set(uint8_t mask, uint8_t value)
 {
     int i = 0, tmp = 1;
 
@@ -143,7 +143,7 @@ int led_set(const uint8_t mask, const uint8_t value)
     return 0;
 }
 
-int led_configure_on_off_mode(const uint8_t mask)
+int led_configure_on_off_mode(uint8_t mask)
 {
     int i = 0, tmp = 1;
 
@@ -160,7 +160,7 @@ int led_configure_on_off_mode(const uint8_t mask)
     return 0;
 }
 
-int led_configure_timer_mode(const uint8_t mask)
+int led_configure_timer_mode(uint8_t mask)
 {
     int i = 0, tmp = 1;
 
@@ -177,7 +177,7 @@ int led_configure_timer_mode(const uint8_t mask)
     return led_set_delay(ALL_LEDS, 0, 500);
 }
 
-int led_get_mode(const uint8_t led_index, uint8_t *led_mode)
+int led_get_mode(uint8_t led_index, uint8_t *led_mode)
 {
     char path[MAX_STR_LENGTH];
     char str[MAX_STR_LENGTH];
@@ -236,7 +236,7 @@ int led_get_mode(const uint8_t led_index, uint8_t *led_mode)
     return 0;
 }
 
-int led_set_delay(const uint8_t mask, const uint32_t delay_on, const uint32_t delay_off)
+int led_set_delay(uint8_t mask, uint32_t delay_on, uint32_t delay_off)
 {
     int i = 0, tmp = 1;
 

@@ -37,7 +37,7 @@ int gpio_monitor_init(void);
  * @param[in] callback Function to call (uint8_t argument is the event type)
  * @return ID of the callback (non-negative integer) if successful, -1 otherwise
  */
-int gpio_monitor_add_callback(const uint8_t gpio_pin, const uint8_t event_mask, void(*callback)(uint8_t));
+int gpio_monitor_add_callback(uint8_t gpio_pin, uint8_t event_mask, void(*callback)(uint8_t));
 
 /**
  * @brief Detach a callback from a GPIO
@@ -45,7 +45,7 @@ int gpio_monitor_add_callback(const uint8_t gpio_pin, const uint8_t event_mask, 
  * @param[in] callback_ID ID of the callback (must not be negative)
  * @return 0 if successful, -1 otherwise
  */
-int gpio_monitor_remove_callback(const int callback_ID);
+int gpio_monitor_remove_callback(int callback_ID);
 
 /**
  * @brief Remove all callbacks and stop monitoring thread.

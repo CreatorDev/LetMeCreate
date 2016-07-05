@@ -30,7 +30,7 @@ int spi_init(void);
  * @param[in] mode Mode of the SPI bus (mode 0, 1, 2 or 3)
  * @return 0 if successful, -1 otherwise
  */
-int spi_set_mode(const uint8_t mikrobus_index, const uint32_t mode);
+int spi_set_mode(uint8_t mikrobus_index, uint32_t mode);
 
 /**
  * @brief Set the speed of an SPI bus.
@@ -39,7 +39,7 @@ int spi_set_mode(const uint8_t mikrobus_index, const uint32_t mode);
  * @param[in] speed Speed in Hz of the SPI bus
  * @return 0 if successful, -1 otherwise
  */
-int spi_set_speed(const uint8_t mikrobus_index, const uint32_t speed);
+int spi_set_speed(uint8_t mikrobus_index, uint32_t speed);
 
 /**
  * @brief Select the bus to use.
@@ -48,7 +48,7 @@ int spi_set_speed(const uint8_t mikrobus_index, const uint32_t speed);
  *
  * @param[in] mikrobus_index Index of the bus to select (see #MIKROBUS_INDEX)
  */
-void spi_select_bus(const uint8_t mikrobus_index);
+void spi_select_bus(uint8_t mikrobus_index);
 
 /**
  * @brief Get the current mikrobus index.
@@ -69,7 +69,7 @@ uint8_t spi_get_current_bus(void);
  * @param[in] count Number of bytes to read or write from the current bus.
  * @return @p count if successful, otherwise it returns -1.
  */
-int spi_transfer(const uint8_t *tx_buffer, uint8_t *rx_buffer, const uint32_t count);
+int spi_transfer(const uint8_t *tx_buffer, uint8_t *rx_buffer, uint32_t count);
 
 /**
  * @brief Close all file descriptors.

@@ -30,7 +30,7 @@ struct switch_callback
 };
 static struct switch_callback *callback_list_head = NULL;
 
-static void process_event(const uint8_t switch_event)
+static void process_event(uint8_t switch_event)
 {
     struct switch_callback *cur = NULL;
 
@@ -116,7 +116,7 @@ int switch_init(void)
     return 0;
 }
 
-int switch_add_callback(const uint8_t event_mask, void (*callback)(void))
+int switch_add_callback(uint8_t event_mask, void (*callback)(void))
 {
     struct switch_callback *entry = NULL;
     if (fd < 0) {
@@ -164,7 +164,7 @@ int switch_add_callback(const uint8_t event_mask, void (*callback)(void))
     return entry->ID;
 }
 
-int switch_remove_callback(const int callback_ID)
+int switch_remove_callback(int callback_ID)
 {
     struct switch_callback *entry = NULL, *prev = NULL;
 

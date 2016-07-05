@@ -18,6 +18,6 @@
  * @param[out] value Pointer to a floating point variable (must be non-null)
  * @return 0 if successful, -1 otherwise
  */
-int adc_get_value(const uint8_t mikrobus_index, float *value);
+int adc_get_value(uint8_t mikrobus_index, float *value);
 
 #endif

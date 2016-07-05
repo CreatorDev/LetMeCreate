@@ -38,7 +38,7 @@ int uart_init(void);
  *
  * @param[in] mikrobus_index Index of the device (see #MIKROBUS_INDEX)
  */
-void uart_select_bus(const uint8_t mikrobus_index);
+void uart_select_bus(uint8_t mikrobus_index);
 
 /**
  * @brief Get the current mikrobus index.
@@ -55,7 +55,7 @@ uint8_t uart_get_current_bus(void);
  * @param[in] baudrate Set the new baud rate of the UART device (see #UART_BAUDRATE for valid baud rates)
  * @return 0 if successful, -1 otherwise
  */
-int uart_set_baudrate(const uint32_t baudrate);
+int uart_set_baudrate(uint32_t baudrate);
 
 /**
  * @brief Get the speed of the current UART device.
@@ -74,7 +74,7 @@ int uart_get_baudrate(uint32_t *baudrate);
  * @param[in] count Number of bytes to send
  * @return 0 if successful, -1 otherwise
  */
-int uart_send(const uint8_t *buffer, const uint32_t count);
+int uart_send(const uint8_t *buffer, uint32_t count);
 
 /**
  * @brief Receive some data using current UART device.
@@ -83,7 +83,7 @@ int uart_send(const uint8_t *buffer, const uint32_t count);
  * @param[in] count Number of bytes to receive
  * @return 0 if successful, -1 otherwise
  */
-int uart_receive(uint8_t *buffer, const uint32_t count);
+int uart_receive(uint8_t *buffer, uint32_t count);
 
 /**
  * @brief Release all UART devices.

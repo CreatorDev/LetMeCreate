@@ -35,7 +35,7 @@ int write_str_file(const char *path, const char *str);
  * @param[in] value Value to write
  * @return 0 if successful, -1 otherwise
  */
-int write_int_file(const char *path, const uint32_t value);
+int write_int_file(const char *path, uint32_t value);
 
 /**
  * @brief Read a string from a device file.
@@ -45,7 +45,7 @@ int write_int_file(const char *path, const uint32_t value);
  * @param[in] max_str_length Maximum number of characters to read
  * @return 0 if successful, -1 otherwise
  */
-int read_str_file(const char *path, char *str, const uint32_t max_str_length);
+int read_str_file(const char *path, char *str, uint32_t max_str_length);
 
 /**
  * @brief Read integer from a device file.
@@ -63,7 +63,7 @@ int read_int_file(const char *path, uint32_t *value);
  * @param[in] pin_no Index of the pin to export
  * @return 0 if successful, -1 otherwise
  */
-int export_pin(const char *dir_path, const uint32_t pin_no);
+int export_pin(const char *dir_path, uint32_t pin_no);
 
 /**
  * @brief Unexport a pin.
@@ -72,6 +72,6 @@ int export_pin(const char *dir_path, const uint32_t pin_no);
  * @param[in] pin_no Index of the pin to unexport
  * @return 0 if successful, -1 otherwise
  */
-int unexport_pin(const char *dir_path, const uint32_t pin_no);
+int unexport_pin(const char *dir_path, uint32_t pin_no);
 
 #endif

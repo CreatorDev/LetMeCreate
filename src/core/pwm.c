@@ -15,7 +15,7 @@
 
 static bool pin_initialised[2] = { false, false };
 
-static bool check_mikrobus_index(const uint8_t mikrobus_index)
+static bool check_mikrobus_index(uint8_t mikrobus_index)
 {
     if (mikrobus_index == MIKROBUS_1)
         return true;
@@ -26,7 +26,7 @@ static bool check_mikrobus_index(const uint8_t mikrobus_index)
     return false;
 }
 
-static bool is_pwm_pin_exported(const uint8_t mikrobus_index)
+static bool is_pwm_pin_exported(uint8_t mikrobus_index)
 {
     DIR *dir = NULL;
     char path[MAX_STR_LENGTH];
@@ -43,7 +43,7 @@ static bool is_pwm_pin_exported(const uint8_t mikrobus_index)
     return true;
 }
 
-static int write_str_pwm_file(const uint8_t mikrobus_index, const char *file_name, const char *str)
+static int write_str_pwm_file(uint8_t mikrobus_index, const char *file_name, const char *str)
 {
     char path[MAX_STR_LENGTH];
 
@@ -55,7 +55,7 @@ static int write_str_pwm_file(const uint8_t mikrobus_index, const char *file_nam
     return write_str_file(path, str);
 }
 
-static int write_int_pwm_file(const uint8_t mikrobus_index, const char *file_name, const uint32_t value)
+static int write_int_pwm_file(uint8_t mikrobus_index, const char *file_name, uint32_t value)
 {
     char str[MAX_STR_LENGTH];
 
@@ -67,7 +67,7 @@ static int write_int_pwm_file(const uint8_t mikrobus_index, const char *file_nam
     return write_str_pwm_file(mikrobus_index, file_name, str);
 }
 
-static int read_int_pwm_file(const uint8_t mikrobus_index, const char *file_name, uint32_t *value)
+static int read_int_pwm_file(uint8_t mikrobus_index, const char *file_name, uint32_t *value)
 {
     char path[MAX_STR_LENGTH];
 
@@ -79,7 +79,7 @@ static int read_int_pwm_file(const uint8_t mikrobus_index, const char *file_name
     return read_int_file(path, value);
 }
 
-int pwm_init(const uint8_t mikrobus_index)
+int pwm_init(uint8_t mikrobus_index)
 {
     if (!check_mikrobus_index(mikrobus_index))
         return -1;
@@ -104,7 +104,7 @@ int pwm_init(const uint8_t mikrobus_index)
     return 0;
 }
 
-int pwm_enable(const uint8_t mikrobus_index)
+int pwm_enable(uint8_t mikrobus_index)
 {
     if (!check_mikrobus_index(mikrobus_index))
         return -1;
@@ -117,7 +117,7 @@ int pwm_enable(const uint8_t mikrobus_index)
     return write_str_pwm_file(mikrobus_index, "enable", "1");
 }
 
-int pwm_set_duty_cycle(const uint8_t mikrobus_index, const float percentage)
+int pwm_set_duty_cycle(uint8_t mikrobus_index, float percentage)
 {
     uint32_t duty_cycle = 0;
     uint32_t period = 0;
@@ -145,7 +145,7 @@ int pwm_set_duty_cycle(const uint8_t mikrobus_index, const float percentage)
     return write_int_pwm_file(mikrobus_index, "duty_cycle", duty_cycle);
 }
 
-int pwm_get_duty_cycle(const uint8_t mikrobus_index, float *percentage)
+int pwm_get_duty_cycle(uint8_t mikrobus_index, float *percentage)
 {
     uint32_t duty_cycle = 0;
     uint32_t period = 0;
@@ -177,12 +177,12 @@ int pwm_get_duty_cycle(const uint8_t mikrobus_index, float *percentage)
     return 0;
 }
 
-int pwm_set_frequency(const uint8_t mikrobus_index, const uint32_t frequency)
+int pwm_set_frequency(uint8_t mikrobus_index, uint32_t frequency)
 {
     return pwm_set_period(mikrobus_index, 1000000000/frequency);
 }
 
-int pwm_set_period(const uint8_t mikrobus_index, const uint32_t period)
+int pwm_set_period(uint8_t mikrobus_index, uint32_t period)
 {
     float percentage = 0.f;
     uint32_t old_period = 0, old_duty_cycle = 0, duty_cycle = 0;
@@ -228,7 +228,7 @@ int pwm_set_period(const uint8_t mikrobus_index, const uint32_t period)
     }
 }
 
-int pwm_get_period(const uint8_t mikrobus_index, uint32_t *period)
+int pwm_get_period(uint8_t mikrobus_index, uint32_t *period)
 {
     if (!check_mikrobus_index(mikrobus_index))
         return -1;
@@ -246,7 +246,7 @@ int pwm_get_period(const uint8_t mikrobus_index, uint32_t *period)
     return read_int_pwm_file(mikrobus_index, "period", period);
 }
 
-int pwm_get_frequency(const uint8_t mikrobus_index, uint32_t *frequency)
+int pwm_get_frequency(uint8_t mikrobus_index, uint32_t *frequency)
 {
     uint32_t period = 0;
 
@@ -263,7 +263,7 @@ int pwm_get_frequency(const uint8_t mikrobus_index, uint32_t *frequency)
     return 0;
 }
 
-int pwm_disable(const uint8_t mikrobus_index)
+int pwm_disable(uint8_t mikrobus_index)
 {
     if (!check_mikrobus_index(mikrobus_index))
         return -1;
@@ -276,7 +276,7 @@ int pwm_disable(const uint8_t mikrobus_index)
     return write_str_pwm_file(mikrobus_index, "enable", "0");
 }
 
-int pwm_release(const uint8_t mikrobus_index)
+int pwm_release(uint8_t mikrobus_index)
 {
     if (!check_mikrobus_index(mikrobus_index))
         return -1;

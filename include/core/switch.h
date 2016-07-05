@@ -34,7 +34,7 @@ int switch_init(void);
  * @param[in] callback Pointer to a function (must not be null)
  * @return ID of the callback, -1 if it fails.
  */
-int switch_add_callback(const uint8_t event_mask, void (*callback)(void));
+int switch_add_callback(uint8_t event_mask, void (*callback)(void));
 
 /**
  * @brief Remove a callback
@@ -42,7 +42,7 @@ int switch_add_callback(const uint8_t event_mask, void (*callback)(void));
  * @param[in] callback_ID ID of the callback to remove
  * @return 0 if successful, -1 otherwise
  */
-int switch_remove_callback(const int callback_ID);
+int switch_remove_callback(int callback_ID);
 
 /**
  * @brief Stop monitoring switch events
