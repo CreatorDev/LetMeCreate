@@ -17,8 +17,10 @@ static bool check_adc_value(const uint8_t mikrobus_index, const float min, const
     if (adc_get_value(mikrobus_index, &value))
         return false;
 
-    if (value < min || value > max)
+    if (value < min || value > max) {
+        printf("Measure %fV out of range [%f,%f].\n", value, min, max);
         return false;
+    }
 
     return true;
 }
