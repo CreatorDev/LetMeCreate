@@ -37,7 +37,15 @@ static bool test_gpio_release_invalid_gpio(void)
 
 static bool test_gpio_init(void)
 {
-    return gpio_init(MIKROBUS_1_INT) == 0;
+    uint8_t direction;
+
+    if (gpio_init(MIKROBUS_1_INT) < 0)
+        return -1;
+
+    if (gpio_get_direction(MIKROBUS_1_INT, &direction) < 0)
+        return -1;
+
+    return direction == GPIO_INPUT;
 }
 
 static bool test_gpio_direction_input(void)
