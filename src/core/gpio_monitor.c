@@ -374,16 +374,21 @@ int gpio_monitor_remove_callback(const int callbackID)
     return 0;
 }
 
-void gpio_monitor_release(void)
+int gpio_monitor_release(void)
 {
+    int ret = 0;
+
     if (thread_running == false)
-        return;
+        return 0;
 
     /* Stop monitoring thread */
     thread_running = false;
-    pthread_join(thread, NULL);
-    pthread_mutex_destroy(&inotify_watch_mutex);
-    pthread_mutex_destroy(&gpio_watch_mutex);
+    if (pthread_join(thread, NULL))
+        ret = -1;
+    if (pthread_mutex_destroy(&inotify_watch_mutex) < 0)
+        ret = -1;
+    if (pthread_mutex_destroy(&gpio_watch_mutex) < 0)
+        ret = -1;
 
     /* Delete all inotify watches */
     while (inotify_watch_list_head) {
@@ -402,6 +407,9 @@ void gpio_monitor_release(void)
     }
 
     /* Release file descriptor */
-    close(fd);
+    if (close(fd) < 0)
+        ret = -1;
     fd = -1;
+
+    return ret;
 }

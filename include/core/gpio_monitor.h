@@ -49,7 +49,9 @@ int gpio_monitor_remove_callback(const int callback_ID);
 
 /**
  * @brief Remove all callbacks and stop monitoring thread.
+ *
+ * @return 0 if successful, -1 otherwise
  */
-void gpio_monitor_release(void);
+int gpio_monitor_release(void);
 
 #endif
