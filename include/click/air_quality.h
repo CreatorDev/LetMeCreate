@@ -21,6 +21,6 @@
  * @param callback Function to call if air quality is bad (must not be null)
  * @return callback ID (positive integer) if successful, -1 otherwise.
  */
-int air_quality_click_set_callback(const uint8_t mikrobus_index, void(*callback)(uint8_t));
+int air_quality_click_set_callback(uint8_t mikrobus_index, void(*callback)(uint8_t));
 
 #endif

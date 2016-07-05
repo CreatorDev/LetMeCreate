@@ -64,7 +64,7 @@ int led_matrix_click_enable(void)
     return 0;
 }
 
-int led_matrix_click_set_intensity(const uint8_t intensity)
+int led_matrix_click_set_intensity(uint8_t intensity)
 {
     uint8_t i = intensity;
     if (intensity > MAX_INTENSITY)
@@ -83,7 +83,7 @@ int led_matrix_click_set_intensity(const uint8_t intensity)
     return 0;
 }
 
-int led_matrix_click_set_column(const uint8_t column_index, const uint8_t data)
+int led_matrix_click_set_column(uint8_t column_index, uint8_t data)
 {
     if (column_index >= COL_CNT) {
         fprintf(stderr, "led_matrix: Invalid column index.\n");
@@ -98,7 +98,7 @@ int led_matrix_click_set_column(const uint8_t column_index, const uint8_t data)
     return spi_write_register(COL(column_index), data);
 }
 
-int led_matrix_click_display_number(const uint8_t number)
+int led_matrix_click_display_number(uint8_t number)
 {
     int i;
     int digits[2];

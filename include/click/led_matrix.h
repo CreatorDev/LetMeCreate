@@ -25,7 +25,7 @@ int led_matrix_click_enable(void);
  * @param[in] intensity in range 0-15
  * @return 0 if successful, -1 otherwise
  */
-int led_matrix_click_set_intensity(const uint8_t intensity);
+int led_matrix_click_set_intensity(uint8_t intensity);
 
 /**
  * @brief Switch on/off all LED's of one column.
@@ -34,7 +34,7 @@ int led_matrix_click_set_intensity(const uint8_t intensity);
  * @param[in] data bit string to switch on/off LED's in this column
  * @return 0 if successful, -1 otherwise
  */
-int led_matrix_click_set_column(const uint8_t column_index, const uint8_t data);
+int led_matrix_click_set_column(uint8_t column_index, uint8_t data);
 
 
 /**
@@ -43,7 +43,7 @@ int led_matrix_click_set_column(const uint8_t column_index, const uint8_t data);
  * @param[in] number a number between 0 and 99 which will be displayed
  * @return 0 if successful, -1 otherwise
  */
-int led_matrix_click_display_number(const uint8_t number);
+int led_matrix_click_display_number(uint8_t number);
 
 /**
  * @brief Switch on/off all LED's.

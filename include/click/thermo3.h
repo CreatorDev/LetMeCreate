@@ -17,7 +17,7 @@
  * @param add_bit Thermo3 click has a jumper on its board to change its address (must be 0 or 1)
  * @return 0 if successful, otherwise it returns -1.
  */
-int thermo3_click_enable(const uint8_t add_bit);
+int thermo3_click_enable(uint8_t add_bit);
 
 /**
  * @brief Get a temperature measure (in degrees Celsius) from Thermo3 click.
@@ -38,7 +38,7 @@ int thermo3_click_get_temperature(float *temperature);
  * @param[in] callback Function to call if temperature is higher than threshold (must not be null)
  * @return callback ID (positive integer if successful, -1 otherwise.
  */
-int thermo3_click_set_alarm(const uint8_t mikrobus_index, const float threshold, void(*callback)(uint8_t));
+int thermo3_click_set_alarm(uint8_t mikrobus_index, float threshold, void(*callback)(uint8_t));
 
 /**
  * @brief Disable Thermo3 click.

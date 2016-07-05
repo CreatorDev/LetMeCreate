@@ -4,7 +4,7 @@
 #include "click/relay2.h"
 
 
-int relay2_click_enable_relay_1(const uint8_t mikrobus_index)
+int relay2_click_enable_relay_1(uint8_t mikrobus_index)
 {
     switch (mikrobus_index) {
     case MIKROBUS_1:
@@ -25,7 +25,7 @@ int relay2_click_enable_relay_1(const uint8_t mikrobus_index)
     return -1;
 }
 
-int relay2_click_disable_relay_1(const uint8_t mikrobus_index)
+int relay2_click_disable_relay_1(uint8_t mikrobus_index)
 {
     switch (mikrobus_index) {
     case MIKROBUS_1:
@@ -46,7 +46,7 @@ int relay2_click_disable_relay_1(const uint8_t mikrobus_index)
     return -1;
 }
 
-int relay2_click_enable_relay_2(const uint8_t mikrobus_index)
+int relay2_click_enable_relay_2(uint8_t mikrobus_index)
 {
     switch (mikrobus_index) {
     case MIKROBUS_1:
@@ -67,7 +67,7 @@ int relay2_click_enable_relay_2(const uint8_t mikrobus_index)
     return -1;
 }
 
-int relay2_click_disable_relay_2(const uint8_t mikrobus_index)
+int relay2_click_disable_relay_2(uint8_t mikrobus_index)
 {
     switch (mikrobus_index) {
     case MIKROBUS_1:

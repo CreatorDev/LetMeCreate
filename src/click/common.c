@@ -3,7 +3,7 @@
 #include "core/i2c.h"
 #include "core/spi.h"
 
-int i2c_write_register(const uint16_t address, const uint8_t reg_address, const uint8_t value)
+int i2c_write_register(uint16_t address, uint8_t reg_address, uint8_t value)
 {
     uint8_t buffer[2];
     buffer[0] = reg_address;
@@ -11,7 +11,7 @@ int i2c_write_register(const uint16_t address, const uint8_t reg_address, const 
     return i2c_write(address, buffer, sizeof(buffer));
 }
 
-int i2c_read_register(const uint16_t address, const uint8_t reg_address, uint8_t *data)
+int i2c_read_register(uint16_t address, uint8_t reg_address, uint8_t *data)
 {
     if (i2c_write_byte(address, reg_address) < 0)
         return -1;
@@ -19,8 +19,8 @@ int i2c_read_register(const uint16_t address, const uint8_t reg_address, uint8_t
     return i2c_read_byte(address, data);
 }
 
-int i2c_read_16b_register(const uint16_t address,
-                          const uint8_t reg_low_address, const uint8_t reg_high_address,
+int i2c_read_16b_register(uint16_t address,
+                          uint8_t reg_low_address, uint8_t reg_high_address,
                           uint16_t *data)
 {
     uint8_t low = 0, high = 0;
@@ -38,7 +38,7 @@ int i2c_read_16b_register(const uint16_t address,
     return 0;
 }
 
-int spi_write_register(const uint8_t reg_address, const uint8_t data)
+int spi_write_register(uint8_t reg_address, uint8_t data)
 {
     uint8_t tx_buffer[2];
 

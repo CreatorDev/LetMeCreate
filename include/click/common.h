@@ -18,7 +18,7 @@
  * @param[in] value New value of the register
  * @return 0 if successful, otherwise it returns -1.
  */
-int i2c_write_register(const uint16_t address, const uint8_t reg_address, const uint8_t value);
+int i2c_write_register(uint16_t address, uint8_t reg_address, uint8_t value);
 
 /**
  * @brief Read a one-byte register from a slave over I²C.
@@ -28,7 +28,7 @@ int i2c_write_register(const uint16_t address, const uint8_t reg_address, const 
  * @param[out] data Pointer to a 8-bit variable to store the value of the register read from the slave
  * @return 0 if successful, otherwise it returns -1.
  */
-int i2c_read_register(const uint16_t address, const uint8_t reg_address, uint8_t *data);
+int i2c_read_register(uint16_t address, uint8_t reg_address, uint8_t *data);
 
 /**
  * @brief Read a 16bit register from a slave over I²C.
@@ -39,7 +39,7 @@ int i2c_read_register(const uint16_t address, const uint8_t reg_address, uint8_t
  * @param[out] data Pointer to a 16-bit variable to store the value of the register read from the slave
  * @return 0 if successful, otherwise it returns -1.
  */
-int i2c_read_16b_register(const uint16_t address, const uint8_t reg_low_address, const uint8_t reg_high_address, uint16_t *data);
+int i2c_read_16b_register(uint16_t address, uint8_t reg_low_address, uint8_t reg_high_address, uint16_t *data);
 
 /**
  * @brief Write one byte to a register over SPI.
@@ -48,6 +48,6 @@ int i2c_read_16b_register(const uint16_t address, const uint8_t reg_low_address,
  * @param[in] data New value of the register
  * @return 0 if successful, -1 otherwise
  */
-int spi_write_register(const uint8_t reg_address, const uint8_t data);
+int spi_write_register(uint8_t reg_address, uint8_t data);
 
 #endif
