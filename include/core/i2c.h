@@ -83,7 +83,9 @@ int i2c_read_byte(uint16_t slave_address, uint8_t *data);
 
 /**
  * @brief Close all file descriptor.
+ *
+ * @return Returns -1 if it fails, otherwise it returns 0.
  */
-void i2c_release(void);
+int i2c_release(void);
 
 #endif

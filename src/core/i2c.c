@@ -47,17 +47,20 @@ static int i2c_init_bus(uint8_t mikrobus_index)
     return 0;
 }
 
-static void i2c_release_bus(uint8_t mikrobus_index)
+static int i2c_release_bus(uint8_t mikrobus_index)
 {
+    int ret = 0;
     switch (mikrobus_index) {
     case MIKROBUS_1:
     case MIKROBUS_2:
         if (fds[mikrobus_index] >= 0) {
-            close(fds[mikrobus_index]);
+            ret = close(fds[mikrobus_index]);
             fds[mikrobus_index] = -1;
         }
         break;
     }
+
+    return ret;
 }
 
 int i2c_init(void)
@@ -164,8 +167,10 @@ int i2c_read_byte(uint16_t slave_address, uint8_t *data)
     return i2c_read(slave_address, data, 1);
 }
 
-void i2c_release(void)
+int i2c_release(void)
 {
-    i2c_release_bus(MIKROBUS_1);
-    i2c_release_bus(MIKROBUS_2);
+    int ret = 0;
+    ret += i2c_release_bus(MIKROBUS_1);
+    ret += i2c_release_bus(MIKROBUS_2);
+    return ret ? -1 : 0;
 }
