@@ -156,6 +156,11 @@ int spi_transfer(const uint8_t *tx_buffer, uint8_t *rx_buffer, uint32_t count)
     if (count == 0)
         return 0;
 
+    if (tx_buffer == NULL && rx_buffer == NULL) {
+        fprintf(stderr, "spi: Cannot make transfer because both TX and RX buffers are null.\n");
+        return -1;
+    }
+
     memset(&tr, 0, sizeof(tr));
     tr.tx_buf = (const unsigned long)tx_buffer;
     tr.rx_buf = (unsigned long)rx_buffer;
