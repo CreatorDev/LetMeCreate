@@ -33,3 +33,7 @@ install(TARGETS test_gpio_monitor RUNTIME DESTINATION bin)
 add_executable(test_i2c test_i2c.c $<TARGET_OBJECTS:common>)
 target_link_libraries(test_i2c letmecreate_core)
 install(TARGETS test_i2c RUNTIME DESTINATION bin)
+
+add_executable(test_spi test_spi.c $<TARGET_OBJECTS:common>)
+target_link_libraries(test_spi letmecreate_core)
+install(TARGETS test_spi RUNTIME DESTINATION bin)
