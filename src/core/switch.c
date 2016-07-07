@@ -30,7 +30,7 @@ struct switch_callback
 };
 static struct switch_callback *callback_list_head = NULL;
 
-static void process_event(const uint8_t switch_event)
+static void process_event(uint8_t switch_event)
 {
     struct switch_callback *cur = NULL;
 
@@ -116,11 +116,16 @@ int switch_init(void)
     return 0;
 }
 
-int switch_add_callback(const uint8_t event_mask, void (*callback)(void))
+int switch_add_callback(uint8_t event_mask, void (*callback)(void))
 {
     struct switch_callback *entry = NULL;
     if (fd < 0) {
         fprintf(stderr, "switch: Failed to add callback, switch_init must be called before\n");
+        return -1;
+    }
+
+    if ((event_mask & SWITCH_ALL_EVENTS) == 0) {
+        fprintf(stderr, "switch: Invalid event mask.\n");
         return -1;
     }
 
@@ -159,7 +164,7 @@ int switch_add_callback(const uint8_t event_mask, void (*callback)(void))
     return entry->ID;
 }
 
-int switch_remove_callback(const int callback_ID)
+int switch_remove_callback(int callback_ID)
 {
     struct switch_callback *entry = NULL, *prev = NULL;
 
@@ -199,14 +204,26 @@ int switch_remove_callback(const int callback_ID)
     return 0;
 }
 
-void switch_release(void)
+int switch_release(void)
 {
     if (fd >= 0) {
         running = false;
-        pthread_join(thread, NULL);
-        close(fd);
+        if (pthread_join(thread, NULL) < 0) {
+            fprintf(stderr, "switch: Failed to terminate monitoring thread.\n");
+            return -1;
+        }
+
+        if (pthread_mutex_destroy(&mutex) < 0) {
+            fprintf(stderr, "switch: Failed to destroy mutex.\n");
+            return -1;
+        }
+
+        if (close(fd) < 0) {
+            fprintf(stderr, "switch: Failed to close file descriptor.\n");
+            return -1;
+        }
+
         fd = -1;
-        pthread_mutex_destroy(&mutex);
 
         /* Delete any entries in callback list */
         while (callback_list_head) {
@@ -215,4 +232,6 @@ void switch_release(void)
             free(tmp);
         }
     }
+
+    return 0;
 }

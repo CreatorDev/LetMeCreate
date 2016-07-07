@@ -3,7 +3,7 @@
 #include "core/common.h"
 #include "core/gpio_monitor.h"
 
-int motion_click_enable(const uint8_t mikrobus_index)
+int motion_click_enable(uint8_t mikrobus_index)
 {
     switch (mikrobus_index) {
     case MIKROBUS_1:
@@ -24,7 +24,7 @@ int motion_click_enable(const uint8_t mikrobus_index)
     return -1;
 }
 
-int motion_click_attach_callback(const uint8_t mikrobus_index, void(*callback)(uint8_t))
+int motion_click_attach_callback(uint8_t mikrobus_index, void(*callback)(uint8_t))
 {
     switch (mikrobus_index) {
     case MIKROBUS_1:
@@ -45,7 +45,7 @@ int motion_click_attach_callback(const uint8_t mikrobus_index, void(*callback)(u
     return -1;
 }
 
-int motion_click_disable(const uint8_t mikrobus_index)
+int motion_click_disable(uint8_t mikrobus_index)
 {
     switch (mikrobus_index) {
     case MIKROBUS_1:

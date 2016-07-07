@@ -19,8 +19,18 @@ enum LED_INDEX {
     LED_4 = 0x10,
     LED_5 = 0x20,
     LED_6 = 0x40,
-    LED_HEARTBEAT=0x80
+    LED_HEARTBEAT=0x80,
+    ALL_LEDS = 0xFF
 };
+
+/** Mode of LED's */
+enum LED_MODE {
+    ON_OFF_MODE,
+    TIMER_MODE
+};
+
+/** Number of LEDS */
+#define LED_CNT                     (8)
 
 /**
  * @brief Initialise file descriptors for each LED. Configure all LEDS in on/off mode. Switch off
@@ -36,7 +46,7 @@ int led_init(void);
  * @param[in] mask
  * @return 0 if successful, -1 otherwise
  */
-int led_switch_on(const uint8_t mask);
+int led_switch_on(uint8_t mask);
 
 /**
  * @brief Switch off some LEDs.
@@ -44,7 +54,7 @@ int led_switch_on(const uint8_t mask);
  * @param[in] mask
  * @return 0 if successful, -1 otherwise
  */
-int led_switch_off(const uint8_t mask);
+int led_switch_off(uint8_t mask);
 
 /**
  * @brief Switch on/off each LED depending on corresponding bit in @p led_value
@@ -60,7 +70,7 @@ int led_switch_off(const uint8_t mask);
  * @param[in] value bit string to set LED's value
  * @return 0 if successful, -1 otherwise
  */
-int led_set(const uint8_t mask, const uint8_t value);
+int led_set(uint8_t mask, uint8_t value);
 
 /**
  * @brief Configure all LEDS from mask in on/off mode. led_init must have been called before.
@@ -68,7 +78,7 @@ int led_set(const uint8_t mask, const uint8_t value);
  * @param[in] mask bit string to access LED'S
  * @return 0 if successful, -1 otherwise
  */
-int led_configure_on_off_mode(const uint8_t mask);
+int led_configure_on_off_mode(uint8_t mask);
 
 /**
  * @brief Configure all LEDS from mask in timer mode. led_init must have been called before.
@@ -76,7 +86,16 @@ int led_configure_on_off_mode(const uint8_t mask);
  * @param[in] mask bit string to access LED'S
  * @return 0 if successful, -1 otherwise
  */
-int led_configure_timer_mode(const uint8_t mask);
+int led_configure_timer_mode(uint8_t mask);
+
+/**
+ * @brief Get the mode of a LED.
+ *
+ * @param[in] led_index
+ * @param[out] led_mode Current mode of the LED (see #LED_MODE)
+ * @return 0 if successful, -1 otherwise
+ */
+int led_get_mode(uint8_t led_index, uint8_t *led_mode);
 
 /**
  * @brief Configure delays for LEDS. LEDS must have been configured in timer mode before.
@@ -86,11 +105,13 @@ int led_configure_timer_mode(const uint8_t mask);
  * @param[in] delay_off Defines how long the LED will stay on (in milliseconds)
  * @return 0 if successful, -1 otherwise
  */
-int led_set_delay(const uint8_t mask, const uint32_t delay_on, const uint32_t delay_off);
+int led_set_delay(uint8_t mask, uint32_t delay_on, uint32_t delay_off);
 
 /**
- * @brief Close file descriptors for each LED.
+ * @brief Close file descriptors for each LED and switch off all LED's.
+ *
+ * @return 0 if successful, -1 otherwise
  */
-void led_release(void);
+int led_release(void);
 
 #endif

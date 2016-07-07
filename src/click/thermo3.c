@@ -19,7 +19,7 @@
 static bool enabled = false;
 static uint8_t last_address_bit = 0;
 
-int thermo3_click_enable(const uint8_t add_bit)
+int thermo3_click_enable(uint8_t add_bit)
 {
     uint8_t buffer[3];
 
@@ -68,7 +68,7 @@ int thermo3_click_get_temperature(float *temperature)
     return 0;
 }
 
-int thermo3_click_set_alarm(const uint8_t mikrobus_index, const float threshold, void(*callback)(uint8_t))
+int thermo3_click_set_alarm(uint8_t mikrobus_index, float threshold, void(*callback)(uint8_t))
 {
     uint8_t alarm_pin = 0;
     uint8_t buffer[3];

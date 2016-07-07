@@ -6,6 +6,7 @@
 #include <sys/types.h>
 #include <termios.h>
 #include <unistd.h>
+#include "core/common.h"
 #include "core/uart.h"
 
 #define UART_1_DEVICE_FILE      "/dev/ttySC0"
@@ -13,27 +14,149 @@
 
 static int fds[2] = { -1, -1 };
 static struct termios old_pts[2];
-static uint8_t current_uart_device = MIKROBUS_1_UART;
+static uint8_t current_mikrobus_index = MIKROBUS_1;
 
-static bool check_uart_device(const uint8_t uart_device)
+static bool check_mikrobus_index(uint8_t mikrobus_index)
 {
-    if (uart_device == MIKROBUS_1_UART)
+    if (mikrobus_index == MIKROBUS_1)
         return true;
-    if (uart_device == MIKROBUS_2_UART)
+    if (mikrobus_index == MIKROBUS_2)
         return true;
 
-    fprintf(stderr, "uart: Invalid uart device\n.");
+    fprintf(stderr, "uart: Invalid mikrobus_index\n.");
     return false;
 }
 
-int uart_init(const uint8_t uart_device, const uint32_t baudrate)
+static int uart_init_bus(uint8_t mikrobus_index)
 {
     char *device_file = NULL;
-    speed_t speed;
     struct termios pts;
 
-    if (!check_uart_device(uart_device))
+    if (!check_mikrobus_index(mikrobus_index))
         return -1;
+
+    if (fds[mikrobus_index] >= 0)
+        return 0;
+
+    if (mikrobus_index == MIKROBUS_1)
+        device_file = UART_1_DEVICE_FILE;
+    else
+        device_file = UART_2_DEVICE_FILE;
+
+    if ((fds[mikrobus_index] = open(device_file, O_RDWR)) < 0) {
+        fprintf(stderr, "uart: Failed to open file descriptor.\n");
+        return -1;
+    }
+
+    if (tcgetattr(fds[mikrobus_index], &old_pts[mikrobus_index]) < 0) {
+        fprintf(stderr, "uart: Failed to get current parameters.\n");
+        close(fds[mikrobus_index]);
+        fds[mikrobus_index] = -1;
+        return -1;
+    }
+
+    memcpy(&pts, &old_pts[mikrobus_index], sizeof(pts));
+
+    pts.c_cflag = (pts.c_cflag & ~CSIZE) | CS8;
+    pts.c_cflag &= ~CSTOPB;
+    pts.c_cflag &= ~CRTSCTS;
+    pts.c_cflag |= (CLOCAL | CREAD);
+
+    pts.c_lflag = 0;
+    pts.c_oflag = 0;
+    pts.c_iflag &= ~(IXON | IXOFF | IXANY);
+    pts.c_cc[VMIN] = 1;
+    pts.c_cc[VTIME] = 0;
+
+    if (tcflush(fds[mikrobus_index], TCIOFLUSH) < 0) {
+        fprintf(stderr, "uart: Failed to flush buffer.\n");
+        close(fds[mikrobus_index]);
+        fds[mikrobus_index] = -1;
+        return -1;
+    }
+
+    if (tcsetattr(fds[mikrobus_index], TCSANOW, &pts) < 0) {
+        fprintf(stderr, "uart: Failed to set parameters.\n");
+        close(fds[mikrobus_index]);
+        fds[mikrobus_index] = -1;
+        return -1;
+    }
+
+    return 0;
+}
+
+static int uart_release_bus(uint8_t mikrobus_index)
+{
+    if (!check_mikrobus_index(mikrobus_index))
+        return -1;
+
+    if (fds[mikrobus_index] < 0)
+        return 0;
+
+    /* Flush buffers */
+    if (tcflush(fds[mikrobus_index], TCIOFLUSH) < 0) {
+        fprintf(stderr, "uart: Failed to flush buffers.\n");
+        return -1;
+    }
+
+    /* Restore old parameters */
+    if (tcsetattr(fds[mikrobus_index], TCSANOW, &old_pts[mikrobus_index]) < 0) {
+        fprintf(stderr, "uart: Failed to restore old parameters.\n");
+        return -1;
+    }
+
+    close(fds[mikrobus_index]);
+    fds[mikrobus_index] = -1;
+    return 0;
+}
+
+int uart_init(void)
+{
+    if (uart_init_bus(MIKROBUS_1) < 0)
+        return -1;
+    uart_select_bus(MIKROBUS_1);
+    if (uart_set_baudrate(UART_BD_9600) < 0)
+        return -1;
+
+    if (uart_init_bus(MIKROBUS_2) < 0)
+        return -1;
+    uart_select_bus(MIKROBUS_2);
+    if (uart_set_baudrate(UART_BD_9600) < 0)
+        return -1;
+    uart_select_bus(MIKROBUS_1);
+
+    return 0;
+}
+
+void uart_select_bus(uint8_t mikrobus_index)
+{
+    switch (mikrobus_index) {
+    case MIKROBUS_1:
+    case MIKROBUS_2:
+        current_mikrobus_index = mikrobus_index;
+        break;
+    }
+}
+
+uint8_t uart_get_current_bus(void)
+{
+    return current_mikrobus_index;
+}
+
+int uart_set_baudrate(uint32_t baudrate)
+{
+    struct termios pts;
+    speed_t speed;
+
+    if (fds[current_mikrobus_index] < 0) {
+        fprintf(stderr, "uart: device %d must be initialised before sending data.\n", current_mikrobus_index);
+        return -1;
+    }
+
+    if (tcgetattr(fds[current_mikrobus_index], &pts) < 0) {
+        fprintf(stderr, "uart: Failed to get current parameters.\n");
+        return -1;
+    }
 
     switch(baudrate) {
     case UART_BD_1200:
@@ -58,74 +181,71 @@ int uart_init(const uint8_t uart_device, const uint32_t baudrate)
         speed = B57600;
         break;
     default:
-        fprintf(stderr, "uart: Invalid baudrate specified\n.");
+        fprintf(stderr, "uart: Invalid baudrate.\n");
         return -1;
     }
 
-    if (fds[uart_device] >= 0)
-        return 0;
+    cfsetospeed(&pts, speed);
+    cfsetispeed(&pts, speed);
 
-    if (uart_device == MIKROBUS_1_UART)
-        device_file = UART_1_DEVICE_FILE;
-    else
-        device_file = UART_2_DEVICE_FILE;
-
-    if ((fds[uart_device] = open(device_file, O_RDWR)) < 0) {
-        fprintf(stderr, "uart: Failed to open file descriptor.\n");
-        return -1;
-    }
-
-    if (tcgetattr(fds[uart_device], &old_pts[uart_device]) < 0) {
-        fprintf(stderr, "uart: Failed to get current parameters.\n");
-        close(fds[uart_device]);
-        fds[uart_device] = -1;
-        return -1;
-    }
-
-    memcpy(&pts, &old_pts[uart_device], sizeof(pts));
-
-    cfsetospeed (&pts, speed);
-    cfsetispeed (&pts, speed);
-
-    pts.c_cflag = (pts.c_cflag & ~CSIZE) | CS8;
-    pts.c_cflag &= ~CSTOPB;
-    pts.c_cflag &= ~CRTSCTS;
-    pts.c_cflag |= (CLOCAL | CREAD);
-
-    pts.c_lflag = 0;
-    pts.c_oflag = 0;
-    pts.c_iflag &= ~(IXON | IXOFF | IXANY);
-    pts.c_cc[VMIN] = 1;
-    pts.c_cc[VTIME] = 0;
-
-    if (tcflush(fds[uart_device], TCIOFLUSH) < 0) {
-        fprintf(stderr, "uart: Failed to flush buffer.\n");
-        close(fds[uart_device]);
-        fds[uart_device] = -1;
-        return -1;
-    }
-
-    if (tcsetattr(fds[uart_device], TCSANOW, &pts) < 0) {
-        fprintf(stderr, "uart: Failed to set parameters.\n");
-        close(fds[uart_device]);
-        fds[uart_device] = -1;
+    if (tcsetattr(fds[current_mikrobus_index], TCSANOW, &pts) < 0) {
+        fprintf(stderr, "uart: Failed to set baudrate.\n");
         return -1;
     }
 
     return 0;
 }
 
-int uart_select(const uint8_t uart_device)
+int uart_get_baudrate(uint32_t *baudrate)
 {
-    if (!check_uart_device(uart_device))
-        return -1;
+    struct termios pts;
 
-    current_uart_device = uart_device;
+    if (baudrate == NULL) {
+        fprintf(stderr, "uart: Cannot set baudrate using null pointer.\n");
+        return -1;
+    }
+
+    if (fds[current_mikrobus_index] < 0) {
+        fprintf(stderr, "uart: device %d must be initialised before sending data.\n", current_mikrobus_index);
+        return -1;
+    }
+
+    if (tcgetattr(fds[current_mikrobus_index], &pts) < 0) {
+        fprintf(stderr, "uart: Failed to get current parameters.\n");
+        return -1;
+    }
+
+    switch (cfgetispeed(&pts)) {
+    case B1200:
+        *baudrate = UART_BD_1200;
+        break;
+    case B2400:
+        *baudrate = UART_BD_2400;
+        break;
+    case B4800:
+        *baudrate = UART_BD_4800;
+        break;
+    case B9600:
+        *baudrate = UART_BD_9600;
+        break;
+    case B19200:
+        *baudrate = UART_BD_19200;
+        break;
+    case B38400:
+        *baudrate = UART_BD_38400;
+        break;
+    case B57600:
+        *baudrate = UART_BD_57600;
+        break;
+    default:
+        fprintf(stderr, "uart: UART device use unknown baudrate.\n");
+        return -1;
+    }
 
     return 0;
 }
 
-int uart_send(const uint8_t *buffer, const uint32_t count)
+int uart_send(const uint8_t *buffer, uint32_t count)
 {
     uint32_t sent_cnt = 0;
 
@@ -137,13 +257,13 @@ int uart_send(const uint8_t *buffer, const uint32_t count)
     if (count == 0)
         return 0;
 
-    if (fds[current_uart_device] < 0) {
-        fprintf(stderr, "uart: device %d must be initialised before sending data.\n", current_uart_device);
+    if (fds[current_mikrobus_index] < 0) {
+        fprintf(stderr, "uart: device %d must be initialised before sending data.\n", current_mikrobus_index);
         return -1;
     }
 
     while (sent_cnt < count) {
-        int ret = write(fds[current_uart_device], &buffer[sent_cnt], count - sent_cnt);
+        int ret = write(fds[current_mikrobus_index], &buffer[sent_cnt], count - sent_cnt);
         if (ret < 0) {
             fprintf(stderr, "uart: Failed to write.\n");
             return -1;
@@ -154,7 +274,7 @@ int uart_send(const uint8_t *buffer, const uint32_t count)
     return sent_cnt;
 }
 
-int uart_receive(uint8_t *buffer, const uint32_t count)
+int uart_receive(uint8_t *buffer, uint32_t count)
 {
     uint32_t received_cnt = 0;
 
@@ -166,13 +286,13 @@ int uart_receive(uint8_t *buffer, const uint32_t count)
     if (count == 0)
         return 0;
 
-    if (fds[current_uart_device] < 0) {
-        fprintf(stderr, "uart: device %d must be initialised before receiving data.\n", current_uart_device);
+    if (fds[current_mikrobus_index] < 0) {
+        fprintf(stderr, "uart: device %d must be initialised before receiving data.\n", current_mikrobus_index);
         return -1;
     }
 
     while (received_cnt < count) {
-        int ret = read(fds[current_uart_device], &buffer[received_cnt], count - received_cnt);
+        int ret = read(fds[current_mikrobus_index], &buffer[received_cnt], count - received_cnt);
         if (ret < 0) {
             fprintf(stderr, "uart: Failed to read\n");
             return -1;
@@ -183,27 +303,10 @@ int uart_receive(uint8_t *buffer, const uint32_t count)
     return received_cnt;
 }
 
-int uart_release(const uint8_t uart_device)
+int uart_release(void)
 {
-    if (!check_uart_device(uart_device))
+    if (uart_release_bus(MIKROBUS_1) < 0)
         return -1;
 
-    if (fds[uart_device] < 0)
-        return 0;
-
-    /* Flush buffers */
-    if (tcflush(fds[uart_device], TCIOFLUSH) < 0) {
-        fprintf(stderr, "uart: Failed to flush buffers.\n");
-        return -1;
-    }
-
-    /* Restore old parameters */
-    if (tcsetattr(fds[uart_device], TCSANOW, &old_pts[uart_device]) < 0) {
-        fprintf(stderr, "uart: Failed to restore old parameters.\n");
-        return -1;
-    }
-
-    close(fds[uart_device]);
-    fds[uart_device] = -1;
-    return 0;
+    return uart_release_bus(MIKROBUS_2);
 }

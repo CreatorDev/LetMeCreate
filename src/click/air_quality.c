@@ -4,7 +4,7 @@
 #include "core/gpio.h"
 #include "core/gpio_monitor.h"
 
-int air_quality_click_set_callback(const uint8_t mikrobus_index, void(*callback)(uint8_t))
+int air_quality_click_set_callback(uint8_t mikrobus_index, void(*callback)(uint8_t))
 {
     uint8_t output_pin = 0;
     int callback_ID;

@@ -17,7 +17,7 @@
 static int fds[] = { -1, -1 };
 static uint8_t current_mikrobus_index = MIKROBUS_1;
 
-static int spi_init_bus(const uint8_t mikrobus_index)
+static int spi_init_bus(uint8_t mikrobus_index)
 {
     int fd = -1;
     uint8_t bits_per_word = BITS_PER_WORD;
@@ -65,7 +65,7 @@ static int spi_init_bus(const uint8_t mikrobus_index)
     return fd;
 }
 
-static int spi_release_bus(const uint8_t mikrobus_index)
+static int spi_release_bus(uint8_t mikrobus_index)
 {
     switch (mikrobus_index) {
     case MIKROBUS_1:
@@ -98,7 +98,7 @@ int spi_init(void)
     return 0;
 }
 
-int spi_set_mode(const uint8_t mikrobus_index, const uint32_t mode)
+int spi_set_mode(uint8_t mikrobus_index, uint32_t mode)
 {
     if (fds[mikrobus_index] < 0) {
         fprintf(stderr, "spi: Cannot set mode of uninitialised bus.\n");
@@ -113,7 +113,7 @@ int spi_set_mode(const uint8_t mikrobus_index, const uint32_t mode)
     return 0;
 }
 
-int spi_set_speed(const uint8_t mikrobus_index, const uint32_t speed)
+int spi_set_speed(uint8_t mikrobus_index, uint32_t speed)
 {
     if (fds[mikrobus_index] < 0) {
         fprintf(stderr, "spi: Cannot set mode of uninitialised bus.\n");
@@ -128,19 +128,13 @@ int spi_set_speed(const uint8_t mikrobus_index, const uint32_t speed)
     return 0;
 }
 
-int spi_select_bus(const uint8_t mikrobus_index)
+void spi_select_bus(uint8_t mikrobus_index)
 {
     switch (mikrobus_index) {
     case MIKROBUS_1:
     case MIKROBUS_2:
         current_mikrobus_index = mikrobus_index;
-        break;
-    default:
-        fprintf(stderr, "spi: Invalid mikrobus index.\n");
-        return -1;
     }
-
-    return 0;
 }
 
 uint8_t spi_get_current_bus(void)
@@ -148,7 +142,7 @@ uint8_t spi_get_current_bus(void)
     return current_mikrobus_index;
 }
 
-int spi_transfer(const uint8_t *tx_buffer, uint8_t *rx_buffer, const uint32_t count)
+int spi_transfer(const uint8_t *tx_buffer, uint8_t *rx_buffer, uint32_t count)
 {
     int fd;
     struct spi_ioc_transfer tr;
@@ -161,6 +155,11 @@ int spi_transfer(const uint8_t *tx_buffer, uint8_t *rx_buffer, const uint32_t co
 
     if (count == 0)
         return 0;
+
+    if (tx_buffer == NULL && rx_buffer == NULL) {
+        fprintf(stderr, "spi: Cannot make transfer because both TX and RX buffers are null.\n");
+        return -1;
+    }
 
     memset(&tr, 0, sizeof(tr));
     tr.tx_buf = (const unsigned long)tx_buffer;

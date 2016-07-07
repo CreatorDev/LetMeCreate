@@ -11,19 +11,13 @@
 
 #include <stdint.h>
 
-/** Index of ADC */
-enum ADC_INDEX {
-    MIKROBUS_1_ADC, /**< ADC available on Mikrobus 1 and Raspberry pi interface */
-    MIKROBUS_2_ADC  /**< ADC available on Mikrobus 2 and Raspberry pi interface */
-};
-
 /**
  * @brief Get the reading of an ADC in Volt, in range 0-5V.
  *
- * @param[in] index Index of the ADC (see #ADC_INDEX)
+ * @param[in] mikrobus_index Index of the ADC (see #MIKROBUS_INDEX)
  * @param[out] value Pointer to a floating point variable (must be non-null)
- * @return 0 if succesful, -1 otherwise
+ * @return 0 if successful, -1 otherwise
  */
-int adc_get_value(const uint8_t index, float *value);
+int adc_get_value(uint8_t mikrobus_index, float *value);
 
 #endif

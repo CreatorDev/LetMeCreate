@@ -23,6 +23,7 @@ MikroClick board supported:
   - 8x8R (Led Matrix)
 
 Examples are installed in /usr/bin/letmecreate_examples.
+Tests are installed in /usr/bin/letmecreate_tests.
 
 ## Integration in Openwrt
 

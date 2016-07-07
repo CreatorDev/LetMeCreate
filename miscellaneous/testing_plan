@@ -1,0 +1,172 @@
+Switch
+======
+
+1.     `switch_add_callback(0xF, myfunc)` return -1
+2.     `switch_init()` return 0
+3.     `switch_init()` return 0 (check if multiple functions return 0)
+4.     `switch_add_callback(0x0, myfunc)` return -1
+5.     `switch_add_callback(0xF, NULL)` return -1
+6.     `switch_remove_callback(-1)`  return -1
+7.     For event in [0x1,0x2,0x4,0x8]
+            `switch_add_callback(event,myfunc)` return id
+            Press/Release switch 1, read 1
+            Press/Release switch 2, read nothing
+            `switch_remove_callback(id)` return 0
+            `switch_remove_callback(id)` return -1
+8.     `switch_release()` return 0
+9.     `switch_init()` return 0
+10.     `switch_release()` return 0 and switch_release return 0
+
+ADC
+===
+
+1.     wire MIKROBUS_1_ADC to GND and measure 0
+2.     wire MIKROBUS_1_ADC to 3.3V and measure 675
+3.     wire MIKROBUS_1_ADC to 5V and measure 1023
+4.     wire MIKROBUS_2_ADC to GND and measure 0
+5.     wire MIKROBUS_2_ADC to 3.3V and measure 675
+6.     wire MIKROBUS_2_ADC to 5V and measure 1023
+7.     `adc_get_measure(4, mymeasure)` return -1
+8.     `adc_get_measure(MIKROBUS_1, NULL)` return -1
+
+UART
+====
+
+Prerequisite: Loopback MIKROBUS_1 and MIKROBUS_2 TX/RX
+
+1.     `uart_send` mikrobus 1 return -1
+       `uart receive` mikrobus 1 return -1
+2.     `uart_init()` return 0 and get_bd = bd1
+3.     `uart_init()` return 0 and get_bd = bd1
+4.     `uart_send(NULL, 1)` return -1
+5.     `uart_send(buffer, 0)` return 0
+6.     `uart_receive(NULL, 1)` return -1
+7.     `uart_receive(buffer, 0)` return 0
+8.     `uart_set_baudrate(115200)` return -1
+9.     `uart_release()` return 0
+10.     `uart_release()` return 0
+11.     `uart_select_bus(3)` return -1;
+12.     for bd in UART_BAUDRATE
+                `uart_init(bd)` return 0 and get_bd = bd
+                send data from mikrobus 1 to 2
+                send data from mikrobus 2 to 1
+                `uart_release()` return 0
+
+Led
+===
+
+1.     `led_switch_on(ALL_LEDS)` and `led_switch_off(ALL_LEDS)` return -1
+2.     `led_set(ALL_LEDS,0xAA)` return -1
+3.     `let_set_delay(ALL_LEDS,500,500)` return -1
+4.     `led_release()` return 0
+5.     `led_init()` return 0 and leds are off and in on_off_mode
+6.     `led_init()` return 0 and leds are off and in on_off_mode
+7.     `led_release()` return 0 and leds are off
+8.     `led_release()` return 0 and leds are off
+9.     `led_init()` return 0 `led_switch_on` each led return 0 must see all leds going progressively on
+10.     `led_switch_off` each led return 0 must see all leds going progressively off
+11.     `led_set(0xAA)` return 0 and see all leds according to pattern
+12.     `led_set(0x55)` return 0 and see all leds according to pattern
+13.     `led_set_delay(ALL_LEDS, 500, 500) return -1
+14.     `led_configure_timer_mode(0xFF)` return 0 and all leds are off and get_mode are TIMER_MODE
+15.     `led_get_mode(0x3, mode)` return -1
+16.     `led_get_mode(0x1, NULL)` return -1
+17.     `led_set_delay(0xFF, 500, 500)` return 0 and check that leds blink at 1Hz
+18.     `led_set_delay(0xFF, 100, 1000)` return 0 and check that leds blink faster
+19.     `led_switch_on/off(ALL_LEDS)` return -1
+20.     `led_set(ALL_LEDS,0xFF)` return -1
+21.     `led_configure_on_off_mode(ALL_LEDS)` return 0 and all leds are off
+22.     `led_switch_on(ALL_LEDS)` return 0 and all leds on
+23.     `led_release()` return 0 and all leds are off
+
+PWM
+===
+
+1.     `pwm_init(3)` return -1
+2.     `pwm_release(3)` return -1
+        pwm_get_duty_cyle(MIKROBUS_1) return -1
+        pwm_get/set return -1
+3.     `pwm_init(MIKROBUS_1)` return 0 and `pwm_init(MIKROBUS_2)` return 0 `pwm_get_duty_cycle()` = 50 and `pwm_get_frequency()` = 2kHz
+4.     `pwm_init(MIKROBUS_1)` return 0 and `pwm_init(MIKROBUS_2)` return 0 `pwm_get_duty_cycle()` = 50 and `pwm_get_frequency()` = 2kHz
+7.     `pwm_get_duty_cycle(null)` return -1
+8.     `pwm_get_frequency(null)` return -1
+9.     `pwm_get_period(null)` return -1
+5.     `pwm_release(MIKROBUS_1)` return 0 and `pwm_release(MIKROBUS_2)` return 0
+6.     `pwm_release(MIKROBUS_1)` return 0 and `pwm_release(MIKROBUS_2)` return 0
+
+10.    `pwm_set_period(1kHz)` == `pwm_get_period` = 1/`pwm_get_frequency()`
+11.    If multimeter
+            `pwm_init(MIKROBUS_1)`
+            `pwm_set_frequency(3kHz)`
+            `pwm_set_duty(50)`
+            `pwm_enable(MIKROBUS_1)`
+            ask
+            `pwm_set_frequency(1kHz)`
+            ask
+            `pwm_disable(MIKROBUS_1)`
+            ask
+            `pwm_release(MIKROBUS_1)`
+
+GPIO
+====
+
+21=MIKROBUS_1_INT
+1.     `gpio_set_direction(100, output) and return -1
+2.     `gpio_get_direction(100, dir) and return -1
+3.     `gpio_get_value(100, 0) and return -1
+4.     `gpio_set_value(100, value) and return -1
+5.     `gpio_init(100)  and return -1
+6.     `gpio_release(100)  and return -1
+7.     `gpio_init(21) return 0
+8.     `gpio_set_direction(21, input) and `gpio_get_value(21)` = 0
+9.     ask user to connect to gnd and `gpio_get_value(21)` = 0
+10.     ask user to connect to 3v3 and `gpio_get_value(21)` = 1
+11.     ask user to connect led and `gpio_set_direction(21, output)` return 0 and `gpio_set_value(21, 1)` return 0 and ask user if led is on
+12.     `gpio_set_value(21, 0)` return 0 and ask user if led is off
+13.     `gpio_release(21)`
+
+GPIO MONITOR
+============
+
+1.      `gpio_monitor_add_callback(21, edge, mycallback)` return -1
+2.      `gpio_monitor_init()` return 0
+3.      id = `gpio_monitor_add_callback(21, edge, mycallback)` return 0
+            connect to gnd and detect falling event
+            connect to 3v3 and detect raising event
+4.      `gpio_monitor_remove_callback(4)` return -1
+5.      `gpio_monitor_remove_callback(id)` return 0
+6.      `gpio_monitor_remove_callback(id)` return -1
+7.      `gpio_monitor_release()` return 0
+
+I2C
+===
+
+1.      i2c_write() return -1
+2.      i2c_read() return -1
+3.      i2c_init() return 0 and get_current_bus() == MIKROBUS_1
+4.      i2c_select_bus(4) and get_current_bus() == MIKROBUS_1
+5.      i2c_write(NULL, 1) return -1
+6.      i2c_read(NULL, 1) return -1
+7.      i2c_write(buffer, 0) return 0
+8.      i2c_read(buffer, 0) return 0
+9.      Plug Proximity Click in mikrobus 1
+            read Product ID
+10.      Plug Proximity Click in mikrobus 2
+            i2c_select_bus(MIKROBUS_2) and get_current_bus() == MIKROBUS_2
+            read Product ID
+11.      i2c_release() return 0
+
+SPI
+===
+
+1.      spi_set_mode() return -1
+2.      spi_set_speed() return -1
+3.      spi_transfer() return -1
+4.      spi_init() return 0
+5.      spi_transfer(NULL, NULL, 0) return 0
+6.      spi_transfer(NULL, NULL, 1) return -1
+7.      Plug Accel Click in mikrobus 1
+            read product ID
+8.      Plug Accel Click in mikrobus 1
+            read product ID
+9.      spi_release() return 0

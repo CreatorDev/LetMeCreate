@@ -11,13 +11,7 @@
 
 #include <stdint.h>
 
-/** Index of UART devices */
-enum UART_DEVICE {
-    MIKROBUS_1_UART, /**< UART available on Mikrobus 1 */
-    MIKROBUS_2_UART /**< UART available on Mikrobus 2 and RPI interface */
-};
-
-/** UART baudrates  */
+/** UART baud rates  */
 enum UART_BAUDRATE {
     UART_BD_1200    = 1200,
     UART_BD_2400    = 2400,
@@ -29,50 +23,75 @@ enum UART_BAUDRATE {
 };
 
 /**
- * @brief Initialise a UART device.
+ * @brief Initialise all UART devices.
  *
- * Open a device file and configure it.
+ * Set the baud rate to 9600. Set current UART device to MIKROBUS_1.
  *
- * @param uart_device Index of the device (see #UART_DEVICE for valid indices)
- * @param baudrate Baudrate of the UART (only values from #UART_BAUDRATE are valid)
- * @return 0 if succesful, -1 otherwise
+ * @return 0 if successful, -1 otherwise
  */
-int uart_init(const uint8_t uart_device, const uint32_t baudrate);
+int uart_init(void);
 
 /**
  * @brief Select the current UART device.
  *
- * @param uart_device Index of the device (see #UART_DEVICE for valid indices)
- * @return 0 if succesful, -1 otherwise
+ * If mikrobus_index is not valid, it does not change the current UART device.
+ *
+ * @param[in] mikrobus_index Index of the device (see #MIKROBUS_INDEX)
  */
-int uart_select(const uint8_t uart_device);
+void uart_select_bus(uint8_t mikrobus_index);
+
+/**
+ * @brief Get the current mikrobus index.
+ *
+ * @return Current selected UART device (see #MIKROBUS_INDEX)
+ */
+uint8_t uart_get_current_bus(void);
+
+/**
+ * @brief Set the baud rate of the current UART device.
+ *
+ * The device must be initialised first.
+ *
+ * @param[in] baudrate Set the new baud rate of the UART device (see #UART_BAUDRATE for valid baud rates)
+ * @return 0 if successful, -1 otherwise
+ */
+int uart_set_baudrate(uint32_t baudrate);
+
+/**
+ * @brief Get the speed of the current UART device.
+ *
+ * The device must be initialised first.
+ *
+ * @param[out] baudrate Current baud rate of the UART device (must not be null)
+ * @return 0 if successful, -1 otherwise
+ */
+int uart_get_baudrate(uint32_t *baudrate);
 
 /**
  * @brief Send some data using current UART device.
  *
- * @param buffer Array of bytes
- * @param count Number of bytes to send
- * @return 0 if succesful, -1 otherwise
+ * @param[in] buffer Array of bytes
+ * @param[in] count Number of bytes to send
+ * @return 0 if successful, -1 otherwise
  */
-int uart_send(const uint8_t *buffer, const uint32_t count);
+int uart_send(const uint8_t *buffer, uint32_t count);
 
 /**
  * @brief Receive some data using current UART device.
  *
- * @param buffer Array of bytes
- * @param count Number of bytes to receive
- * @return 0 if succesful, -1 otherwise
+ * @param[out] buffer Array of bytes
+ * @param[in] count Number of bytes to receive
+ * @return 0 if successful, -1 otherwise
  */
-int uart_receive(uint8_t *buffer, const uint32_t count);
+int uart_receive(uint8_t *buffer, uint32_t count);
 
 /**
- * @brief Release a UART device.
+ * @brief Release all UART devices.
  *
  * Close device file and restore old parameters.
  *
- * @param uart_device Index of the device (see #UART_DEVICE for valid indices)
- * @return 0 if succesful, -1 otherwise
+ * @return 0 if successful, -1 otherwise
  */
-int uart_release(const uint8_t uart_device);
+int uart_release(void);
 
 #endif

@@ -15,7 +15,7 @@
 #define GPIO_PATH_FORMAT        "/sys/class/gpio/gpio%d/%s"
 
 
-static bool check_pin(const uint8_t pin)
+static bool check_pin(uint8_t pin)
 {
     switch (pin) {
     case GPIO_14:
@@ -45,7 +45,7 @@ static bool check_pin(const uint8_t pin)
     }
 }
 
-static bool create_gpio_path(char *path, const uint8_t gpio_pin, const char *file_name)
+static bool create_gpio_path(char *path, uint8_t gpio_pin, const char *file_name)
 {
     if (snprintf(path, MAX_STR_LENGTH, GPIO_PATH_FORMAT, gpio_pin, file_name) < 0) {
         fprintf(stderr, "gpio: Could not create path for accessing %s of gpio %d.\n", file_name, gpio_pin);
@@ -55,7 +55,7 @@ static bool create_gpio_path(char *path, const uint8_t gpio_pin, const char *fil
     return true;
 }
 
-static bool check_gpio_initialised(const uint8_t gpio_pin)
+static bool is_gpio_exported(uint8_t gpio_pin)
 {
     DIR *dir = NULL;
     char path[MAX_STR_LENGTH];
@@ -72,7 +72,7 @@ static bool check_gpio_initialised(const uint8_t gpio_pin)
     return true;
 }
 
-static int write_str_gpio_file(const uint8_t gpio_pin, const char *file_name, const char *value)
+static int write_str_gpio_file(uint8_t gpio_pin, const char *file_name, const char *value)
 {
     char path[MAX_STR_LENGTH];
 
@@ -84,7 +84,7 @@ static int write_str_gpio_file(const uint8_t gpio_pin, const char *file_name, co
     return write_str_file(path, value);
 }
 
-static int write_int_gpio_file(const uint8_t gpio_pin, const char *file_name, const uint32_t value)
+static int write_int_gpio_file(uint8_t gpio_pin, const char *file_name, uint32_t value)
 {
     char str[MAX_STR_LENGTH];
 
@@ -96,7 +96,7 @@ static int write_int_gpio_file(const uint8_t gpio_pin, const char *file_name, co
     return write_str_gpio_file(gpio_pin, file_name, str);
 }
 
-static int read_str_gpio_file(const uint8_t gpio_pin, const char *file_name, char *value, const uint32_t max_str_length)
+static int read_str_gpio_file(uint8_t gpio_pin, const char *file_name, char *value, uint32_t max_str_length)
 {
     char path[MAX_STR_LENGTH];
 
@@ -106,35 +106,36 @@ static int read_str_gpio_file(const uint8_t gpio_pin, const char *file_name, cha
     return read_str_file(path, value, max_str_length);
 }
 
-static int read_int_gpio_file(const uint8_t gpio_pin, const char *file_name, uint32_t *value)
+static int read_int_gpio_file(uint8_t gpio_pin, const char *file_name, uint8_t *value)
 {
-    char str[MAX_STR_LENGTH];
+    char path[MAX_STR_LENGTH];
+    uint32_t tmp;
 
-    if (read_str_gpio_file(gpio_pin, file_name, str, MAX_STR_LENGTH) < 0)
+    if (!create_gpio_path(path, gpio_pin, file_name))
         return -1;
 
-    errno = 0;
-    *value = strtoul(str, NULL, 10);
-    if (errno != 0) {
-        fprintf(stderr, "gpio: Failed to convert string %s to integer.\n", str);
+    if (read_int_file(path, &tmp) < 0)
         return -1;
-    }
 
+    *value = tmp;
     return 0;
 }
 
-int gpio_init(const uint8_t gpio_pin)
+int gpio_init(uint8_t gpio_pin)
 {
     if (!check_pin(gpio_pin))
         return -1;
 
-    if (check_gpio_initialised(gpio_pin))
+    if (is_gpio_exported(gpio_pin))
         return 0;
 
-    return export_pin(GPIO_DIR_BASE_PATH, gpio_pin);
+    if (export_pin(GPIO_DIR_BASE_PATH, gpio_pin) < 0)
+        return -1;
+
+    return gpio_set_direction(gpio_pin, GPIO_INPUT);
 }
 
-int gpio_set_direction(const uint8_t gpio_pin, const uint8_t dir)
+int gpio_set_direction(uint8_t gpio_pin, uint8_t dir)
 {
     char str[4];
 
@@ -152,7 +153,7 @@ int gpio_set_direction(const uint8_t gpio_pin, const uint8_t dir)
         return -1;
     }
 
-    if (!check_gpio_initialised(gpio_pin)) {
+    if (!is_gpio_exported(gpio_pin)) {
         fprintf(stderr, "gpio: Cannot set direction of uninitialised gpio %d\n", gpio_pin);
         return -1;
     }
@@ -160,7 +161,7 @@ int gpio_set_direction(const uint8_t gpio_pin, const uint8_t dir)
     return write_str_gpio_file(gpio_pin, "direction", str);
 }
 
-int gpio_get_direction(const uint8_t gpio_pin, uint8_t *dir)
+int gpio_get_direction(uint8_t gpio_pin, uint8_t *dir)
 {
     char value[MAX_STR_LENGTH];
 
@@ -172,7 +173,7 @@ int gpio_get_direction(const uint8_t gpio_pin, uint8_t *dir)
         return -1;
     }
 
-    if (!check_gpio_initialised(gpio_pin))
+    if (!is_gpio_exported(gpio_pin))
         return 0;
 
     if (read_str_gpio_file(gpio_pin, "direction", value, MAX_STR_LENGTH) < 0)
@@ -190,14 +191,14 @@ int gpio_get_direction(const uint8_t gpio_pin, uint8_t *dir)
     return 0;
 }
 
-int gpio_set_value(const uint8_t gpio_pin, const uint32_t value)
+int gpio_set_value(uint8_t gpio_pin, uint8_t value)
 {
     uint8_t dir;
 
     if (!check_pin(gpio_pin))
         return -1;
 
-    if (!check_gpio_initialised(gpio_pin))
+    if (!is_gpio_exported(gpio_pin))
         return 0;
 
     if (gpio_get_direction(gpio_pin, &dir) < 0)
@@ -211,7 +212,7 @@ int gpio_set_value(const uint8_t gpio_pin, const uint32_t value)
     return write_int_gpio_file(gpio_pin, "value", value == 0 ? 0 : 1);
 }
 
-int gpio_get_value(const uint8_t gpio_pin, uint32_t *value)
+int gpio_get_value(uint8_t gpio_pin, uint8_t *value)
 {
     if (!check_pin(gpio_pin))
         return -1;
@@ -221,18 +222,18 @@ int gpio_get_value(const uint8_t gpio_pin, uint32_t *value)
         return -1;
     }
 
-    if (!check_gpio_initialised(gpio_pin))
+    if (!is_gpio_exported(gpio_pin))
         return 0;
 
     return read_int_gpio_file(gpio_pin, "value", value);
 }
 
-int gpio_release(const uint8_t gpio_pin)
+int gpio_release(uint8_t gpio_pin)
 {
     if (!check_pin(gpio_pin))
         return -1;
 
-    if (!check_gpio_initialised(gpio_pin))
+    if (!is_gpio_exported(gpio_pin))
         return 0;
 
     return unexport_pin(GPIO_DIR_BASE_PATH, gpio_pin);
