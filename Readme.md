@@ -39,13 +39,26 @@ $ cd ci-40
 $ git clone https://github.com/IMGCreator/openwrt.git
 $ mkdir -p custom/letmecreate
 $ cd custom/letmecreate
+```
+
+#### Stable release
+
+If you are only interested in getting the latest release of LetMeCreate library, then download a copy of Makefile.stable located in miscallenous folder. Then, copy this file inside the letmecreate folder you have just created and rename it to Makefile.
+
+#### Development configuration
+
+If you are interested in modifying the library, getting the lastest changes, then clone it:
+
+```sh
 $ git clone https://github.com/francois-berder/LetMeCreate.git
 ```
 
-Copy the Makefile to the right location:
+And copy the Makefile to the right location:
 ```sh
 $ cp LetMeCreate/miscellaneous/Makefile.devel Makefile
 ```
+
+#### Register the library in Openwrt
 
 To register the feed in openwrt, go back in openwrt folder and open feeds.conf.default.
 Add this line:
