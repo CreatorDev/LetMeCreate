@@ -33,7 +33,7 @@ static bool test_spi_transfer_before_init(void)
 {
     uint8_t tx_buffer = 0, rx_buffer = 0;
 
-    return spi_transfer(tx_buffer, rx_buffer, 1) == -1;
+    return spi_transfer(&tx_buffer, &rx_buffer, 1) == -1;
 }
 
 static bool test_spi_init(void)
