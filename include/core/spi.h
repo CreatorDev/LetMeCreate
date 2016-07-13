@@ -27,7 +27,7 @@ enum SPI_SPEED {
  *
  * Configure all SPI bus:
  *   - 8 bits per word
- *   - 1MHz
+ *   - 2.73MHz
  *   - SPI_MODE_3
  *
  * @return 0 if successful, -1 otherwise
