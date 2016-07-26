@@ -34,6 +34,14 @@ define Build/Prepare
 	rm -Rf $(PKG_BUILD_DIR)/examples/bin
 endef
 
+define Build/InstallDev
+	$(INSTALL_DIR) $(STAGING_DIR)/usr/include/letmecreate
+	$(CP) $(PKG_BUILD_DIR)/include/* $(STAGING_DIR)/usr/include/
+
+	$(INSTALL_DIR) $(STAGING_DIR)/usr/lib
+	$(CP) $(PKG_BUILD_DIR)/lib/*.so $(STAGING_DIR)/usr/lib/
+endef
+
 define Package/letmecreate/install
 	mkdir -p $(1)/usr/bin/letmecreate_examples
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/examples/bin/* $(1)/usr/bin/letmecreate_examples
