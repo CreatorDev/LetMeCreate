@@ -1,0 +1,5 @@
+add_library(letmecreate_core SHARED IMPORTED)
+add_library(letmecreate_click SHARED IMPORTED)
+find_library(LETMECREATE_LIBRARY_PATH letmecreate_core letmecreate_click HINTS "${CMAKE_CURRENT_LIST_DIR}/../../")
+set_target_properties(letmecreate_core PROPERTIES IMPORTED_LOCATION "${LETMECREATE_LIBRARY_PATH}")
+set_target_properties(letmecreate_click PROPERTIES IMPORTED_LOCATION "${LETMECREATE_LIBRARY_PATH}")
