@@ -11,6 +11,7 @@
 
 #include "click/accel.h"
 #include "click/air_quality.h"
+#include "click/color.h"
 #include "click/common.h"
 #include "click/joystick.h"
 #include "click/led_matrix.h"
