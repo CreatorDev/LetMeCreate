@@ -34,7 +34,8 @@ set(LETMECREATE_VERSION ${LETMECREATE_MAJOR_VERSION}.${LETMECREATE_MINOR_VERSION
 set(CMAKE_C_FLAGS_DEBUG  "${CMAKE_C_FLAGS_DEBUG} -Wall -ggdb3")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-include_directories(include)
+include_directories(include/letmecreate)
+
 file(GLOB core_srcs src/core/*.c)
 file(GLOB click_srcs src/click/*.c)
 
@@ -43,6 +44,7 @@ add_library(letmecreate_click SHARED ${click_srcs})
 
 install(TARGETS letmecreate_core LIBRARY DESTINATION lib)
 install(TARGETS letmecreate_click LIBRARY DESTINATION lib)
+install(DIRECTORY include DESTINATION .)
 
 if(BUILD_EXAMPLES)
     add_subdirectory(examples)
