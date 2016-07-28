@@ -1,6 +1,7 @@
 PROJECT_NAME           = "LetMeCreate"
 PROJECT_BRIEF          = "This library implements some wrappers for the Ci-40."
 OUTPUT_DIRECTORY       = doc/
-INPUT                  = include/
+INPUT                  = Readme.md include/
 FILE_PATTERNS          = *.h
 RECURSIVE              = YES
+USE_MDFILE_AS_MAINPAGE = Readme.md
