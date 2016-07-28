@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=letmecreate
-PKG_VERSION:=0.1
+PKG_VERSION:=1.0.1
 
 PKG_LICENSE:=BSD-3-Clause
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
@@ -15,10 +15,20 @@ define Package/letmecreate
   TITLE:=LetMeCreate
 endef
 
-CMAKE_OPTIONS = \
-	-DBUILD_EXAMPLES=ON \
-	-DBUILD_TESTS=ON \
-	-DCMAKE_BUILD_TYPE=Debug
+define Package/letmecreate/config
+	source "$(SOURCE)/Config.in"
+endef
+
+ifeq ($(CONFIG_LETMECREATE_DEBUG_BUILD),y)
+CMAKE_OPTIONS = -DCMAKE_BUILD_TYPE=Debug
+endif
+
+ifeq ($(CONFIG_LETMECREATE_RELEASE_BUILD),y)
+CMAKE_OPTIONS = -DCMAKE_BUILD_TYPE=Release
+endif
+
+CMAKE_OPTIONS += $(if $(CONFIG_LETMECREATE_BUILD_EXAMPLES),-DBUILD_EXAMPLES=ON)
+CMAKE_OPTIONS += $(if $(CONFIG_LETMECREATE_BUILD_TESTS),-DBUILD_TESTS=ON)
 
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
@@ -43,11 +53,15 @@ define Build/InstallDev
 endef
 
 define Package/letmecreate/install
-	mkdir -p $(1)/usr/bin/letmecreate_examples
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/examples/bin/* $(1)/usr/bin/letmecreate_examples
+	if [ -d "$(PKG_BUILD_DIR)/examples/bin/" ]; then \
+		mkdir -p $(1)/usr/bin/letmecreate_examples; \
+		$(INSTALL_BIN) $(PKG_BUILD_DIR)/examples/bin/* $(1)/usr/bin/letmecreate_examples; \
+	fi
 
-	mkdir -p $(1)/usr/bin/letmecreate_tests
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tests/bin/* $(1)/usr/bin/letmecreate_tests
+	if [ -d "$(PKG_BUILD_DIR)/tests/bin/" ]; then \
+		mkdir -p $(1)/usr/bin/letmecreate_tests; \
+		$(INSTALL_BIN) $(PKG_BUILD_DIR)/tests/bin/* $(1)/usr/bin/letmecreate_tests; \
+	fi
 
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/lib/*.so $(1)/usr/lib/
@@ -55,5 +69,6 @@ define Package/letmecreate/install
 	$(INSTALL_DIR) $(1)/usr/include/letmecreate
 	$(CP) $(PKG_BUILD_DIR)/include/* $(1)/usr/include/letmecreate
 endef
+
 
 $(eval $(call BuildPackage,letmecreate))

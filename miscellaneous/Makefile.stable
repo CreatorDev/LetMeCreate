@@ -1,21 +1,10 @@
-# This Makefile should be used for getting the latest stable release of this library.
-
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=letmecreate
-PKG_VERSION:=1.0
-
-PKG_SOURCE_VERSION:= 8b54e588158317b445304783fb82e10a8444fa58
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz
-PKG_SOURCE_URL:= git@github.com:francois-berder/LetMeCreate.git
-PKG_SOURCE_PROTO:=git
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_MD5SUM:=259f30b42738486be6a19737e08bdf00
+PKG_VERSION:=1.0.1
 
 PKG_LICENSE:=BSD-3-Clause
-PKG_LICENSE_FILE:=LICENSE
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_SOURCE_SUBDIR)
-PKG_INSTALL:=1
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/cmake.mk
@@ -26,8 +15,25 @@ define Package/letmecreate
   TITLE:=LetMeCreate
 endef
 
-CMAKE_OPTIONS = \
-	-DBUILD_EXAMPLES=ON
+define Package/letmecreate/config
+	source "$(SOURCE)/Config.in"
+endef
+
+CMAKE_OPTIONS += $(if $(CONFIG_LETMECREATE_BUILD_EXAMPLES),-DBUILD_EXAMPLES=ON)
+
+define Build/Prepare
+	mkdir -p $(PKG_BUILD_DIR)
+	$(CP) LetMeCreate/* $(PKG_BUILD_DIR)/
+	rm -Rf $(PKG_BUILD_DIR)/CMakeFiles/
+	rm -f $(PKG_BUILD_DIR)/CMakeCache.txt
+	rm -f $(PKG_BUILD_DIR)/Makefile
+	rm -f $(PKG_BUILD_DIR)/cmake_install.cmake
+	rm -Rf $(PKG_BUILD_DIR)/lib/
+	rm -Rf $(PKG_BUILD_DIR)/examples/CMakeFiles/
+	rm -f $(PKG_BUILD_DIR)/examples/Makefile
+	rm -f $(PKG_BUILD_DIR)/examples/cmake_install.cmake
+	rm -Rf $(PKG_BUILD_DIR)/examples/bin
+endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(STAGING_DIR)/usr/include/letmecreate
@@ -38,8 +44,10 @@ define Build/InstallDev
 endef
 
 define Package/letmecreate/install
-	mkdir -p $(1)/usr/bin/letmecreate_examples
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/examples/bin/* $(1)/usr/bin/letmecreate_examples
+	if [ -d "$(PKG_BUILD_DIR)/examples/bin/" ]; then \
+		mkdir -p $(1)/usr/bin/letmecreate_examples; \
+		$(INSTALL_BIN) $(PKG_BUILD_DIR)/examples/bin/* $(1)/usr/bin/letmecreate_examples; \
+	fi
 
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/lib/*.so $(1)/usr/lib/

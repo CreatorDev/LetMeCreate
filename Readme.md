@@ -43,7 +43,7 @@ $ cd custom/letmecreate
 
 #### Stable release
 
-If you are only interested in getting the latest release of LetMeCreate library, then download a copy of Makefile.stable located in miscallenous folder. Then, copy this file inside the letmecreate folder you have just created and rename it to Makefile.
+If you are only interested in getting the latest release of LetMeCreate library, then download a copy of Makefile.stable and Config.in.stable located in miscellaneous folder. Copy these files inside the letmecreate folder you have just created and rename it to Makefile and Config.in respectively.
 
 #### Development configuration
 
@@ -53,10 +53,13 @@ If you are interested in modifying the library, getting the lastest changes, the
 $ git clone https://github.com/francois-berder/LetMeCreate.git
 ```
 
-And copy the Makefile to the right location:
+Copy the Makefile and the Config.in to the right location:
 ```sh
 $ cp LetMeCreate/miscellaneous/Makefile.devel Makefile
+$ cp LetMeCreate/miscellaneous/Config.in.devel Config.in
 ```
+
+This project uses two branches. The dev branch contains all the latest changes and should not be considered as stable. The dev branch is sometimes merged to master once new features are considered stable.
 
 #### Register the library in Openwrt
 
