@@ -1,5 +1,5 @@
 /**
- * @file include/core/common.h
+ * @file include/letmecreate/core/common.h
  * @author Francois Berder
  * @date 2016
  * @copyright 3-clause BSD
