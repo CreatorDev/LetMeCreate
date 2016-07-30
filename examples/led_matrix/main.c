@@ -1,8 +1,6 @@
 #include <linux/spi/spidev.h>
 #include <time.h>
-#include "click/led_matrix.h"
-#include "core/common.h"
-#include "core/spi.h"
+#include <letmecreate/letmecreate.h>
 
 static void sleep_40ms(void)
 {

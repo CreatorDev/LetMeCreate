@@ -1,6 +1,5 @@
 #include <unistd.h>
-#include "click/relay2.h"
-#include "core/common.h"
+#include <letmecreate/letmecreate.h>
 
 int main(void)
 {

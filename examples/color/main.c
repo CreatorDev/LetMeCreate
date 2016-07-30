@@ -1,7 +1,5 @@
 #include <stdio.h>
-#include "core/i2c.h"
-#include "click/color.h"
-#include "core/common.h"
+#include <letmecreate/letmecreate.h>
 
 int main(void)
 {

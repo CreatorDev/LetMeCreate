@@ -3,9 +3,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <time.h>
-#include "click/accel.h"
-#include "core/common.h"
-#include "core/spi.h"
+#include <letmecreate/letmecreate.h>
 
 static volatile bool running = true;
 

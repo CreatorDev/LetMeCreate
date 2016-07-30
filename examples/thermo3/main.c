@@ -1,8 +1,5 @@
 #include <stdio.h>
-#include "core/common.h"
-#include "core/i2c.h"
-#include "click/thermo3.h"
-
+#include <letmecreate/letmecreate.h>
 int main(void)
 {
     float temperature = 0.f;
