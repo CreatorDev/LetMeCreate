@@ -3,6 +3,8 @@
  * @author Francois Berder
  * @date 2016
  * @copyright 3-clause BSD
+ *
+ * @example led/main.c
  */
 
 #ifndef __LETMECREATE_CORE_LED_H__

@@ -27,3 +27,7 @@ install(TARGETS letmecreate_led_matrix_example RUNTIME DESTINATION bin)
 add_executable(letmecreate_color_example color/main.c)
 target_link_libraries(letmecreate_color_example letmecreate_click letmecreate_core)
 install(TARGETS letmecreate_color_example RUNTIME DESTINATION bin)
+
+add_executable(letmecreate_led_example led/main.c)
+target_link_libraries(letmecreate_led_example letmecreate_core)
+install(TARGETS letmecreate_led_example RUNTIME DESTINATION bin)
