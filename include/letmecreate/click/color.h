@@ -3,6 +3,8 @@
  * @author Matthew Fennell
  * @date 2016
  * @copyright 3-clause BSD
+ *
+ * @example color/main.c
  */
 
 #ifndef __LETMECREATE_CLICK_COLOR_H__
