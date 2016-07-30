@@ -9,15 +9,15 @@
 #ifndef __LETMECREATE_CORE_H__
 #define __LETMECREATE_CORE_H__
 
-#include "core/adc.h"
-#include "core/common.h"
-#include "core/gpio.h"
-#include "core/gpio_monitor.h"
-#include "core/i2c.h"
-#include "core/led.h"
-#include "core/pwm.h"
-#include "core/spi.h"
-#include "core/switch.h"
-#include "core/uart.h"
+#include "letmecreate/core/adc.h"
+#include "letmecreate/core/common.h"
+#include "letmecreate/core/gpio.h"
+#include "letmecreate/core/gpio_monitor.h"
+#include "letmecreate/core/i2c.h"
+#include "letmecreate/core/led.h"
+#include "letmecreate/core/pwm.h"
+#include "letmecreate/core/spi.h"
+#include "letmecreate/core/switch.h"
+#include "letmecreate/core/uart.h"
 
 #endif

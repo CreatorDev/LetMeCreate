@@ -1,8 +1,8 @@
 #include <stdbool.h>
 #include <stdio.h>
-#include "click/common.h"
-#include "click/led_matrix.h"
-#include "core/spi.h"
+#include "letmecreate/click/common.h"
+#include "letmecreate/click/led_matrix.h"
+#include "letmecreate/core/spi.h"
 
 /* Commands */
 #define SHUTDOWN        (0x0C)

@@ -1,7 +1,7 @@
 #include <stdio.h>
-#include "click/motion.h"
-#include "core/common.h"
-#include "core/gpio_monitor.h"
+#include "letmecreate/click/motion.h"
+#include "letmecreate/core/common.h"
+#include "letmecreate/core/gpio_monitor.h"
 
 int motion_click_enable(uint8_t mikrobus_index)
 {

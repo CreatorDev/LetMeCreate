@@ -5,8 +5,8 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdio.h>
-#include "core/spi.h"
-#include "core/common.h"
+#include "letmecreate/core/spi.h"
+#include "letmecreate/core/common.h"
 
 #define MIKROBUS_SPI_PATH_1 "/dev/spidev0.2"
 #define MIKROBUS_SPI_PATH_2 "/dev/spidev0.3"

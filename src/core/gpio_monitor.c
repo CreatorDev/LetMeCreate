@@ -6,8 +6,8 @@
 #include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include "core/common.h"
-#include "core/gpio_monitor.h"
+#include "letmecreate/core/common.h"
+#include "letmecreate/core/gpio_monitor.h"
 
 
 #define GPIO_PATH_FORMAT      "/sys/class/gpio/gpio%d/"

@@ -9,15 +9,15 @@
 #ifndef __LETMECREATE_CLICK_H__
 #define __LETMECREATE_CLICK_H__
 
-#include "click/accel.h"
-#include "click/air_quality.h"
-#include "click/color.h"
-#include "click/common.h"
-#include "click/joystick.h"
-#include "click/led_matrix.h"
-#include "click/motion.h"
-#include "click/proximity.h"
-#include "click/relay2.h"
-#include "click/thermo3.h"
+#include "letmecreate/click/accel.h"
+#include "letmecreate/click/air_quality.h"
+#include "letmecreate/click/color.h"
+#include "letmecreate/click/common.h"
+#include "letmecreate/click/joystick.h"
+#include "letmecreate/click/led_matrix.h"
+#include "letmecreate/click/motion.h"
+#include "letmecreate/click/proximity.h"
+#include "letmecreate/click/relay2.h"
+#include "letmecreate/click/thermo3.h"
 
 #endif

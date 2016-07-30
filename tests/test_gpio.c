@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "common.h"
-#include "core/gpio.h"
+#include "letmecreate/core/gpio.h"
 
 static bool test_gpio_get_set_direction_invalid_gpio(void)
 {

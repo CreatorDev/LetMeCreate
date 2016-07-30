@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 #include "common.h"
-#include "core/switch.h"
+#include "letmecreate/core/switch.h"
 
 static volatile uint8_t switch_status;
 static volatile uint8_t switch_pressed;

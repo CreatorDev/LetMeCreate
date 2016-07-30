@@ -11,8 +11,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "common.h"
-#include "core/common.h"
-#include "core/spi.h"
+#include "letmecreate/core/common.h"
+#include "letmecreate/core/spi.h"
 
 #define ADXL345_DEVICE_ID_REG           (0x00)
 #define ADXL345_DEVICE_ID               (0xE5)

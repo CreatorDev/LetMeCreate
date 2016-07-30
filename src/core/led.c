@@ -4,8 +4,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include "core/common.h"
-#include "core/led.h"
+#include "letmecreate/core/common.h"
+#include "letmecreate/core/led.h"
 
 
 #define LED_DEVICE_FILE_PATH                    "/sys/class/leds/marduk:red:user%d/%s"

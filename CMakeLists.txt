@@ -34,7 +34,7 @@ set(LETMECREATE_VERSION ${LETMECREATE_MAJOR_VERSION}.${LETMECREATE_MINOR_VERSION
 set(CMAKE_C_FLAGS_DEBUG  "${CMAKE_C_FLAGS_DEBUG} -Wall -ggdb3")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-include_directories(include/letmecreate)
+include_directories(include)
 
 file(GLOB core_srcs src/core/*.c)
 file(GLOB click_srcs src/click/*.c)

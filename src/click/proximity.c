@@ -1,8 +1,8 @@
 #include <stddef.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include "click/proximity.h"
-#include "click/common.h"
+#include "letmecreate/click/proximity.h"
+#include "letmecreate/click/common.h"
 
 #define COMMAND_REG             (0x80)
 #define PRIDREV_REG             (0x81)

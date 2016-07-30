@@ -3,8 +3,8 @@
 #include <sys/ioctl.h>
 #include <linux/i2c-dev.h>
 #include <unistd.h>
-#include "core/i2c.h"
-#include "core/common.h"
+#include "letmecreate/core/i2c.h"
+#include "letmecreate/core/common.h"
 
 #define MIKROBUS_I2C_PATH_1 "/dev/i2c-0"
 #define MIKROBUS_I2C_PATH_2 "/dev/i2c-1"
