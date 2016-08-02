@@ -36,7 +36,7 @@ Clone the library and openwrt somewhere on you computer:
 ```sh
 $ mkdir ci-40
 $ cd ci-40
-$ git clone https://github.com/IMGCreator/openwrt.git
+$ git clone https://github.com/CreatorDev/openwrt.git
 $ mkdir -p custom/letmecreate
 $ cd custom/letmecreate
 $ git clone https://github.com/francois-berder/LetMeCreate.git
