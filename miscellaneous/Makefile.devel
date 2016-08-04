@@ -47,10 +47,13 @@ endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(STAGING_DIR)/usr/include/letmecreate
-	$(CP) $(PKG_BUILD_DIR)/include/* $(STAGING_DIR)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/letmecreate $(STAGING_DIR)/usr/include/letmecreate
 
 	$(INSTALL_DIR) $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/lib/*.so $(STAGING_DIR)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.so $(STAGING_DIR)/usr/lib/
+
+	$(INSTALL_DIR) $(STAGING_DIR)/usr/lib/cmake/LetMeCreate
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/cmake/LetMeCreate/*.cmake $(STAGING_DIR)/usr/lib/cmake/LetMeCreate
 endef
 
 define Package/letmecreate/install
@@ -65,10 +68,13 @@ define Package/letmecreate/install
 	fi
 
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/lib/*.so $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.so $(1)/usr/lib/
 
 	$(INSTALL_DIR) $(1)/usr/include/letmecreate
-	$(CP) $(PKG_BUILD_DIR)/include/* $(1)/usr/include/letmecreate
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/letmecreate
+
+	$(INSTALL_DIR) $(1)/usr/lib/cmake/LetMeCreate
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/cmake/LetMeCreate/*.cmake $(1)/usr/lib/cmake/LetMeCreate
 endef
 
 $(eval $(call BuildPackage,letmecreate))
