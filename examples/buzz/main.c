@@ -10,12 +10,12 @@ int main(void)
   pwm_set_duty_cycle(MIKROBUS_1, 50); //determines volume (0->100, 100 is not max! Read PWM docs for info).
 
   int x=0;
-  for(x=0; x<3; x++)
+  for(x=0; x<3; x++) //3 quick beeps
   {
     pwm_enable(MIKROBUS_1);
-    sleep(1);
+    usleep(100000);
     pwm_disable(MIKROBUS_1);
-    sleep(1);
+    usleep(100000);
   }
 
 
