@@ -16,6 +16,7 @@ MikroClick board supported:
   - Thermo3
   - Proximity
   - Motion
+  - Relay
   - Relay2
   - Joystick
   - Air quality
