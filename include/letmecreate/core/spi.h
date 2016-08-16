@@ -30,6 +30,8 @@ enum SPI_SPEED {
  *   - 2.73MHz
  *   - SPI_MODE_3
  *
+ * The current SPI bus is set to MIKROBUS_1.
+ *
  * @return 0 if successful, -1 otherwise
  */
 int spi_init(void);
