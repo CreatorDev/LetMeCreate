@@ -94,6 +94,8 @@ int spi_init(void)
         return -1;
     }
 
+    spi_select_bus(MIKROBUS_1);
+
     return 0;
 }
 
