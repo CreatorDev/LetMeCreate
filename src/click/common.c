@@ -1,7 +1,7 @@
 #include <stddef.h>
-#include "click/common.h"
-#include "core/i2c.h"
-#include "core/spi.h"
+#include "letmecreate/click/common.h"
+#include "letmecreate/core/i2c.h"
+#include "letmecreate/core/spi.h"
 
 int i2c_write_register(uint16_t address, uint8_t reg_address, uint8_t value)
 {

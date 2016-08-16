@@ -10,8 +10,8 @@
 #include <string.h>
 #include <unistd.h>
 #include "common.h"
-#include "core/gpio.h"
-#include "core/gpio_monitor.h"
+#include "letmecreate/core/gpio.h"
+#include "letmecreate/core/gpio_monitor.h"
 
 static int callback_ID;
 static uint8_t gpio_event;

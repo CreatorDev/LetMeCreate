@@ -1,7 +1,5 @@
 #include <stdio.h>
-#include "core/common.h"
-#include "core/i2c.h"
-#include "click/proximity.h"
+#include <letmecreate/letmecreate.h>
 
 int main(void)
 {

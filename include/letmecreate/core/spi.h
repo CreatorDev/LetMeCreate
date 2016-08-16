@@ -11,13 +11,26 @@
 
 #include <stdint.h>
 
+/** SPI speed */
+enum SPI_SPEED {
+    SPI_680K  = 680000,
+    SPI_1M36  = 1360000,
+    SPI_2M73  = 2730000,
+    SPI_5M46  = 5460000,
+    SPI_10M93 = 10930000,
+    SPI_21M87 = 21870000,
+    SPI_43M75 = 43750000
+};
+
 /**
  * @brief Initialise all SPI bus of the Ci-40.
  *
  * Configure all SPI bus:
  *   - 8 bits per word
- *   - 1MHz
+ *   - 2.73MHz
  *   - SPI_MODE_3
+ *
+ * The current SPI bus is set to MIKROBUS_1.
  *
  * @return 0 if successful, -1 otherwise
  */
@@ -35,8 +48,13 @@ int spi_set_mode(uint8_t mikrobus_index, uint32_t mode);
 /**
  * @brief Set the speed of an SPI bus.
  *
+ * The SPI driver only has seven different speeds available, defined in #SPI_SPEED. If you try to
+ * define a speed that is not supported by the driver, it will find the closest speed without
+ * exceeding it.
+ * For instance, if you try to set the speed to 3MHz, the actual speed will be set to 2.73MHz.
+ *
  * @param[in] mikrobus_index Index of the bus to initialise (see #MIKROBUS_INDEX)
- * @param[in] speed Speed in Hz of the SPI bus
+ * @param[in] speed Speed in Hz of the SPI bus (see #SPI_SPEED)
  * @return 0 if successful, -1 otherwise
  */
 int spi_set_speed(uint8_t mikrobus_index, uint32_t speed);

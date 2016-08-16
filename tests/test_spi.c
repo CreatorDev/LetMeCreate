@@ -11,8 +11,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "common.h"
-#include "core/common.h"
-#include "core/spi.h"
+#include "letmecreate/core/common.h"
+#include "letmecreate/core/spi.h"
 
 #define ADXL345_DEVICE_ID_REG           (0x00)
 #define ADXL345_DEVICE_ID               (0xE5)
@@ -33,7 +33,7 @@ static bool test_spi_transfer_before_init(void)
 {
     uint8_t tx_buffer = 0, rx_buffer = 0;
 
-    return spi_transfer(tx_buffer, rx_buffer, 1) == -1;
+    return spi_transfer(&tx_buffer, &rx_buffer, 1) == -1;
 }
 
 static bool test_spi_init(void)

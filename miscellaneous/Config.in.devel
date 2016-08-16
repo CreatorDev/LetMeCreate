@@ -1,0 +1,22 @@
+choice
+	prompt "Build type"
+	default LETMECREATE_DEBUG_BUILD
+
+config LETMECREATE_DEBUG_BUILD
+	bool "Debug"
+
+config LETMECREATE_RELEASE_BUILD
+	bool "Release"
+endchoice
+
+config LETMECREATE_BUILD_EXAMPLES
+	bool
+	default y
+	prompt "Build examples"
+	depends on PACKAGE_letmecreate
+
+config LETMECREATE_BUILD_TESTS
+	bool
+	default n
+	prompt "Build tests"
+	depends on PACKAGE_letmecreate

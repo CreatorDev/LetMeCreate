@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include "click/joystick.h"
-#include "click/common.h"
+#include "letmecreate/click/joystick.h"
+#include "letmecreate/click/common.h"
 
 
 #define JOYSTICK_ADDRESS (0x40)

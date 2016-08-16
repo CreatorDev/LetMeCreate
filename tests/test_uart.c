@@ -9,8 +9,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "common.h"
-#include "core/common.h"
-#include "core/uart.h"
+#include "letmecreate/core/common.h"
+#include "letmecreate/core/uart.h"
 
 static bool test_uart_send_receive_without_init(void)
 {

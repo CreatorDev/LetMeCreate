@@ -3,6 +3,8 @@
  * @author Michal Tusnio
  * @date 2016
  * @copyright 3-clause BSD
+ *
+ * @example joystick/main.c
  */
 
 #ifndef __LETMECREATE_CLICK_JOYSTICK_H__

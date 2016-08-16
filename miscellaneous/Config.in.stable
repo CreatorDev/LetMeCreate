@@ -1,0 +1,5 @@
+config LETMECREATE_BUILD_EXAMPLES
+	bool
+	default y
+	prompt "Build examples"
+	depends on PACKAGE_letmecreate

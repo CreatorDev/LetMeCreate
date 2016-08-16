@@ -1,8 +1,5 @@
 #include <stdio.h>
-#include <core/common.h>
-#include <core/led.h>
-#include <core/i2c.h>
-#include <click/joystick.h>
+#include <letmecreate/letmecreate.h>
 
 /*   Roughly the variable that will be reached when the joystick is farthest
      left or right */

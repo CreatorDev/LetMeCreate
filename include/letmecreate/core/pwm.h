@@ -81,7 +81,7 @@ int pwm_get_frequency(uint8_t mikrobus_index, uint32_t *frequency);
 int pwm_set_period(uint8_t mikrobus_index, uint32_t period);
 
 /**
- * @brief Get the frequency.
+ * @brief Get the Period.
  *
  * @param[in] mikrobus_index Index of the pin (see #MIKROBUS_INDEX)
  * @param[out] period Pointer to an integer (must not be null)

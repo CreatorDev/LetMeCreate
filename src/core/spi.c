@@ -5,13 +5,12 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdio.h>
-#include "core/spi.h"
-#include "core/common.h"
+#include "letmecreate/core/spi.h"
+#include "letmecreate/core/common.h"
 
 #define MIKROBUS_SPI_PATH_1 "/dev/spidev0.2"
 #define MIKROBUS_SPI_PATH_2 "/dev/spidev0.3"
 
-#define SPI_SPEED           (1000000)   /* 1MHz */
 #define BITS_PER_WORD       (8)
 
 static int fds[] = { -1, -1 };
@@ -21,7 +20,7 @@ static int spi_init_bus(uint8_t mikrobus_index)
 {
     int fd = -1;
     uint8_t bits_per_word = BITS_PER_WORD;
-    uint32_t speed = SPI_SPEED;
+    uint32_t speed = SPI_2M73;
     uint32_t mode = SPI_MODE_3;
     const char *spi_path = NULL;
 
@@ -94,6 +93,8 @@ int spi_init(void)
         fprintf(stderr, "spi: Failed to initialise spi on mikrobus 2\n");
         return -1;
     }
+
+    spi_select_bus(MIKROBUS_1);
 
     return 0;
 }

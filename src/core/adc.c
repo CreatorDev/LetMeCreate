@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include "core/adc.h"
-#include "core/common.h"
+#include "letmecreate/core/adc.h"
+#include "letmecreate/core/common.h"
 
 #define ADC_BASE_PATH       "/sys/bus/iio/devices/iio:device0/"
 

@@ -3,6 +3,8 @@
  * @author Francois Berder
  * @date 2016
  * @copyright 3-clause BSD
+ *
+ * @example led_matrix/main.c
  */
 
 #ifndef __LETMECREATE_CLICK_LED_MATRIX_H__

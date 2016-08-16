@@ -1,9 +1,9 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
-#include "click/accel.h"
-#include "core/spi.h"
-#include "click/common.h"
+#include "letmecreate/click/accel.h"
+#include "letmecreate/core/spi.h"
+#include "letmecreate/click/common.h"
 
 /* Control registers */
 #define BW_RATE_REG         (0x2C)

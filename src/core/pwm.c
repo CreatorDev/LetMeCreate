@@ -7,8 +7,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include "core/pwm.h"
-#include "core/common.h"
+#include "letmecreate/core/pwm.h"
+#include "letmecreate/core/common.h"
 
 #define DEVICE_FILE_BASE_PATH           "/sys/class/pwm/pwmchip0/"
 #define PWM_DEVICE_FILE_BASE_PATH       "/sys/class/pwm/pwmchip0/pwm"

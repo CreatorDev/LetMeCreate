@@ -20,16 +20,7 @@ define Package/letmecreate/config
 	source "$(SOURCE)/Config.in"
 endef
 
-ifeq ($(CONFIG_LETMECREATE_DEBUG_BUILD),y)
-CMAKE_OPTIONS = -DCMAKE_BUILD_TYPE=Debug
-endif
-
-ifeq ($(CONFIG_LETMECREATE_RELEASE_BUILD),y)
-CMAKE_OPTIONS = -DCMAKE_BUILD_TYPE=Release
-endif
-
 CMAKE_OPTIONS += $(if $(CONFIG_LETMECREATE_BUILD_EXAMPLES),-DBUILD_EXAMPLES=ON)
-CMAKE_OPTIONS += $(if $(CONFIG_LETMECREATE_BUILD_TESTS),-DBUILD_TESTS=ON)
 
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
@@ -60,11 +51,6 @@ define Package/letmecreate/install
 	if [ -d "$(PKG_BUILD_DIR)/examples/bin/" ]; then \
 		mkdir -p $(1)/usr/bin/letmecreate_examples; \
 		$(INSTALL_BIN) $(PKG_BUILD_DIR)/examples/bin/* $(1)/usr/bin/letmecreate_examples; \
-	fi
-
-	if [ -d "$(PKG_BUILD_DIR)/tests/bin/" ]; then \
-		mkdir -p $(1)/usr/bin/letmecreate_tests; \
-		$(INSTALL_BIN) $(PKG_BUILD_DIR)/tests/bin/* $(1)/usr/bin/letmecreate_tests; \
 	fi
 
 	$(INSTALL_DIR) $(1)/usr/lib

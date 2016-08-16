@@ -11,8 +11,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "common.h"
-#include "core/common.h"
-#include "core/pwm.h"
+#include "letmecreate/core/common.h"
+#include "letmecreate/core/pwm.h"
 
 
 static bool test_pwm_get_set_duty_cycle_before_init(void)

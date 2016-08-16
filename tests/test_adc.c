@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "common.h"
-#include "core/adc.h"
+#include "letmecreate/core/adc.h"
 
 static bool check_adc_value(const uint8_t mikrobus_index, const float min, const float max)
 {
