@@ -13,6 +13,7 @@
 #include "letmecreate/click/air_quality.h"
 #include "letmecreate/click/color.h"
 #include "letmecreate/click/common.h"
+#include "letmecreate/click/eve.h"
 #include "letmecreate/click/joystick.h"
 #include "letmecreate/click/led_matrix.h"
 #include "letmecreate/click/motion.h"
