@@ -158,15 +158,29 @@ static bool test_eve_click_toggle(void)
 
 static bool test_eve_click_bgcolor_and_fgcolor(void)
 {
+    bool ret = true;
+
     if (eve_click_clear(0, 0, 0) < 0
     ||  eve_click_draw(FT800_BGCOLOR, 0x402000) < 0
     ||  eve_click_draw(FT800_FGCOLOR, 0x387000) < 0
     ||  eve_click_draw(FT800_TOGGLE, 60, 20, 33, 27, 0, 0, "no"
 "\xff" "yes") < 0
     ||  eve_click_display() < 0)
-        return  false;
+        ret = false;
 
-    return ask_question("Do you see a toggle with brown background color and green foreground color ?", 15) == 1;
+    if (ret)
+        ret = ask_question("Do you see a toggle with brown background color and green foreground color ?", 15) == 1;
+
+    /* Restore default values for FGCOLOR and BGCOLOR */
+    if (ret) {
+        if (eve_click_clear(0, 0, 0) < 0
+        ||  eve_click_draw(FT800_BGCOLOR, 0x002040) < 0
+        ||  eve_click_draw(FT800_FGCOLOR, 0x003870) < 0
+        ||  eve_click_display() < 0)
+            ret = false;
+    }
+
+    return ret;
 }
 
 static bool test_eve_click_gradcolor(void)
