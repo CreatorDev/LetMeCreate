@@ -239,13 +239,27 @@ static bool test_eve_click_disable_buffering(void)
     return ret;
 }
 
+static bool test_eve_click_memset_and_memcrc(void)
+{
+    uint32_t crc;
+
+    if (eve_click_memset(0, 0xAA, 8) < 0)
+        return false;
+
+    if (eve_click_memcrc(0, 8, &crc) < 0)
+        return false;
+
+    return crc == 0xABB622F0;
+}
+
 int main(void)
 {
     int ret = -1;
 
-    CREATE_TEST(eve_click, 18)
+    CREATE_TEST(eve_click, 19)
     ADD_TEST_CASE(eve_click, enable_disable);
     ADD_TEST_CASE(eve_click, black_screen_on_enable);
+    ADD_TEST_CASE(eve_click, memset_and_memcrc);
     ADD_TEST_CASE(eve_click, clear);
     ADD_TEST_CASE(eve_click, button);
     ADD_TEST_CASE(eve_click, clock);
