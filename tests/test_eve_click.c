@@ -63,17 +63,27 @@ static bool test_eve_click_clock(void)
     return ask_question("Do you see a clock ?", 15) == 1;
 }
 
+static bool test_eve_click_dial(void)
+{
+    if (eve_click_clear(0, 0, 0) < 0
+    ||  eve_click_draw(FT800_DIAL, 80, 60, 24, 0, 0x5555) < 0
+    ||  eve_click_display() < 0)
+        return  false;
+
+    return ask_question("Do you see a dial ?", 15) == 1;
+}
 
 int main(void)
 {
     int ret = -1;
 
-    CREATE_TEST(eve_click, 5)
+    CREATE_TEST(eve_click, 6)
     ADD_TEST_CASE(eve_click, enable_disable);
     ADD_TEST_CASE(eve_click, black_screen_on_enable);
     ADD_TEST_CASE(eve_click, clear);
     ADD_TEST_CASE(eve_click, button);
     ADD_TEST_CASE(eve_click, clock);
+    ADD_TEST_CASE(eve_click, dial);
 
     if (spi_init() < 0
     ||  spi_set_mode(MIKROBUS_1, SPI_MODE_0) < 0)
