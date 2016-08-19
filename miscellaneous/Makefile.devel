@@ -16,6 +16,12 @@ define Package/letmecreate
   TITLE:=LetMeCreate
 endef
 
+define Package/letmecreate/description
+ This library is a collection of wrappers for interfaces of the Ci40. It also
+ contains drivers for some Click boards. Examples are installed in
+ /usr/bin/letmecreate_examples.
+endef
+
 define Package/letmecreate/config
 	source "$(SOURCE)/Config.in"
 endef
