@@ -34,14 +34,23 @@ static bool test_eve_click_black_screen_on_enable(void)
     return ask_question("Do you see a black screen ?", 15) == 1;
 }
 
+static bool test_eve_click_clear(void)
+{
+    if (eve_click_clear(0, 255, 0) < 0
+    ||  eve_click_display() < 0)
+        return  false;
+
+    return ask_question("Do you see a green screen ?", 15) == 1;
+}
+
 int main(void)
 {
     int ret = -1;
 
-    CREATE_TEST(eve_click, 2)
+    CREATE_TEST(eve_click, 3)
     ADD_TEST_CASE(eve_click, enable_disable);
     ADD_TEST_CASE(eve_click, black_screen_on_enable);
-
+    ADD_TEST_CASE(eve_click, clear);
 
     if (spi_init() < 0
     ||  spi_set_mode(MIKROBUS_1, SPI_MODE_0) < 0)
