@@ -125,11 +125,21 @@ static bool test_eve_click_slider(void)
     return ask_question("Do you see a slider ?", 15) == 1;
 }
 
+static bool test_eve_click_text(void)
+{
+    if (eve_click_clear(0, 0, 0) < 0
+    ||  eve_click_draw(FT800_TEXT, 0, 0, 31, 0, "Text!") < 0
+    ||  eve_click_display() < 0)
+        return  false;
+
+    return ask_question("Do you see some text ?", 15) == 1;
+}
+
 int main(void)
 {
     int ret = -1;
 
-    CREATE_TEST(eve_click, 11)
+    CREATE_TEST(eve_click, 12)
     ADD_TEST_CASE(eve_click, enable_disable);
     ADD_TEST_CASE(eve_click, black_screen_on_enable);
     ADD_TEST_CASE(eve_click, clear);
@@ -141,6 +151,7 @@ int main(void)
     ADD_TEST_CASE(eve_click, progress);
     ADD_TEST_CASE(eve_click, scrollbar);
     ADD_TEST_CASE(eve_click, slider);
+    ADD_TEST_CASE(eve_click, text);
 
     if (spi_init() < 0
     ||  spi_set_mode(MIKROBUS_1, SPI_MODE_0) < 0)
