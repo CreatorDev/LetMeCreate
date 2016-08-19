@@ -146,11 +146,24 @@ static bool test_eve_click_toggle(void)
     return ask_question("Do you see a toggle ?", 15) == 1;
 }
 
+static bool test_eve_click_bgcolor_and_fgcolor(void)
+{
+    if (eve_click_clear(0, 0, 0) < 0
+    ||  eve_click_draw(FT800_BGCOLOR, 0x402000) < 0
+    ||  eve_click_draw(FT800_FGCOLOR, 0x387000) < 0
+    ||  eve_click_draw(FT800_TOGGLE, 60, 20, 33, 27, 0, 0, "no"
+"\xff" "yes") < 0
+    ||  eve_click_display() < 0)
+        return  false;
+
+    return ask_question("Do you see a toggle with brown background color and green foreground color ?", 15) == 1;
+}
+
 int main(void)
 {
     int ret = -1;
 
-    CREATE_TEST(eve_click, 13)
+    CREATE_TEST(eve_click, 14)
     ADD_TEST_CASE(eve_click, enable_disable);
     ADD_TEST_CASE(eve_click, black_screen_on_enable);
     ADD_TEST_CASE(eve_click, clear);
@@ -164,6 +177,7 @@ int main(void)
     ADD_TEST_CASE(eve_click, slider);
     ADD_TEST_CASE(eve_click, text);
     ADD_TEST_CASE(eve_click, toggle);
+    ADD_TEST_CASE(eve_click, bgcolor_and_fgcolor);
 
     if (spi_init() < 0
     ||  spi_set_mode(MIKROBUS_1, SPI_MODE_0) < 0)
