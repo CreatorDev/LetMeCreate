@@ -93,11 +93,34 @@ static bool test_eve_click_number(void)
     return ask_question("Do you see the number 42 ?", 15) == 1;
 }
 
+static bool test_eve_click_progress(void)
+{
+    if (eve_click_clear(0, 0, 0) < 0
+    ||  eve_click_draw(FT800_PROGRESS, 20, 50, 120, 12, 0, 50,
+100) < 0
+    ||  eve_click_display() < 0)
+        return  false;
+
+    return ask_question("Do you see a progress bar ?", 15) == 1;
+}
+
+static bool test_eve_click_scrollbar(void)
+{
+    if (eve_click_clear(0, 0, 0) < 0
+    ||  eve_click_draw(FT800_SCROLLBAR, 20, 50, 120, 8, 0, 10, 40,
+100) < 0
+    ||  eve_click_display() < 0)
+        return  false;
+
+    return ask_question("Do you see a scrollbar ?", 15) == 1;
+}
+
+
 int main(void)
 {
     int ret = -1;
 
-    CREATE_TEST(eve_click, 8)
+    CREATE_TEST(eve_click, 10)
     ADD_TEST_CASE(eve_click, enable_disable);
     ADD_TEST_CASE(eve_click, black_screen_on_enable);
     ADD_TEST_CASE(eve_click, clear);
@@ -106,6 +129,8 @@ int main(void)
     ADD_TEST_CASE(eve_click, dial);
     ADD_TEST_CASE(eve_click, gauge);
     ADD_TEST_CASE(eve_click, number);
+    ADD_TEST_CASE(eve_click, progress);
+    ADD_TEST_CASE(eve_click, scrollbar);
 
     if (spi_init() < 0
     ||  spi_set_mode(MIKROBUS_1, SPI_MODE_0) < 0)
