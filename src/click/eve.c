@@ -997,7 +997,13 @@ int eve_click_draw(uint32_t cmd, ...)
         ret = parse_coprocessor_cmd(cmd, args);
     va_end(args);
 
-    return ret;
+    if (ret < 0)
+        return ret;
+
+    if (!eve_click_is_buffering_enabled())
+        return cmd_fifo_send(cmds, cmd_cnt);
+     else
+        return 0;
 }
 
 int eve_click_display(void)
