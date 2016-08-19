@@ -1,3 +1,35 @@
+/*
+ * On linux, GPIO's can be controlled via sysfs by reading/writing to some
+ * specific files. These are not regular files and writing to them trigger
+ * some operations.
+ *
+ * In /sys/class/gpio folder, two important files are present: export and
+ * unexport. To make a GPIO accessible to the user, you must first export it.
+ * This consists in writing its index to the export file. For instance, to
+ * export GPIO 27, simply write string '27' to /sys/class/gpio/export.
+ * Similarly, to release a GPIO, one needs to write string '27' to
+ * /sys/class/gpio/unexport.
+ *
+ * Once a GPIO is exported, it can be controlled by reading/writing to files in
+ * folder /sys/class/gpio/gpioN (where N is its index).
+ * Hence, exporting GPIO 27 creates folder /sys/class/gpio/gpio27 and the
+ * following files are present: active_low, direction, edge, value
+ *
+ * To set GPIO 27 as an input, write string 'in' to
+ * /sys/class/gpio/gpio27/direction.
+ *
+ * Reading /sys/class/gpio/gpio27/value always return strings '0' or '1'. This
+ * is used to find the current state of an input.
+ *
+ * To set GPIO 27 as an output, write string 'out' to
+ * /sys/class/gpio/gpio27/direction. However, reading now
+ * /sys/class/gpio/gpio27/value indicates if the output level is high or low.
+ * If a GPIO is configured as an output, writing to /sys/class/gpio/gpioN/value
+ * changes the level of the output.
+ *
+ */
+
+
 #include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
