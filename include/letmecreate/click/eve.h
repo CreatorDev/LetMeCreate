@@ -34,4 +34,8 @@ int eve_click_display(void);
 /* Loading image data in FT800 chip memory */
 int eve_click_load_image(uint32_t ptr, uint32_t options, const uint8_t *data, uint32_t count);
 
+/* Memory operations on FT800 chip */
+int eve_click_memcrc(uint32_t ptr, uint32_t byte_count, uint32_t *crc);
+int eve_click_memset(uint32_t ptr, uint32_t value, uint32_t byte_count);
+
 #endif

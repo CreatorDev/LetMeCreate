@@ -1050,3 +1050,46 @@ int eve_click_load_image(uint32_t ptr, uint32_t options, const uint8_t *data, ui
 
     return ret;
 }
+
+int eve_click_memcrc(uint32_t ptr, uint32_t byte_count, uint32_t *crc)
+{
+    uint16_t offset = 0;
+    uint32_t buffer[4];
+
+    if (ft800_enabled == false)
+        return -1;
+
+    if (crc == NULL)
+        return -1;
+
+    if (byte_count == 0)
+        return 0;
+
+    if (read_16bit_reg(FT800_REG_CMD_WRITE, &offset) < 0)
+        return -1;
+
+    buffer[0] = FT800_MEMCRC;
+    buffer[1] = ptr;
+    buffer[2] = byte_count;
+    buffer[3] = 0;
+    if (cmd_fifo_send(buffer, 4) < 0)
+        return -1;
+
+    return read_32bit_reg(FT800_RAM_CMD + offset + 12, crc);
+}
+
+int eve_click_memset(uint32_t ptr, uint32_t value, uint32_t byte_count)
+{
+    uint32_t buffer[4];
+    if (ft800_enabled == false)
+        return -1;
+
+    if (byte_count == 0)
+        return 0;
+
+    buffer[0] = FT800_MEMSET;
+    buffer[1] = ptr;
+    buffer[2] = value;
+    buffer[3] = byte_count;
+    return cmd_fifo_send(buffer, 4);
+}
