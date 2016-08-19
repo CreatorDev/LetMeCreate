@@ -37,5 +37,6 @@ int eve_click_load_image(uint32_t ptr, uint32_t options, const uint8_t *data, ui
 /* Memory operations on FT800 chip */
 int eve_click_memcrc(uint32_t ptr, uint32_t byte_count, uint32_t *crc);
 int eve_click_memset(uint32_t ptr, uint32_t value, uint32_t byte_count);
+int eve_click_memcpy(uint32_t dest, uint32_t src, uint32_t byte_count);
 
 #endif

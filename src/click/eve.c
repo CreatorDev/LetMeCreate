@@ -1093,3 +1093,20 @@ int eve_click_memset(uint32_t ptr, uint32_t value, uint32_t byte_count)
     buffer[3] = byte_count;
     return cmd_fifo_send(buffer, 4);
 }
+
+int eve_click_memcpy(uint32_t dest, uint32_t src, uint32_t byte_count)
+{
+    uint32_t buffer[4];
+
+    if (ft800_enabled == false)
+        return -1;
+
+    if (byte_count == 0)
+        return 0;
+
+    buffer[0] = FT800_MEMCPY;
+    buffer[1] = dest;
+    buffer[2] = src;
+    buffer[3] = byte_count;
+    return cmd_fifo_send(buffer, 4);
+}
