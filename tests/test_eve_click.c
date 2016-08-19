@@ -43,14 +43,26 @@ static bool test_eve_click_clear(void)
     return ask_question("Do you see a green screen ?", 15) == 1;
 }
 
+static bool test_eve_click_button(void)
+{
+    if (eve_click_clear(0, 0, 0) < 0
+    ||  eve_click_draw(FT800_BUTTON, 100, 100, 100, 40, 26, 0, "Press") < 0
+    ||  eve_click_display() < 0)
+        return  false;
+
+    return ask_question("Do you see a button ?", 15) == 1;
+}
+
+
 int main(void)
 {
     int ret = -1;
 
-    CREATE_TEST(eve_click, 3)
+    CREATE_TEST(eve_click, 4)
     ADD_TEST_CASE(eve_click, enable_disable);
     ADD_TEST_CASE(eve_click, black_screen_on_enable);
     ADD_TEST_CASE(eve_click, clear);
+    ADD_TEST_CASE(eve_click, button);
 
     if (spi_init() < 0
     ||  spi_set_mode(MIKROBUS_1, SPI_MODE_0) < 0)
@@ -59,6 +71,7 @@ int main(void)
     ret = run_test(test_eve_click);
     free(test_eve_click.cases);
 
+    eve_click_disable(MIKROBUS_1);
     spi_release();
 
     return ret;
