@@ -220,11 +220,30 @@ static bool test_eve_click_gradient(void)
     return ask_question("Do you see a blue to red gradient ?", 15) == 1;
 }
 
+static bool test_eve_click_disable_buffering(void)
+{
+    bool ret = true;
+    eve_click_disable_buffering();
+    if (eve_click_clear(0, 0, 0) < 0
+    ||  eve_click_draw(FT800_BUTTON, 50, 50, 100, 40, 26, 0, "Press") < 0
+    ||  eve_click_draw(FT800_BUTTON, 100, 100, 100, 40, 26, 0, "Press") < 0
+    ||  eve_click_draw(FT800_BUTTON, 200, 200, 100, 40, 26, 0, "Press") < 0
+    ||  eve_click_display() < 0)
+        ret = false;
+
+    eve_click_enable_buffering();
+
+    if (ret)
+        ret = ask_question("Do you three buttons ?", 15) == 1;
+
+    return ret;
+}
+
 int main(void)
 {
     int ret = -1;
 
-    CREATE_TEST(eve_click, 17)
+    CREATE_TEST(eve_click, 18)
     ADD_TEST_CASE(eve_click, enable_disable);
     ADD_TEST_CASE(eve_click, black_screen_on_enable);
     ADD_TEST_CASE(eve_click, clear);
@@ -242,6 +261,7 @@ int main(void)
     ADD_TEST_CASE(eve_click, bgcolor_and_fgcolor);
     ADD_TEST_CASE(eve_click, gradcolor);
     ADD_TEST_CASE(eve_click, gradient);
+    ADD_TEST_CASE(eve_click, disable_buffering);
 
     if (spi_init() < 0
     ||  spi_set_mode(MIKROBUS_1, SPI_MODE_0) < 0)
