@@ -265,15 +265,28 @@ static bool test_eve_click_memcpy(void)
     return crc == 0xABB622F0;
 }
 
+static bool test_eve_click_memzero(void)
+{
+    uint32_t crc;
+
+    if (eve_click_memset(0, 0xFF, 8) < 0
+    ||  eve_click_memzero(0, 8) < 0
+    ||  eve_click_memcrc(0, 8, &crc) < 0)
+        return false;
+
+    return crc == 0x6522DF69;
+}
+
 int main(void)
 {
     int ret = -1;
 
-    CREATE_TEST(eve_click, 20)
+    CREATE_TEST(eve_click, 21)
     ADD_TEST_CASE(eve_click, enable_disable);
     ADD_TEST_CASE(eve_click, black_screen_on_enable);
     ADD_TEST_CASE(eve_click, memset_and_memcrc);
     ADD_TEST_CASE(eve_click, memcpy);
+    ADD_TEST_CASE(eve_click, memzero);
     ADD_TEST_CASE(eve_click, clear);
     ADD_TEST_CASE(eve_click, button);
     ADD_TEST_CASE(eve_click, clock);
