@@ -697,26 +697,47 @@ static void wait_for_coprocessor(void)
     } while(reg_cmd_write != reg_cmd_read);
 }
 
+static uint16_t compute_fifo_freespace(void)
+{
+    uint16_t reg_cmd_write = 0, reg_cmd_read = 0;
+
+    if (read_16bit_reg(FT800_REG_CMD_WRITE, &reg_cmd_write) < 0
+    ||  read_16bit_reg(FT800_REG_CMD_READ, &reg_cmd_read) < 0)
+        return 0;
+
+    return (4096 - 4) - ((reg_cmd_write - reg_cmd_read) & 0xFFF);
+}
+
 static int cmd_fifo_send(uint32_t *cmd_buffer, uint32_t cmd_buffer_cnt)
 {
     uint32_t i = 0, offset = 0;
 
     wait_for_coprocessor();
 
-    if (read_32bit_reg(FT800_REG_CMD_WRITE, &offset) < 0)
-        return -1;
+    while (cmd_buffer_cnt > 0) {
+        uint32_t offset = 0;
+        uint16_t fifo_freespace = compute_fifo_freespace() / 4;
+        uint32_t chunk_length = cmd_buffer_cnt;
 
-    for (i = 0; i < cmd_buffer_cnt; ++i) {
-        if (write_32bit_reg(FT800_RAM_CMD + offset, cmd_buffer[i]) < 0)
+        if (chunk_length > fifo_freespace)
+            chunk_length = fifo_freespace;
+
+        if (read_32bit_reg(FT800_REG_CMD_WRITE, &offset) < 0)
             return -1;
-        offset += 4;
+
+        memory_write(FT800_RAM_CMD + offset, (uint8_t*)cmd_buffer, 4*chunk_length);
+
+        offset += 4 * chunk_length;
+        offset &= 0xFFC;
+
+        if (write_32bit_reg(FT800_REG_CMD_WRITE, offset) < 0)
+            return -1;
+
+        wait_for_coprocessor();
+
+        cmd_buffer_cnt -= chunk_length;
+        cmd_buffer += chunk_length;
     }
-    offset &= 0xFFC;
-
-    if (write_32bit_reg(FT800_REG_CMD_WRITE, offset) < 0)
-        return -1;
-
-    wait_for_coprocessor();
 
     return 0;
 }
