@@ -1,32 +1,42 @@
-#include <stdbool.h>
-#include "core/led.h"
-#include "click/motion.h"
-#include "core/common.h"
+#include <time.h>
+#include <letmecreate/letmecreate.h>
 
-void flash(uint8_t null)
+
+static void sleep_ms(unsigned int ms)
 {
-	int x = 0;
-	for(x=0; x<10; x++)
-	{
-		led_switch_on(ALL_LEDS);
-		usleep(100000);
-		led_switch_off(ALL_LEDS);
-		usleep(100000);
-	}
+    struct timespec req, rem;
+
+    req.tv_sec = ms / 1000;
+    ms -= req.tv_sec * 1000;
+    req.tv_nsec = ms * 1000000;
+
+    while (nanosleep(&req, &rem))
+        req = rem;
+}
+
+void flash_leds(uint8_t null)
+{
+    int x = 0;
+    for(; x < 10; ++x) {
+        led_switch_on(ALL_LEDS);
+        sleep_ms(100);
+        led_switch_off(ALL_LEDS);
+        sleep_ms(100);
+    }
 }
 
 int main(void)
 {
-	motion_click_enable(MIKROBUS_1);
-	led_init();
-	while(1)
-	{
-		static bool b = true;
-		if(b)
-		{
-			motion_click_attach_callback(MIKROBUS_1, flash);
-			b = false;      
-		}  
-	}
+    led_init();
+    motion_click_enable(MIKROBUS_1);
+    motion_click_attach_callback(MIKROBUS_1, flash_leds);
+
+    printf("LED's will flash when Motion Click detects a movement.\n");
+    printf("Press Ctrl+C to quit.\n");
+
+    while (1)
+        ;
+
+    return 0;
 }
 
