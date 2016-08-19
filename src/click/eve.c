@@ -1012,3 +1012,35 @@ int eve_click_display(void)
     return cmd_fifo_send(cmds, cmd_cnt);
 }
 
+int eve_click_load_image(uint32_t ptr, uint32_t options, const uint8_t *data, uint32_t count)
+{
+    int ret = 0;
+    uint32_t *buffer = NULL;
+    uint32_t buffer_count = 0;
+
+    if (ft800_enabled == false)
+        return -1;
+
+    if (data == NULL)
+        return -1;
+
+    if (count == 0)
+        return 0;
+
+    buffer_count = 3 + (count + 3) / 4;
+    buffer = malloc(sizeof(uint32_t) * buffer_count);
+    if (buffer == NULL)
+        return -1;
+    buffer[0] = FT800_LOADIMAGE;
+    buffer[1] = ptr;
+    buffer[2] = options;
+    buffer[buffer_count - 1] = 0;
+    memcpy(&buffer[3], data, count);
+
+    if (cmd_fifo_send(buffer, buffer_count) < 0)
+        ret = -1;
+
+    free(buffer);
+
+    return ret;
+}
