@@ -83,6 +83,16 @@ static bool test_eve_click_gauge(void)
     return ask_question("Do you see a gauge ?", 15) == 1;
 }
 
+static bool test_eve_click_keys(void)
+{
+    if (eve_click_clear(0, 0, 0) < 0
+    ||  eve_click_draw(FT800_KEYS, 10, 10, 140, 30, 26, 0, "12345") < 0
+    ||  eve_click_display() < 0)
+        return  false;
+
+    return ask_question("Do you see 12345 keys ?", 15) == 1;
+}
+
 static bool test_eve_click_number(void)
 {
     if (eve_click_clear(0, 0, 0) < 0
@@ -163,7 +173,7 @@ int main(void)
 {
     int ret = -1;
 
-    CREATE_TEST(eve_click, 14)
+    CREATE_TEST(eve_click, 15)
     ADD_TEST_CASE(eve_click, enable_disable);
     ADD_TEST_CASE(eve_click, black_screen_on_enable);
     ADD_TEST_CASE(eve_click, clear);
@@ -171,6 +181,7 @@ int main(void)
     ADD_TEST_CASE(eve_click, clock);
     ADD_TEST_CASE(eve_click, dial);
     ADD_TEST_CASE(eve_click, gauge);
+    ADD_TEST_CASE(eve_click, keys);
     ADD_TEST_CASE(eve_click, number);
     ADD_TEST_CASE(eve_click, progress);
     ADD_TEST_CASE(eve_click, scrollbar);
