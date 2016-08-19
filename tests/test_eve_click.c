@@ -210,11 +210,21 @@ static bool test_eve_click_gradcolor(void)
     return ret;
 }
 
+static bool test_eve_click_gradient(void)
+{
+    if (eve_click_clear(0, 0, 0) < 0
+    ||  eve_click_draw(FT800_GRADIENT, 0, 0, 0x0000ff, 160, 0, 0xff0000) < 0
+    ||  eve_click_display() < 0)
+        return  false;
+
+    return ask_question("Do you see a blue to red gradient ?", 15) == 1;
+}
+
 int main(void)
 {
     int ret = -1;
 
-    CREATE_TEST(eve_click, 16)
+    CREATE_TEST(eve_click, 17)
     ADD_TEST_CASE(eve_click, enable_disable);
     ADD_TEST_CASE(eve_click, black_screen_on_enable);
     ADD_TEST_CASE(eve_click, clear);
@@ -231,6 +241,7 @@ int main(void)
     ADD_TEST_CASE(eve_click, toggle);
     ADD_TEST_CASE(eve_click, bgcolor_and_fgcolor);
     ADD_TEST_CASE(eve_click, gradcolor);
+    ADD_TEST_CASE(eve_click, gradient);
 
     if (spi_init() < 0
     ||  spi_set_mode(MIKROBUS_1, SPI_MODE_0) < 0)
