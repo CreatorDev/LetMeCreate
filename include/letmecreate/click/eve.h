@@ -40,4 +40,7 @@ int eve_click_memset(uint32_t ptr, uint32_t value, uint32_t byte_count);
 int eve_click_memcpy(uint32_t dest, uint32_t src, uint32_t byte_count);
 int eve_click_memzero(uint32_t ptr, uint32_t byte_count);
 
+/* Other commands */
+int eve_click_ftdi_logo(void);
+
 #endif

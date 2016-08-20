@@ -1125,3 +1125,36 @@ int eve_click_memzero(uint32_t ptr, uint32_t byte_count)
     buffer[2] = byte_count;
     return cmd_fifo_send(buffer, 3);
 }
+
+int eve_click_ftdi_logo(void)
+{
+    uint32_t cmd = FT800_LOGO;
+    uint32_t offset;
+    uint16_t reg_cmd_read = 0, reg_cmd_write = 0;
+
+    if (ft800_enabled == false)
+        return -1;
+
+    if (read_32bit_reg(FT800_REG_CMD_WRITE, &offset) < 0)
+        return -1;
+    offset &= 0xFFC;
+
+    if (write_32bit_reg(FT800_RAM_CMD + offset, cmd) < 0)
+        return -1;
+    offset += 4;
+    if (write_32bit_reg(FT800_REG_CMD_WRITE, offset) < 0)
+        return -1;
+
+    sleep_ms(2500);
+
+    /* Wait until REG_CMD_READ and REG_CMD_WRITE are equal to 0 */
+    do {
+        if (read_16bit_reg(FT800_REG_CMD_READ, &reg_cmd_read) < 0
+        ||  read_16bit_reg(FT800_REG_CMD_WRITE, &reg_cmd_write) < 0)
+            return -1;
+        reg_cmd_read &= 0xFFF;
+        reg_cmd_write &= 0xFFF;
+    } while(reg_cmd_read != 0 && reg_cmd_write != 0);
+
+    return 0;
+}
