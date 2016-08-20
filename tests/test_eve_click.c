@@ -277,11 +277,19 @@ static bool test_eve_click_memzero(void)
     return crc == 0x6522DF69;
 }
 
+static bool test_eve_click_ftdi_logo(void)
+{
+    if (eve_click_ftdi_logo() < 0)
+        return false;
+
+    return ask_question("Do you see the ftdi logo ?", 15) == 1;
+}
+
 int main(void)
 {
     int ret = -1;
 
-    CREATE_TEST(eve_click, 21)
+    CREATE_TEST(eve_click, 22)
     ADD_TEST_CASE(eve_click, enable_disable);
     ADD_TEST_CASE(eve_click, black_screen_on_enable);
     ADD_TEST_CASE(eve_click, memset_and_memcrc);
@@ -303,6 +311,7 @@ int main(void)
     ADD_TEST_CASE(eve_click, gradcolor);
     ADD_TEST_CASE(eve_click, gradient);
     ADD_TEST_CASE(eve_click, disable_buffering);
+    ADD_TEST_CASE(eve_click, ftdi_logo);
 
     if (spi_init() < 0
     ||  spi_set_mode(MIKROBUS_1, SPI_MODE_0) < 0)
