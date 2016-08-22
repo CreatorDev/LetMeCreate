@@ -1052,6 +1052,19 @@ int eve_click_load_image(uint32_t ptr, uint32_t options, const uint8_t *data, ui
     return ret;
 }
 
+int eve_click_load_identity(void)
+{
+    if (ft800_enabled == false)
+        return -1;
+
+    if (cmd_buffering) {
+        return parse_coprocessor_vcmd(FT800_LOADIDENTITY);
+    } else {
+        uint32_t cmd = FT800_LOADIDENTITY;
+        return cmd_fifo_send(&cmd, 1);
+    }
+}
+
 int eve_click_translate(int32_t tx, int32_t ty)
 {
     if (ft800_enabled == false)
