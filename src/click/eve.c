@@ -1052,6 +1052,67 @@ int eve_click_load_image(uint32_t ptr, uint32_t options, const uint8_t *data, ui
     return ret;
 }
 
+int eve_click_translate(int32_t tx, int32_t ty)
+{
+    if (ft800_enabled == false)
+        return -1;
+
+    if (cmd_buffering) {
+        return parse_coprocessor_vcmd(FT800_TRANSLATE, tx, ty);
+    } else {
+        uint32_t buffer[3];
+        buffer[0] = FT800_TRANSLATE;
+        buffer[1] = tx;
+        buffer[2] = ty;
+        return cmd_fifo_send(buffer, 3);
+    }
+}
+
+int eve_click_get_matrix(int32_t *a, int32_t *b, int32_t *c,
+                         int32_t *d, int32_t *e, int32_t *f)
+{
+    uint32_t buffer[7];
+    uint16_t offset;
+
+    if (ft800_enabled == false)
+        return -1;
+
+    if (a == NULL || b == NULL || c == NULL
+    ||  d == NULL || e == NULL || f == NULL)
+        return -1;
+
+    if (read_16bit_reg(FT800_REG_CMD_WRITE, &offset) < 0)
+        return -1;
+
+    buffer[0] = FT800_GETMATRIX;
+    memset(&buffer[1], 0, 24);
+    if (cmd_fifo_send(buffer, 7) < 0)
+        return -1;
+
+    if (read_32bit_reg(FT800_RAM_CMD + offset + 4, a) < 0
+    ||  read_32bit_reg(FT800_RAM_CMD + offset + 8, b) < 0
+    ||  read_32bit_reg(FT800_RAM_CMD + offset + 12, c) < 0
+    ||  read_32bit_reg(FT800_RAM_CMD + offset + 16, d) < 0
+    ||  read_32bit_reg(FT800_RAM_CMD + offset + 20, e) < 0
+    ||  read_32bit_reg(FT800_RAM_CMD + offset + 24, f) < 0)
+        return -1;
+
+    return 0;
+}
+
+int eve_click_set_matrix(void)
+{
+    if (ft800_enabled == false)
+        return -1;
+
+    if (cmd_buffering) {
+        return parse_coprocessor_vcmd(FT800_SETMATRIX);
+    } else {
+        uint32_t cmd = FT800_SETMATRIX;
+        return cmd_fifo_send(&cmd, 1);
+    }
+}
+
 int eve_click_memcrc(uint32_t ptr, uint32_t byte_count, uint32_t *crc)
 {
     uint16_t offset = 0;

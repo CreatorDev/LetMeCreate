@@ -34,6 +34,12 @@ int eve_click_display(void);
 /* Loading image data in FT800 chip memory */
 int eve_click_load_image(uint32_t ptr, uint32_t options, const uint8_t *data, uint32_t count);
 
+/* bitmap transform matrix operations */
+int eve_click_translate(int32_t tx, int32_t ty);
+int eve_click_get_matrix(int32_t *a, int32_t *b, int32_t *c,
+                         int32_t *d, int32_t *e, int32_t *f);
+int eve_click_set_matrix(void);
+
 /* Memory operations on FT800 chip */
 int eve_click_memcrc(uint32_t ptr, uint32_t byte_count, uint32_t *crc);
 int eve_click_memset(uint32_t ptr, uint32_t value, uint32_t byte_count);
