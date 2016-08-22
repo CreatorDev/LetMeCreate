@@ -1065,6 +1065,22 @@ int eve_click_load_identity(void)
     }
 }
 
+int eve_click_scale(int32_t sx, int32_t sy)
+{
+    if (ft800_enabled == false)
+        return -1;
+
+    if (cmd_buffering) {
+        return parse_coprocessor_vcmd(FT800_SCALE, sx, sy);
+    } else {
+        uint32_t buffer[3];
+        buffer[0] = FT800_SCALE;
+        buffer[1] = sx;
+        buffer[2] = sy;
+        return cmd_fifo_send(buffer, 3);
+    }
+}
+
 int eve_click_translate(int32_t tx, int32_t ty)
 {
     if (ft800_enabled == false)
