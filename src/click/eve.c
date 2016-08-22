@@ -1097,6 +1097,21 @@ int eve_click_translate(int32_t tx, int32_t ty)
     }
 }
 
+int eve_click_rotate(int32_t angle)
+{
+    if (ft800_enabled == false)
+        return -1;
+
+    if (cmd_buffering) {
+        return parse_coprocessor_vcmd(FT800_ROTATE, angle);
+    } else {
+        uint32_t buffer[2];
+        buffer[0] = FT800_ROTATE;
+        buffer[1] = angle;
+        return cmd_fifo_send(buffer, 2);
+    }
+}
+
 int eve_click_get_matrix(int32_t *a, int32_t *b, int32_t *c,
                          int32_t *d, int32_t *e, int32_t *f)
 {

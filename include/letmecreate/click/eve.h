@@ -38,6 +38,7 @@ int eve_click_load_image(uint32_t ptr, uint32_t options, const uint8_t *data, ui
 int eve_click_load_identity(void);
 int eve_click_translate(int32_t tx, int32_t ty);
 int eve_click_scale(int32_t sx, int32_t sy);
+int eve_click_rotate(int32_t angle);
 int eve_click_get_matrix(int32_t *a, int32_t *b, int32_t *c,
                          int32_t *d, int32_t *e, int32_t *f);
 int eve_click_set_matrix(void);
