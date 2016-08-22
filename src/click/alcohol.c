@@ -6,6 +6,8 @@
 
 int alcohol_click_get_measure(uint8_t mikrobus_index, uint16_t *measure)
 {
+    float tmp = 0.f;
+
     if (measure == NULL) {
         fprintf(stderr, "alcohol: Cannot store measurement in null variable.\n");
         return -1;
@@ -16,5 +18,10 @@ int alcohol_click_get_measure(uint8_t mikrobus_index, uint16_t *measure)
         return -1;
     }
 
-    return adc_get_value(mikrobus_index, measure);
+    if (adc_get_value(mikrobus_index, &tmp) < 0)
+        return -1;
+
+    *measure = (tmp / 5.f) * 1023;
+
+    return 0;
 }
