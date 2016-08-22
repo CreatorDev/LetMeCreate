@@ -345,14 +345,55 @@ static bool test_eve_click_spinner(void)
     return ask_question("Did the spinner stop ?", 15) == 1;
 }
 
+static bool test_eve_click_load_image(void)
+{
+    FILE *image = NULL;
+    uint8_t *data = NULL;
+    uint32_t length = 0;
+
+    image = fopen("data/image.jpg", "rb");
+    if (image == NULL)
+        return false;
+    fseek(image, 0, SEEK_END);
+    length = ftell(image);
+    rewind(image);
+
+    data = malloc(length);
+    if (data == NULL) {
+        fclose(image);
+        return false;
+    }
+
+    if (fread(data, 1, length, image) != length) {
+        fclose(image);
+        return false;
+    }
+    fclose(image);
+
+    if (eve_click_load_image(0, FT800_OPT_NODL, data, length) < 0)
+        return false;
+
+    if (eve_click_clear(0, 0, 0) < 0
+    ||  eve_click_draw(FT800_BITMAP_SOURCE, 0) < 0
+    ||  eve_click_draw(FT800_BITMAP_LAYOUT, FT800_RGB565, 128*2, 100) < 0
+    ||  eve_click_draw(FT800_BITMAP_SIZE, FT800_NEAREST, FT800_BORDER, FT800_BORDER, 128, 100) < 0
+    ||  eve_click_draw(FT800_BEGIN, FT800_BITMAPS) < 0
+    ||  eve_click_draw(FT800_VERTEX2II, 100, 100, 0, 0) < 0
+    ||  eve_click_display() < 0)
+        return false;
+
+    return ask_question("Do you see an image ?", 15) == 1;
+}
+
 int main(void)
 {
     int ret = -1;
 
-    CREATE_TEST(eve_click, 24)
+    CREATE_TEST(eve_click, 25)
     ADD_TEST_CASE(eve_click, enable_disable);
     ADD_TEST_CASE(eve_click, black_screen_on_enable);
     ADD_TEST_CASE(eve_click, spinner);
+    ADD_TEST_CASE(eve_click, load_image);
     ADD_TEST_CASE(eve_click, memset_and_memcrc);
     ADD_TEST_CASE(eve_click, memcpy);
     ADD_TEST_CASE(eve_click, memzero);
