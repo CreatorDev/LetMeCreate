@@ -400,13 +400,11 @@ static bool test_eve_click_translate_and_set_matrix(void)
 {
     int32_t a, b, c, d, e, f;
 
-    if (eve_click_clear(0, 0, 0) < 0
-    ||  eve_click_translate(-100*65536, 100 *65536) < 0
-    ||  eve_click_set_matrix() < 0
-    ||  eve_click_display() < 0)
-        return false;
+    eve_click_disable_buffering();
 
-    if (eve_click_get_matrix(&a, &b, &c, &d, &e, &f) < 0)
+    if (eve_click_translate(-100*65536, 100 *65536) < 0
+    ||  eve_click_set_matrix() < 0
+    ||  eve_click_get_matrix(&a, &b, &c, &d, &e, &f) < 0)
         return false;
 
     return a == 65536 && b == 0 && c == 6553600
@@ -417,10 +415,8 @@ static bool test_eve_click_scale(void)
 {
     int32_t a, b, c, d, e, f;
 
-    if (eve_click_clear(0, 0, 0) < 0
-    ||  eve_click_scale(2*65536, 2*65536) < 0
+    if (eve_click_scale(2*65536, 2*65536) < 0
     ||  eve_click_set_matrix() < 0
-    ||  eve_click_display() < 0
     ||  eve_click_get_matrix(&a, &b, &c, &d, &e, &f) < 0)
         return false;
 
@@ -432,10 +428,8 @@ static bool test_eve_click_rotate(void)
 {
     int32_t a, b, c, d, e, f;
 
-    if (eve_click_clear(0, 0, 0) < 0
-    ||  eve_click_rotate(90 * 65536 / 360) < 0
+    if (eve_click_rotate(90 * 65536 / 360) < 0
     ||  eve_click_set_matrix() < 0
-    ||  eve_click_display() < 0
     ||  eve_click_get_matrix(&a, &b, &c, &d, &e, &f) < 0)
         return false;
 
@@ -447,11 +441,13 @@ static bool test_eve_click_load_identity(void)
 {
     int32_t a, b, c, d, e, f;
 
-    if (eve_click_clear(0, 0, 0) < 0
-    ||  eve_click_load_identity() < 0
-    ||  eve_click_display() < 0
-    ||  eve_click_get_matrix(&a, &b, &c, &d, &e, &f) < 0)
+    if (eve_click_load_identity() < 0
+    ||  eve_click_get_matrix(&a, &b, &c, &d, &e, &f) < 0) {
+        eve_click_enable_buffering();
         return false;
+    }
+
+    eve_click_enable_buffering();
 
     return a == 65536 && b == 0 && c == 0
         && d == 0 && e == 65536 && f == 0;
