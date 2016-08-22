@@ -975,6 +975,7 @@ int eve_click_clear(uint8_t r, uint8_t g, uint8_t b)
 
     if (parse_coprocessor_vcmd(FT800_DLSTART) < 0
     ||  parse_display_list_vcmd(FT800_CLEAR_COLOR_RGB, r, g, b) < 0
+    ||  parse_display_list_vcmd(FT800_CLEAR_COLOR_A, 0xFF) < 0
     ||  parse_display_list_vcmd(FT800_CLEAR, 1, 1, 1) < 0)
         return -1;
 
