@@ -428,6 +428,21 @@ static bool test_eve_click_scale(void)
         && d == 0 && e == 32768 && f == -3276800;
 }
 
+static bool test_eve_click_rotate(void)
+{
+    int32_t a, b, c, d, e, f;
+
+    if (eve_click_clear(0, 0, 0) < 0
+    ||  eve_click_rotate(90 * 65536 / 360) < 0
+    ||  eve_click_set_matrix() < 0
+    ||  eve_click_display() < 0
+    ||  eve_click_get_matrix(&a, &b, &c, &d, &e, &f) < 0)
+        return false;
+
+    return a == 0 && b == 32767 && c == -3276700
+        && d == -32767 && e == 0 && f == -3276700;
+}
+
 static bool test_eve_click_load_identity(void)
 {
     int32_t a, b, c, d, e, f;
@@ -446,12 +461,13 @@ int main(void)
 {
     int ret = -1;
 
-    CREATE_TEST(eve_click, 29)
+    CREATE_TEST(eve_click, 30)
     ADD_TEST_CASE(eve_click, enable_disable);
     ADD_TEST_CASE(eve_click, black_screen_on_enable);
     ADD_TEST_CASE(eve_click, get_matrix);
     ADD_TEST_CASE(eve_click, translate_and_set_matrix);
     ADD_TEST_CASE(eve_click, scale);
+    ADD_TEST_CASE(eve_click, rotate);
     ADD_TEST_CASE(eve_click, load_identity);
     ADD_TEST_CASE(eve_click, spinner);
     ADD_TEST_CASE(eve_click, load_image);
