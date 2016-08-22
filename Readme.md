@@ -22,6 +22,7 @@ MikroClick board supported:
   - Air quality
   - Accel (SPI only)
   - 8x8R (Led Matrix)
+  - Alcohol
 
 Examples are installed in /usr/bin/letmecreate_examples.
 Tests are installed in /usr/bin/letmecreate_tests.
