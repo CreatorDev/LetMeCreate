@@ -285,17 +285,61 @@ static bool test_eve_click_ftdi_logo(void)
     return ask_question("Do you see the ftdi logo ?", 15) == 1;
 }
 
+static bool test_eve_click_snapshot(void)
+{
+    bool ret = true;
+    uint8_t *data = NULL;
+    FILE *file = NULL;
+
+    /* Display a red screen */
+    if (eve_click_clear(255, 0, 0) < 0
+    ||  eve_click_display() < 0)
+        return false;
+
+    if (ask_question("Do you see a red screen ?", 15) != 1)
+        return false;
+
+    data = malloc(480*272*2);
+    if (data == NULL)
+        return false;
+    if (eve_click_snapshot(0, data) < 0)
+        ret = false;
+    free(data);
+    if (ret == false)
+        return ret;
+
+    /* Display a blue screen */
+    if (eve_click_clear(0, 0, 255) < 0
+    ||  eve_click_display() < 0)
+        return false;
+    if (ask_question("Do you see a blue screen ?", 15) != 1)
+        return false;
+
+    /* Display snapshot (should be a red screen) */
+    if (eve_click_clear(255, 0, 0) < 0
+    ||  eve_click_draw(FT800_BITMAP_SOURCE, 0) < 0
+    ||  eve_click_draw(FT800_BITMAP_LAYOUT, FT800_ARGB4, 2*480, 272) < 0
+    ||  eve_click_draw(FT800_BITMAP_SIZE, FT800_NEAREST, FT800_BORDER, FT800_BORDER, 480, 272) < 0
+    ||  eve_click_draw(FT800_BEGIN, FT800_BITMAPS) < 0
+    ||  eve_click_draw(FT800_VERTEX2II, 0, 0, 0, 0) < 0
+    ||  eve_click_draw(FT800_END) < 0
+    ||  eve_click_display() < 0)
+        ret = false;
+    return ask_question("Do you see a red screen ?", 15) == 1;
+}
+
 int main(void)
 {
     int ret = -1;
 
-    CREATE_TEST(eve_click, 22)
+    CREATE_TEST(eve_click, 23)
     ADD_TEST_CASE(eve_click, enable_disable);
     ADD_TEST_CASE(eve_click, black_screen_on_enable);
     ADD_TEST_CASE(eve_click, memset_and_memcrc);
     ADD_TEST_CASE(eve_click, memcpy);
     ADD_TEST_CASE(eve_click, memzero);
     ADD_TEST_CASE(eve_click, clear);
+    ADD_TEST_CASE(eve_click, snapshot);
     ADD_TEST_CASE(eve_click, button);
     ADD_TEST_CASE(eve_click, clock);
     ADD_TEST_CASE(eve_click, dial);
