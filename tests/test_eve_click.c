@@ -328,13 +328,31 @@ static bool test_eve_click_snapshot(void)
     return ask_question("Do you see a red screen ?", 15) == 1;
 }
 
+static bool test_eve_click_spinner(void)
+{
+    /* Display a black screen */
+    if (eve_click_clear(0, 0, 0) < 0
+    ||  eve_click_spinner(240, 136, 0, 0) < 0
+    ||  eve_click_display() < 0)
+        return false;
+
+    if (ask_question("Do you see a animating spinner ?", 15) != 1)
+        return false;
+
+    if(eve_click_stop() < 0)
+        return false;
+
+    return ask_question("Did the spinner stop ?", 15) == 1;
+}
+
 int main(void)
 {
     int ret = -1;
 
-    CREATE_TEST(eve_click, 23)
+    CREATE_TEST(eve_click, 24)
     ADD_TEST_CASE(eve_click, enable_disable);
     ADD_TEST_CASE(eve_click, black_screen_on_enable);
+    ADD_TEST_CASE(eve_click, spinner);
     ADD_TEST_CASE(eve_click, memset_and_memcrc);
     ADD_TEST_CASE(eve_click, memcpy);
     ADD_TEST_CASE(eve_click, memzero);
@@ -356,6 +374,7 @@ int main(void)
     ADD_TEST_CASE(eve_click, gradient);
     ADD_TEST_CASE(eve_click, disable_buffering);
     ADD_TEST_CASE(eve_click, ftdi_logo);
+
 
     if (spi_init() < 0
     ||  spi_set_mode(MIKROBUS_1, SPI_MODE_0) < 0)
