@@ -1158,3 +1158,51 @@ int eve_click_ftdi_logo(void)
 
     return 0;
 }
+
+int eve_click_snapshot(uint32_t ptr, uint8_t *data)
+{
+    uint32_t buffer[2];
+    uint32_t total_bytes_to_read = 480 * 272 * 2;
+
+    if (ft800_enabled == false)
+        return -1;
+
+    if (data == NULL)
+        return -1;
+
+    buffer[0] = FT800_SNAPSHOT;
+    buffer[1] = ptr;
+
+    /* Disable pixel clock output */
+    if (write_8bit_reg(FT800_REG_PCLK, 0) < 0) {
+        fprintf(stderr, "eve: Failed to disable pixel clock output.\n");
+        return -1;
+    }
+
+    if (cmd_fifo_send(buffer, 2) < 0)
+        return -1;
+
+    /* Enable pixel clock output */
+    if (write_8bit_reg(FT800_REG_PCLK, 5) < 0) {
+        fprintf(stderr, "eve: Failed to disable pixel clock output.\n");
+        return -1;
+    }
+
+    /* Read in chunk of max 4092 bytes because SPI driver fails to do transfer
+     * of more than 4kB.
+     */
+    while (total_bytes_to_read > 0) {
+        uint32_t count = total_bytes_to_read;
+        if (count > 4092)
+            count = 4092;
+
+        if (memory_read(ptr, data, count) < 0)
+            return -1;
+
+        ptr += count;
+        data += count;
+        total_bytes_to_read -= count;
+    }
+
+    return 0;
+}
