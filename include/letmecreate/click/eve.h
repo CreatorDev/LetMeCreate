@@ -43,5 +43,7 @@ int eve_click_memzero(uint32_t ptr, uint32_t byte_count);
 /* Other commands */
 int eve_click_ftdi_logo(void);
 int eve_click_snapshot(uint32_t ptr, uint8_t *data);
+int eve_click_spinner(int16_t x, int16_t y, uint16_t style, uint16_t scale);
+int eve_click_stop(void);
 
 #endif

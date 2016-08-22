@@ -1207,3 +1207,26 @@ int eve_click_snapshot(uint32_t ptr, uint8_t *data)
 
     return 0;
 }
+
+int eve_click_spinner(int16_t x, int16_t y, uint16_t style, uint16_t scale)
+{
+    uint32_t buffer[3];
+
+    if (ft800_enabled == false)
+        return -1;
+
+    cmds[cmd_cnt++] = FT800_SPINNER;
+    cmds[cmd_cnt++] = (y << 16) | x;
+    cmds[cmd_cnt++] = (scale << 16) | style;
+    return 0;
+}
+
+int eve_click_stop(void)
+{
+    uint32_t cmd = FT800_STOP;
+
+    if (ft800_enabled == false)
+        return -1;
+
+    return cmd_fifo_send(&cmd, 1);
+}
