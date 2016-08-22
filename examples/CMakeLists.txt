@@ -31,3 +31,11 @@ install(TARGETS letmecreate_color_example RUNTIME DESTINATION bin)
 add_executable(letmecreate_led_example led/main.c)
 target_link_libraries(letmecreate_led_example letmecreate_core)
 install(TARGETS letmecreate_led_example RUNTIME DESTINATION bin)
+
+add_executable(letmecreate_buzz_example buzz/main.c)
+target_link_libraries(letmecreate_buzz_example letmecreate_core)
+install(TARGETS letmecreate_buzz_example RUNTIME DESTINATION bin)
+
+add_executable(letmecreate_motion_example motion/main.c)
+target_link_libraries(letmecreate_motion_example letmecreate_click letmecreate_core)
+install(TARGETS letmecreate_motion_example RUNTIME DESTINATION bin)

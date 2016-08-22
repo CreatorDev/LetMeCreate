@@ -4,7 +4,18 @@
 
 #define ADC_BASE_PATH       "/sys/bus/iio/devices/iio:device0/"
 
-
+/*
+ * The Ci40 contains several 10-bit ADC which can be accessed by reading
+ * /sys/bus/iio/devices/iio:device0/in_voltage0_raw (for mikrobus 1)
+ * or /sys/bus/iio/devices/iio:device0/in_voltage1_raw (for mikrobus 2).
+ *
+ * These two files are updated regularly and contain the value measured by the
+ * ADC in range 0-1023. The pins can accept voltage up to 5V and so to convert
+ * a measurement to an actual voltage, one needs to apply a linear scale.
+ * 0 - 0V
+ * 1023 - 5V
+ *
+ */
 int adc_get_value(uint8_t mikrobus_index, float *value)
 {
     uint32_t tmp = 0;
