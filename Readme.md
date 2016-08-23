@@ -23,6 +23,7 @@ MikroClick board supported:
   - Accel (SPI only)
   - 8x8R (Led Matrix)
   - Alcohol
+  - IR eclipse
 
 Examples are installed in /usr/bin/letmecreate_examples.
 Tests are installed in /usr/bin/letmecreate_tests.
