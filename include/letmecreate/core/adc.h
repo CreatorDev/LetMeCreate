@@ -6,8 +6,8 @@
  */
 
 
-#ifndef __LETMECREATE_CORE_GPIO_H__
-#define __LETMECREATE_CORE_GPIO_H__
+#ifndef __LETMECREATE_CORE_ADC_H__
+#define __LETMECREATE_CORE_ADC_H__
 
 #include <stdint.h>
 
