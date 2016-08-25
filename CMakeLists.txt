@@ -15,11 +15,14 @@ option(BUILD_TESTS "Build tests" OFF)
 file(GLOB core_srcs src/core/*.c)
 file(GLOB click_srcs src/click/*.c)
 
+file(GLOB core_hdrs include/letmecreate/core/*.h)
+file(GLOB click_hdrs include/letmecreate/click/*.h)
+
 include_directories(include)
 
 # Create targets
-add_library(letmecreate_core SHARED ${core_srcs})
-add_library(letmecreate_click SHARED ${click_srcs})
+add_library(letmecreate_core SHARED ${core_srcs} ${core_hdrs})
+add_library(letmecreate_click SHARED ${click_srcs} ${click_hdrs})
 target_link_libraries(letmecreate_click letmecreate_core)
 
 target_compile_definitions(letmecreate_core PUBLIC "LETMECREATE_CORE_DEBUG=$<CONFIG:Debug>")
