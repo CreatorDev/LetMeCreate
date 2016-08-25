@@ -31,12 +31,12 @@ int motion_click_attach_callback(uint8_t mikrobus_index, void(*callback)(uint8_t
         if (!gpio_init(MIKROBUS_1_INT)
          && !gpio_set_direction(MIKROBUS_1_INT, GPIO_INPUT)
          && !gpio_monitor_init())
-            return gpio_monitor_add_callback(MIKROBUS_1_INT, GPIO_RAISING, callback);
+            return gpio_monitor_add_callback(MIKROBUS_1_INT, GPIO_EDGE, callback);
     case MIKROBUS_2:
         if (!gpio_init(MIKROBUS_2_INT)
          && !gpio_set_direction(MIKROBUS_2_INT, GPIO_INPUT)
          && !gpio_monitor_init())
-            return gpio_monitor_add_callback(MIKROBUS_2_INT, GPIO_RAISING, callback);
+            return gpio_monitor_add_callback(MIKROBUS_2_INT, GPIO_EDGE, callback);
     default:
         fprintf(stderr, "motion: Invalid mikrobus index.\n");
         return -1;
