@@ -21,7 +21,7 @@ int alcohol_click_get_measure(uint8_t mikrobus_index, uint16_t *measure)
     if (adc_get_value(mikrobus_index, &tmp) < 0)
         return -1;
 
-    *measure = (tmp / 5.f) * 1023;
+    *measure = (tmp / 5.f) * 65535;
 
     return 0;
 }

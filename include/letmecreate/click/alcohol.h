@@ -10,7 +10,7 @@
  * concentration of alcohol. This function returns the voltage read on ADC pin.
  *
  * param[in] mikrobus_index Index of the mikrobus
- * @param[out] measure Pointer to a 16-bit variable to retrieve the output from the click (must not be null)
+ * @param[out] measure Pointer to a 16-bit variable to retrieve the output from the click (must not be null), in range 0..65535
  *
  * @return 0 if successful, otherwise it returns -1.
  */
