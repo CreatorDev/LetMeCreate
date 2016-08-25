@@ -1,3 +1,10 @@
+/**
+ * @file ir_eclipse.h
+ * @author Francois Berder
+ * @date 2016
+ * @copyright 3-clause BSD
+ */
+
 #ifndef __LETMECREATE_CLICK_IR_ECLIPSE_H__
 #define __LETMECREATE_CLICK_IR_ECLIPSE_H__
 
