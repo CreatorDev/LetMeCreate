@@ -51,27 +51,16 @@ set(targets_export_name "${PROJECT_NAME}Targets")
 # Include module with fuction 'write_basic_package_version_file'
 include(CMakePackageConfigHelpers)
 
-# Configure '<PROJECT-NAME>ConfigVersion.cmake'
-# Note: PROJECT_VERSION is used as a VERSION
 write_basic_package_version_file(
     "${version_config}" COMPATIBILITY SameMajorVersion
 )
 
-# Configure '<PROJECT-NAME>Config.cmake'
-# Use variables:
-#   * targets_export_name
-#   * PROJECT_NAME
 configure_package_config_file(
     "cmake/Config.cmake.in"
     "${project_config}"
     INSTALL_DESTINATION "${config_install_dir}"
 )
 
-# Targets:
-#   * <prefix>/lib/libbar.a
-#   * <prefix>/lib/libbaz.a
-#   * header location after install: <prefix>/include/foo/Bar.hpp
-#   * headers can be included by C++ code `#include <foo/Bar.hpp>`
 install(
     TARGETS letmecreate_core letmecreate_click
     EXPORT "${targets_export_name}"
@@ -81,25 +70,17 @@ install(
     INCLUDES DESTINATION "${include_install_dir}"
 )
 
-# Headers:
-#   * Source/foo/Bar.hpp -> <prefix>/include/foo/Bar.hpp
-#   * Source/foo/Baz.hpp -> <prefix>/include/foo/Baz.hpp
 install(
     DIRECTORY "include/letmecreate"
     DESTINATION "${include_install_dir}"
     FILES_MATCHING PATTERN "*.h"
 )
 
-# Config
-#   * <prefix>/lib/cmake/Foo/FooConfig.cmake
-#   * <prefix>/lib/cmake/Foo/FooConfigVersion.cmake
 install(
     FILES "${project_config}" "${version_config}"
     DESTINATION "${config_install_dir}"
 )
 
-# Config
-#   * <prefix>/lib/cmake/Foo/FooTargets.cmake
 install(
     EXPORT "${targets_export_name}"
     DESTINATION "${config_install_dir}"
