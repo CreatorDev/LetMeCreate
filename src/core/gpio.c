@@ -87,6 +87,7 @@ static bool create_gpio_path(char *path, uint8_t gpio_pin, const char *file_name
     return true;
 }
 
+/* Check if gpio N, the folder /sys/class/gpio/gpioN exists. */
 static bool is_gpio_exported(uint8_t gpio_pin)
 {
     DIR *dir = NULL;
@@ -158,6 +159,7 @@ int gpio_init(uint8_t gpio_pin)
     if (!check_pin(gpio_pin))
         return -1;
 
+    /* Export a GPIO by writing its index to file /sys/class/gpio/export. */
     if (is_gpio_exported(gpio_pin))
         return 0;
 
@@ -176,6 +178,7 @@ int gpio_set_direction(uint8_t gpio_pin, uint8_t dir)
         return -1;
     }
 
+    /* Only strings "out" and "in" can be written to file /sys/class/gpio/gpioN/direction/ */
     if (dir == GPIO_OUTPUT) {
         strcpy(str, "out");
     } else if (dir == GPIO_INPUT) {
@@ -216,6 +219,10 @@ int gpio_get_direction(uint8_t gpio_pin, uint8_t *dir)
     } else if (strncmp(value, "in", 2) == 0) {
         *dir = GPIO_INPUT;
     } else {
+        /*
+         * This should never happen because the content of /sys/class/gpio/gpioN/direction
+         * is set by the gpio controller (unless the driver is buggy)
+         */
         fprintf(stderr, "gpio: Invalid direction read from gpio %d.\n", gpio_pin);
         return -1;
     }
@@ -241,6 +248,7 @@ int gpio_set_value(uint8_t gpio_pin, uint8_t value)
         return -1;
     }
 
+    /* Only write "0" or "1" to /sys/class/gpio/gpioN/value */
     return write_int_gpio_file(gpio_pin, "value", value == 0 ? 0 : 1);
 }
 
@@ -257,6 +265,7 @@ int gpio_get_value(uint8_t gpio_pin, uint8_t *value)
     if (!is_gpio_exported(gpio_pin))
         return 0;
 
+    /* The value returned by read_int_gpio_file is either 0 or 1 */
     return read_int_gpio_file(gpio_pin, "value", value);
 }
 
@@ -268,6 +277,7 @@ int gpio_release(uint8_t gpio_pin)
     if (!is_gpio_exported(gpio_pin))
         return 0;
 
+    /* Write gpio index to /sys/class/gpio/unexport */
     return unexport_pin(GPIO_DIR_BASE_PATH, gpio_pin);
 }
 
