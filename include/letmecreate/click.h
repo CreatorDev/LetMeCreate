@@ -14,6 +14,7 @@
 #include "letmecreate/click/alcohol.h"
 #include "letmecreate/click/color.h"
 #include "letmecreate/click/common.h"
+#include "letmecreate/click/ir_distance.h"
 #include "letmecreate/click/ir_eclipse.h"
 #include "letmecreate/click/joystick.h"
 #include "letmecreate/click/led_matrix.h"
