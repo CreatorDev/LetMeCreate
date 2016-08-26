@@ -1,3 +1,40 @@
+/*
+ * The PWM wrapper of the LetMeCreate library relies on files updated by the
+ * PWM driver of the Ci40. Reading and writing to these files control both
+ * PWM output (one PWM output on each Mikrobus) and get information about their
+ * current status.
+ *
+ * To tell the driver to expose these files, the PWM must be exported. It consists
+ * in writing the PWM index as a string to file /sys/class/pwm/pwmchip0/export.
+ * To hide these files, the PWM output must be unexported. One must write the PWM
+ * index to file /sys/class/pwm/pwmchip0/unexport.
+ *
+ * On the Ci40:
+ *  - pwm0 is the index of the pwm output available on Mikrobus 1
+ *  - pwm0 is the index of the pwm output available on Mikrobus 2
+ * Both PWM outputs are available on the Raspberry Pi extension.
+ *
+ * Once exported, all files are located in /sys/class/pwm/pwmchip0/pwm0 and
+ * /sys/class/pwm/pwmchip0/pwm1.
+ * Both folders contain the same files: enable, period and duty_cycle, as well
+ * as other files not used by this wrapper.
+ *
+ * To enable PWM, one has to write string "1" to file enable. Similarly, to
+ * disable the output, the string "0" must be written. Reading it indicates
+ * whether the PWM output is enabled or not.
+ *
+ * To set the duty cycle of a PWM output, the desired number must be written
+ * as a string in file duty_cycle. Reading it gives the current duty_cycle.
+ *
+ * To set the period of a PWM output, the desired period must be written as a
+ * string in file period. Reading it gives the current period.
+ *
+ * On top of these operations, this wrapper allows to set the period given a
+ * frequency and seamlessly updates the duty_cycle. Also, the duty cycle is
+ * specified as a percentage instead of nanoseconds.
+ */
+
+
 #include <dirent.h>
 #include <fcntl.h>
 #include <stdbool.h>
@@ -26,6 +63,10 @@ static bool check_mikrobus_index(uint8_t mikrobus_index)
     return false;
 }
 
+/*
+ * Check if the directory /sys/class/pwm/pwmchip0/pwm0 or
+ * /sys/class/pwm/pwmchip0/pwm1 exists.
+ */
 static bool is_pwm_pin_exported(uint8_t mikrobus_index)
 {
     DIR *dir = NULL;
@@ -43,6 +84,10 @@ static bool is_pwm_pin_exported(uint8_t mikrobus_index)
     return true;
 }
 
+/*
+ * Writes a string to a file located in /sys/class/pwm/pwmchip0/pwm0 or
+ * /sys/class/pwm/pwmchip0/pwm1.
+ */
 static int write_str_pwm_file(uint8_t mikrobus_index, const char *file_name, const char *str)
 {
     char path[MAX_STR_LENGTH];
@@ -55,6 +100,10 @@ static int write_str_pwm_file(uint8_t mikrobus_index, const char *file_name, con
     return write_str_file(path, str);
 }
 
+/*
+ * Writes a string to a file located in /sys/class/pwm/pwmchip0/pwm0 or
+ * /sys/class/pwm/pwmchip0/pwm1.
+ */
 static int write_int_pwm_file(uint8_t mikrobus_index, const char *file_name, uint32_t value)
 {
     char str[MAX_STR_LENGTH];
@@ -67,6 +116,10 @@ static int write_int_pwm_file(uint8_t mikrobus_index, const char *file_name, uin
     return write_str_pwm_file(mikrobus_index, file_name, str);
 }
 
+/*
+ * Reads an integer from a file located in directory /sys/class/pwm/pwmchip0/pwm0/
+ * or /sys/class/pwm/pwmchip0/pwm1/.
+ */
 static int read_int_pwm_file(uint8_t mikrobus_index, const char *file_name, uint32_t *value)
 {
     char path[MAX_STR_LENGTH];
