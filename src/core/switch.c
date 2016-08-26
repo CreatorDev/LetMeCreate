@@ -1,3 +1,21 @@
+/*
+ * The switch wrapper works by polling a file for events and
+ * maintaining a list of callbacks.
+ *
+ * This polling activity is executed in a different thread to avoid blocking the
+ * rest of the application. This thread is called the monitoring thread.
+ *
+ * The monitoring thread waits for events being written to /dev/input/event1. To do
+ * so, it relies on the poll function whose return value indicates if some data can
+ * be read or not. Once an event is read, the monitoring thread iterates through
+ * the list of callbacks and call those who subscribed to this event. Notice, that
+ * the monitoring thread never modifies (add/remove entries) the callback list.
+ *
+ * The rest of the code is executed in the main thread. To ensure that the
+ * monitoring thread cannot use the list while a callback is added or removed,
+ * a mutex is used.
+ */
+
 #include <fcntl.h>
 #include <linux/input.h>
 #include <poll.h>
@@ -55,6 +73,14 @@ static void* switch_update(void *arg)
 
     running = true;
     while (running) {
+        /*
+         * Polls on file /dev/input/event1.
+         * The timeout is set to 20ms. Hence, the function will return after at most
+         * 20ms. This is required to ensure that the boolean variable running
+         * is checked frequently. If no timeout was given and no events detected,
+         * the thread would be stuck in the poll function and would never exit even
+         * if the running variable is set to false in switch_release().
+         */
         ret = poll(&pfd, 1, TIMEOUT);
 
         if (ret < 0) {
@@ -140,9 +166,13 @@ int switch_add_callback(uint8_t event_mask, void (*callback)(void))
         return -1;
     }
     entry->ID = switch_callback_ID;
+
+    /* Increment the ID to ensure that all registered callbacks have a unique ID. */
     ++switch_callback_ID;
+
     entry->event_mask = event_mask;
     entry->f = callback;
+    /* The entry is always added at the end of the list. Hence, it has no next entry. */
     entry->next = NULL;
 
 
@@ -181,6 +211,10 @@ int switch_remove_callback(int callback_ID)
     if (callback_list_head == NULL)
         return -1;
 
+    /*
+     * Iterate through the callback list until an entry with ID equal to
+     * callback_ID is found.
+     */
     entry = callback_list_head;
     while (entry) {
         if (entry->ID == callback_ID)
@@ -189,6 +223,8 @@ int switch_remove_callback(int callback_ID)
         prev = entry;
         entry = entry->next;
     }
+
+    /* If no entry is found that matches this criteria, an error code is returned. */
     if (entry == NULL)
         return -1;
 
