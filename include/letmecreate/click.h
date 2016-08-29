@@ -23,5 +23,6 @@
 #include "letmecreate/click/relay2.h"
 #include "letmecreate/click/thermo3.h"
 #include "letmecreate/click/relay.h"
-
+#include "letmecreate/click/weather.h"
+#include "letmecreate/3rd_party/bme280.h"
 #endif
