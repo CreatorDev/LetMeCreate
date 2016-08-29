@@ -22,5 +22,6 @@
 #include "letmecreate/click/relay2.h"
 #include "letmecreate/click/thermo3.h"
 #include "letmecreate/click/relay.h"
+#include "letmecreate/click/co.h"
 
 #endif
