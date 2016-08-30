@@ -9,6 +9,8 @@
 #ifndef __LETMECREATE_CLICK_H__
 #define __LETMECREATE_CLICK_H__
 
+#include "letmecreate/3rd_party/bme280.h"
+
 #include <letmecreate/click/7seg.h>
 #include <letmecreate/click/accel.h>
 #include <letmecreate/click/adc.h>
@@ -37,6 +39,4 @@
 #include <letmecreate/click/rtc.h>
 #include <letmecreate/click/thermo3.h>
 #include "letmecreate/click/weather.h"
-#include "letmecreate/3rd_party/bme280.h"
-
 #endif

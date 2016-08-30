@@ -19,22 +19,12 @@
  ************************************************************************************************************************/
 
 #include "bme280.h"
-#include <stdlib.h>
-#include <stdbool.h>
-#include <signal.h>
-#include <stdio.h>
-#include <unistd.h>
 #include <letmecreate/letmecreate.h>
-#include <getopt.h>
-#include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
-#include <sys/ioctl.h>
-
-#define I2C_BUFFER_LEN 48
-#define BME280_DATA_INDEX   1
+#include <unistd.h>
 
 struct bme280_t bme280;
+static uint8_t readResult = 0;
 
 s8 weather_click_i2c_bus_read(u8 dev_addr, u8 reg_addr, u8 *reg_data, u8 cnt) {
     s32 iError = BME280_INIT_VALUE;
@@ -45,6 +35,7 @@ s8 weather_click_i2c_bus_read(u8 dev_addr, u8 reg_addr, u8 *reg_data, u8 cnt) {
         iError = i2c_read(dev_addr, &tmp, 1) >= 0 ? 0 : -1;
         *(reg_data + t) = tmp;
         if (iError < 0) {
+            readResult = -1;
             break;
         }
     }
@@ -61,6 +52,7 @@ s8 weather_click_i2c_bus_write(u8 dev_addr, u8 reg_addr, u8 *reg_data, u8 cnt) {
         array[1] = *(reg_data + t);
         iError = i2c_write(dev_addr, &array[0], 2) >= 0 ? 0 : -1;
         if (iError < 0) {
+            readResult = -1;
             break;
         }
     }
@@ -81,8 +73,9 @@ s8 I2C_routine(void) {
     return BME280_INIT_VALUE;
 }
 
-void weather_click_read_measurements(uint8_t mikrobus_index, double* temperature, double* pressure, double* humidity) {
+uint8_t weather_click_read_measurements(uint8_t mikrobus_index, double* temperature, double* pressure, double* humidity) {
 
+    readResult = 0;
     s32 uncompTemp = BME280_INIT_VALUE;
     s32 uncompPress = BME280_INIT_VALUE;
     s32 uncompHumidity = BME280_INIT_VALUE;
@@ -101,10 +94,13 @@ void weather_click_read_measurements(uint8_t mikrobus_index, double* temperature
     if (humidity != NULL) {
         *humidity = bme280_compensate_humidity_double(uncompHumidity);
     }
+    return readResult;
 }
 
-void weather_click_init(uint8_t mikrobus_index) {
+uint8_t weather_click_init(uint8_t mikrobus_index) {
     i2c_select_bus(mikrobus_index);
+
+    readResult = 0;
 
     I2C_routine();
     bme280_init(&bme280);
@@ -117,4 +113,6 @@ void weather_click_init(uint8_t mikrobus_index) {
     bme280_set_oversamp_temperature(BME280_OVERSAMP_2X);
     bme280_set_filter(BME280_FILTER_COEFF_16);
     bme280_set_power_mode(BME280_NORMAL_MODE);
+
+    return readResult;
 }
