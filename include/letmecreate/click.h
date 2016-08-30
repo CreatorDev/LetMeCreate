@@ -9,6 +9,8 @@
 #ifndef __LETMECREATE_CLICK_H__
 #define __LETMECREATE_CLICK_H__
 
+#include "letmecreate/3rd_party/bme280.h"
+
 #include "letmecreate/click/accel.h"
 #include "letmecreate/click/air_quality.h"
 #include "letmecreate/click/alcohol.h"
@@ -20,9 +22,8 @@
 #include "letmecreate/click/led_matrix.h"
 #include "letmecreate/click/motion.h"
 #include "letmecreate/click/proximity.h"
+#include "letmecreate/click/relay.h"
 #include "letmecreate/click/relay2.h"
 #include "letmecreate/click/thermo3.h"
-#include "letmecreate/click/relay.h"
 #include "letmecreate/click/weather.h"
-#include "letmecreate/3rd_party/bme280.h"
 #endif

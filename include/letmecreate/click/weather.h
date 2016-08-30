@@ -29,14 +29,16 @@
  * @param[out] temperature measured by sensor, or NULL if not interested in this value.
  * @param[out] pressure measured by sensor, or NULL if not interested in this value.
  * @param[out] humidity measured by sensor, or NULL if not interested in this value.
+ * @return 0 if success otherwise -1
  */
-void weather_click_read_measurements(uint8_t mikrobus_index, double* temperature, double* pressure, double* humidity);
+uint8_t weather_click_read_measurements(uint8_t mikrobus_index, double* temperature, double* pressure, double* humidity);
 
 /**
  * @brief Setups sensor configuration as recommended for indoor measurement in Bosh BME 280 data sheet.
  * @param mikrobus_index Index of the mikrobus used by the click (see #MIKROBUS_INDEX)
+ * @return 0 if success otherwise -1
  */
-void weather_click_init(uint8_t mikrobus_index);
+uint8_t weather_click_init(uint8_t mikrobus_index);
 
 
 #endif /* WEATHER_H_ */
