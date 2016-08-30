@@ -26,8 +26,9 @@
  * require warmup before proper readings can be received.
  *
  * @param mikrobus_index Index of the mikrobus used by the click (see #MIKROBUS_INDEX)
- * @return current concentration of CO in air given in PPM.
+ * @param[out] value current concentration of CO in air given in PPM.
+ * @return 0 if success, -1 if error occurred
  */
-float co_click_read_ppm(uint8_t mikrobus_index);
+uint8_t co_click_read_ppm(uint8_t mikrobus_index, float* value);
 
 #endif /* CO_H_ */

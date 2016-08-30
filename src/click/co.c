@@ -18,20 +18,20 @@
  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ************************************************************************************************************************/
 #include <letmecreate/letmecreate.h>
-#include <tgmath.h>
+#include <math.h>
 
-float co_click_read_ppm(uint8_t mikrobus_index) {
+uint8_t co_click_read_ppm(uint8_t mikrobus_index, float* value) {
 
-    while (1) {
-        float Vrl;
-        adc_get_value(MIKROBUS_2, &Vrl);
-
-        const double Rl = 5000.0;
-        double Rs = Rl * (5 - Vrl) / Vrl;
-        double ratio = Rs / Rl;
-        double lgPPM = (log10(ratio) * -3.7) + 0.9948;
-        double ppm = pow(10, lgPPM);
-
-        return ppm;
+    float Vrl;
+    if (adc_get_value(mikrobus_index, &Vrl) < 0) {
+        return -1;
     }
+
+    const double Rl = 5000.0;
+    double Rs = Rl * (5 - Vrl) / Vrl;
+    double ratio = Rs / Rl;
+    double lgPPM = (log10(ratio) * -3.7) + 0.9948;
+    double ppm = pow(10, lgPPM);
+    *value = (float)ppm;
+    return 0;
 }
