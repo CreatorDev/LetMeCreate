@@ -18,8 +18,8 @@
  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ************************************************************************************************************************/
 
-#ifndef WEATHER_H_
-#define WEATHER_H_
+#ifndef __LETMECREATE_CLICK_WEATHER_H__
+#define __LETMECREATE_CLICK_WEATHER_H__
 #include <stdint.h>
 
 /**
@@ -38,7 +38,7 @@ uint8_t weather_click_read_measurements(uint8_t mikrobus_index, double* temperat
  * @param mikrobus_index Index of the mikrobus used by the click (see #MIKROBUS_INDEX)
  * @return 0 if success otherwise -1
  */
-uint8_t weather_click_init(uint8_t mikrobus_index);
+uint8_t weather_click_enable(uint8_t mikrobus_index);
 
 
-#endif /* WEATHER_H_ */
+#endif /* __LETMECREATE_CLICK_WEATHER_H__ */
