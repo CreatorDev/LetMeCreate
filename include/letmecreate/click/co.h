@@ -18,8 +18,8 @@
  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ************************************************************************************************************************/
 
-#ifndef CO_H_
-#define CO_H_
+#ifndef __LETMECREATE_CLICK_CO_H__
+#define __LETMECREATE_CLICK_CO_H__
 
 /**
  * @brief Reads current PPM for CO in air. Please read data sheet for MQ-7 sensor used in MikroE click. It might
@@ -31,4 +31,4 @@
  */
 uint8_t co_click_read_ppm(uint8_t mikrobus_index, float* value);
 
-#endif /* CO_H_ */
+#endif /* __LETMECREATE_CLICK_CO_H__ */
