@@ -18,14 +18,15 @@
  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ************************************************************************************************************************/
 
-#ifndef RELAY4_H_
-#define RELAY4_H_
+#ifndef __LETMECREATE_CLICK_RELAY4_H__
+#define __LETMECREATE_CLICK_RELAY4_H__
 
 #include <stdbool.h>
 
 /**
  * @brief Configure relay4 to be controlled over given pins on cI40 board (those pins should be connected to pins P0-P3
- * on relay4 board). Each pin will be set as GPIO_OUTPUT.
+ * on relay4 board). Each pin will be set as GPIO_OUTPUT. Due to Ci40 pins layout it's proposed to use GPIO_83, GPIO_81, 
+ * GPIO_80, GPIO_72 as a default values.
  *
  * @param relay0Pin pin which is connected to relay4 P0 pin
  * @param relay1Pin pin which is connected to relay4 P1 pin
@@ -34,13 +35,6 @@
  * @return 0 if success otherwise -1
  */
 uint8_t relay4_enable(uint8_t relay0Pin, uint8_t relay1Pin, uint8_t relay2Pin, uint8_t relay3Pin);
-
-/**
- * @brief Same as calling relay4_enable(GPIO_83, GPIO_81, GPIO_80, GPIO_72)
- *
- * @return 0 if success otherwise -1
- */
-uint8_t relay4_enable_defaults();
 
 /**
  * @brief Releases usage of GPIO pins reserved through call to relay4_enable or relay4_enable_defaults.
@@ -76,4 +70,4 @@ uint8_t relay4_get_state(uint8_t pinIndex, bool* state);
  */
 uint8_t relay4_toggle(uint8_t pinIndex, bool* newState);
 
-#endif /* RELAY4_H_ */
+#endif /* __LETMECREATE_CLICK_RELAY4_H__ */

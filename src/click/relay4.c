@@ -44,10 +44,6 @@ uint8_t relay4_enable(uint8_t relay0Pin, uint8_t relay1Pin, uint8_t relay2Pin, u
     return result < 0 ? -1 : 0;
 }
 
-uint8_t relay4_enable_defaults() {
-    return relay4_enable(GPIO_83, GPIO_81, GPIO_80, GPIO_72);
-}
-
 uint8_t relay4_disable() {
     uint8_t result = 0;
     int t;
