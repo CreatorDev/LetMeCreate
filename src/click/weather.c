@@ -97,7 +97,7 @@ uint8_t weather_click_read_measurements(uint8_t mikrobus_index, double* temperat
     return readResult;
 }
 
-uint8_t weather_click_init(uint8_t mikrobus_index) {
+uint8_t weather_click_enable(uint8_t mikrobus_index) {
     i2c_select_bus(mikrobus_index);
 
     readResult = 0;
