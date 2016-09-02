@@ -60,45 +60,42 @@ uint8_t relay4_disable() {
 
 uint8_t relay4_set_state(uint8_t pinIndex, bool on) {
     if ((pinIndex > 3) || (g_Relay4_pins[pinIndex] == 0)) {
-        fprintf(stderr, "Wrong pin Index, or pin is not initialized through call to relay4_enable.\n");
+        fprintf(stderr, "relay4: Wrong pin Index, or pin is not initialized through call to relay4_enable.\n");
         return -1;
 
-    } else {
-        return gpio_set_value(g_Relay4_pins[pinIndex], on);
     }
+    return gpio_set_value(g_Relay4_pins[pinIndex], on);
 }
 
 uint8_t relay4_get_state(uint8_t pinIndex, bool* state) {
     if ((pinIndex > 3) || (g_Relay4_pins[pinIndex] == 0)) {
-        fprintf(stderr, "Wrong pin Index, or pin is not initialized through call to relay4_enable.\n");
+        fprintf(stderr, "relay4: Wrong pin Index, or pin is not initialized through call to relay4_enable.\n");
         return -1;
 
-    } else {
-        uint8_t intState;
-        uint8_t result = gpio_get_value(g_Relay4_pins[pinIndex], &intState);
-        if (state != NULL) {
-            *state = (bool)intState;
-        }
-        return result;
     }
+    uint8_t intState;
+    uint8_t result = gpio_get_value(g_Relay4_pins[pinIndex], &intState);
+    if (state != NULL) {
+        *state = (bool)intState;
+    }
+    return result;
 }
 
 uint8_t relay4_toggle(uint8_t pinIndex, bool* newState) {
     if ((pinIndex > 3) || (g_Relay4_pins[pinIndex] == 0)) {
-        fprintf(stderr, "Wrong pin Index, or pin is not initialized through call to relay4_enable.\n");
+        fprintf(stderr, "relay4: Wrong pin Index, or pin is not initialized through call to relay4_enable.\n");
         return -1;
 
-    } else {
-        uint8_t intState;
-        uint8_t result = gpio_get_value(g_Relay4_pins[pinIndex], &intState);
-        if (result < 0) {
-            return -1;
-        }
-        //note: new state is negation of current state
-        bool state = intState == 0 ? true : false;
-        if (newState != NULL) {
-            *newState = state;
-        }
-        return gpio_set_value(g_Relay4_pins[pinIndex], state);
     }
+    uint8_t intState;
+    uint8_t result = gpio_get_value(g_Relay4_pins[pinIndex], &intState);
+    if (result < 0) {
+        return -1;
+    }
+    //note: new state is negation of current state
+    bool state = intState == 0 ? true : false;
+    if (newState != NULL) {
+        *newState = state;
+    }
+    return gpio_set_value(g_Relay4_pins[pinIndex], state);
 }
