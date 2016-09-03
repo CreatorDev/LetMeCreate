@@ -303,6 +303,51 @@ int uart_receive(uint8_t *buffer, uint32_t count)
     return received_cnt;
 }
 
+int uart_receive_with_timeout(uint8_t *buffer, uint32_t count, uint32_t timeout)
+{
+    uint32_t received_cnt = 0;
+
+    if (buffer == NULL) {
+        fprintf(stderr, "uart: Cannot store data to null buffer.\n");
+        return -1;
+    }
+
+    if (count == 0)
+        return 0;
+
+    if (fds[current_mikrobus_index] < 0) {
+        fprintf(stderr, "uart: device %d must be initialised before receiving data.\n", current_mikrobus_index);
+        return -1;
+    }
+
+    while (received_cnt < count) {
+        fd_set set;
+        struct timeval tmp_timeout;
+        tmp_timeout.tv_sec = timeout / 1000;
+        tmp_timeout.tv_usec = (timeout % 1000) * 1000;
+        FD_ZERO(&set);
+        FD_SET(fds[current_mikrobus_index], &set);
+
+        int ret = select(fds[current_mikrobus_index] + 1, &set, NULL, NULL, &tmp_timeout);
+        if (ret == -1) {
+            fprintf(stderr, "uart: Failed to read\n");
+            return -1;
+        
+        } else if (ret == 0) {
+            return received_cnt;
+        }
+        
+        ret = read(fds[current_mikrobus_index], &buffer[received_cnt], count - received_cnt);
+        if (ret < 0) {
+            fprintf(stderr, "uart: Failed to read\n");
+            return -1;
+        }
+        received_cnt += ret;
+    }
+
+    return received_cnt;
+}
+
 int uart_release(void)
 {
     if (uart_release_bus(MIKROBUS_1) < 0)
