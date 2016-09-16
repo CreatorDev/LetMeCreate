@@ -16,7 +16,7 @@ MikroClick board supported:
   - Thermo3
   - Proximity
   - Motion
-  - Relay
+  - Relay (partial support)
   - Relay2
   - Joystick
   - Air quality
@@ -25,6 +25,8 @@ MikroClick board supported:
   - Alcohol
   - IR eclipse
   - IR distance
+  - Color
+  - Color2
 
 Examples are installed in /usr/bin/letmecreate_examples.
 Tests are installed in /usr/bin/letmecreate_tests.
