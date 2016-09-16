@@ -39,3 +39,7 @@ install(TARGETS letmecreate_buzz_example RUNTIME DESTINATION bin)
 add_executable(letmecreate_motion_example motion/main.c)
 target_link_libraries(letmecreate_motion_example letmecreate_click letmecreate_core)
 install(TARGETS letmecreate_motion_example RUNTIME DESTINATION bin)
+
+add_executable(letmecreate_color2_example color2/main.c)
+target_link_libraries(letmecreate_color2_example letmecreate_click letmecreate_core)
+install(TARGETS letmecreate_color2_example RUNTIME DESTINATION bin)

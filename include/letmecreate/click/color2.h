@@ -4,6 +4,7 @@
  * @date 2016
  * @copyright 3-clause BSD
  *
+ * @example color2/main.c
  */
 
 #ifndef __LETMECREATE_CLICK_COLOR2_H__
