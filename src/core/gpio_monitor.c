@@ -110,6 +110,10 @@ static void* monitor_gpio(void *arg)
             continue;
 
         gpio_pin = wd_to_gpio_pin(event.wd);
+
+        /* Ignore event if we cannot find the gpio */
+        if (gpio_pin == 0)
+            continue;
         if (find_event_type(gpio_pin, &event_type) < 0)
             continue;
 
