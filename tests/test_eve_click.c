@@ -404,8 +404,12 @@ static bool test_eve_click_translate_and_set_matrix(void)
 
     if (eve_click_translate(-100*65536, 100 *65536) < 0
     ||  eve_click_set_matrix() < 0
-    ||  eve_click_get_matrix(&a, &b, &c, &d, &e, &f) < 0)
+    ||  eve_click_get_matrix(&a, &b, &c, &d, &e, &f) < 0) {
+        eve_click_enable_buffering();
         return false;
+    }
+
+    eve_click_enable_buffering();
 
     return a == 65536 && b == 0 && c == 6553600
         && d == 0 && e == 65536 && f == -6553600;
