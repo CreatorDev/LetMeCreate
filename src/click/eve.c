@@ -1419,3 +1419,13 @@ int eve_click_coldstart(void)
 
     return cmd_fifo_send(&cmd, 1);
 }
+
+int eve_click_screensaver(void)
+{
+    uint32_t cmd = FT800_SCREENSAVER;
+
+    if (ft800_enabled == false)
+        return -1;
+
+    return cmd_fifo_send(&cmd, 1);
+}

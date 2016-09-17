@@ -520,11 +520,36 @@ static bool test_eve_click_coldstart(void)
     return ask_question("Do you see a green \"custom\" button and a blue \"default\" button ?", 15) == 1;
 }
 
+static bool test_eve_click_screensaver(void)
+{
+    bool ret = true;
+    eve_click_disable_buffering();
+
+    if (eve_click_screensaver() < 0
+    ||  eve_click_clear(0,0,0) < 0
+    ||  eve_click_draw(FT800_COLOR_RGB, 0, 255, 0) < 0
+    ||  eve_click_draw(FT800_POINT_SIZE, 10 * 16) < 0
+    ||  eve_click_draw(FT800_BEGIN, FT800_POINTS) < 0
+    ||  eve_click_draw(FT800_MACRO, 0) < 0
+    ||  eve_click_display() < 0) {
+        ret = false;
+    }
+    if (ret)
+        ret = ask_question("Do you see a green point moving on the sreen ?", 15) == 1;
+
+    if (ret)
+        ret = eve_click_stop() < 0;
+
+    eve_click_enable_buffering();
+
+    return ret;
+}
+
 int main(void)
 {
     int ret = -1;
 
-    CREATE_TEST(eve_click, 32)
+    CREATE_TEST(eve_click, 33)
     ADD_TEST_CASE(eve_click, enable_disable);
     ADD_TEST_CASE(eve_click, black_screen_on_enable);
     ADD_TEST_CASE(eve_click, inflate);
@@ -556,6 +581,7 @@ int main(void)
     ADD_TEST_CASE(eve_click, gradient);
     ADD_TEST_CASE(eve_click, disable_buffering);
     ADD_TEST_CASE(eve_click, coldstart);
+    ADD_TEST_CASE(eve_click, screensaver);
     ADD_TEST_CASE(eve_click, ftdi_logo);
 
 
