@@ -33,6 +33,8 @@ int eve_click_display(void);
 
 /* Loading image data in FT800 chip memory */
 int eve_click_load_image(uint32_t ptr, uint32_t options, const uint8_t *data, uint32_t count);
+int eve_click_inflate(uint32_t ptr, const uint8_t *data, uint32_t count);
+int eve_click_get_ptr(uint32_t *ptr);
 
 /* bitmap transform matrix operations */
 int eve_click_load_identity(void);

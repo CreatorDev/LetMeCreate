@@ -453,13 +453,58 @@ static bool test_eve_click_load_identity(void)
         && d == 0 && e == 65536 && f == 0;
 }
 
+static bool test_eve_click_inflate(void)
+{
+    uint32_t uncompressed_length = 0;
+    FILE *image = NULL;
+    uint8_t *data = NULL;
+    uint32_t length = 0;
+
+    image = fopen("data/image.bin", "rb");
+    if (image == NULL)
+        return false;
+    fseek(image, 0, SEEK_END);
+    length = ftell(image);
+    rewind(image);
+
+    data = malloc(length);
+    if (data == NULL) {
+        fclose(image);
+        return false;
+    }
+
+    if (fread(data, 1, length, image) != length) {
+        fclose(image);
+        return false;
+    }
+    fclose(image);
+
+    if (eve_click_inflate(0, data, length) < 0)
+        return false;
+
+    if (eve_click_get_ptr(&uncompressed_length) < 0)
+        return false;
+
+    if (eve_click_clear(0, 0, 0) < 0
+    ||  eve_click_draw(FT800_BITMAP_SOURCE, 0) < 0
+    ||  eve_click_draw(FT800_BITMAP_LAYOUT, FT800_RGB565, 128*2, 100) < 0
+    ||  eve_click_draw(FT800_BITMAP_SIZE, FT800_NEAREST, FT800_BORDER, FT800_BORDER, 128, 100) < 0
+    ||  eve_click_draw(FT800_BEGIN, FT800_BITMAPS) < 0
+    ||  eve_click_draw(FT800_VERTEX2II, 100, 100, 0, 0) < 0
+    ||  eve_click_display() < 0)
+        return false;
+
+    return ask_question("Do you see an image ?", 15) == 1;
+}
+
 int main(void)
 {
     int ret = -1;
 
-    CREATE_TEST(eve_click, 30)
+    CREATE_TEST(eve_click, 31)
     ADD_TEST_CASE(eve_click, enable_disable);
     ADD_TEST_CASE(eve_click, black_screen_on_enable);
+    ADD_TEST_CASE(eve_click, inflate);
     ADD_TEST_CASE(eve_click, get_matrix);
     ADD_TEST_CASE(eve_click, translate_and_set_matrix);
     ADD_TEST_CASE(eve_click, scale);

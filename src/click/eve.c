@@ -1064,6 +1064,67 @@ int eve_click_load_image(uint32_t ptr, uint32_t options, const uint8_t *data, ui
     return ret;
 }
 
+int eve_click_inflate(uint32_t ptr, const uint8_t *data, uint32_t count)
+{
+    uint32_t buffer_count = 0;
+    uint32_t *buffer = NULL;
+    int ret = 0;
+
+    /*
+      data is decompressed in main graphics ram (0x0 - 0x3FFFF), so ptr must
+      point to a location in this range.
+    */
+    if (ptr >= 0x40000) {
+        fprintf(stderr, "eve: Invalid pointer to decompress data");
+        return -1;
+    }
+
+    if (data == NULL) {
+        fprintf(stderr, "eve: Cannot decompress data with null pointer.\n");
+        return -1;
+    }
+
+    if (count == 0)
+        return 0;
+
+    buffer_count = 3 + (count + 2) / 4;
+    buffer = malloc(sizeof(uint32_t) * buffer_count);
+    if (buffer == NULL)
+        return -1;
+    buffer[0] = FT800_INFLATE;
+    buffer[1] = ptr;
+    buffer[buffer_count - 1] = 0;
+    memcpy(&buffer[2], data, count);
+
+    if (cmd_fifo_send(buffer, buffer_count) < 0)
+        ret = -1;
+
+    free(buffer);
+
+    return ret;
+}
+
+int eve_click_get_ptr(uint32_t *ptr)
+{
+    uint16_t offset = 0;
+    uint32_t buffer[2];
+
+    if (ptr == NULL) {
+        fprintf(stderr, "eve: cannot get ptr with null pointer.\n");
+        return -1;
+    }
+
+    if (read_16bit_reg(FT800_REG_CMD_WRITE, &offset) < 0)
+        return -1;
+
+    buffer[0] = FT800_GETPTR;
+    buffer[1] = 0;
+    if (cmd_fifo_send(buffer, 2) < 0)
+        return -1;
+
+    return read_32bit_reg(FT800_RAM_CMD + offset + 4, ptr);
+}
+
 int eve_click_load_identity(void)
 {
     if (ft800_enabled == false)
