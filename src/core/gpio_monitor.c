@@ -369,7 +369,7 @@ int gpio_monitor_remove_callback(int callbackID)
     /* No more callback associated with gpio, remove inotify watch */
     if (is_gpio_monitored(gpio_pin) == false) {
         if (remove_inotify_watch(gpio_pin) < 0) {
-        fprintf(stderr, "gpio_monitor: Failed to remove inotify watch.\n");
+            fprintf(stderr, "gpio_monitor: Failed to remove inotify watch.\n");
             return -1;
         }
     }
