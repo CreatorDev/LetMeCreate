@@ -497,11 +497,30 @@ static bool test_eve_click_inflate(void)
     return ask_question("Do you see an image ?", 15) == 1;
 }
 
+static bool test_eve_click_coldstart(void)
+{
+    eve_click_disable_buffering();
+    if (eve_click_clear(0, 0, 0) < 0
+    ||  eve_click_draw(FT800_FGCOLOR, 0x00c040) < 0
+    ||  eve_click_draw(FT800_GRADCOLOR, 0) < 0
+    ||  eve_click_draw(FT800_BUTTON, 2, 32, 76, 56, 26, 0, "custom") < 0
+    ||  eve_click_coldstart() < 0
+    ||  eve_click_draw(FT800_BUTTON, 82, 32, 76, 56, 26, 0, "default") < 0
+    ||  eve_click_display() < 0) {
+        eve_click_enable_buffering();
+        return false;
+    }
+
+    eve_click_enable_buffering();
+
+    return ask_question("Do you see a green \"custom\" button and a blue \"default\" button ?", 15) == 1;
+}
+
 int main(void)
 {
     int ret = -1;
 
-    CREATE_TEST(eve_click, 31)
+    CREATE_TEST(eve_click, 32)
     ADD_TEST_CASE(eve_click, enable_disable);
     ADD_TEST_CASE(eve_click, black_screen_on_enable);
     ADD_TEST_CASE(eve_click, inflate);
@@ -532,6 +551,7 @@ int main(void)
     ADD_TEST_CASE(eve_click, gradcolor);
     ADD_TEST_CASE(eve_click, gradient);
     ADD_TEST_CASE(eve_click, disable_buffering);
+    ADD_TEST_CASE(eve_click, coldstart);
     ADD_TEST_CASE(eve_click, ftdi_logo);
 
 

@@ -1409,3 +1409,13 @@ int eve_click_stop(void)
 
     return cmd_fifo_send(&cmd, 1);
 }
+
+int eve_click_coldstart(void)
+{
+    uint32_t cmd = FT800_COLDSTART;
+
+    if (ft800_enabled == false)
+        return -1;
+
+    return cmd_fifo_send(&cmd, 1);
+}
