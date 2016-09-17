@@ -20,7 +20,7 @@ MikroClick board supported:
   - Relay2
   - Joystick
   - Air quality
-  - Accel (SPI only)
+  - Accel
   - 8x8R (Led Matrix)
   - Alcohol
   - IR eclipse
