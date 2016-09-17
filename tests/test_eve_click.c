@@ -419,10 +419,16 @@ static bool test_eve_click_scale(void)
 {
     int32_t a, b, c, d, e, f;
 
+    eve_click_disable_buffering();
+
     if (eve_click_scale(2*65536, 2*65536) < 0
     ||  eve_click_set_matrix() < 0
-    ||  eve_click_get_matrix(&a, &b, &c, &d, &e, &f) < 0)
+    ||  eve_click_get_matrix(&a, &b, &c, &d, &e, &f) < 0) {
+        eve_click_enable_buffering();
         return false;
+    }
+
+    eve_click_enable_buffering();
 
     return a == 32768 && b == 0 && c == 3276800
         && d == 0 && e == 32768 && f == -3276800;
@@ -432,10 +438,16 @@ static bool test_eve_click_rotate(void)
 {
     int32_t a, b, c, d, e, f;
 
+    eve_click_disable_buffering();
+
     if (eve_click_rotate(90 * 65536 / 360) < 0
     ||  eve_click_set_matrix() < 0
-    ||  eve_click_get_matrix(&a, &b, &c, &d, &e, &f) < 0)
+    ||  eve_click_get_matrix(&a, &b, &c, &d, &e, &f) < 0) {
+        eve_click_enable_buffering();
         return false;
+    }
+
+    eve_click_enable_buffering();
 
     return a == 0 && b == 32767 && c == -3276700
         && d == -32767 && e == 0 && f == -3276700;
@@ -444,6 +456,8 @@ static bool test_eve_click_rotate(void)
 static bool test_eve_click_load_identity(void)
 {
     int32_t a, b, c, d, e, f;
+
+    eve_click_disable_buffering();
 
     if (eve_click_load_identity() < 0
     ||  eve_click_get_matrix(&a, &b, &c, &d, &e, &f) < 0) {
@@ -531,14 +545,14 @@ static bool test_eve_click_screensaver(void)
     ||  eve_click_draw(FT800_POINT_SIZE, 10 * 16) < 0
     ||  eve_click_draw(FT800_BEGIN, FT800_POINTS) < 0
     ||  eve_click_draw(FT800_MACRO, 0) < 0
-    ||  eve_click_display() < 0) {
+    ||  eve_click_display() < 0)
         ret = false;
-    }
+
     if (ret)
         ret = ask_question("Do you see a green point moving on the sreen ?", 15) == 1;
 
     if (ret)
-        ret = eve_click_stop() < 0;
+        ret = eve_click_stop() == 0;
 
     eve_click_enable_buffering();
 
