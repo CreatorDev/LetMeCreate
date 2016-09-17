@@ -15,11 +15,14 @@
 #define MAX_FIFO_SIZE       (4096)
 
 static bool ft800_enabled = false;
+static int int_callback_id = -1;
+static bool fifo_empty = true;
 
 /* Co-processor FIFO */
 static uint32_t cmds[1024];
 static uint32_t cmd_cnt = 0;
 static bool cmd_buffering = true;
+
 
 static void sleep_ms(unsigned int ms)
 {
@@ -683,18 +686,18 @@ static int read_32bit_reg(uint32_t reg_address, uint32_t *value)
 
 static void wait_for_coprocessor(void)
 {
-    uint16_t reg_cmd_read = 0, reg_cmd_write = 0;
+    uint16_t reg_cmd_read = 0;
 
     /* TODO: Add a timeout */
-    do {
-        read_16bit_reg(FT800_REG_CMD_WRITE, &reg_cmd_write);
-        read_16bit_reg(FT800_REG_CMD_READ, &reg_cmd_read);
-        reg_cmd_write &= 0xFFF;
-        reg_cmd_read &= 0xFFF;
+    while (fifo_empty == false)
+        sleep_ms(1);
 
-        if (reg_cmd_read == 0xFFF)
-            fprintf(stderr, "eve: coprocessor engine fault\n");
-    } while(reg_cmd_write != reg_cmd_read);
+    /* Check if a fault happened in the coprocessor engine */
+    if (read_16bit_reg(FT800_REG_CMD_READ, &reg_cmd_read) < 0)
+        return;
+    reg_cmd_read &= 0xFFF;
+    if (reg_cmd_read == 0xFFF)
+        fprintf(stderr, "eve: coprocessor engine fault\n");
 }
 
 static uint16_t compute_fifo_freespace(void)
@@ -711,8 +714,6 @@ static uint16_t compute_fifo_freespace(void)
 static int cmd_fifo_send(uint32_t *cmd_buffer, uint32_t cmd_buffer_cnt)
 {
     uint32_t i = 0, offset = 0;
-
-    wait_for_coprocessor();
 
     while (cmd_buffer_cnt > 0) {
         uint32_t offset = 0;
@@ -731,6 +732,7 @@ static int cmd_fifo_send(uint32_t *cmd_buffer, uint32_t cmd_buffer_cnt)
         offset += 4 * chunk_length;
         offset &= 0xFFC;
 
+        fifo_empty = false;
         if (write_32bit_reg(FT800_REG_CMD_WRITE, offset) < 0)
             return -1;
 
@@ -739,6 +741,74 @@ static int cmd_fifo_send(uint32_t *cmd_buffer, uint32_t cmd_buffer_cnt)
         cmd_buffer_cnt -= chunk_length;
         cmd_buffer += chunk_length;
     }
+
+    return 0;
+}
+
+static void interrupt_handler(uint8_t event)
+{
+    uint8_t flags;
+
+    if (read_8bit_reg(FT800_REG_INT_FLAGS, &flags) < 0) {
+        fprintf(stderr, "eve: Failed to read interrupt flags register.\n");
+        return;
+    }
+
+    if (flags & FT800_INT_CMD_FIFO_EMPTY)
+        fifo_empty = true;
+}
+
+static int attach_interrupt_handler(uint8_t mikrobus_index)
+{
+    uint8_t int_pin;
+
+    switch(mikrobus_index) {
+    case MIKROBUS_1:
+        int_pin = MIKROBUS_1_INT;
+        break;
+    case MIKROBUS_2:
+        int_pin = MIKROBUS_2_INT;
+        break;
+    default:
+        return -1;
+    }
+
+    if (gpio_init(int_pin) < 0
+    ||  gpio_monitor_init() < 0)
+        return -1;
+
+    if ((int_callback_id = gpio_monitor_add_callback(int_pin, GPIO_FALLING, interrupt_handler)) < 0)
+        return -1;
+
+    return 0;
+}
+
+static int detach_interrupt_handler(uint8_t mikrobus_index)
+{
+    uint8_t int_pin;
+    int ret = 0;
+
+    switch(mikrobus_index) {
+    case MIKROBUS_1:
+        int_pin = MIKROBUS_1_INT;
+        break;
+    case MIKROBUS_2:
+        int_pin = MIKROBUS_2_INT;
+        break;
+    default:
+        return -1;
+    }
+
+    if (int_callback_id < 0)
+        return 0;
+
+    if (gpio_monitor_remove_callback(int_callback_id) < 0)
+        return -1;
+
+    int_callback_id = -1;
+
+    if (gpio_release(int_pin) < 0)
+        return -1;
 
     return 0;
 }
@@ -845,6 +915,16 @@ int eve_click_enable(uint8_t mikrobus_index)
     if (check_device_id() < 0)
         return -1;
 
+    /* Configure interrupt */
+    int_callback_id = -1;
+    if (attach_interrupt_handler(mikrobus_index) < 0) {
+        fprintf(stderr, "eve: Failed to attach interrupt handler.\n");
+        return -1;
+    }
+    if (write_8bit_reg(FT800_REG_INT_MASK, FT800_INT_CMD_FIFO_EMPTY) < 0
+    ||  write_8bit_reg(FT800_REG_INT_EN, 1) < 0)
+        return -1;
+
     /* Turn off LCD screen */
     if (write_8bit_reg(FT800_REG_GPIO, 0x00) < 0) {
         fprintf(stderr, "eve: Failed to turn off LCD screen.\n");
@@ -919,6 +999,11 @@ int eve_click_disable(uint8_t mikrobus_index)
 {
     if (ft800_enabled == false)
         return 0;
+
+    if (detach_interrupt_handler(mikrobus_index) < 0) {
+        fprintf(stderr, "eve: Failed to detach interrupt handler.\n");
+        return -1;
+    }
 
     /* Disable pixel clock output */
     if (write_8bit_reg(FT800_REG_PCLK, 0) < 0) {
