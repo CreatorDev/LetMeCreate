@@ -742,6 +742,13 @@ static int cmd_fifo_send(uint32_t *cmd_buffer, uint32_t cmd_buffer_cnt)
     return 0;
 }
 
+static int flush_buffer(void)
+{
+    int ret = cmd_fifo_send(cmds, cmd_cnt);
+    cmd_cnt = 0;
+    return ret;
+}
+
 static int ft800_power(uint8_t bus_index, bool enable)
 {
     uint8_t pd_n_pin;
@@ -979,7 +986,10 @@ int eve_click_clear(uint8_t r, uint8_t g, uint8_t b)
     ||  parse_display_list_vcmd(FT800_CLEAR, 1, 1, 1) < 0)
         return -1;
 
-    return 0;
+    if (!eve_click_is_buffering_enabled())
+        return flush_buffer();
+     else
+        return 0;
 }
 
 int eve_click_draw(uint32_t cmd, ...)
@@ -1002,7 +1012,7 @@ int eve_click_draw(uint32_t cmd, ...)
         return ret;
 
     if (!eve_click_is_buffering_enabled())
-        return cmd_fifo_send(cmds, cmd_cnt);
+        return flush_buffer();
      else
         return 0;
 }
@@ -1012,11 +1022,13 @@ int eve_click_display(void)
     if (ft800_enabled == false)
         return -1;
 
+    printf("eve_click_display\n");
+
     if (parse_display_list_vcmd(FT800_DISPLAY) < 0
     ||  parse_coprocessor_vcmd(FT800_SWAP) < 0)
         return -1;
 
-    return cmd_fifo_send(cmds, cmd_cnt);
+    return flush_buffer();
 }
 
 int eve_click_load_image(uint32_t ptr, uint32_t options, const uint8_t *data, uint32_t count)
