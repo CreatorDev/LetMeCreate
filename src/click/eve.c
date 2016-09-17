@@ -684,6 +684,17 @@ static int read_32bit_reg(uint32_t reg_address, uint32_t *value)
     return memory_read(reg_address, (uint8_t*)value, 4);
 }
 
+static void recover_coprocessor_engine_fault(void)
+{
+    fprintf(stderr, "eve: recovering from coprocessor engine fault.\n");
+
+    if (write_8bit_reg(FT800_REG_CPURESET, 1) < 0
+    ||  write_32bit_reg(FT800_REG_CMD_READ, 0) < 0
+    ||  write_32bit_reg(FT800_REG_CMD_WRITE, 0) < 0
+    ||  write_8bit_reg(FT800_REG_CPURESET, 0) < 0)
+        fprintf(stderr, "eve: Failed to recover.\n");
+}
+
 static void wait_for_coprocessor(void)
 {
     uint16_t reg_cmd_read = 0;
@@ -697,7 +708,7 @@ static void wait_for_coprocessor(void)
         return;
     reg_cmd_read &= 0xFFF;
     if (reg_cmd_read == 0xFFF)
-        fprintf(stderr, "eve: coprocessor engine fault\n");
+        recover_coprocessor_engine_fault();
 }
 
 static uint16_t compute_fifo_freespace(void)
