@@ -693,7 +693,7 @@ static void wait_for_coprocessor(void)
         reg_cmd_read &= 0xFFF;
 
         if (reg_cmd_read == 0xFFF)
-            printf("coprocessor engine fault\n");
+            fprintf(stderr, "eve: coprocessor engine fault\n");
     } while(reg_cmd_write != reg_cmd_read);
 }
 
