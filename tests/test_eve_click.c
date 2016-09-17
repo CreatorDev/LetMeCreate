@@ -545,13 +545,46 @@ static bool test_eve_click_screensaver(void)
     return ret;
 }
 
+static bool test_eve_click_backlight_intensity(void)
+{
+    bool ret = true;
+
+    if (eve_click_set_backlight_intensity(128) < 0)
+        ret = false;
+
+    if (ret && (eve_click_clear(255, 255, 255) < 0
+                ||  eve_click_display() < 0))
+        ret = false;
+
+    if (ret && ask_question("Do you see a white screen ?", 15) != 1)
+        ret = false;
+
+    if (ret && eve_click_set_backlight_intensity(64) < 0)
+        return false;
+
+    if (ret && ask_question("Did the backlight intensity decreased ?", 15) != 1)
+        return false;
+
+    if (ret && eve_click_set_backlight_intensity(1) < 0)
+        return false;
+
+    if (ret && ask_question("Did the backlight intensity decreased ?", 15) != 1)
+        ret = false;
+
+    /* Restore default intensity */
+    eve_click_set_backlight_intensity(128);
+
+    return ret;
+}
+
 int main(void)
 {
     int ret = -1;
 
-    CREATE_TEST(eve_click, 33)
+    CREATE_TEST(eve_click, 34)
     ADD_TEST_CASE(eve_click, enable_disable);
     ADD_TEST_CASE(eve_click, black_screen_on_enable);
+    ADD_TEST_CASE(eve_click, backlight_intensity);
     ADD_TEST_CASE(eve_click, inflate);
     ADD_TEST_CASE(eve_click, get_matrix);
     ADD_TEST_CASE(eve_click, translate_and_set_matrix);

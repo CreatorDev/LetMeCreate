@@ -1429,3 +1429,11 @@ int eve_click_screensaver(void)
 
     return cmd_fifo_send(&cmd, 1);
 }
+
+int eve_click_set_backlight_intensity(uint8_t intensity)
+{
+    if (intensity > 128)
+        intensity = 128;
+
+    return write_8bit_reg(FT800_REG_PWM_DUTY, intensity);
+}

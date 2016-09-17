@@ -58,5 +58,6 @@ int eve_click_spinner(int16_t x, int16_t y, uint16_t style, uint16_t scale);
 int eve_click_stop(void);
 int eve_click_coldstart(void);
 int eve_click_screensaver(void);
+int eve_click_set_backlight_intensity(uint8_t intensity);
 
 #endif
