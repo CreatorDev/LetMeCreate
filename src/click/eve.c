@@ -725,7 +725,8 @@ static int cmd_fifo_send(uint32_t *cmd_buffer, uint32_t cmd_buffer_cnt)
         if (read_32bit_reg(FT800_REG_CMD_WRITE, &offset) < 0)
             return -1;
 
-        memory_write(FT800_RAM_CMD + offset, (uint8_t*)cmd_buffer, 4*chunk_length);
+        if (memory_write(FT800_RAM_CMD + offset, (uint8_t*)cmd_buffer, 4*chunk_length) < 0)
+            return -1;
 
         offset += 4 * chunk_length;
         offset &= 0xFFC;
