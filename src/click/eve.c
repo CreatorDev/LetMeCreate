@@ -1023,8 +1023,6 @@ int eve_click_display(void)
     if (ft800_enabled == false)
         return -1;
 
-    printf("eve_click_display\n");
-
     if (parse_display_list_vcmd(FT800_DISPLAY) < 0
     ||  parse_coprocessor_vcmd(FT800_SWAP) < 0)
         return -1;
