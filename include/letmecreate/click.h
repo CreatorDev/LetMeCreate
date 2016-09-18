@@ -14,6 +14,7 @@
 #include <letmecreate/click/adc.h>
 #include <letmecreate/click/air_quality.h>
 #include <letmecreate/click/alcohol.h>
+#include <letmecreate/click/alphanum.h>
 #include <letmecreate/click/bargraph.h>
 #include <letmecreate/click/co.h>
 #include <letmecreate/click/color.h>

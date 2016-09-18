@@ -77,3 +77,7 @@ install(TARGETS letmecreate_eve_4_example RUNTIME DESTINATION bin)
 add_executable(letmecreate_rtc_example rtc/main.c)
 target_link_libraries(letmecreate_rtc_example letmecreate_click letmecreate_core)
 install(TARGETS letmecreate_rtc_example RUNTIME DESTINATION bin)
+
+add_executable(letmecreate_alphanum_example alphanum/main.c)
+target_link_libraries(letmecreate_alphanum_example letmecreate_click letmecreate_core)
+install(TARGETS letmecreate_alphanum_example RUNTIME DESTINATION bin)
