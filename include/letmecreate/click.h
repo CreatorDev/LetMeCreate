@@ -22,8 +22,8 @@
 #include "letmecreate/click/led_matrix.h"
 #include "letmecreate/click/motion.h"
 #include "letmecreate/click/proximity.h"
+#include "letmecreate/click/relay.h"
 #include "letmecreate/click/relay2.h"
 #include "letmecreate/click/thermo3.h"
-#include "letmecreate/click/relay.h"
 
 #endif
