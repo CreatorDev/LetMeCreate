@@ -47,3 +47,7 @@ install(TARGETS letmecreate_color2_example RUNTIME DESTINATION bin)
 add_executable(letmecreate_bargraph_example bargraph/main.c)
 target_link_libraries(letmecreate_bargraph_example letmecreate_click letmecreate_core)
 install(TARGETS letmecreate_bargraph_example RUNTIME DESTINATION bin)
+
+add_executable(letmecreate_7seg_example 7seg/main.c)
+target_link_libraries(letmecreate_7seg_example letmecreate_click letmecreate_core)
+install(TARGETS letmecreate_bargraph_example RUNTIME DESTINATION bin)

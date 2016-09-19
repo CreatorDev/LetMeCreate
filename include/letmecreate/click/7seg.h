@@ -3,6 +3,8 @@
  * @author Francois Berder
  * @date 2016
  * @copyright 3-clause BSD
+ *
+ * @example 7seg/main.c
  */
 
 #ifndef __LETMECREATE_CLICK_7SEG_H__
