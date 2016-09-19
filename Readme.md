@@ -27,6 +27,7 @@ MikroClick board supported:
   - IR distance
   - Color
   - Color2
+  - Bargraph
 
 Examples are installed in /usr/bin/letmecreate_examples.
 Tests are installed in /usr/bin/letmecreate_tests.
