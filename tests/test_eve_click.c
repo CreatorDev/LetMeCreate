@@ -591,14 +591,49 @@ static bool test_eve_click_backlight_intensity(void)
     return ret;
 }
 
+
+static uint16_t detected_x, detected_y;
+static void touch_callback(uint16_t x, uint16_t y)
+{
+    detected_x = x;
+    detected_y = y;
+}
+
+static bool test_eve_click_touch(void)
+{
+    int timeout = 0;
+
+    if (eve_click_calibrate() < 0)
+        return false;
+
+    eve_click_attach_touch_callback(touch_callback);
+
+    printf("Please touch the top left corner of the screen.\n");
+
+    detected_x = 0;
+    detected_y = 0;
+
+    while (detected_x == 0 && detected_y == 0 && timeout < 15000) {
+        sleep_ms(50);
+        timeout += 50;
+    }
+    if (timeout >= 15000)
+        return false;
+
+    eve_click_attach_touch_callback(NULL);
+
+    return detected_x < 100 && detected_y < 100;
+}
+
 int main(void)
 {
     int ret = -1;
 
-    CREATE_TEST(eve_click, 34)
+    CREATE_TEST(eve_click, 35)
     ADD_TEST_CASE(eve_click, enable_disable);
     ADD_TEST_CASE(eve_click, black_screen_on_enable);
     ADD_TEST_CASE(eve_click, backlight_intensity);
+    ADD_TEST_CASE(eve_click, touch);
     ADD_TEST_CASE(eve_click, inflate);
     ADD_TEST_CASE(eve_click, get_matrix);
     ADD_TEST_CASE(eve_click, translate_and_set_matrix);
