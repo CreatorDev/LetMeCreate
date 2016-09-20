@@ -28,6 +28,8 @@ MikroClick board supported:
   - Color
   - Color2
   - Bargraph
+  - 7Seg
+  - ADC
 
 Examples are installed in /usr/bin/letmecreate_examples.
 Tests are installed in /usr/bin/letmecreate_tests.
