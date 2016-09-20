@@ -16,15 +16,18 @@ MikroClick board supported:
   - Thermo3
   - Proximity
   - Motion
-  - Relay
+  - Relay (partial support)
   - Relay2
   - Joystick
   - Air quality
-  - Accel (SPI only)
+  - Accel
   - 8x8R (Led Matrix)
   - Alcohol
   - IR eclipse
   - IR distance
+  - Color
+  - Color2
+  - Bargraph
 
 Examples are installed in /usr/bin/letmecreate_examples.
 Tests are installed in /usr/bin/letmecreate_tests.

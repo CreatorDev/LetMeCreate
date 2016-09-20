@@ -110,6 +110,10 @@ static void* monitor_gpio(void *arg)
             continue;
 
         gpio_pin = wd_to_gpio_pin(event.wd);
+
+        /* Ignore event if we cannot find the gpio */
+        if (gpio_pin == 0)
+            continue;
         if (find_event_type(gpio_pin, &event_type) < 0)
             continue;
 
@@ -365,7 +369,7 @@ int gpio_monitor_remove_callback(int callbackID)
     /* No more callback associated with gpio, remove inotify watch */
     if (is_gpio_monitored(gpio_pin) == false) {
         if (remove_inotify_watch(gpio_pin) < 0) {
-        fprintf(stderr, "gpio_monitor: Failed to remove inotify watch.\n");
+            fprintf(stderr, "gpio_monitor: Failed to remove inotify watch.\n");
             return -1;
         }
     }

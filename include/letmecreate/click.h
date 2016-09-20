@@ -11,11 +11,14 @@
 
 #include "letmecreate/bosh/bme280.h"
 
+#include "letmecreate/click/7seg.h"
 #include "letmecreate/click/accel.h"
 #include "letmecreate/click/air_quality.h"
 #include "letmecreate/click/alcohol.h"
+#include "letmecreate/click/bargraph.h"
 #include "letmecreate/click/co.h"
 #include "letmecreate/click/color.h"
+#include "letmecreate/click/color2.h"
 #include "letmecreate/click/common.h"
 #include "letmecreate/click/ir_distance.h"
 #include "letmecreate/click/ir_eclipse.h"

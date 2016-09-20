@@ -10,6 +10,27 @@
 #ifndef __LETMECREATE_CLICK_ACCEL_H__
 #define __LETMECREATE_CLICK_ACCEL_H__
 
+#include <stdint.h>
+
+
+/**
+ * @brief Use SPI bus to communicate with Accel Click.
+ *
+ * By default, it uses SPI to communicate with Accel Click. This function should
+ * be called before using the device.
+ */
+void accel_click_use_spi(void);
+
+/**
+ * @brief Use I2C bus to communicate with Accel Click.
+ *
+ * This function should be called before using the device.
+ *
+ * @param add_bit Jumper on the click board to change the address of the device.
+ * Should be 0 or 1.
+ */
+void accel_click_use_i2c(uint8_t add_bit);
+
 /**
  * @brief Enable the Accel Click (Use SPI bus).
  *
