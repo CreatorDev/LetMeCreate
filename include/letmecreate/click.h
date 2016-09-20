@@ -9,7 +9,7 @@
 #ifndef __LETMECREATE_CLICK_H__
 #define __LETMECREATE_CLICK_H__
 
-#include "letmecreate/3rd_party/bme280.h"
+#include "letmecreate/bosh/bme280.h"
 
 #include "letmecreate/click/accel.h"
 #include "letmecreate/click/air_quality.h"
