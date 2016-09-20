@@ -1,5 +1,5 @@
 /**
- * @file adc.h
+ * @file core/adc.h
  * @author Francois Berder
  * @date 2016
  * @copyright 3-clause BSD

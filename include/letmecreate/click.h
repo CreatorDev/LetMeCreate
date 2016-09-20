@@ -11,6 +11,7 @@
 
 #include "letmecreate/click/7seg.h"
 #include "letmecreate/click/accel.h"
+#include "letmecreate/click/adc.h"
 #include "letmecreate/click/air_quality.h"
 #include "letmecreate/click/alcohol.h"
 #include "letmecreate/click/bargraph.h"
