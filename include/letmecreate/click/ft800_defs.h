@@ -289,5 +289,11 @@
 #define FT800_INT_CMD_FIFO_FLAG         (0x40)
 #define FT800_INT_CONVCOMPLETE          (0x80)
 
+/* Touch controller modes */
+#define FT800_TOUCH_MODE_OFF            (0)
+#define FT800_TOUCH_MODE_ONE_SHOT       (0x01)
+#define FT800_TOUCH_MODE_FRAME_SYNC     (0x02)
+#define FT800_TOUCH_MODE_CONTINUOUS     (0x03)
+
 #endif
 
