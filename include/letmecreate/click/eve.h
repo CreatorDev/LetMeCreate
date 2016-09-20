@@ -60,4 +60,8 @@ int eve_click_coldstart(void);
 int eve_click_screensaver(void);
 int eve_click_set_backlight_intensity(uint8_t intensity);
 
+/* Touch screen related */
+void eve_click_attach_touch_callback(void (*callback)(uint16_t, uint16_t));
+int eve_click_calibrate(void);
+
 #endif

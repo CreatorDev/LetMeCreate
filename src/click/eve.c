@@ -23,6 +23,7 @@ static uint32_t cmds[1024];
 static uint32_t cmd_cnt = 0;
 static bool cmd_buffering = true;
 
+static void (*touch_callback)(uint16_t, uint16_t) = NULL;
 
 static void sleep_ms(unsigned int ms)
 {
@@ -767,6 +768,16 @@ static void interrupt_handler(uint8_t event)
 
     if (flags & FT800_INT_CMD_FIFO_EMPTY)
         fifo_empty = true;
+
+    if (flags & FT800_INT_TOUCH) {
+        if (touch_callback != NULL) {
+            uint32_t tmp = 0;
+            if (read_32bit_reg(FT800_REG_TOUCH_SCREEN_XY, &tmp) < 0)
+                return;
+
+            touch_callback(tmp >> 16, tmp);
+        }
+    }
 }
 
 static int attach_interrupt_handler(uint8_t mikrobus_index)
@@ -926,13 +937,19 @@ int eve_click_enable(uint8_t mikrobus_index)
     if (check_device_id() < 0)
         return -1;
 
+    /* Enable touch screen */
+    if (write_8bit_reg(FT800_REG_TOUCH_MODE, FT800_TOUCH_MODE_CONTINUOUS) < 0) {
+        fprintf(stderr, "eve: Failed to set touch controller mode.\n");
+        return -1;
+    }
+
     /* Configure interrupt */
     int_callback_id = -1;
     if (attach_interrupt_handler(mikrobus_index) < 0) {
         fprintf(stderr, "eve: Failed to attach interrupt handler.\n");
         return -1;
     }
-    if (write_8bit_reg(FT800_REG_INT_MASK, FT800_INT_CMD_FIFO_EMPTY) < 0
+    if (write_8bit_reg(FT800_REG_INT_MASK, FT800_INT_CMD_FIFO_EMPTY | FT800_INT_TOUCH) < 0
     ||  write_8bit_reg(FT800_REG_INT_EN, 1) < 0)
         return -1;
 
@@ -1530,4 +1547,56 @@ int eve_click_set_backlight_intensity(uint8_t intensity)
         intensity = 128;
 
     return write_8bit_reg(FT800_REG_PWM_DUTY, intensity);
+}
+
+void eve_click_attach_touch_callback(void (*callback)(uint16_t, uint16_t))
+{
+    touch_callback = callback;
+}
+
+int eve_click_calibrate(void)
+{
+    bool prev_buffering = true;
+    bool calibration_failure = false;
+    uint16_t offset = 0;
+    uint32_t result = 0;
+
+    /* Discard any previous content in cmds */
+    cmd_cnt = 0;
+
+    prev_buffering = eve_click_is_buffering_enabled();
+    eve_click_enable_buffering();
+
+    if (parse_coprocessor_vcmd(FT800_DLSTART) < 0
+    ||  parse_display_list_vcmd(FT800_CLEAR, 1, 1, 1) < 0
+    ||  parse_coprocessor_vcmd(FT800_TEXT, 240, 136, 27, FT800_OPT_CENTER, "Please tap on the dot") < 0)
+        return -1;
+
+    cmds[cmd_cnt++] = FT800_CALIBRATE;
+    cmds[cmd_cnt++] = 0;
+
+    /* Flush buffer to send commands to device */
+    if (flush_buffer() < 0)
+        return -1;
+
+    /* Check result of calibration */
+    if (read_16bit_reg(FT800_REG_CMD_READ, &offset) < 0)
+        return -1;
+    if (read_32bit_reg(FT800_RAM_CMD + offset - 4, &result) < 0)
+        return -1;
+    if (result == 0) {
+        fprintf(stderr, "eve: Failed to calibrate touch screen.\n");
+        calibration_failure = true;
+   }
+
+    /* Restore previous buffering setting */
+    if (prev_buffering)
+        eve_click_enable_buffering();
+    else
+        eve_click_disable_buffering();
+
+    if (calibration_failure)
+        return -1;
+
+    return 0;
 }
