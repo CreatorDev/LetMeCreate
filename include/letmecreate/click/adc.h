@@ -3,6 +3,8 @@
  * @author Francois Berder
  * @date 2016
  * @copyright 3-clause BSD
+ *
+ * @example adc/main.c
  */
 
 #ifndef __LETMECREATE_CLICK_ADC_H__
