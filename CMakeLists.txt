@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(LetMeCreate)
+project(LetMeCreate C)
 
 
 set(LETMECREATE_MAJOR_VERSION 1)
