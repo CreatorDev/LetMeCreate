@@ -12,9 +12,11 @@ set(PROJECT_VERSION ${LETMECREATE_VERSION})
 option(BUILD_EXAMPLES "Build examples" OFF)
 option(BUILD_TESTS "Build tests" OFF)
 
+file(GLOB bosh_srcs src/bosh/*.c)
 file(GLOB core_srcs src/core/*.c)
 file(GLOB click_srcs src/click/*.c)
 
+file(GLOB bosh_hdrs include/letmecreate/bosh/*.h)
 file(GLOB core_hdrs include/letmecreate/core/*.h)
 file(GLOB click_hdrs include/letmecreate/click/*.h)
 
@@ -23,11 +25,12 @@ include_directories(include)
 # Create targets
 add_library(letmecreate_core SHARED ${core_srcs} ${core_hdrs})
 add_library(letmecreate_click SHARED ${click_srcs} ${click_hdrs})
-target_link_libraries(letmecreate_click letmecreate_core)
+add_library(letmecreate_bosh SHARED ${click_srcs} ${click_hdrs})
+target_link_libraries(letmecreate_click letmecreate_core letmecreate_bosh)
 
 target_compile_definitions(letmecreate_core PUBLIC "LETMECREATE_CORE_DEBUG=$<CONFIG:Debug>")
 target_compile_definitions(letmecreate_click PUBLIC "LETMECREATE_CLICK_DEBUG=$<CONFIG:Debug>")
-
+target_compile_definitions(letmecreate_bosh PUBLIC "LETMECREATE_BOSH_DEBUG=$<CONFIG:Debug>")
 
 target_include_directories(
     letmecreate_core PUBLIC
@@ -65,7 +68,7 @@ configure_package_config_file(
 )
 
 install(
-    TARGETS letmecreate_core letmecreate_click
+    TARGETS letmecreate_core letmecreate_click letmecreate_bosh
     EXPORT "${targets_export_name}"
     LIBRARY DESTINATION "lib"
     ARCHIVE DESTINATION "lib"
