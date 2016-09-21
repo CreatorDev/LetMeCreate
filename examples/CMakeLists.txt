@@ -1,5 +1,7 @@
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/examples/bin)
 
+add_library(examples_common OBJECT common.c)
+
 add_executable(letmecreate_proximity_example proximity/main.c)
 target_link_libraries(letmecreate_proximity_example letmecreate_click letmecreate_core)
 install(TARGETS letmecreate_proximity_example RUNTIME DESTINATION bin)
@@ -16,11 +18,11 @@ add_executable(letmecreate_joystick_example joystick/main.c)
 target_link_libraries(letmecreate_joystick_example letmecreate_click letmecreate_core)
 install(TARGETS letmecreate_joystick_example RUNTIME DESTINATION bin)
 
-add_executable(letmecreate_accel_example accel/main.c)
+add_executable(letmecreate_accel_example accel/main.c $<TARGET_OBJECTS:examples_common>)
 target_link_libraries(letmecreate_accel_example letmecreate_click letmecreate_core)
 install(TARGETS letmecreate_accel_example RUNTIME DESTINATION bin)
 
-add_executable(letmecreate_led_matrix_example led_matrix/main.c)
+add_executable(letmecreate_led_matrix_example led_matrix/main.c $<TARGET_OBJECTS:examples_common>)
 target_link_libraries(letmecreate_led_matrix_example letmecreate_click letmecreate_core)
 install(TARGETS letmecreate_led_matrix_example RUNTIME DESTINATION bin)
 
@@ -28,15 +30,15 @@ add_executable(letmecreate_color_example color/main.c)
 target_link_libraries(letmecreate_color_example letmecreate_click letmecreate_core)
 install(TARGETS letmecreate_color_example RUNTIME DESTINATION bin)
 
-add_executable(letmecreate_led_example led/main.c)
+add_executable(letmecreate_led_example led/main.c $<TARGET_OBJECTS:examples_common>)
 target_link_libraries(letmecreate_led_example letmecreate_core)
 install(TARGETS letmecreate_led_example RUNTIME DESTINATION bin)
 
-add_executable(letmecreate_buzz_example buzz/main.c)
+add_executable(letmecreate_buzz_example buzz/main.c $<TARGET_OBJECTS:examples_common>)
 target_link_libraries(letmecreate_buzz_example letmecreate_core)
 install(TARGETS letmecreate_buzz_example RUNTIME DESTINATION bin)
 
-add_executable(letmecreate_motion_example motion/main.c)
+add_executable(letmecreate_motion_example motion/main.c $<TARGET_OBJECTS:examples_common>)
 target_link_libraries(letmecreate_motion_example letmecreate_click letmecreate_core)
 install(TARGETS letmecreate_motion_example RUNTIME DESTINATION bin)
 
@@ -44,11 +46,11 @@ add_executable(letmecreate_color2_example color2/main.c)
 target_link_libraries(letmecreate_color2_example letmecreate_click letmecreate_core)
 install(TARGETS letmecreate_color2_example RUNTIME DESTINATION bin)
 
-add_executable(letmecreate_bargraph_example bargraph/main.c)
+add_executable(letmecreate_bargraph_example bargraph/main.c $<TARGET_OBJECTS:examples_common>)
 target_link_libraries(letmecreate_bargraph_example letmecreate_click letmecreate_core)
 install(TARGETS letmecreate_bargraph_example RUNTIME DESTINATION bin)
 
-add_executable(letmecreate_7seg_example 7seg/main.c)
+add_executable(letmecreate_7seg_example 7seg/main.c $<TARGET_OBJECTS:examples_common>)
 target_link_libraries(letmecreate_7seg_example letmecreate_click letmecreate_core)
 install(TARGETS letmecreate_7seg_example RUNTIME DESTINATION bin)
 
