@@ -94,7 +94,7 @@
 
 /* Touch screen registers */
 #define FT800_REG_TOUCH_MODE            (0x1024F0)
-#define FT800_REG_TOUCH_ADC_MOD         (0x1024F4)
+#define FT800_REG_TOUCH_ADC_MODE        (0x1024F4)
 #define FT800_REG_TOUCH_CHARGE          (0x1024F8)
 #define FT800_REG_TOUCH_SETTLE          (0x1024FC)
 #define FT800_REG_TOUCH_OVERSAMPLE      (0x102500)

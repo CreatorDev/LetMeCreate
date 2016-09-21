@@ -938,7 +938,9 @@ int eve_click_enable(uint8_t mikrobus_index)
         return -1;
 
     /* Enable touch screen */
-    if (write_8bit_reg(FT800_REG_TOUCH_MODE, FT800_TOUCH_MODE_CONTINUOUS) < 0) {
+    if (write_8bit_reg(FT800_REG_TOUCH_OVERSAMPLE, 15) < 0   /* Max oversampling */
+    ||  write_8bit_reg(FT800_REG_TOUCH_ADC_MODE, 1) < 0 /* Differential mode for better accuracy */
+    ||  write_8bit_reg(FT800_REG_TOUCH_MODE, FT800_TOUCH_MODE_CONTINUOUS) < 0) {
         fprintf(stderr, "eve: Failed to set touch controller mode.\n");
         return -1;
     }
