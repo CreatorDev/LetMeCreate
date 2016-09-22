@@ -39,3 +39,7 @@ install(TARGETS letmecreate_buzz_example RUNTIME DESTINATION bin)
 add_executable(letmecreate_motion_example motion/main.c)
 target_link_libraries(letmecreate_motion_example letmecreate_click letmecreate_core)
 install(TARGETS letmecreate_motion_example RUNTIME DESTINATION bin)
+
+add_executable(letmecreate_bar_graph_example bar_graph/main.c)
+target_link_libraries(letmecreate_bar_graph_example letmecreate_click letmecreate_core)
+install(TARGETS letmecreate_bar_graph_example RUNTIME DESTINATION bin)
