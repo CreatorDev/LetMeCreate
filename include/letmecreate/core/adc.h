@@ -1,13 +1,13 @@
 /**
- * @file adc.h
+ * @file core/adc.h
  * @author Francois Berder
  * @date 2016
  * @copyright 3-clause BSD
  */
 
 
-#ifndef __LETMECREATE_CORE_GPIO_H__
-#define __LETMECREATE_CORE_GPIO_H__
+#ifndef __LETMECREATE_CORE_ADC_H__
+#define __LETMECREATE_CORE_ADC_H__
 
 #include <stdint.h>
 

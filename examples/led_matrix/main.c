@@ -1,17 +1,7 @@
 #include <linux/spi/spidev.h>
-#include <time.h>
 #include <letmecreate/letmecreate.h>
+#include "examples/common.h"
 
-static void sleep_40ms(void)
-{
-    struct timespec rem, req = {
-        .tv_sec = 0,
-        .tv_nsec = 40000000
-    };
-
-    while (nanosleep(&req, &rem))
-        req = rem;
-}
 
 int main(void)
 {
@@ -27,7 +17,7 @@ int main(void)
         for (lines = 0; lines < 8; ++lines) {
             columns[cols] |= (1 << lines);
             led_matrix_click_set(columns);
-            sleep_40ms();
+            sleep_ms(40);
         }
     }
 

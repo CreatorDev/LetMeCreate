@@ -2,8 +2,8 @@
 #include <signal.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include <time.h>
 #include <letmecreate/letmecreate.h>
+#include "examples/common.h"
 
 static volatile bool running = true;
 
@@ -12,16 +12,6 @@ static void exit_program(int signo)
     running = false;
 }
 
-static void sleep_100ms(void)
-{
-    struct timespec rem, req = {
-        .tv_sec = 0,
-        .tv_nsec = 100000000
-    };
-
-    while (nanosleep(&req, &rem))
-        req = rem;
-}
 
 int main(void)
 {
@@ -47,7 +37,7 @@ int main(void)
         printf("\33[2K\r");     /* Erase current line */
         printf("%-9.3f%-9.3f%-9.3f", x, y, z);
         fflush(stdout);
-        sleep_100ms();
+        sleep_ms(100);
     }
 
     accel_click_disable();
