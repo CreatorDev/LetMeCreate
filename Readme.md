@@ -24,6 +24,7 @@ MikroClick board supported:
   - 8x8R (Led Matrix)
   - Alcohol
   - IR eclipse
+  - Bar Graph
 
 Examples are installed in /usr/bin/letmecreate_examples.
 Tests are installed in /usr/bin/letmecreate_tests.
