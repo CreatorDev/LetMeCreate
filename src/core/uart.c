@@ -13,6 +13,7 @@
 #define UART_2_DEVICE_FILE      "/dev/ttySC1"
 
 static int fds[2] = { -1, -1 };
+static uint32_t timeout_for_bus[2] = {UART_TIMEOUT_NEVER, UART_TIMEOUT_NEVER};
 static struct termios old_pts[2];
 static uint8_t current_mikrobus_index = MIKROBUS_1;
 
@@ -274,6 +275,14 @@ int uart_send(const uint8_t *buffer, uint32_t count)
     return sent_cnt;
 }
 
+uint32_t uart_get_timeout() {
+    return timeout_for_bus[current_mikrobus_index];
+}
+
+void uart_set_timeout(uint32_t timeout) {
+    timeout_for_bus[current_mikrobus_index] = timeout;
+}
+
 int uart_receive(uint8_t *buffer, uint32_t count)
 {
     uint32_t received_cnt = 0;
@@ -291,52 +300,27 @@ int uart_receive(uint8_t *buffer, uint32_t count)
         return -1;
     }
 
+    uint32_t timeout = timeout_for_bus[current_mikrobus_index];
     while (received_cnt < count) {
-        int ret = read(fds[current_mikrobus_index], &buffer[received_cnt], count - received_cnt);
-        if (ret < 0) {
-            fprintf(stderr, "uart: Failed to read\n");
-            return -1;
+        int ret;
+        if (timeout != UART_TIMEOUT_NEVER) {
+            fd_set set;
+            struct timeval tmp_timeout;
+            tmp_timeout.tv_sec = timeout / 1000;
+            tmp_timeout.tv_usec = (timeout % 1000) * 1000;
+            FD_ZERO(&set);
+            FD_SET(fds[current_mikrobus_index], &set);
+
+            ret = select(fds[current_mikrobus_index] + 1, &set, NULL, NULL, &tmp_timeout);
+            if (ret == -1) {
+                fprintf(stderr, "uart: Failed to read\n");
+                return -1;
+
+            } else if (ret == 0) {
+                return received_cnt;
+            }
         }
-        received_cnt += ret;
-    }
 
-    return received_cnt;
-}
-
-int uart_receive_with_timeout(uint8_t *buffer, uint32_t count, uint32_t timeout)
-{
-    uint32_t received_cnt = 0;
-
-    if (buffer == NULL) {
-        fprintf(stderr, "uart: Cannot store data to null buffer.\n");
-        return -1;
-    }
-
-    if (count == 0)
-        return 0;
-
-    if (fds[current_mikrobus_index] < 0) {
-        fprintf(stderr, "uart: device %d must be initialised before receiving data.\n", current_mikrobus_index);
-        return -1;
-    }
-
-    while (received_cnt < count) {
-        fd_set set;
-        struct timeval tmp_timeout;
-        tmp_timeout.tv_sec = timeout / 1000;
-        tmp_timeout.tv_usec = (timeout % 1000) * 1000;
-        FD_ZERO(&set);
-        FD_SET(fds[current_mikrobus_index], &set);
-
-        int ret = select(fds[current_mikrobus_index] + 1, &set, NULL, NULL, &tmp_timeout);
-        if (ret == -1) {
-            fprintf(stderr, "uart: Failed to read\n");
-            return -1;
-        
-        } else if (ret == 0) {
-            return received_cnt;
-        }
-        
         ret = read(fds[current_mikrobus_index], &buffer[received_cnt], count - received_cnt);
         if (ret < 0) {
             fprintf(stderr, "uart: Failed to read\n");
