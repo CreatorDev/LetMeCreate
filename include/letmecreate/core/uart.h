@@ -22,6 +22,8 @@ enum UART_BAUDRATE {
     UART_BD_57600   = 57600
 };
 
+#define UART_TIMEOUT_NEVER 0
+
 /**
  * @brief Initialise all UART devices.
  *
@@ -84,6 +86,22 @@ int uart_send(const uint8_t *buffer, uint32_t count);
  * @return 0 if successful, -1 otherwise
  */
 int uart_receive(uint8_t *buffer, uint32_t count);
+
+/**
+ * @brief Get time after which receive data on uart will be timedout. Each Mikrobus socket have independent timeout, call to this function is correlated with
+ * calls to uart_select_bus(uint8_t)
+ *
+ * @param[in] timeout Timeout in ms after which unction will return, even if not full buffer is read
+ */
+uint32_t uart_get_timeout(void);
+
+/**
+ * @brief Set time after which receive data on uart will be timedout, even if not all expected data are read. Each Mikrobus socket have independent timeout,
+ * call to this function is correlated with calls to uart_select_bus(uint8_t). Pass UART_TIMEOUT_NEVER to disable timeout functionality.
+ *
+ * @param[in] timeout Timeout in ms after which unction will return, even if not full buffer is read
+ */
+void uart_set_timeout(uint32_t timeout);
 
 /**
  * @brief Release all UART devices.
