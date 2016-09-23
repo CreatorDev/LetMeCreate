@@ -93,7 +93,7 @@ int uart_receive(uint8_t *buffer, uint32_t count);
  *
  * @param[in] timeout Timeout in ms after which unction will return, even if not full buffer is read
  */
-uint32_t uart_get_timeout();
+uint32_t uart_get_timeout(void);
 
 /**
  * @brief Set time after which receive data on uart will be timedout, even if not all expected data are read. Each Mikrobus socket have independent timeout,

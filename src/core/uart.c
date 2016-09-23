@@ -317,6 +317,7 @@ int uart_receive(uint8_t *buffer, uint32_t count)
                 return -1;
 
             } else if (ret == 0) {
+                fprintf(stderr, "uart: Read timeout.\n");
                 return received_cnt;
             }
         }
