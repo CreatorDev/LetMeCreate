@@ -13,17 +13,11 @@
 #include <unistd.h>
 
 #include "letmecreate/click/alphanum.h"
-#include "letmecreate/click/thermo3.h"
-#include "letmecreate/core/common.h"
-#include "letmecreate/core/gpio.h"
-#include "letmecreate/core/spi.h"
-#include "letmecreate/core/i2c.h"
+#include "letmecreate/core.h"
 
-static uint8_t current_mikrobus_index = MIKROBUS_2;
-
-uint8_t gpio_pin_le2;
-uint8_t gpio_pin_oe;
-uint8_t gpio_pin_oe2;
+static uint8_t gpio_pin_le2;
+static uint8_t gpio_pin_oe;
+static uint8_t gpio_pin_oe2;
 
 /* 
  * Convert char to 14 segment display value.
@@ -32,20 +26,18 @@ uint16_t
 alphanum_get_char(char c)
 {
 	if ((c >= '-') && (c <= '_')) {
-		return char_table[c - '-'];
+		return alphanum_char_table[c - '-'];
 	} else {
 		return 0;
 	}
 }
 
 /*
- * Write value on display a and b.
+ * Write value on segments a (left) and b (right).
  */
 int 
-alphanum_write(uint16_t a, uint16_t b)
+alphanum_raw_write(uint16_t a, uint16_t b)
 {
-	int ret;
-
 	/* Set all GPIO to 1 */
 	if (gpio_set_value(gpio_pin_le2, 1)) {
 		printf("Error: cannot set value\n");
@@ -63,7 +55,7 @@ alphanum_write(uint16_t a, uint16_t b)
 	}
 
 	/* Write b */
-	if ((ret = spi_transfer((uint8_t *) &b, NULL, sizeof(b))) < 0) {
+	if (spi_transfer((uint8_t *) &b, NULL, sizeof(b)) < 0) {
 		fprintf(stderr, "spi write register failed.\n");
 		return -1;
 	}
@@ -75,7 +67,7 @@ alphanum_write(uint16_t a, uint16_t b)
 	}
 
 	/* Write a */
-	if ((ret = spi_transfer((uint8_t *) &a, NULL, sizeof(a))) < 0) {
+	if (spi_transfer((uint8_t *) &a, NULL, sizeof(a)) < 0) {
 		fprintf(stderr, "spi write register failed.\n");
 		return -1;
 	}
@@ -108,15 +100,27 @@ alphanum_write(uint16_t a, uint16_t b)
 		printf("Error: cannot set value\n");
 		return -1;
 	}
+
+	return 0;
+}
+
+/*
+ * Write 2 chars on the segment display.
+ * Wrapper around alphanum_raw_write().
+ */
+int
+alphanum_write(char a, char b)
+{
+	alphanum_raw_write(alphanum_get_char(toupper(a)), alphanum_get_char(toupper(b)));
 }
 
 /* 
- * Init the alphanum clicker
+ * Init the alphanum clicker.
  */
 int
 alphanum_init(uint8_t bus)
 {
-	int ret;
+	int ret = 0;
 
 	/* Setup GPIO */
 	switch(bus) {
@@ -135,13 +139,33 @@ alphanum_init(uint8_t bus)
 			return -1;
 	}
 
-	gpio_init(gpio_pin_le2);
-	gpio_init(gpio_pin_oe);
-	gpio_init(gpio_pin_oe2);
+	/* Init GPIO pins */
+	if ((ret = gpio_init(gpio_pin_le2)) != 0) {
+		printf("Error: Cannot initialize gpio\n");
+		return ret;
+	}
+	if ((ret = gpio_init(gpio_pin_oe)) != 0) {
+		printf("Error: Cannot initialize gpio\n");
+		return ret;
+	}
+	if ((ret = gpio_init(gpio_pin_oe2)) != 0) {
+		printf("Error: Cannot initialize gpio\n");
+		return ret;
+	}
 
-	gpio_set_direction(gpio_pin_le2, GPIO_OUTPUT);
-	gpio_set_direction(gpio_pin_oe, GPIO_OUTPUT);
-	gpio_set_direction(gpio_pin_oe2, GPIO_OUTPUT);
+	/* Set directions for the GPIO pins */
+	if ((ret = gpio_set_direction(gpio_pin_le2, GPIO_OUTPUT)) != 0) {
+		printf("Error: Cannot gpio directions\n");
+		return ret;
+	}
+	if ((ret = gpio_set_direction(gpio_pin_oe, GPIO_OUTPUT)) != 0) {
+		printf("Error: Cannot gpio directions\n");
+		return ret;
+	}
+	if ((ret = gpio_set_direction(gpio_pin_oe2, GPIO_OUTPUT)) != 0) {
+		printf("Error: Cannot gpio directions\n");
+		return ret;
+	}
 
 	/* SPI int */
 	if ((ret = spi_init()) != 0) {
@@ -154,6 +178,10 @@ alphanum_init(uint8_t bus)
 	return ret;
 }
 
+/* 
+ * Periodically switch between segments a and b to keep the illusion of
+ * a simultaneous display of both values.
+ */
 void
 alphanum_switch_cycles(int num)
 {
@@ -184,6 +212,10 @@ alphanum_switch_cycles(int num)
 	}
 }
 
+/*
+ * Write 2 or more characters on the alphanum clicker as a 
+ * "running text".
+ */
 void
 alphanum_write_running_text(const char *s, int ntimes)
 {
@@ -205,7 +237,7 @@ alphanum_write_running_text(const char *s, int ntimes)
 	while (1) {
 		if ((i + 1) >= strlen(str)) {
 			if ((i + 1) == (strlen(str) + 1)) {
-				alphanum_write(0x00, 0x00);
+				alphanum_raw_write(0x00, 0x00);
 				alphanum_switch_cycles(cycles);
 				i = 0;
 				if (ntimes == cnt && ntimes > 0) {
@@ -214,34 +246,14 @@ alphanum_write_running_text(const char *s, int ntimes)
 					++cnt;
 				}
 			} else {
-				alphanum_write(alphanum_get_char(str[i]), 0x00);
+				alphanum_raw_write(alphanum_get_char(str[i]), 0x00);
 				alphanum_switch_cycles(cycles);
 				++i;
 			}
 		} else {
-			alphanum_write(alphanum_get_char(str[i]), alphanum_get_char(str[i + 1]));
+			alphanum_raw_write(alphanum_get_char(str[i]), alphanum_get_char(str[i + 1]));
 			alphanum_switch_cycles(cycles);
 			++i;
 		}
 	}
-}
-
-/* 
- * Used to get the temperature from the temp clicker
- */
-void
-alphanum_get_temperature(char *str)
-{
-	float temperature = 0.f;
-
-	i2c_init();
-	i2c_select_bus(MIKROBUS_1);
-
-	thermo3_click_enable(0);
-	thermo3_click_get_temperature(&temperature);
-	snprintf(str, STR_MAX, "%.2f", temperature);
-	
-	thermo3_click_disable();
-
-	i2c_release();
 }

@@ -15,63 +15,29 @@
 #include "letmecreate/letmecreate.h"
 
 /*
- * Alpha clicker. Examples:
- * Write a running text on the clicker
- * ./main -r "Hi Creator" 
- *
- * Read the temperature clicker
- * ./main -t
+ * Example to write the characters on the alphanum clicker.
  */
 int
 main(int argc, char *argv[])
 {
-	char ch;
-	char *str;
-	char temp[STR_MAX];
-	alphanum_init(MIKROBUS_2);
+	char str[] = "Hi"; /* String to print */
 
-	while ((ch = getopt(argc, argv, "r:c:t")) != -1) {
-		switch(ch) {
-			/* Write running text */
-			case 'r':
-				str = optarg;
-				if (strlen(str) < 3) {
-					printf("Error: please provide a longer text argument!\n");
-					return -1;
-				}
-				printf("Writing: %s\n", str);
-				alphanum_write_running_text(str, 0);
-				break;
-			/* Display two chars */
-			case 'c':
-				str = optarg;
-				if (strlen(str) < 1) {
-					printf("Error: please provide a text argument!\n");
-					return -1;
-				}
-				printf("Writing: %s\n", str);
-				if (strlen(str) < 2) {
-					alphanum_write(alphanum_get_char(toupper(str[0])), 0x0);
-				} else {
-					alphanum_write(alphanum_get_char(toupper(str[0])), alphanum_get_char(toupper(str[1])));
-				}
-				alphanum_switch_cycles(0);
-				break;
-			/* Read temperature and display */
-			case 't':
-				while (1) {
-					memset(temp, 0, STR_MAX);
-					alphanum_get_temperature(temp);
-					printf("Writing temperature: %s C\n", temp);
-					alphanum_write_running_text(temp, 1);
-				}
-				break;
-			default:
-				fprintf(stderr, "Error: Wrong parameter\n");
-				return -1;
-				break;
-		}
-	} 
+	/* Initialize the alphanum clicker */
+	if (alphanum_init(MIKROBUS_2) != 0) {
+		printf("Error: Clicker cannot be initiliazed\n");
+		return 1;
+	}
+
+	printf("Writing: %s\n", str);
+	if (alphanum_write(str[0], str[1]) != 0) {
+		printf("Error: Cannot write to alphanum clicker\n");
+		return 1;
+	}
+
+	/* This alternately switches on the output of either the two shift registers
+	 * to appear to print two characters at the same time.
+	 */
+	alphanum_switch_cycles(0);
 
 	return 0;
 }

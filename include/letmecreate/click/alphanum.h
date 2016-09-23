@@ -1,18 +1,30 @@
-
 #define SWITCH_INTERVAL 8 * 1000
 #define STR_MAX 10
 
-uint16_t alphanum_get_char(char);
-int alphanum_write(uint16_t, uint16_t);
+/* Init the alphanum clicker */
 int alphanum_init(uint8_t);
+
+/* Converts a char into a 14 segment display value */
+uint16_t alphanum_get_char(char);
+
+/* Write the two chars to */
+int alphanum_write(char, char);
+
+/* Raw write  */
+int alphanum_raw_write(uint16_t, uint16_t);
+
+/* This peridically switch between segment a and b to keep the illusion of a 
+ * simultanous display of both values
+ */
 void alphanum_switch_cycles(int);
+
+/* Write a text with more than two characters */
 void alphanum_write_running_text(const char *, int);
-void alphanum_get_temperature(char *);
 
 /*
- * Char table
+ * Translation table between a character and a 14 segment display value.
  */
-const uint16_t char_table[51]={
+const uint16_t alphanum_char_table[51] = {
  //-------------------
  // Hex			Symbol 
  //-------------------
