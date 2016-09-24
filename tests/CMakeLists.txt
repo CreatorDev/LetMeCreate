@@ -37,3 +37,7 @@ install(TARGETS test_i2c RUNTIME DESTINATION bin)
 add_executable(test_spi test_spi.c $<TARGET_OBJECTS:common>)
 target_link_libraries(test_spi letmecreate_core)
 install(TARGETS test_spi RUNTIME DESTINATION bin)
+
+add_executable(test_eve_click test_eve_click.c $<TARGET_OBJECTS:common>)
+target_link_libraries(test_eve_click letmecreate_click letmecreate_core)
+install(TARGETS test_eve_click RUNTIME DESTINATION bin)

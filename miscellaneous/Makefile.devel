@@ -71,6 +71,8 @@ define Package/letmecreate/install
 	if [ -d "$(PKG_BUILD_DIR)/tests/bin/" ]; then \
 		mkdir -p $(1)/usr/bin/letmecreate_tests; \
 		$(INSTALL_BIN) $(PKG_BUILD_DIR)/tests/bin/* $(1)/usr/bin/letmecreate_tests; \
+		mkdir -p $(1)/usr/bin/letmecreate_tests/data; \
+		$(INSTALL_DATA) $(PKG_BUILD_DIR)/tests/data/* $(1)/usr/bin/letmecreate_tests/data; \
 	fi
 
 	$(INSTALL_DIR) $(1)/usr/lib
