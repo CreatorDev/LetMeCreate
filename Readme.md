@@ -30,6 +30,7 @@ MikroClick board supported:
   - Bargraph
   - 7Seg
   - ADC
+  - EVE
 
 Examples are installed in /usr/bin/letmecreate_examples.
 Tests are installed in /usr/bin/letmecreate_tests.
