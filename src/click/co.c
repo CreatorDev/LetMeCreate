@@ -17,8 +17,8 @@
  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE 
  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ************************************************************************************************************************/
-#include <letmecreate/core.h>
 #include <math.h>
+#include "letmecreate/core/adc.h"
 
 uint8_t co_click_read_ppm(uint8_t mikrobus_index, float* value) {
 
