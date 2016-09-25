@@ -1,5 +1,3 @@
-#include <sys/ioctl.h>
-#include <linux/spi/spidev.h>
 #include <stdio.h>
 #include <dirent.h>
 #include <ctype.h>
@@ -20,7 +18,14 @@
 int
 main(int argc, char *argv[])
 {
+	int ret = 0;
 	char str[] = "Hi"; /* String to print */
+
+	/* SPI int */
+	if ((ret = spi_init()) != 0) {
+		printf("Error spi init failed with %i\n", ret);
+		return ret;
+	}
 
 	/* Initialize the alphanum clicker */
 	if (alphanum_init(MIKROBUS_2) != 0) {

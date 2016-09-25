@@ -1,4 +1,7 @@
-#define SWITCH_INTERVAL 8 * 1000
+/* Switch interval in ms */
+#define ALPHANUM_SWITCH_INTERVAL 8
+
+/* Max string length for running text */
 #define STR_MAX 10
 
 /* Init the alphanum clicker */
@@ -20,6 +23,9 @@ void alphanum_switch_cycles(int);
 
 /* Write a text with more than two characters */
 void alphanum_write_running_text(const char *, int);
+
+/* Sleep for switch cycles */
+static void alphanum_sleep_cycles(void);
 
 /*
  * Translation table between a character and a 14 segment display value.

@@ -8,6 +8,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -18,6 +19,23 @@
 static uint8_t gpio_pin_le2;
 static uint8_t gpio_pin_oe;
 static uint8_t gpio_pin_oe2;
+
+/* 
+ * Sleep for switch cycles.
+ */
+static void
+alphanum_sleep_cycles(void)
+{
+	struct timespec cycles;
+	struct timespec slept;
+
+	cycles.tv_sec = ALPHANUM_SWITCH_INTERVAL / 1000;
+	cycles.tv_nsec = ALPHANUM_SWITCH_INTERVAL * 1000 * 1000 - (cycles.tv_sec * 1000);
+
+	while (nanosleep(&cycles, &slept) != 0) {
+		cycles = slept;
+	}
+}
 
 /* 
  * Convert char to 14 segment display value.
@@ -167,12 +185,6 @@ alphanum_init(uint8_t bus)
 		return ret;
 	}
 
-	/* SPI int */
-	if ((ret = spi_init()) != 0) {
-		printf("Error spi init failed with %i\n", ret);
-		return ret;
-	}
-
 	spi_select_bus(bus);
 
 	return ret;
@@ -196,7 +208,7 @@ alphanum_switch_cycles(int num)
 			return;
 		}
 
-		usleep(SWITCH_INTERVAL);
+		alphanum_sleep_cycles();
 
 		if (gpio_set_value(gpio_pin_oe2, 1)) {
 			printf("Error 2: cannot set value le2\n");
@@ -207,7 +219,7 @@ alphanum_switch_cycles(int num)
 			return;
 		}
 
-		usleep(SWITCH_INTERVAL);
+		alphanum_sleep_cycles();
 		++i;
 	}
 }
