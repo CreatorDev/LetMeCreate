@@ -47,3 +47,7 @@ install(TARGETS letmecreate_color2_example RUNTIME DESTINATION bin)
 add_executable(letmecreate_alphanum_example alphanum/main.c)
 target_link_libraries(letmecreate_alphanum_example letmecreate_click letmecreate_core)
 install(TARGETS letmecreate_alphanum_example RUNTIME DESTINATION bin)
+
+add_executable(letmecreate_oled_example oled/main.c)
+target_link_libraries(letmecreate_oled_example letmecreate_click letmecreate_core)
+install(TARGETS letmecreate_oled_example RUNTIME DESTINATION bin)
