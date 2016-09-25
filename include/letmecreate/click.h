@@ -28,6 +28,7 @@
 #include <letmecreate/click/joystick.h>
 #include <letmecreate/click/led_matrix.h>
 #include <letmecreate/click/motion.h>
+#include <letmecreate/click/oled.h>
 #include <letmecreate/click/opto.h>
 #include <letmecreate/click/proximity.h>
 #include <letmecreate/click/relay.h>
