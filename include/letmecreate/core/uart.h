@@ -88,18 +88,18 @@ int uart_send(const uint8_t *buffer, uint32_t count);
 int uart_receive(uint8_t *buffer, uint32_t count);
 
 /**
- * @brief Get time after which receive data on uart will be timedout. Each Mikrobus socket have independent timeout, call to this function is correlated with
- * calls to uart_select_bus(uint8_t)
+ * @brief Get timeout of currently selected UART bus.
  *
- * @param[in] timeout Timeout in ms after which unction will return, even if not full buffer is read
+ * @return timeout Timeout in ms after which uart_receive will return, even if it does not read the request amount of bytes.
  */
 uint32_t uart_get_timeout(void);
 
 /**
- * @brief Set time after which receive data on uart will be timedout, even if not all expected data are read. Each Mikrobus socket have independent timeout,
- * call to this function is correlated with calls to uart_select_bus(uint8_t). Pass UART_TIMEOUT_NEVER to disable timeout functionality.
+ * @brief Set timeout of currently selected UART bus.
  *
- * @param[in] timeout Timeout in ms after which unction will return, even if not full buffer is read
+ * Pass UART_TIMEOUT_NEVER to disable timeout functionality.
+ *
+ * @param[in] timeout Timeout in ms after which uart_receive will return, even if it does not read the request amount of bytes.
  */
 void uart_set_timeout(uint32_t timeout);
 
