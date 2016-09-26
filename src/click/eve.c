@@ -1236,7 +1236,7 @@ int eve_click_get_ptr(uint32_t *ptr)
     if (cmd_fifo_send(buffer, 2) < 0)
         return -1;
 
-    return read_32bit_reg(FT800_RAM_CMD + offset + 4, ptr);
+    return read_32bit_reg(FT800_RAM_CMD + ((offset + 4) & 0xFFC), ptr);
 }
 
 int eve_click_load_identity(void)
@@ -1304,6 +1304,7 @@ int eve_click_get_matrix(int32_t *a, int32_t *b, int32_t *c,
 {
     uint32_t buffer[7];
     uint16_t offset;
+    uint32_t a_loc = 0, b_loc = 0, c_loc = 0, d_loc = 0, e_loc = 0, f_loc = 0;
 
     if (ft800_enabled == false)
         return -1;
@@ -1320,12 +1321,19 @@ int eve_click_get_matrix(int32_t *a, int32_t *b, int32_t *c,
     if (cmd_fifo_send(buffer, 7) < 0)
         return -1;
 
-    if (read_32bit_reg(FT800_RAM_CMD + offset + 4, a) < 0
-    ||  read_32bit_reg(FT800_RAM_CMD + offset + 8, b) < 0
-    ||  read_32bit_reg(FT800_RAM_CMD + offset + 12, c) < 0
-    ||  read_32bit_reg(FT800_RAM_CMD + offset + 16, d) < 0
-    ||  read_32bit_reg(FT800_RAM_CMD + offset + 20, e) < 0
-    ||  read_32bit_reg(FT800_RAM_CMD + offset + 24, f) < 0)
+    a_loc = FT800_RAM_CMD + ((offset + 4) & 0xFFC);
+    b_loc = FT800_RAM_CMD + ((offset + 8) & 0xFFC);
+    c_loc = FT800_RAM_CMD + ((offset + 12) & 0xFFC);
+    d_loc = FT800_RAM_CMD + ((offset + 16) & 0xFFC);
+    e_loc = FT800_RAM_CMD + ((offset + 20) & 0xFFC);
+    f_loc = FT800_RAM_CMD + ((offset + 24) & 0xFFC);
+
+    if (read_32bit_reg(a_loc, a) < 0
+    ||  read_32bit_reg(b_loc, b) < 0
+    ||  read_32bit_reg(c_loc, c) < 0
+    ||  read_32bit_reg(d_loc, d) < 0
+    ||  read_32bit_reg(e_loc, e) < 0
+    ||  read_32bit_reg(f_loc, f) < 0)
         return -1;
 
     return 0;
@@ -1368,7 +1376,7 @@ int eve_click_memcrc(uint32_t ptr, uint32_t byte_count, uint32_t *crc)
     if (cmd_fifo_send(buffer, 4) < 0)
         return -1;
 
-    return read_32bit_reg(FT800_RAM_CMD + offset + 12, crc);
+    return read_32bit_reg(FT800_RAM_CMD + ((offset + 12) & 0xFFC), crc);
 }
 
 int eve_click_memset(uint32_t ptr, uint32_t value, uint32_t byte_count)
@@ -1584,7 +1592,7 @@ int eve_click_calibrate(void)
     /* Check result of calibration */
     if (read_16bit_reg(FT800_REG_CMD_READ, &offset) < 0)
         return -1;
-    if (read_32bit_reg(FT800_RAM_CMD + offset - 4, &result) < 0)
+    if (read_32bit_reg(FT800_RAM_CMD + ((offset + 4092) & 0xFFC), &result) < 0)
         return -1;
     if (result == 0) {
         fprintf(stderr, "eve: Failed to calibrate touch screen.\n");
