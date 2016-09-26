@@ -11,10 +11,10 @@
         products derived from this software without specific prior written permission.
  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+ DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
- WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE 
+ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ************************************************************************************************************************/
 
@@ -25,20 +25,18 @@
 /**
  * @brief Reads current values of temperature, pressure, humidity from sensor.
  *
- * @param mikrobus_index Index of the mikrobus used by the click (see #MIKROBUS_INDEX)
  * @param[out] temperature measured by sensor, or NULL if not interested in this value.
  * @param[out] pressure measured by sensor, or NULL if not interested in this value.
  * @param[out] humidity measured by sensor, or NULL if not interested in this value.
  * @return 0 if success otherwise -1
  */
-uint8_t weather_click_read_measurements(uint8_t mikrobus_index, double* temperature, double* pressure, double* humidity);
+uint8_t weather_click_read_measurements(double* temperature, double* pressure, double* humidity);
 
 /**
  * @brief Setups sensor configuration as recommended for indoor measurement in Bosh BME 280 data sheet.
- * @param mikrobus_index Index of the mikrobus used by the click (see #MIKROBUS_INDEX)
  * @return 0 if success otherwise -1
  */
-uint8_t weather_click_enable(uint8_t mikrobus_index);
+uint8_t weather_click_enable();
 
 
 #endif /* __LETMECREATE_CLICK_WEATHER_H__ */
