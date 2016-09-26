@@ -1,3 +1,12 @@
+/**
+ * @file relay4.h
+ * @author Bartlomiej Zarnowski
+ * @date 2016
+ * @copyright 3-clause BSD
+ */
+
+
+
 /************************************************************************************************************************
  Copyright (c) 2016, Imagination Technologies Limited and/or its affiliated group companies.
  All rights reserved.
