@@ -1,6 +1,6 @@
 /**
  * @file uart.h
- * @author Francois Berder
+ * @author Francois Berder, Bartlomiej Zarnowski
  * @date 2016
  * @copyright 3-clause BSD
  */
