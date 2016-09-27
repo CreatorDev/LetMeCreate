@@ -19,7 +19,7 @@ int main(void)
     int i = 0;
 
     spi_init();
-    for (; i < 4; ++i) {
+    for (; i < ADC_CLICK_CHANNEL_COUNT; ++i) {
         adc_click_get_raw_value(i, &value);
         printf("channel %d value: %u\n", i, value);
     }
