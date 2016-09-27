@@ -342,15 +342,68 @@ static int parse_font(uint16_t font, uint32_t offset)
     /* TODO add checks */
 
     uint8_t *dest = (uint8_t*)(&cmds[cmd_cnt]);
+    /* Check that there is enough space in cmds array */
     memcpy(&dest[offset], &font, 2);
     return 0;
 }
 
-static int parse_options(uint16_t options, uint32_t offset)
+static bool check_option_opcode(uint32_t opcode, uint16_t options)
 {
-    /* TODO add checks */
+    bool ret = true;
+
+    switch (opcode) {
+    case FT800_BUTTON:
+    case FT800_SLIDER:
+    case FT800_DIAL:
+    case FT800_TOGGLE:
+    case FT800_PROGRESS:
+    case FT800_SCROLLBAR:
+        if (options & ~(FT800_OPT_FLAT | FT800_OPT_3D) != 0)
+           ret = false;
+        break;
+    case FT800_LOADIMAGE:
+        if (options & ~(FT800_OPT_RGB565 | FT800_OPT_MONO | FT800_OPT_NODL) != 0)
+            ret = false;
+        break;
+    case FT800_NUMBER:
+        if (options & ~(FT800_OPT_SIGNED | FT800_OPT_CENTERX | FT800_OPT_CENTERY | FT800_OPT_RIGHTX) != 0)
+            ret = false;
+        break;
+    case FT800_CLOCK:
+        if (options & ~(FT800_OPT_FLAT | FT800_OPT_3D | FT800_OPT_NOBACK | FT800_OPT_NOTICKS | FT800_OPT_NOHM | FT800_OPT_NOSECS | FT800_OPT_NOHANDS) != 0)
+            ret = false;
+        break;
+    case FT800_KEYS:
+        if (options & ~(FT800_OPT_FLAT | FT800_OPT_3D | FT800_OPT_CENTERX | FT800_OPT_CENTERY | FT800_OPT_RIGHTX) != 0)
+            ret = false;
+        break;
+    case FT800_GAUGE:
+        if (options & ~(FT800_OPT_FLAT | FT800_OPT_3D | FT800_OPT_CENTERX | FT800_OPT_CENTERY | FT800_OPT_RIGHTX) != 0)
+            ret = false;
+        break;
+    case FT800_TEXT:
+        if (options & ~(FT800_OPT_CENTERX | FT800_OPT_CENTERY | FT800_OPT_RIGHTX) != 0)
+            ret = false;
+        break;
+    default:
+        ret = false;
+        break;
+    }
+
+    if (!ret)
+        fprintf(stderr, "eve: Option does not apply to command.\n");
+
+    return ret;
+}
+
+static int parse_options(uint32_t opcode, uint16_t options, uint32_t offset)
+{
+    /* Check that option can be applied to this command */
+    if (check_option_opcode(opcode, options) == false)
+        return -1;
 
     uint8_t *dest = (uint8_t*)(&cmds[cmd_cnt]);
+    /* Check that there is enough space in cmds array */
     memcpy(&dest[offset], &options, 2);
     return 0;
 }
@@ -387,7 +440,7 @@ static int parse_coprocessor_cmd(uint32_t opcode, va_list args)
         ||  parse_16bits_arg(va_arg(args, int), 8) < 0      /* w */
         ||  parse_16bits_arg(va_arg(args, int), 10) < 0     /* h */
         ||  parse_font(va_arg(args, int), 12) < 0
-        ||  parse_options(va_arg(args, int), 14) < 0)
+        ||  parse_options(opcode, va_arg(args, int), 14) < 0)
             return -1;
         cmd_length += 3;
         {
@@ -401,7 +454,7 @@ static int parse_coprocessor_cmd(uint32_t opcode, va_list args)
         if (parse_16bits_arg(va_arg(args, int), 4) < 0      /* x */
         ||  parse_16bits_arg(va_arg(args, int), 6) < 0      /* y */
         ||  parse_16bits_arg(va_arg(args, int), 8) < 0      /* radius */
-        ||  parse_options(va_arg(args, int), 10) < 0
+        ||  parse_options(opcode, va_arg(args, int), 10) < 0
         ||  parse_16bits_arg(va_arg(args, int), 12) < 0     /* hour */
         ||  parse_16bits_arg(va_arg(args, int), 14) < 0     /* minute */
         ||  parse_16bits_arg(va_arg(args, int), 16) < 0     /* second */
@@ -415,7 +468,7 @@ static int parse_coprocessor_cmd(uint32_t opcode, va_list args)
         if (parse_16bits_arg(va_arg(args, int), 4) < 0      /* x */
         ||  parse_16bits_arg(va_arg(args, int), 6) < 0      /* y */
         ||  parse_16bits_arg(va_arg(args, int), 8) < 0      /* radius */
-        ||  parse_options(va_arg(args, int), 10) < 0
+        ||  parse_options(opcode, va_arg(args, int), 10) < 0
         ||  parse_16bits_arg(va_arg(args, int), 12) < 0)    /* value */
             return -1;
         cmd_length += 3;
@@ -431,7 +484,7 @@ static int parse_coprocessor_cmd(uint32_t opcode, va_list args)
         if (parse_16bits_arg(va_arg(args, int), 4) < 0      /* x */
         ||  parse_16bits_arg(va_arg(args, int), 6) < 0      /* y */
         ||  parse_16bits_arg(va_arg(args, int), 8) < 0      /* radius */
-        ||  parse_options(va_arg(args, int), 10) < 0
+        ||  parse_options(opcode, va_arg(args, int), 10) < 0
         ||  parse_16bits_arg(va_arg(args, int), 12) < 0     /* major */
         ||  parse_16bits_arg(va_arg(args, int), 14) < 0     /* minor */
         ||  parse_16bits_arg(va_arg(args, int), 16) < 0     /* value */
@@ -465,7 +518,7 @@ static int parse_coprocessor_cmd(uint32_t opcode, va_list args)
         ||  parse_16bits_arg(va_arg(args, int), 8) < 0      /* width */
         ||  parse_16bits_arg(va_arg(args, int), 10) < 0     /* height */
         ||  parse_font(va_arg(args, int), 12) < 0
-        ||  parse_options(va_arg(args, int), 14) < 0)
+        ||  parse_options(opcode, va_arg(args, int), 14) < 0)
             return -1;
         cmd_length += 3;
         {
@@ -481,7 +534,7 @@ static int parse_coprocessor_cmd(uint32_t opcode, va_list args)
         if (parse_16bits_arg(va_arg(args, int), 4) < 0      /* x */
         ||  parse_16bits_arg(va_arg(args, int), 6) < 0      /* y */
         ||  parse_font(va_arg(args, int), 8) < 0
-        ||  parse_options(va_arg(args, int), 10) < 0
+        ||  parse_options(opcode, va_arg(args, int), 10) < 0
         ||  parse_32bits_arg(va_arg(args, int), 12) < 0)   /* n */
             return -1;
         cmd_length += 3;
@@ -491,7 +544,7 @@ static int parse_coprocessor_cmd(uint32_t opcode, va_list args)
         ||  parse_16bits_arg(va_arg(args, int), 6) < 0      /* y */
         ||  parse_16bits_arg(va_arg(args, int), 8) < 0      /* width */
         ||  parse_16bits_arg(va_arg(args, int), 10) < 0     /* height */
-        ||  parse_options(va_arg(args, int), 12) < 0
+        ||  parse_options(opcode, va_arg(args, int), 12) < 0
         ||  parse_16bits_arg(va_arg(args, int), 14) < 0     /* value */
         ||  parse_16bits_arg(va_arg(args, int), 16) < 0)    /* range */
             return -1;
@@ -514,7 +567,7 @@ static int parse_coprocessor_cmd(uint32_t opcode, va_list args)
         ||  parse_16bits_arg(va_arg(args, int), 6) < 0      /* y */
         ||  parse_16bits_arg(va_arg(args, int), 8) < 0      /* width */
         ||  parse_16bits_arg(va_arg(args, int), 10) < 0     /* height */
-        ||  parse_options(va_arg(args, int), 12) < 0
+        ||  parse_options(opcode, va_arg(args, int), 12) < 0
         ||  parse_16bits_arg(va_arg(args, int), 14) < 0     /* value */
         ||  parse_16bits_arg(va_arg(args, int), 16) < 0     /* size */
         ||  parse_16bits_arg(va_arg(args, int), 18) < 0)    /* range */
@@ -529,7 +582,7 @@ static int parse_coprocessor_cmd(uint32_t opcode, va_list args)
         ||  parse_16bits_arg(va_arg(args, int), 6) < 0      /* y */
         ||  parse_16bits_arg(va_arg(args, int), 8) < 0      /* width */
         ||  parse_16bits_arg(va_arg(args, int), 10) < 0     /* height */
-        ||  parse_options(va_arg(args, int), 12) < 0
+        ||  parse_options(opcode, va_arg(args, int), 12) < 0
         ||  parse_16bits_arg(va_arg(args, int), 14) < 0     /* value */
         ||  parse_16bits_arg(va_arg(args, int), 16) < 0)    /* range */
             return -1;
@@ -539,7 +592,7 @@ static int parse_coprocessor_cmd(uint32_t opcode, va_list args)
         if (parse_16bits_arg(va_arg(args, int), 4) < 0      /* x */
         ||  parse_16bits_arg(va_arg(args, int), 6) < 0      /* y */
         ||  parse_font(va_arg(args, int), 8) < 0
-        ||  parse_options(va_arg(args, int), 10) < 0)
+        ||  parse_options(opcode, va_arg(args, int), 10) < 0)
             return -1;
         cmd_length += 2;
         {
@@ -554,7 +607,7 @@ static int parse_coprocessor_cmd(uint32_t opcode, va_list args)
         ||  parse_16bits_arg(va_arg(args, int), 6) < 0      /* y */
         ||  parse_16bits_arg(va_arg(args, int), 8) < 0      /* w */
         ||  parse_font(va_arg(args, int), 10) < 0
-        ||  parse_options(va_arg(args, int), 12) < 0)
+        ||  parse_options(opcode, va_arg(args, int), 12) < 0)
             return -1;
 
         {
