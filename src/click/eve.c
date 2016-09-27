@@ -22,6 +22,7 @@ static bool fifo_empty = true;
 static uint32_t cmds[1024];
 static uint32_t cmd_cnt = 0;
 static bool cmd_buffering = true;
+static bool use_timeout = true;
 
 static void (*touch_callback)(uint16_t, uint16_t) = NULL;
 
@@ -699,10 +700,16 @@ static void recover_coprocessor_engine_fault(void)
 static void wait_for_coprocessor(void)
 {
     uint16_t reg_cmd_read = 0;
+    uint16_t timeout = 1000; /* timeout of 1s */
 
-    /* TODO: Add a timeout */
-    while (fifo_empty == false)
+    while (fifo_empty == false) {
         sleep_ms(1);
+        --timeout;
+        if (use_timeout && timeout == 0) {
+            fprintf(stderr, "eve: Timeout while waiting for coprocessor.\n");
+            break;
+        }
+    }
 
     /* Check if a fault happened in the coprocessor engine */
     if (read_16bit_reg(FT800_REG_CMD_READ, &reg_cmd_read) < 0)
@@ -1585,9 +1592,17 @@ int eve_click_calibrate(void)
     cmds[cmd_cnt++] = FT800_CALIBRATE;
     cmds[cmd_cnt++] = 0;
 
-    /* Flush buffer to send commands to device */
-    if (flush_buffer() < 0)
+    /* Flush buffer to send commands to device
+       Disable timeout because it will take at least a few seconds for the user
+       to go through the calibration and CMD_CALIBRATE will not terminate until
+       this calibration phase is finished.
+     */
+    use_timeout = false;
+    if (flush_buffer() < 0) {
+        use_timeout = true;
         return -1;
+    }
+    use_timeout = true;
 
     /* Check result of calibration */
     if (read_16bit_reg(FT800_REG_CMD_READ, &offset) < 0)
