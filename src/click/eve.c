@@ -339,7 +339,10 @@ static int parse_32bits_arg(uint32_t arg, uint32_t offset)
 
 static int parse_font(uint16_t font, uint32_t offset)
 {
-    /* TODO add checks */
+    if (font > 31) {
+        fprintf(stderr, "eve: Invalid font index, it must be in range 0-31.\n");
+        return -1;
+    }
 
     uint8_t *dest = (uint8_t*)(&cmds[cmd_cnt]);
     /* Check that there is enough space in cmds array */
