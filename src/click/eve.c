@@ -12,14 +12,17 @@
 #include "letmecreate/core/gpio_monitor.h"
 #include "letmecreate/core/spi.h"
 
-#define FIFO_SIZE           (4096)
+#define FIFO_SIZE               (4096)  /* 4KB */
+#define FIFO_CMD_SIZE           (4)     /* 4bytes */
+#define FIFO_RAM_OFFSET(OFFSET) (FT800_RAM_CMD + ((OFFSET) & (FIFO_SIZE - FIFO_CMD_SIZE)))
+
 
 static bool ft800_enabled = false;
 static int int_callback_id = -1;
 static bool fifo_empty = true;
 
 /* Co-processor FIFO */
-static uint32_t cmds[1024];
+static uint32_t cmds[FIFO_SIZE / FIFO_CMD_SIZE];
 static uint32_t cmd_cnt = 0;
 static bool cmd_buffering = true;
 static bool use_timeout = true;
@@ -61,7 +64,7 @@ static int write_str_to_cmd_fifo(char *str)
 
     strcpy((char*)(&cmds[cmd_cnt]), str);
 
-    return (str_length + 3) / 4;
+    return (str_length + 3) / FIFO_CMD_SIZE;
 }
 
 static bool is_display_list_cmd(uint32_t cmd)
@@ -418,7 +421,7 @@ static int parse_str(char *str, uint32_t offset)
     /* TODO add checks */
     strcpy(&dest[offset], str);
 
-    return (strlen(str) / 4) + 1;
+    return (strlen(str) / FIFO_CMD_SIZE) + 1;
 }
 
 static int parse_coprocessor_cmd(uint32_t opcode, va_list args)
@@ -785,7 +788,7 @@ static uint16_t compute_fifo_freespace(void)
     ||  read_16bit_reg(FT800_REG_CMD_READ, &reg_cmd_read) < 0)
         return 0;
 
-    return (FIFO_SIZE - 4) - ((reg_cmd_write - reg_cmd_read) & 0xFFF);
+    return (FIFO_SIZE - FIFO_CMD_SIZE) - ((reg_cmd_write - reg_cmd_read) & 0xFFF);
 }
 
 static int cmd_fifo_send(uint32_t *cmd_buffer, uint32_t cmd_buffer_cnt)
@@ -794,7 +797,7 @@ static int cmd_fifo_send(uint32_t *cmd_buffer, uint32_t cmd_buffer_cnt)
 
     while (cmd_buffer_cnt > 0) {
         uint32_t offset = 0;
-        uint16_t fifo_freespace = compute_fifo_freespace() / 4;
+        uint16_t fifo_freespace = compute_fifo_freespace() / FIFO_CMD_SIZE;
         uint32_t chunk_length = cmd_buffer_cnt;
 
         if (chunk_length > fifo_freespace)
@@ -803,10 +806,10 @@ static int cmd_fifo_send(uint32_t *cmd_buffer, uint32_t cmd_buffer_cnt)
         if (read_32bit_reg(FT800_REG_CMD_WRITE, &offset) < 0)
             return -1;
 
-        if (memory_write(FT800_RAM_CMD + offset, (uint8_t*)cmd_buffer, 4*chunk_length) < 0)
+        if (memory_write(FIFO_RAM_OFFSET(offset), (uint8_t*)cmd_buffer, FIFO_CMD_SIZE*chunk_length) < 0)
             return -1;
 
-        offset += 4 * chunk_length;
+        offset += FIFO_CMD_SIZE * chunk_length;
         offset &= 0xFFC;
 
         fifo_empty = false;
@@ -1301,7 +1304,7 @@ int eve_click_get_ptr(uint32_t *ptr)
     if (cmd_fifo_send(buffer, 2) < 0)
         return -1;
 
-    return read_32bit_reg(FT800_RAM_CMD + ((offset + 4) & 0xFFC), ptr);
+    return read_32bit_reg(FIFO_RAM_OFFSET(offset + 4), ptr);
 }
 
 int eve_click_load_identity(void)
@@ -1386,12 +1389,12 @@ int eve_click_get_matrix(int32_t *a, int32_t *b, int32_t *c,
     if (cmd_fifo_send(buffer, 7) < 0)
         return -1;
 
-    a_loc = FT800_RAM_CMD + ((offset + 4) & 0xFFC);
-    b_loc = FT800_RAM_CMD + ((offset + 8) & 0xFFC);
-    c_loc = FT800_RAM_CMD + ((offset + 12) & 0xFFC);
-    d_loc = FT800_RAM_CMD + ((offset + 16) & 0xFFC);
-    e_loc = FT800_RAM_CMD + ((offset + 20) & 0xFFC);
-    f_loc = FT800_RAM_CMD + ((offset + 24) & 0xFFC);
+    a_loc = FIFO_RAM_OFFSET(offset + 4);
+    b_loc = FIFO_RAM_OFFSET(offset + 8);
+    c_loc = FIFO_RAM_OFFSET(offset + 12);
+    d_loc = FIFO_RAM_OFFSET(offset + 16);
+    e_loc = FIFO_RAM_OFFSET(offset + 20);
+    f_loc = FIFO_RAM_OFFSET(offset + 24);
 
     if (read_32bit_reg(a_loc, a) < 0
     ||  read_32bit_reg(b_loc, b) < 0
@@ -1441,7 +1444,7 @@ int eve_click_memcrc(uint32_t ptr, uint32_t byte_count, uint32_t *crc)
     if (cmd_fifo_send(buffer, 4) < 0)
         return -1;
 
-    return read_32bit_reg(FT800_RAM_CMD + ((offset + 12) & 0xFFC), crc);
+    return read_32bit_reg(FIFO_RAM_OFFSET(offset + 12), crc);
 }
 
 int eve_click_memset(uint32_t ptr, uint32_t value, uint32_t byte_count)
@@ -1505,7 +1508,7 @@ int eve_click_ftdi_logo(void)
         return -1;
     offset &= 0xFFC;
 
-    if (write_32bit_reg(FT800_RAM_CMD + offset, cmd) < 0)
+    if (write_32bit_reg(FIFO_RAM_OFFSET(offset), cmd) < 0)
         return -1;
     offset += 4;
     if (write_32bit_reg(FT800_REG_CMD_WRITE, offset) < 0)
@@ -1559,8 +1562,8 @@ int eve_click_snapshot(uint32_t ptr, uint8_t *data)
      */
     while (total_bytes_to_read > 0) {
         uint32_t count = total_bytes_to_read;
-        if (count > 4092)
-            count = 4092;
+        if (count > (FIFO_SIZE - FIFO_CMD_SIZE))
+            count = FIFO_SIZE - FIFO_CMD_SIZE;
 
         if (memory_read(ptr, data, count) < 0)
             return -1;
@@ -1665,7 +1668,7 @@ int eve_click_calibrate(void)
     /* Check result of calibration */
     if (read_16bit_reg(FT800_REG_CMD_READ, &offset) < 0)
         return -1;
-    if (read_32bit_reg(FT800_RAM_CMD + ((offset + 4092) & 0xFFC), &result) < 0)
+    if (read_32bit_reg(FIFO_RAM_OFFSET(offset + (FIFO_SIZE - FIFO_CMD_SIZE)), &result) < 0)
         return -1;
     if (result == 0) {
         fprintf(stderr, "eve: Failed to calibrate touch screen.\n");
