@@ -32,6 +32,7 @@ MikroClick board supported:
   - ADC
   - EVE
   - Relay4
+  - Opto
 
 Examples are installed in /usr/bin/letmecreate_examples.
 Tests are installed in /usr/bin/letmecreate_tests.
