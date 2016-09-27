@@ -12,7 +12,7 @@
 #include "letmecreate/core/gpio_monitor.h"
 #include "letmecreate/core/spi.h"
 
-#define MAX_FIFO_SIZE       (4096)
+#define FIFO_SIZE           (4096)
 
 static bool ft800_enabled = false;
 static int int_callback_id = -1;
@@ -780,7 +780,7 @@ static uint16_t compute_fifo_freespace(void)
     ||  read_16bit_reg(FT800_REG_CMD_READ, &reg_cmd_read) < 0)
         return 0;
 
-    return (4096 - 4) - ((reg_cmd_write - reg_cmd_read) & 0xFFF);
+    return (FIFO_SIZE - 4) - ((reg_cmd_write - reg_cmd_read) & 0xFFF);
 }
 
 static int cmd_fifo_send(uint32_t *cmd_buffer, uint32_t cmd_buffer_cnt)
