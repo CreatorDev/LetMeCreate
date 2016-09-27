@@ -1,3 +1,10 @@
+/**
+ * This example shows how to use the 7Seg Click wrapper of the LetMeCreate library.
+ * It displays number from 0 to 99 in 10seconds.
+ * It assumes that the 7Seg Click is inserted in Mikrobus 1.
+ */
+
+
 #include <letmecreate/letmecreate.h>
 #include "examples/common.h"
 
