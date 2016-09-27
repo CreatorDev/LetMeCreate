@@ -1,3 +1,12 @@
+/**
+ * This example shows how to use the BarGraph Click wrapper of the LetMeCreate
+ * library.
+ *
+ * It turns on gradually all the LED's from left to right in 2 seconds.
+ *
+ * The BarGraph Click must be inserted in Mikrobus 1 before running this program.
+ */
+
 #include <letmecreate/letmecreate.h>
 #include "examples/common.h"
 
