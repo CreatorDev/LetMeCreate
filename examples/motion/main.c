@@ -1,3 +1,13 @@
+/**
+ * This example shows how to use the Motion Click wrapper of the LetMeCreate
+ * library.
+ *
+ * Whenever the motion click detects an event, it flashes all LED's ten times.
+ * The user must press Ctrl+C to terminate the program.
+ *
+ * The Motion Click must be inserted in Mikrobus 1 before running this program.
+ */
+
 #include <stdio.h>
 #include <letmecreate/letmecreate.h>
 #include "examples/common.h"
