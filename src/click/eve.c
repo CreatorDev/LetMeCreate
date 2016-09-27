@@ -612,7 +612,9 @@ static int parse_coprocessor_cmd(uint32_t opcode, va_list args)
 
         {
             uint16_t state = va_arg(args, int);
-            /* TODO: add checks */
+            if (state > 0)  /* state must equal 65535 to turn on toggle */
+                state = 65535;
+
             if (parse_16bits_arg(state, 14) < 0)
                 return -1;
         }
