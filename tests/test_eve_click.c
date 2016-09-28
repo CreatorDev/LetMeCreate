@@ -289,7 +289,6 @@ static bool test_eve_click_snapshot(void)
 {
     bool ret = true;
     uint8_t *data = NULL;
-    FILE *file = NULL;
 
     /* Display a red screen */
     if (eve_click_clear(255, 0, 0) < 0

@@ -370,31 +370,31 @@ static bool check_option_opcode(uint32_t opcode, uint16_t options)
     case FT800_TOGGLE:
     case FT800_PROGRESS:
     case FT800_SCROLLBAR:
-        if (options & ~(FT800_OPT_FLAT | FT800_OPT_3D) != 0)
+        if ((options & ~(FT800_OPT_FLAT | FT800_OPT_3D)) != 0)
            ret = false;
         break;
     case FT800_LOADIMAGE:
-        if (options & ~(FT800_OPT_RGB565 | FT800_OPT_MONO | FT800_OPT_NODL) != 0)
+        if ((options & ~(FT800_OPT_RGB565 | FT800_OPT_MONO | FT800_OPT_NODL)) != 0)
             ret = false;
         break;
     case FT800_NUMBER:
-        if (options & ~(FT800_OPT_SIGNED | FT800_OPT_CENTERX | FT800_OPT_CENTERY | FT800_OPT_RIGHTX) != 0)
+        if ((options & ~(FT800_OPT_SIGNED | FT800_OPT_CENTERX | FT800_OPT_CENTERY | FT800_OPT_RIGHTX)) != 0)
             ret = false;
         break;
     case FT800_CLOCK:
-        if (options & ~(FT800_OPT_FLAT | FT800_OPT_3D | FT800_OPT_NOBACK | FT800_OPT_NOTICKS | FT800_OPT_NOHM | FT800_OPT_NOSECS | FT800_OPT_NOHANDS) != 0)
+        if ((options & ~(FT800_OPT_FLAT | FT800_OPT_3D | FT800_OPT_NOBACK | FT800_OPT_NOTICKS | FT800_OPT_NOHM | FT800_OPT_NOSECS | FT800_OPT_NOHANDS)) != 0)
             ret = false;
         break;
     case FT800_KEYS:
-        if (options & ~(FT800_OPT_FLAT | FT800_OPT_3D | FT800_OPT_CENTERX | FT800_OPT_CENTERY | FT800_OPT_RIGHTX) != 0)
+        if ((options & ~(FT800_OPT_FLAT | FT800_OPT_3D | FT800_OPT_CENTERX | FT800_OPT_CENTERY | FT800_OPT_RIGHTX)) != 0)
             ret = false;
         break;
     case FT800_GAUGE:
-        if (options & ~(FT800_OPT_FLAT | FT800_OPT_3D | FT800_OPT_CENTERX | FT800_OPT_CENTERY | FT800_OPT_RIGHTX) != 0)
+        if ((options & ~(FT800_OPT_FLAT | FT800_OPT_3D | FT800_OPT_CENTERX | FT800_OPT_CENTERY | FT800_OPT_RIGHTX)) != 0)
             ret = false;
         break;
     case FT800_TEXT:
-        if (options & ~(FT800_OPT_CENTERX | FT800_OPT_CENTERY | FT800_OPT_RIGHTX) != 0)
+        if ((options & ~(FT800_OPT_CENTERX | FT800_OPT_CENTERY | FT800_OPT_RIGHTX)) != 0)
             ret = false;
         break;
     default:
@@ -803,8 +803,6 @@ static uint16_t compute_fifo_freespace(void)
 
 static int cmd_fifo_send(uint32_t *cmd_buffer, uint32_t cmd_buffer_cnt)
 {
-    uint32_t i = 0, offset = 0;
-
     while (cmd_buffer_cnt > 0) {
         uint32_t offset = 0;
         uint16_t fifo_freespace = compute_fifo_freespace() / FIFO_CMD_SIZE;
@@ -886,7 +884,6 @@ static int attach_interrupt_handler(uint8_t mikrobus_index)
 static int detach_interrupt_handler(uint8_t mikrobus_index)
 {
     uint8_t int_pin;
-    int ret = 0;
 
     switch(mikrobus_index) {
     case MIKROBUS_1:
@@ -1406,12 +1403,12 @@ int eve_click_get_matrix(int32_t *a, int32_t *b, int32_t *c,
     e_loc = FIFO_RAM_OFFSET(offset + 20);
     f_loc = FIFO_RAM_OFFSET(offset + 24);
 
-    if (read_32bit_reg(a_loc, a) < 0
-    ||  read_32bit_reg(b_loc, b) < 0
-    ||  read_32bit_reg(c_loc, c) < 0
-    ||  read_32bit_reg(d_loc, d) < 0
-    ||  read_32bit_reg(e_loc, e) < 0
-    ||  read_32bit_reg(f_loc, f) < 0)
+    if (read_32bit_reg(a_loc, (uint32_t*)a) < 0
+    ||  read_32bit_reg(b_loc, (uint32_t*)b) < 0
+    ||  read_32bit_reg(c_loc, (uint32_t*)c) < 0
+    ||  read_32bit_reg(d_loc, (uint32_t*)d) < 0
+    ||  read_32bit_reg(e_loc, (uint32_t*)e) < 0
+    ||  read_32bit_reg(f_loc, (uint32_t*)f) < 0)
         return -1;
 
     return 0;
@@ -1588,8 +1585,6 @@ int eve_click_snapshot(uint32_t ptr, uint8_t *data)
 
 int eve_click_spinner(int16_t x, int16_t y, uint16_t style, uint16_t scale)
 {
-    uint32_t buffer[3];
-
     if (ft800_enabled == false)
         return -1;
 
