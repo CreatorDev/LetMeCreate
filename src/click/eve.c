@@ -308,10 +308,27 @@ static int parse_display_list_vcmd(uint32_t cmd, ...)
     return ret;
 }
 
+/* @param[in] offset from last command in buffer (FIFO_CMD_SIZE * cmd_cnt)
+ * @param[in] byte_count Number of bytes to insert
+ */
+static bool check_enough_space_buffer(uint32_t offset, uint8_t byte_count)
+{
+    /* Check that there is enough space in cmds array */
+    if (FIFO_SIZE - (FIFO_CMD_SIZE * cmd_cnt + offset) < byte_count)  {
+        fprintf(stderr, "eve: Not enough space in cmd buffer.\n");
+        return false;
+    }
+
+    return true;
+}
+
 static int parse_16bits_arg(uint16_t arg, uint32_t offset)
 {
     uint8_t *dest = (uint8_t*)(&cmds[cmd_cnt]);
-    /* Check that there is enough space in cmds array */
+
+    if (check_enough_space_buffer(offset, 2) == false)
+        return -1;
+
     memcpy(&dest[offset], &arg, 2);
     return 0;
 }
@@ -319,20 +336,25 @@ static int parse_16bits_arg(uint16_t arg, uint32_t offset)
 static int parse_32bits_arg(uint32_t arg, uint32_t offset)
 {
     uint8_t *dest = (uint8_t*)(&cmds[cmd_cnt]);
-    /* Check that there is enough space in cmds array */
+
+    if (check_enough_space_buffer(offset, 4) == false)
+        return -1;
+
     memcpy(&dest[offset], &arg, 4);
     return 0;
 }
 
 static int parse_font(uint16_t font, uint32_t offset)
 {
+    uint8_t *dest = (uint8_t*)(&cmds[cmd_cnt]);
     if (font > 31) {
         fprintf(stderr, "eve: Invalid font index, it must be in range 0-31.\n");
         return -1;
     }
 
-    uint8_t *dest = (uint8_t*)(&cmds[cmd_cnt]);
-    /* Check that there is enough space in cmds array */
+    if (check_enough_space_buffer(offset, 2) == false)
+        return -1;
+
     memcpy(&dest[offset], &font, 2);
     return 0;
 }
@@ -388,12 +410,15 @@ static bool check_option_opcode(uint32_t opcode, uint16_t options)
 
 static int parse_options(uint32_t opcode, uint16_t options, uint32_t offset)
 {
+    uint8_t *dest = (uint8_t*)(&cmds[cmd_cnt]);
+
     /* Check that option can be applied to this command */
     if (check_option_opcode(opcode, options) == false)
         return -1;
 
-    uint8_t *dest = (uint8_t*)(&cmds[cmd_cnt]);
-    /* Check that there is enough space in cmds array */
+    if (check_enough_space_buffer(offset, 2) == false)
+        return -1;
+
     memcpy(&dest[offset], &options, 2);
     return 0;
 }
@@ -402,9 +427,10 @@ static int parse_str(char *str, uint32_t offset)
 {
     char *dest = (char*)(&cmds[cmd_cnt]);
 
-    /* TODO add checks */
-    strcpy(&dest[offset], str);
+    if (check_enough_space_buffer(offset, strlen(str) + 1) == false)
+        return -1;
 
+    strcpy(&dest[offset], str);
     return (strlen(str) / FIFO_CMD_SIZE) + 1;
 }
 
