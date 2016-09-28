@@ -51,22 +51,6 @@ static int send_command(uint8_t cmd)
     return spi_transfer(buffer, NULL, sizeof(buffer));
 }
 
-/* TODO: add extra parameters for dest buffer */
-static int write_str_to_cmd_fifo(char *str)
-{
-    uint32_t str_length = 0;
-
-    if (str == NULL)
-        return -1;
-
-    str_length = strlen(str) + 1;
-    /* TODO: add check that there is enough space in dest */
-
-    strcpy((char*)(&cmds[cmd_cnt]), str);
-
-    return (str_length + 3) / FIFO_CMD_SIZE;
-}
-
 static bool is_display_list_cmd(uint32_t cmd)
 {
     switch (cmd & 0xC0000000) {
