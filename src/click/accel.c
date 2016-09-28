@@ -42,7 +42,6 @@
 
 static bool enabled = false;
 static bool use_spi = true;
-static uint8_t lsb_address;
 static uint16_t slave_address = ADXL345_ADDRESS_0;
 
 static int write_register(uint8_t reg, uint8_t value)
