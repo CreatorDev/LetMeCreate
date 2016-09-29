@@ -833,7 +833,7 @@ static int cmd_fifo_send(uint32_t *cmd_buffer, uint32_t cmd_buffer_cnt)
     return 0;
 }
 
-static void interrupt_handler(uint8_t event)
+static void interrupt_handler(uint8_t __attribute__ ((unused))event)
 {
     uint8_t flags;
 
