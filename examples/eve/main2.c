@@ -37,6 +37,10 @@ int main(void)
     if (eve_click_calibrate() < 0)
         goto exit;
 
+
+    /* Add your own callback after calibration, otherwise you might get
+     * incorrect coordinates.
+     */
     eve_click_attach_touch_callback(callback);
 
     eve_click_clear(0, 0, 0);
@@ -51,6 +55,7 @@ int main(void)
     while (1) {
         char str[255];
 
+        /* Wait until the user touches the screen */
         while (touch_screen_event == false)
             ;
 
