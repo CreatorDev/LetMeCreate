@@ -3,20 +3,27 @@
  * wrapper of the LetMeCreate library.
  *
  * It first performs calibration of the touch screen, then it prints the
- * coordinates of the touch event.
+ * coordinates of the touch event. Press Ctrl+C to exit program.
  *
  * Before running this program:
  *   - the EVE Click must be inserted in Mikrobus 1
  *   - a WQVGA screen must be connected to the EVE Click.
  */
 #include <linux/spi/spidev.h>
+#include <signal.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <letmecreate/letmecreate.h>
 
+static volatile bool running = true;
 static volatile bool touch_screen_event = false;
 static uint16_t last_event_x = 0, last_event_y = 0;
+
+static void exit_program(int __attribute__ ((unused))signo)
+{
+    running = false;
+}
 
 static void callback(uint16_t x, uint16_t y)
 {
@@ -27,6 +34,14 @@ static void callback(uint16_t x, uint16_t y)
 
 int main(void)
 {
+    /* Set signal handler to exit program when Ctrl+c is pressed */
+    struct sigaction action = {
+        .sa_handler = exit_program,
+        .sa_flags = 0
+    };
+    sigemptyset(&action.sa_mask);
+    sigaction (SIGINT, &action, NULL);
+
     spi_init();
     spi_set_mode(MIKROBUS_1, SPI_MODE_0);
 
@@ -37,6 +52,7 @@ int main(void)
     if (eve_click_calibrate() < 0)
         goto exit;
 
+    printf("Press Ctrl+C to exit program.\n");
 
     /* Add your own callback after calibration, otherwise you might get
      * incorrect coordinates.
@@ -52,12 +68,15 @@ int main(void)
                    "Tap on the screen");
     eve_click_display();
 
-    while (1) {
+    while (running) {
         char str[255];
 
-        /* Wait until the user touches the screen */
-        while (touch_screen_event == false)
+        /* Wait until the user touches the screen or that it exits */
+        while (touch_screen_event == false && running == true)
             ;
+
+        if (running == false)
+            goto exit;
 
         snprintf(str, 255, "x: %u, y: %u", last_event_x, last_event_y);
 
