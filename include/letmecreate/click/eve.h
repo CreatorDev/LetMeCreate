@@ -7,6 +7,7 @@
  * @example eve/main.c
  * @example eve/main2.c
  * @example eve/main3.c
+ * @example eve/main4.c
  */
 
 #ifndef __LETMECREATE_CLICK_EVE_H__

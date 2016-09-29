@@ -66,6 +66,8 @@ define Package/letmecreate/install
 	if [ -d "$(PKG_BUILD_DIR)/examples/bin/" ]; then \
 		mkdir -p $(1)/usr/bin/letmecreate_examples; \
 		$(INSTALL_BIN) $(PKG_BUILD_DIR)/examples/bin/* $(1)/usr/bin/letmecreate_examples; \
+		mkdir -p $(1)/usr/bin/letmecreate_examples/data; \
+		$(INSTALL_DATA) $(PKG_BUILD_DIR)/examples/data/* $(1)/usr/bin/letmecreate_examples/data; \
 	fi
 
 	if [ -d "$(PKG_BUILD_DIR)/tests/bin/" ]; then \
