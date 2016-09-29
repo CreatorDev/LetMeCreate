@@ -10,7 +10,6 @@
  *   - a WQVGA screen must be connected to the EVE Click.
  */
 #include <linux/spi/spidev.h>
-#include <stdio.h>
 #include <unistd.h>
 #include <letmecreate/letmecreate.h>
 
