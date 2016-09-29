@@ -18,11 +18,10 @@
 
 static volatile bool running = true;
 
-static void exit_program(int signo)
+static void exit_program(int __attribute__ ((unused))signo)
 {
     running = false;
 }
-
 
 int main(void)
 {
