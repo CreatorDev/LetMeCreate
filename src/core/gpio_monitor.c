@@ -87,7 +87,7 @@ static void call_callbacks(uint8_t gpio_pin, uint8_t event_type)
     pthread_mutex_unlock(&gpio_watch_mutex);
 }
 
-static void* monitor_gpio(void *arg)
+static void* monitor_gpio(void __attribute__ ((unused))*arg)
 {
     thread_running = true;
     while (thread_running) {
