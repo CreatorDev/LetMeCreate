@@ -94,7 +94,11 @@ int eve_click_clear(uint8_t r, uint8_t g, uint8_t b);
  * Otherwise, it is stored in a buffer until eve_click_display is called or any
  * other functions that flush the command buffer.
  *
- * @param cmd Opcode of the command.
+ * Documentation for each command is available at:
+ * http://www.ftdichip.com/Support/Documents/ProgramGuides/FT800%20Programmers%20Guide.pdf
+ * This function can accept both display list commands and coprocessor commands.
+ *
+ * @param[in] cmd Opcode of the command.
  * @return 0 if successful, -1 otherwise.
  */
 int eve_click_draw(uint32_t cmd, ...);
@@ -306,10 +310,10 @@ int eve_click_snapshot(uint32_t ptr, uint8_t *data);
  *
  * The spinner is stopped by calling eve_click_stop.
  *
- * @param x X coordinate of the spinner
- * @param y Y coordinate of the spinner
- * @param style Must be in range 0 to 3
- * @param scale Scaling coefficient. 0 for no scaling, 1: half screen, 2: full screen
+ * @param[in] x X screen coordinate of top left of spinner
+ * @param[in] y Y screen coordinate of top right of spinner
+ * @param[in] style Must be in range 0 to 3
+ * @param[in] scale Scaling coefficient. 0 for no scaling, 1: half screen, 2: full screen
  * @return 0 if successful, -1 otherwise.
  */
 int eve_click_spinner(int16_t x, int16_t y, uint16_t style, uint16_t scale);
