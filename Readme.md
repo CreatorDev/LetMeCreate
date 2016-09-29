@@ -33,6 +33,7 @@ MikroClick board supported:
   - EVE
   - Relay4 (partial support)
   - Opto
+  - CO
 
 Examples are installed in /usr/bin/letmecreate_examples.
 Tests are installed in /usr/bin/letmecreate_tests.
