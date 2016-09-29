@@ -31,7 +31,7 @@ MikroClick board supported:
   - 7Seg
   - ADC
   - EVE
-  - Relay4
+  - Relay4 (partial support)
   - Opto
 
 Examples are installed in /usr/bin/letmecreate_examples.
