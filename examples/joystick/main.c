@@ -13,15 +13,16 @@
 
 /*   Roughly the variable that will be reached when the joystick is farthest
      left or right */
-#define OFFSET  98
-#define MAXIMUM (OFFSET * 2)
+#define OFFSET      (98)
+#define MAXIMUM     ((OFFSET) * 2)
 
 
-int get_led_mask(float perc)
+static uint8_t get_led_mask(float perc)
 {
-    int mask = 0;
-    int div = perc * LED_CNT;
+    uint8_t mask = 0;
+    int div = (1.f - perc) * LED_CNT;
     int i;
+
     if (div > LED_CNT)
         div = LED_CNT;
 
@@ -31,10 +32,9 @@ int get_led_mask(float perc)
     return mask;
 }
 
-int main()
+int main(void)
 {
     i2c_init();
-    i2c_select_bus(MIKROBUS_1);
     led_init();
 
     /* Use Ctrl-C to break the loop */
@@ -42,8 +42,10 @@ int main()
         int8_t x, y;
         int mask;
 
-        if (joystick_click_get_position(&x, &y) == -1)
+        if (joystick_click_get_position(&x, &y) == -1) {
+            fprintf(stderr, "Failed to get joystick position.\n");
             break;
+        }
 
         printf("%i %i\n", (int)x, (int)y);
 
