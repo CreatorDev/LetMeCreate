@@ -13,7 +13,7 @@
 #include "examples/common.h"
 
 
-void flash_leds(uint8_t null)
+void flash_leds(uint8_t __attribute__ ((unused))null)
 {
     int x = 0;
     for(; x < 10; ++x) {
