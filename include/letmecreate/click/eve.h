@@ -3,6 +3,10 @@
  * @author Francois Berder
  * @date 2016
  * @copyright 3-clause BSD
+ *
+ * @example eve/main.c
+ * @example eve/main2.c
+ * @example eve/main3.c
  */
 
 #ifndef __LETMECREATE_CLICK_EVE_H__
