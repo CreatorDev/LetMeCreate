@@ -1,3 +1,13 @@
+/**
+ * This example shows how to use the Joystick Click wrapper of the LetMeCreate.
+ *
+ * It continuously reads the position of the joystick, prints it in the terminal
+ * and displays a pattern on the LED's based on the x coordinate.
+ *
+ * The Joystick Click must be inserted in Mikrobus 1 before running this program.
+ */
+
+
 #include <stdio.h>
 #include <letmecreate/letmecreate.h>
 
