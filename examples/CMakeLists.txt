@@ -65,3 +65,7 @@ install(TARGETS letmecreate_eve_example RUNTIME DESTINATION bin)
 add_executable(letmecreate_eve_2_example eve/main2.c)
 target_link_libraries(letmecreate_eve_2_example letmecreate_click letmecreate_core)
 install(TARGETS letmecreate_eve_2_example RUNTIME DESTINATION bin)
+
+add_executable(letmecreate_eve_3_example eve/main3.c)
+target_link_libraries(letmecreate_eve_3_example letmecreate_click letmecreate_core)
+install(TARGETS letmecreate_eve_3_example RUNTIME DESTINATION bin)
