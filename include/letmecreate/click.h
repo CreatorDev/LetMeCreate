@@ -9,6 +9,8 @@
 #ifndef __LETMECREATE_CLICK_H__
 #define __LETMECREATE_CLICK_H__
 
+#include "letmecreate/bosh/bme280.h"
+
 #include "letmecreate/click/7seg.h"
 #include "letmecreate/click/accel.h"
 #include "letmecreate/click/adc.h"
@@ -31,5 +33,5 @@
 #include "letmecreate/click/relay2.h"
 #include "letmecreate/click/relay4.h"
 #include "letmecreate/click/thermo3.h"
-
+#include "letmecreate/click/weather.h"
 #endif
