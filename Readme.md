@@ -1,11 +1,15 @@
 # LetMeCreate library
 
+## Build status
+
 Master
 [![Build Status](https://travis-ci.org/francois-berder/LetMeCreate.svg?branch=master)](https://travis-ci.org/francois-berder/LetMeCreate)
+
+
 Dev
 [![Build Status](https://travis-ci.org/francois-berder/LetMeCreate.svg?branch=dev)](https://travis-ci.org/francois-berder/LetMeCreate)
 
-
+## Introduction
 
 This library is a collection of small wrappers for some interfaces of the Ci40. It aims at making easier to develop on this platform. Also, it provides some wrappers for a few clicks. Notice that you cannot compile the library on Ci40 because cmake cannot run on it.
 
