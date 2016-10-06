@@ -63,7 +63,7 @@ static void process_event(uint8_t switch_event)
     pthread_mutex_unlock(&mutex);
 }
 
-static void* switch_update(void *arg)
+static void* switch_update(void __attribute__ ((unused))*arg)
 {
     int ret;
     struct input_event event[2];
