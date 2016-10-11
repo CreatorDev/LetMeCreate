@@ -25,16 +25,16 @@ add_library(letmecreate_core SHARED ${core_srcs} ${core_hdrs})
 add_library(letmecreate_click SHARED ${click_srcs} ${click_hdrs})
 target_link_libraries(letmecreate_click letmecreate_core)
 
-# Enable warnings
-set_target_properties(letmecreate_core PROPERTIES C_VISIBILITY_PRESET hidden)
-set_target_properties(letmecreate_click PROPERTIES C_VISIBILITY_PRESET hidden)
-set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wextra -ggdb3")
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wall -Wextra -O2")
-
 # Export symbols
 include(GenerateExportHeader)
 generate_export_header(letmecreate_core EXPORT_FILE_NAME "include/letmecreate/core/export.h")
 generate_export_header(letmecreate_click EXPORT_FILE_NAME "include/letmecreate/click/export.h")
+set_target_properties(letmecreate_core PROPERTIES C_VISIBILITY_PRESET hidden)
+set_target_properties(letmecreate_click PROPERTIES C_VISIBILITY_PRESET hidden)
+
+# Enable warnings
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wextra -ggdb3")
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wall -Wextra -O2")
 
 
 target_include_directories(
