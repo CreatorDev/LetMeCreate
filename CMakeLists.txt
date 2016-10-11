@@ -27,7 +27,7 @@ target_link_libraries(letmecreate_click letmecreate_core)
 
 # Enable warnings
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wextra -ggdb3 -fvisibility=hidden")
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wall -Wextra -fvisibility=hidden")
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wall -Wextra -O2 -fvisibility=hidden")
 
 # Export symbols
 include(GenerateExportHeader)
