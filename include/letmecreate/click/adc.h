@@ -14,16 +14,14 @@
 #include <stdint.h>
 #include <letmecreate/click/export.h>
 
-#define ADC_CLICK_CHANNEL_COUNT (4)
-
 /** Channel index of the ADC Click */
 enum ADC_CLICK_CHANNEL_INDEX {
     ADC_CLICK_CHANNEL_1,
     ADC_CLICK_CHANNEL_2,
     ADC_CLICK_CHANNEL_3,
     ADC_CLICK_CHANNEL_4,
+    ADC_CLICK_CHANNEL_COUNT,
 };
-
 
 /**
  * @brief Read raw value from a channel of the ADC Click.
