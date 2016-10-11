@@ -31,6 +31,7 @@
 #define __LETMECREATE_CLICK_RELAY4_H__
 
 #include <stdint.h>
+#include <letmecreate/click/export.h>
 
 /**
  * @brief Configure relay4 to be controlled over given pins on cI40 board (those pins should be connected to pins P0-P3
@@ -43,14 +44,14 @@
  * @param[in] relay_3_pin Index of the pin connected to relay4 P3 pin
  * @return 0 if successful, -1 otherwise
  */
-int relay4_click_enable(uint8_t relay_0_pin, uint8_t relay_1_pin, uint8_t relay_2_pin, uint8_t relay_3_pin);
+int LETMECREATE_CLICK_EXPORT relay4_click_enable(uint8_t relay_0_pin, uint8_t relay_1_pin, uint8_t relay_2_pin, uint8_t relay_3_pin);
 
 /**
  * @brief Releases usage of GPIO pins reserved through call to relay4_enable.
  *
  * @return 0 if successful, -1 otherwise
  */
-int relay4_click_disable(void);
+int LETMECREATE_CLICK_EXPORT relay4_click_disable(void);
 
 /**
  * @brief Changes state of one of 4 relay switch. Input parameter is a index number not a GPIO pin ID.
@@ -59,7 +60,7 @@ int relay4_click_disable(void);
  * @param[in] state Set to 1 if relay should be turned on, 0 otherwise
  * @return 0 if successful, -1 otherwise
  */
-int relay4_click_set_state(uint8_t pin_index, uint8_t state);
+int LETMECREATE_CLICK_EXPORT relay4_click_set_state(uint8_t pin_index, uint8_t state);
 
 /**
  * @brief Returns state of one of 4 relay switch. Input parameter is a index number not a GPIO pin ID.
@@ -68,7 +69,7 @@ int relay4_click_set_state(uint8_t pin_index, uint8_t state);
  * @param[out] state Current state of switch (0: low, 1: high)
  * @return 0 if successful, -1 otherwise
  */
-int relay4_click_get_state(uint8_t pin_index, uint8_t* state);
+int LETMECREATE_CLICK_EXPORT relay4_click_get_state(uint8_t pin_index, uint8_t* state);
 
 /**
  * @brief Changes state of one of 4 relay switch to opposite.
@@ -76,6 +77,6 @@ int relay4_click_get_state(uint8_t pin_index, uint8_t* state);
  * @param[in] pin_index Index of the relay which state will be changed.
  * @return 0 if successful, -1 otherwise
  */
-int relay4_click_toggle(uint8_t pin_index);
+int LETMECREATE_CLICK_EXPORT relay4_click_toggle(uint8_t pin_index);
 
 #endif /* __LETMECREATE_CLICK_RELAY4_H__ */

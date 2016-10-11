@@ -11,13 +11,14 @@
 #define __LETMECREATE_CLICK_PROXIMITY_H__
 
 #include <stdint.h>
+#include <letmecreate/click/export.h>
 
 /**
  * @brief Enable the proximity click.
  *
  * @return 0 if successful, otherwise it returns -1.
  */
-int proximity_click_enable(void);
+int LETMECREATE_CLICK_EXPORT proximity_click_enable(void);
 
 /**
  * @brief Get a measure from proximity click.
@@ -27,13 +28,13 @@ int proximity_click_enable(void);
  * @param[out] measure Pointer to a 16-bit variable to retrieve the output from the click (must not be null)
  * @return 0 if successful, otherwise it returns -1.
  */
-int proximity_click_get_measure(uint16_t *measure);
+int LETMECREATE_CLICK_EXPORT proximity_click_get_measure(uint16_t *measure);
 
 /**
  * @brief Shutdown the proximity click.
  *
  * @return 0 if successful, otherwise it returns -1.
  */
-int proximity_click_disable(void);
+int LETMECREATE_CLICK_EXPORT proximity_click_disable(void);
 
 #endif

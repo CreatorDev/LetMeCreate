@@ -12,6 +12,7 @@
 
 
 #include <stdint.h>
+#include <letmecreate/click/export.h>
 
 #define ADC_CLICK_CHANNEL_COUNT (4)
 
@@ -32,6 +33,6 @@ enum ADC_CLICK_CHANNEL_INDEX {
  * returned is a 12-bit integer.
  * @return 0 if successful, otherwise it returns -1.
  */
-int adc_click_get_raw_value(uint8_t channel, uint16_t *value);
+int LETMECREATE_CLICK_EXPORT adc_click_get_raw_value(uint8_t channel, uint16_t *value);
 
 #endif

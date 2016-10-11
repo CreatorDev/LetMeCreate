@@ -9,6 +9,7 @@
 #define __LETMECREATE_CLICK_IR_ECLIPSE_H__
 
 #include <stdint.h>
+#include <letmecreate/click/export.h>
 
 /**
  * @brief Attach callback triggered if an object is detected.
@@ -20,6 +21,6 @@
  * @param[in] callback Must not be null.
  * @return A callback ID (positive integer) if successful, -1 otherwise
  */
-int ir_eclipse_click_add_callback(uint8_t mikrobus_index, void (*callback)(uint8_t));
+int LETMECREATE_CLICK_EXPORT ir_eclipse_click_add_callback(uint8_t mikrobus_index, void (*callback)(uint8_t));
 
 #endif

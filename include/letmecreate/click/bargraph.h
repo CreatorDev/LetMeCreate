@@ -11,6 +11,7 @@
 #define __LETMECREATE_CLICK_BARGRAPH_H__
 
 #include <stdint.h>
+#include <letmecreate/click/export.h>
 
 /**
  * @brief Switch on/off LED's of the Bargraph Click.
@@ -22,7 +23,7 @@
  * significant bits are used.
  * @return 0 if successful, otherwise it returns -1.
  */
-int bargraph_click_set_value(uint16_t value);
+int LETMECREATE_CLICK_EXPORT bargraph_click_set_value(uint16_t value);
 
 /**
  * @brief Set the intensity of the LED's of the Bargraph Click.
@@ -31,6 +32,6 @@ int bargraph_click_set_value(uint16_t value);
  * @param[in] intensity Must be in range 0..100
  * @return 0 if successful, otherwise it returns -1.
  */
-int bargraph_click_set_intensity(uint8_t mikrobus_index, float intensity);
+int LETMECREATE_CLICK_EXPORT bargraph_click_set_intensity(uint8_t mikrobus_index, float intensity);
 
 #endif

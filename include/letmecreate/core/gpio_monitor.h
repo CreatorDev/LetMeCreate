@@ -10,7 +10,8 @@
 #define __LETMECREATE_CORE_GPIO_MONITOR_H__
 
 #include <stdint.h>
-#include "gpio.h"
+#include <letmecreate/core/gpio.h>
+#include <letmecreate/core/export.h>
 
 /** Event on GPIO */
 enum GPIO_EVENT {
@@ -27,7 +28,7 @@ enum GPIO_EVENT {
  *
  * @return 0 if successful, -1 otherwise
  */
-int gpio_monitor_init(void);
+int LETMECREATE_CORE_EXPORT gpio_monitor_init(void);
 
 /**
  * @brief Attach a callback to a GPIO.
@@ -37,7 +38,7 @@ int gpio_monitor_init(void);
  * @param[in] callback Function to call (uint8_t argument is the event type)
  * @return ID of the callback (non-negative integer) if successful, -1 otherwise
  */
-int gpio_monitor_add_callback(uint8_t gpio_pin, uint8_t event_mask, void(*callback)(uint8_t));
+int LETMECREATE_CORE_EXPORT gpio_monitor_add_callback(uint8_t gpio_pin, uint8_t event_mask, void(*callback)(uint8_t));
 
 /**
  * @brief Detach a callback from a GPIO
@@ -45,13 +46,13 @@ int gpio_monitor_add_callback(uint8_t gpio_pin, uint8_t event_mask, void(*callba
  * @param[in] callback_ID ID of the callback (must not be negative)
  * @return 0 if successful, -1 otherwise
  */
-int gpio_monitor_remove_callback(int callback_ID);
+int LETMECREATE_CORE_EXPORT gpio_monitor_remove_callback(int callback_ID);
 
 /**
  * @brief Remove all callbacks and stop monitoring thread.
  *
  * @return 0 if successful, -1 otherwise
  */
-int gpio_monitor_release(void);
+int LETMECREATE_CORE_EXPORT gpio_monitor_release(void);
 
 #endif

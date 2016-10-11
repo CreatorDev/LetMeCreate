@@ -12,6 +12,7 @@
 #define __LETMECREATE_CLICK_THERMO3_H__
 
 #include <stdint.h>
+#include <letmecreate/click/export.h>
 
 /**
  * @brief Enable Thermo3 click.
@@ -19,7 +20,7 @@
  * @param add_bit Thermo3 click has a jumper on its board to change its address (must be 0 or 1)
  * @return 0 if successful, otherwise it returns -1.
  */
-int thermo3_click_enable(uint8_t add_bit);
+int LETMECREATE_CLICK_EXPORT thermo3_click_enable(uint8_t add_bit);
 
 /**
  * @brief Get a temperature measure (in degrees Celsius) from Thermo3 click.
@@ -27,7 +28,7 @@ int thermo3_click_enable(uint8_t add_bit);
  * @param[out] temperature Pointer to a 16-bit variable for writing temperature read from Thermo3 click
  * @return 0 if successful, otherwise it returns -1.
  */
-int thermo3_click_get_temperature(float *temperature);
+int LETMECREATE_CLICK_EXPORT thermo3_click_get_temperature(float *temperature);
 
 /**
  * @brief Configure Thermo3 click to trigger an interrupt if temperature is too high.
@@ -40,13 +41,13 @@ int thermo3_click_get_temperature(float *temperature);
  * @param[in] callback Function to call if temperature is higher than threshold (must not be null)
  * @return callback ID (positive integer if successful, -1 otherwise.
  */
-int thermo3_click_set_alarm(uint8_t mikrobus_index, float threshold, void(*callback)(uint8_t));
+int LETMECREATE_CLICK_EXPORT thermo3_click_set_alarm(uint8_t mikrobus_index, float threshold, void(*callback)(uint8_t));
 
 /**
  * @brief Disable Thermo3 click.
  *
  * @return 0 if successful, otherwise it returns -1.
  */
-int thermo3_click_disable(void);
+int LETMECREATE_CLICK_EXPORT thermo3_click_disable(void);
 
 #endif

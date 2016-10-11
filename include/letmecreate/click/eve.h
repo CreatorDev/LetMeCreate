@@ -16,6 +16,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include "letmecreate/click/ft800_defs.h"
+#include <letmecreate/click/export.h>
 
 /**
  * @brief Initialise the EVE click.
@@ -26,7 +27,7 @@
  * @param[in] mikrobus_index Index of the mikrobus (see #MIKROBUS_INDEX)
  * @return 0 if successful, -1 otherwise.
  */
-int eve_click_enable(uint8_t mikrobus_index);
+int LETMECREATE_CLICK_EXPORT eve_click_enable(uint8_t mikrobus_index);
 
 /**
  * @brief Shutdown EVE click.
@@ -34,7 +35,7 @@ int eve_click_enable(uint8_t mikrobus_index);
  * @param[in] mikrobus_index Index of the mikrobus (see #MIKROBUS_INDEX)
  * @return 0 if successful, -1 otherwise.
  */
-int eve_click_disable(uint8_t mikrobus_index);
+int LETMECREATE_CLICK_EXPORT eve_click_disable(uint8_t mikrobus_index);
 
 /*
  *******************************************************************************
@@ -52,17 +53,17 @@ int eve_click_disable(uint8_t mikrobus_index);
 /**
  * @brief Disable buffering.
  */
-void eve_click_disable_buffering(void);
+void LETMECREATE_CLICK_EXPORT eve_click_disable_buffering(void);
 
 /**
  * @brief Enable buffering.
  */
-void eve_click_enable_buffering(void);
+void LETMECREATE_CLICK_EXPORT eve_click_enable_buffering(void);
 
 /**
  * @return True if buffering is enabled, false otherwise.
  */
-bool eve_click_is_buffering_enabled(void);
+bool LETMECREATE_CLICK_EXPORT eve_click_is_buffering_enabled(void);
 
 /*
  *******************************************************************************
@@ -86,7 +87,7 @@ bool eve_click_is_buffering_enabled(void);
  * @param[in] b Blue component of the color to clear the screen with
  * @return 0 if successful, -1 otherwise
  */
-int eve_click_clear(uint8_t r, uint8_t g, uint8_t b);
+int LETMECREATE_CLICK_EXPORT eve_click_clear(uint8_t r, uint8_t g, uint8_t b);
 
 /**
  * @brief Add a graphics command in the buffer.
@@ -102,14 +103,14 @@ int eve_click_clear(uint8_t r, uint8_t g, uint8_t b);
  * @param[in] cmd Opcode of the command.
  * @return 0 if successful, -1 otherwise.
  */
-int eve_click_draw(uint32_t cmd, ...);
+int LETMECREATE_CLICK_EXPORT eve_click_draw(uint32_t cmd, ...);
 
 /**
  * @brief Flush the buffer and display the frame on the screen.
  *
  * @return 0 if successful, -1 otherwise.
  */
-int eve_click_display(void);
+int LETMECREATE_CLICK_EXPORT eve_click_display(void);
 
 /*
  *******************************************************************************
@@ -132,7 +133,7 @@ int eve_click_display(void);
  * @param[in] count Size in bytes of the image
  * @return 0 if successful, -1 otherwise.
  */
-int eve_click_load_image(uint32_t ptr, uint32_t options, const uint8_t *data, uint32_t count);
+int LETMECREATE_CLICK_EXPORT eve_click_load_image(uint32_t ptr, uint32_t options, const uint8_t *data, uint32_t count);
 
 /**
  * @brief Decompress data compressed with the deflate algorithm.
@@ -142,7 +143,7 @@ int eve_click_load_image(uint32_t ptr, uint32_t options, const uint8_t *data, ui
  * @param[in] count Size in bytes of the compressed data
  * @return 0 if successful, -1 otherwise.
  */
-int eve_click_inflate(uint32_t ptr, const uint8_t *data, uint32_t count);
+int LETMECREATE_CLICK_EXPORT eve_click_inflate(uint32_t ptr, const uint8_t *data, uint32_t count);
 
 /**
  * @brief Get the end address of the decompressed data
@@ -153,7 +154,7 @@ int eve_click_inflate(uint32_t ptr, const uint8_t *data, uint32_t count);
  * @param[out] ptr Last address of decompressed data (must not be null)
  * @return 0 if successful, -1 otherwise.
  */
-int eve_click_get_ptr(uint32_t *ptr);
+int LETMECREATE_CLICK_EXPORT eve_click_get_ptr(uint32_t *ptr);
 
 /*
  *******************************************************************************
@@ -169,7 +170,7 @@ int eve_click_get_ptr(uint32_t *ptr);
  *
  * @return 0 if successful, -1 otherwise.
  */
-int eve_click_load_identity(void);
+int LETMECREATE_CLICK_EXPORT eve_click_load_identity(void);
 
 /**
  * @brief Translate
@@ -180,7 +181,7 @@ int eve_click_load_identity(void);
  * @param[in] ty signed 16.16 fixed-point y coordinate
  * @return 0 if successful, -1 otherwise.
  */
-int eve_click_translate(int32_t tx, int32_t ty);
+int LETMECREATE_CLICK_EXPORT eve_click_translate(int32_t tx, int32_t ty);
 
 /**
  * @brief Scale
@@ -191,7 +192,7 @@ int eve_click_translate(int32_t tx, int32_t ty);
  * @param[in] sy signed 16.16 fixed-point x factor
  * @return 0 if successful, -1 otherwise.
  */
-int eve_click_scale(int32_t sx, int32_t sy);
+int LETMECREATE_CLICK_EXPORT eve_click_scale(int32_t sx, int32_t sy);
 
 /**
  * @brief Rotate
@@ -201,7 +202,7 @@ int eve_click_scale(int32_t sx, int32_t sy);
  * @param[in] angle Clockwise rotation angle in units of 1/65536 of a circle
  * @return 0 if successful, -1 otherwise.
  */
-int eve_click_rotate(int32_t angle);
+int LETMECREATE_CLICK_EXPORT eve_click_rotate(int32_t angle);
 
 /**
  * @brief Retrieve bitmap transformation matrix from FT800.
@@ -218,7 +219,7 @@ int eve_click_rotate(int32_t angle);
  * @param[out] f
  * @return 0 if successful, -1 otherwise.
  */
-int eve_click_get_matrix(int32_t *a, int32_t *b, int32_t *c,
+int LETMECREATE_CLICK_EXPORT eve_click_get_matrix(int32_t *a, int32_t *b, int32_t *c,
                          int32_t *d, int32_t *e, int32_t *f);
 
 /**
@@ -226,7 +227,7 @@ int eve_click_get_matrix(int32_t *a, int32_t *b, int32_t *c,
  *
  * @return 0 if successful, -1 otherwise.
  */
-int eve_click_set_matrix(void);
+int LETMECREATE_CLICK_EXPORT eve_click_set_matrix(void);
 
 /*
  *******************************************************************************
@@ -242,7 +243,7 @@ int eve_click_set_matrix(void);
  * @param[out] crc CRC of the memory region specified by ptr and byte_count (must not be null)
  * @return 0 if successful, -1 otherwise
  */
-int eve_click_memcrc(uint32_t ptr, uint32_t byte_count, uint32_t *crc);
+int LETMECREATE_CLICK_EXPORT eve_click_memcrc(uint32_t ptr, uint32_t byte_count, uint32_t *crc);
 
 /**
  * @brief Set memory region to a specific value.
@@ -252,7 +253,7 @@ int eve_click_memcrc(uint32_t ptr, uint32_t byte_count, uint32_t *crc);
  * @param[in] byte_count Number of bytes to set
  * @return 0 if successful, -1 otherwise
  */
-int eve_click_memset(uint32_t ptr, uint32_t value, uint32_t byte_count);
+int LETMECREATE_CLICK_EXPORT eve_click_memset(uint32_t ptr, uint32_t value, uint32_t byte_count);
 
 /**
  * @brief Copy one region of memory to another one.
@@ -265,7 +266,7 @@ int eve_click_memset(uint32_t ptr, uint32_t value, uint32_t byte_count);
  * @param[in] byte_count Number of byte to copy from src to dest
  * @return 0 if successful, -1 otherwise
  */
-int eve_click_memcpy(uint32_t dest, uint32_t src, uint32_t byte_count);
+int LETMECREATE_CLICK_EXPORT eve_click_memcpy(uint32_t dest, uint32_t src, uint32_t byte_count);
 
 /**
  * @brief Set to zero a memory region.
@@ -274,7 +275,7 @@ int eve_click_memcpy(uint32_t dest, uint32_t src, uint32_t byte_count);
  * @param[in] byte_count Number of byte to zeroed
  * @return 0 if successful, -1 otherwise
  */
-int eve_click_memzero(uint32_t ptr, uint32_t byte_count);
+int LETMECREATE_CLICK_EXPORT eve_click_memzero(uint32_t ptr, uint32_t byte_count);
 
 /*
  *******************************************************************************
@@ -289,7 +290,7 @@ int eve_click_memzero(uint32_t ptr, uint32_t byte_count);
  *
  * @return 0 if successful, -1 otherwise.
  */
-int eve_click_ftdi_logo(void);
+int LETMECREATE_CLICK_EXPORT eve_click_ftdi_logo(void);
 
 /**
  * @brief Take a snapshot of the screen.
@@ -304,7 +305,7 @@ int eve_click_ftdi_logo(void);
  * @param[out] data Pointer to an array of bytes
  * @return 0 if successful, -1 otherwise.
  */
-int eve_click_snapshot(uint32_t ptr, uint8_t *data);
+int LETMECREATE_CLICK_EXPORT eve_click_snapshot(uint32_t ptr, uint8_t *data);
 
 /**
  * @brief Display a spinner.
@@ -317,21 +318,21 @@ int eve_click_snapshot(uint32_t ptr, uint8_t *data);
  * @param[in] scale Scaling coefficient. 0 for no scaling, 1: half screen, 2: full screen
  * @return 0 if successful, -1 otherwise.
  */
-int eve_click_spinner(int16_t x, int16_t y, uint16_t style, uint16_t scale);
+int LETMECREATE_CLICK_EXPORT eve_click_spinner(int16_t x, int16_t y, uint16_t style, uint16_t scale);
 
 /**
  * @brief Stop a spinner or a screensaver.
  *
  * @return 0 if successful, -1 otherwise.
  */
-int eve_click_stop(void);
+int LETMECREATE_CLICK_EXPORT eve_click_stop(void);
 
 /**
  * @brief Reset the coprocessor of the EVE click.
  *
  * @return 0 if successful, -1 otherwise.
  */
-int eve_click_coldstart(void);
+int LETMECREATE_CLICK_EXPORT eve_click_coldstart(void);
 
 /**
  * @brief Display a screensaver.
@@ -340,7 +341,7 @@ int eve_click_coldstart(void);
  *
  * @return 0 if successful, -1 otherwise.
  */
-int eve_click_screensaver(void);
+int LETMECREATE_CLICK_EXPORT eve_click_screensaver(void);
 
 /**
  * @brief Control the intensity of the backlight.
@@ -350,7 +351,7 @@ int eve_click_screensaver(void);
  * @param[in] intensity Must be in range 0..100
  * @return 0 if successful, -1 otherwise.
  */
-int eve_click_set_backlight_intensity(uint8_t intensity);
+int LETMECREATE_CLICK_EXPORT eve_click_set_backlight_intensity(uint8_t intensity);
 
 /*
  *******************************************************************************
@@ -370,7 +371,7 @@ int eve_click_set_backlight_intensity(uint8_t intensity);
  * @param[in] callback Arguments to this callback are the screen coordinates of
  * the detected touch point.
  */
-void eve_click_attach_touch_callback(void (*callback)(uint16_t, uint16_t));
+void LETMECREATE_CLICK_EXPORT eve_click_attach_touch_callback(void (*callback)(uint16_t, uint16_t));
 
 /**
  * @brief Calibrate touch screen.
@@ -381,6 +382,6 @@ void eve_click_attach_touch_callback(void (*callback)(uint16_t, uint16_t));
  *
  * @return 0 if successful, -1 otherwise.
  */
-int eve_click_calibrate(void);
+int LETMECREATE_CLICK_EXPORT eve_click_calibrate(void);
 
 #endif

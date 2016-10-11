@@ -11,6 +11,7 @@
 #define __LETMECREATE_CLICK_7SEG_H__
 
 #include <stdint.h>
+#include <letmecreate/click/export.h>
 
 /**
  * @brief Display a decimal number on the 7Seg Click.
@@ -22,7 +23,7 @@
  * significant bits are used.
  * @return 0 if successful, otherwise it returns -1.
  */
-int seven_seg_click_display_decimal_number(uint8_t number);
+int LETMECREATE_CLICK_EXPORT seven_seg_click_display_decimal_number(uint8_t number);
 
 /**
  * @brief Display a hexidecimal number on the 7Seg Click.
@@ -33,7 +34,7 @@ int seven_seg_click_display_decimal_number(uint8_t number);
  * @param[in] hex Hexadecimal number
  * @return 0 if successful, otherwise it returns -1.
  */
-int seven_seg_click_display_hex_number(uint8_t hex);
+int LETMECREATE_CLICK_EXPORT seven_seg_click_display_hex_number(uint8_t hex);
 
 /**
  * @brief Set the intensity of the LED's of the 7seg Click.
@@ -42,6 +43,6 @@ int seven_seg_click_display_hex_number(uint8_t hex);
  * @param[in] intensity Must be in range 0..100
  * @return 0 if successful, otherwise it returns -1.
  */
-int seven_seg_click_set_intensity(uint8_t mikrobus_index, float intensity);
+int LETMECREATE_CLICK_EXPORT seven_seg_click_set_intensity(uint8_t mikrobus_index, float intensity);
 
 #endif

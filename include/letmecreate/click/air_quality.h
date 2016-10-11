@@ -10,6 +10,7 @@
 #define __LETMECREATE_CLICK_AIR_QUALITY_H__
 
 #include <stdint.h>
+#include <letmecreate/click/export.h>
 
 /**
  * @brief Attach callback triggered if air quality is bad.
@@ -21,6 +22,6 @@
  * @param callback Function to call if air quality is bad (must not be null)
  * @return callback ID (positive integer) if successful, -1 otherwise.
  */
-int air_quality_click_set_callback(uint8_t mikrobus_index, void(*callback)(uint8_t));
+int LETMECREATE_CLICK_EXPORT air_quality_click_set_callback(uint8_t mikrobus_index, void(*callback)(uint8_t));
 
 #endif
