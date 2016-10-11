@@ -31,12 +31,8 @@ set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wall -Wextra -fvisibility=h
 
 # Export symbols
 include(GenerateExportHeader)
-add_compiler_export_flags()
 generate_export_header(letmecreate_core EXPORT_FILE_NAME "include/letmecreate/core/export.h")
 generate_export_header(letmecreate_click EXPORT_FILE_NAME "include/letmecreate/click/export.h")
-
-target_compile_definitions(letmecreate_core PUBLIC "LETMECREATE_CORE_DEBUG=$<CONFIG:Debug>")
-target_compile_definitions(letmecreate_click PUBLIC "LETMECREATE_CLICK_DEBUG=$<CONFIG:Debug>")
 
 
 target_include_directories(
