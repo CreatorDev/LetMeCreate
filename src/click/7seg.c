@@ -1,6 +1,8 @@
 #include <stdio.h>
+#include "letmecreate/click/7seg.h"
 #include "letmecreate/core/pwm.h"
 #include "letmecreate/core/spi.h"
+
 
 static const uint8_t characters[] = {
 0x7E,   /* 0 */
