@@ -24,27 +24,27 @@ Interface supported:
   - ADC
 
 MikroClick board supported:
-  - Thermo3
-  - Proximity
-  - Motion
-  - Relay (partial support)
-  - Relay2
-  - Joystick
-  - Air quality
-  - Accel
+  - 7Seg
   - 8x8R (Led Matrix)
+  - Accel
+  - ADC
+  - Air quality
   - Alcohol
-  - IR eclipse
-  - IR distance
+  - Bargraph
+  - CO
   - Color
   - Color2
-  - Bargraph
-  - 7Seg
-  - ADC
   - EVE
-  - Relay4 (partial support)
+  - IR distance
+  - IR eclipse
+  - Joystick
+  - Motion
   - Opto
-  - CO
+  - Proximity
+  - Relay (partial support)
+  - Relay2
+  - Relay4 (partial support)
+  - Thermo3
 
 Examples are installed in /usr/bin/letmecreate_examples.
 Tests are installed in /usr/bin/letmecreate_tests.
