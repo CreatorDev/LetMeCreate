@@ -9,7 +9,7 @@
 #ifndef __LETMECREATE_H__
 #define __LETMECREATE_H__
 
-#include "letmecreate/core.h"
-#include "letmecreate/click.h"
+#include <letmecreate/core.h>
+#include <letmecreate/click.h>
 
 #endif

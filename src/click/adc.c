@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include "letmecreate/click/adc.h"
-#include "letmecreate/core/spi.h"
+#include <letmecreate/click/adc.h>
+#include <letmecreate/core/spi.h>
 
 #define START_BIT       (0x04)
 #define SINGLED_ENDED   (0x02)

@@ -1,10 +1,10 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
-#include "letmecreate/click/accel.h"
-#include "letmecreate/click/common.h"
-#include "letmecreate/core/i2c.h"
-#include "letmecreate/core/spi.h"
+#include <letmecreate/click/accel.h>
+#include <letmecreate/click/common.h>
+#include <letmecreate/core/i2c.h>
+#include <letmecreate/core/spi.h>
 
 
 /* I2C ADXL345 addresses */

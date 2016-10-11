@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "common.h"
-#include "letmecreate/core/led.h"
+#include <letmecreate/core/led.h>
 
 static bool test_led_switch_on_off_before_init(void)
 {

@@ -1,8 +1,8 @@
 #include <stdio.h>
-#include "letmecreate/click/ir_eclipse.h"
-#include "letmecreate/core/common.h"
-#include "letmecreate/core/gpio.h"
-#include "letmecreate/core/gpio_monitor.h"
+#include <letmecreate/click/ir_eclipse.h>
+#include <letmecreate/core/common.h>
+#include <letmecreate/core/gpio.h>
+#include <letmecreate/core/gpio_monitor.h>
 
 
 int ir_eclipse_click_add_callback(uint8_t mikrobus_index, void (*callback)(uint8_t))

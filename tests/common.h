@@ -2,7 +2,7 @@
 #define _LETMECREATE_TESTS_COMMON_H
 
 #include <stdbool.h>
-#include "letmecreate/core/common.h"
+#include <letmecreate/core/common.h>
 
 struct test_case {
     char name[MAX_STR_LENGTH];

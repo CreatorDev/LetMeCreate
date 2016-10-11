@@ -6,8 +6,8 @@
 #include <sys/types.h>
 #include <termios.h>
 #include <unistd.h>
-#include "letmecreate/core/common.h"
-#include "letmecreate/core/uart.h"
+#include <letmecreate/core/common.h>
+#include <letmecreate/core/uart.h>
 
 #define UART_1_DEVICE_FILE      "/dev/ttySC0"
 #define UART_2_DEVICE_FILE      "/dev/ttySC1"

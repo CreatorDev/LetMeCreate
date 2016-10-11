@@ -15,7 +15,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
-#include "letmecreate/click/ft800_defs.h"
+#include <letmecreate/click/ft800_defs.h>
 #include <letmecreate/click/export.h>
 
 /**

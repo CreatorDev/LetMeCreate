@@ -40,8 +40,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include "letmecreate/core/gpio.h"
-#include "letmecreate/core/common.h"
+#include <letmecreate/core/gpio.h>
+#include <letmecreate/core/common.h>
 
 #define GPIO_DIR_BASE_PATH      "/sys/class/gpio/"
 #define GPIO_PATH_FORMAT        "/sys/class/gpio/gpio%d/%s"

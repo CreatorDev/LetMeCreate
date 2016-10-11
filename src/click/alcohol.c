@@ -1,7 +1,7 @@
 #include <stdio.h>
-#include "letmecreate/click/alcohol.h"
-#include "letmecreate/core/common.h"
-#include "letmecreate/core/adc.h"
+#include <letmecreate/click/alcohol.h>
+#include <letmecreate/core/adc.h>
+#include <letmecreate/core/common.h>
 
 
 int alcohol_click_get_measure(uint8_t mikrobus_index, uint16_t *measure)

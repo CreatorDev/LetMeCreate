@@ -9,8 +9,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "common.h"
-#include "letmecreate/core/spi.h"
-#include "letmecreate/click/eve.h"
+#include <letmecreate/click/eve.h>
+#include <letmecreate/core/spi.h>
 
 
 static bool test_eve_click_enable_disable(void)

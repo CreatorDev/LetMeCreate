@@ -5,12 +5,12 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
-#include "letmecreate/click/eve.h"
-#include "letmecreate/click/ft800_defs.h"
-#include "letmecreate/core/common.h"
-#include "letmecreate/core/gpio.h"
-#include "letmecreate/core/gpio_monitor.h"
-#include "letmecreate/core/spi.h"
+#include <letmecreate/click/eve.h>
+#include <letmecreate/click/ft800_defs.h>
+#include <letmecreate/core/common.h>
+#include <letmecreate/core/gpio.h>
+#include <letmecreate/core/gpio_monitor.h>
+#include <letmecreate/core/spi.h>
 
 #define FIFO_SIZE               (4096)  /* 4KB */
 #define FIFO_CMD_SIZE           (4)     /* 4bytes */

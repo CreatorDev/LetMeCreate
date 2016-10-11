@@ -1,8 +1,9 @@
 #include <stdio.h>
-#include "letmecreate/click/air_quality.h"
-#include "letmecreate/core/common.h"
-#include "letmecreate/core/gpio.h"
-#include "letmecreate/core/gpio_monitor.h"
+#include <letmecreate/click/air_quality.h>
+#include <letmecreate/core/common.h>
+#include <letmecreate/core/gpio.h>
+#include <letmecreate/core/gpio_monitor.h>
+
 
 int air_quality_click_set_callback(uint8_t mikrobus_index, void(*callback)(uint8_t))
 {

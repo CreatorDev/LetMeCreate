@@ -1,7 +1,7 @@
 #include <stddef.h>
-#include "letmecreate/click/bargraph.h"
-#include "letmecreate/core/pwm.h"
-#include "letmecreate/core/spi.h"
+#include <letmecreate/click/bargraph.h>
+#include <letmecreate/core/pwm.h>
+#include <letmecreate/core/spi.h>
 
 
 int bargraph_click_set_value(uint16_t value)

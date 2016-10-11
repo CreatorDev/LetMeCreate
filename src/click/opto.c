@@ -1,8 +1,8 @@
 #include <stdbool.h>
 #include <stdio.h>
-#include "letmecreate/click/opto.h"
-#include "letmecreate/core/common.h"
-#include "letmecreate/core/gpio.h"
+#include <letmecreate/click/opto.h>
+#include <letmecreate/core/common.h>
+#include <letmecreate/core/gpio.h>
 
 #define CHANNEL_COUNT       (4)
 

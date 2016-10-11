@@ -9,8 +9,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "common.h"
-#include "letmecreate/core/common.h"
-#include "letmecreate/core/i2c.h"
+#include <letmecreate/core/common.h>
+#include <letmecreate/core/i2c.h>
 
 #define VCNL4010_ADDRESS            (0x13)
 #define VCNL4010_PRODUCT_ID_REG     (0x81)

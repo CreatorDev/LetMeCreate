@@ -28,6 +28,7 @@
 #ifndef __LETMECREATE_CLICK_CO_H__
 #define __LETMECREATE_CLICK_CO_H__
 
+#include <stdint.h>
 #include <letmecreate/click/export.h>
 
 /**

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <time.h>
-#include "letmecreate/click/color2.h"
-#include "letmecreate/click/common.h"
+#include <letmecreate/click/color2.h>
+#include <letmecreate/click/common.h>
 
 #define ISL29125_ADDRESS        (0x44)
 

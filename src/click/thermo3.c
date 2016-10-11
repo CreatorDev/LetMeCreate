@@ -1,11 +1,11 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
-#include "letmecreate/click/thermo3.h"
-#include "letmecreate/core/common.h"
-#include "letmecreate/core/gpio.h"
-#include "letmecreate/core/gpio_monitor.h"
-#include "letmecreate/core/i2c.h"
+#include <letmecreate/click/thermo3.h>
+#include <letmecreate/core/common.h>
+#include <letmecreate/core/gpio.h>
+#include <letmecreate/core/gpio_monitor.h>
+#include <letmecreate/core/i2c.h>
 
 #define TMP102_ADDRESS                  (0x48 | (last_address_bit & 0x01))
 #define TEMPERATURE_REG_ADDRESS         (0x00)

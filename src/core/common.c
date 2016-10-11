@@ -6,7 +6,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include "letmecreate/core/common.h"
+#include <letmecreate/core/common.h>
 
 
 int write_str_file(const char *path, const char *str)

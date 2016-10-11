@@ -20,8 +20,8 @@
 
 #include <stdbool.h>
 #include <stdio.h>
-#include "letmecreate/click/relay4.h"
-#include "letmecreate/core/gpio.h"
+#include <letmecreate/click/relay4.h>
+#include <letmecreate/core/gpio.h>
 
 #define RELAY4_PIN_COUNT        (4)
 

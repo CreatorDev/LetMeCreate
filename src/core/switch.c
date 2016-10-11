@@ -26,7 +26,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include "letmecreate/core/switch.h"
+#include <letmecreate/core/switch.h>
 
 #define DEVICE_FILE         "/dev/input/event1"
 #define TIMEOUT             (20)        /* 20 ms timeout while polling */

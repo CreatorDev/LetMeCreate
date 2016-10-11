@@ -1,7 +1,7 @@
 #include <stdio.h>
-#include "letmecreate/core/common.h"
-#include "letmecreate/core/gpio.h"
-#include "letmecreate/click/relay2.h"
+#include <letmecreate/core/common.h>
+#include <letmecreate/core/gpio.h>
+#include <letmecreate/click/relay2.h>
 
 
 int relay2_click_enable_relay_1(uint8_t mikrobus_index)
