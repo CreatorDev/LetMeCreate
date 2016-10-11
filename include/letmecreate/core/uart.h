@@ -1,6 +1,6 @@
 /**
  * @file uart.h
- * @author Francois Berder
+ * @author Francois Berder, Bartlomiej Zarnowski
  * @date 2016
  * @copyright 3-clause BSD
  */
@@ -10,6 +10,7 @@
 #define __LETMECREATE_CORE_UART_H__
 
 #include <stdint.h>
+#include <letmecreate/core/export.h>
 
 /** UART baud rates  */
 enum UART_BAUDRATE {
@@ -22,6 +23,8 @@ enum UART_BAUDRATE {
     UART_BD_57600   = 57600
 };
 
+#define UART_TIMEOUT_NEVER 0
+
 /**
  * @brief Initialise all UART devices.
  *
@@ -29,7 +32,7 @@ enum UART_BAUDRATE {
  *
  * @return 0 if successful, -1 otherwise
  */
-int uart_init(void);
+int LETMECREATE_CORE_EXPORT uart_init(void);
 
 /**
  * @brief Select the current UART device.
@@ -38,14 +41,14 @@ int uart_init(void);
  *
  * @param[in] mikrobus_index Index of the device (see #MIKROBUS_INDEX)
  */
-void uart_select_bus(uint8_t mikrobus_index);
+void LETMECREATE_CORE_EXPORT uart_select_bus(uint8_t mikrobus_index);
 
 /**
  * @brief Get the current mikrobus index.
  *
  * @return Current selected UART device (see #MIKROBUS_INDEX)
  */
-uint8_t uart_get_current_bus(void);
+uint8_t LETMECREATE_CORE_EXPORT uart_get_current_bus(void);
 
 /**
  * @brief Set the baud rate of the current UART device.
@@ -55,7 +58,7 @@ uint8_t uart_get_current_bus(void);
  * @param[in] baudrate Set the new baud rate of the UART device (see #UART_BAUDRATE for valid baud rates)
  * @return 0 if successful, -1 otherwise
  */
-int uart_set_baudrate(uint32_t baudrate);
+int LETMECREATE_CORE_EXPORT uart_set_baudrate(uint32_t baudrate);
 
 /**
  * @brief Get the speed of the current UART device.
@@ -65,7 +68,7 @@ int uart_set_baudrate(uint32_t baudrate);
  * @param[out] baudrate Current baud rate of the UART device (must not be null)
  * @return 0 if successful, -1 otherwise
  */
-int uart_get_baudrate(uint32_t *baudrate);
+int LETMECREATE_CORE_EXPORT uart_get_baudrate(uint32_t *baudrate);
 
 /**
  * @brief Send some data using current UART device.
@@ -74,7 +77,7 @@ int uart_get_baudrate(uint32_t *baudrate);
  * @param[in] count Number of bytes to send
  * @return 0 if successful, -1 otherwise
  */
-int uart_send(const uint8_t *buffer, uint32_t count);
+int LETMECREATE_CORE_EXPORT uart_send(const uint8_t *buffer, uint32_t count);
 
 /**
  * @brief Receive some data using current UART device.
@@ -83,7 +86,23 @@ int uart_send(const uint8_t *buffer, uint32_t count);
  * @param[in] count Number of bytes to receive
  * @return 0 if successful, -1 otherwise
  */
-int uart_receive(uint8_t *buffer, uint32_t count);
+int LETMECREATE_CORE_EXPORT uart_receive(uint8_t *buffer, uint32_t count);
+
+/**
+ * @brief Get timeout of currently selected UART bus.
+ *
+ * @return timeout Timeout in ms after which uart_receive will return, even if it does not read the request amount of bytes.
+ */
+uint32_t LETMECREATE_CORE_EXPORT uart_get_timeout(void);
+
+/**
+ * @brief Set timeout of currently selected UART bus.
+ *
+ * Pass UART_TIMEOUT_NEVER to disable timeout functionality.
+ *
+ * @param[in] timeout Timeout in ms after which uart_receive will return, even if it does not read the request amount of bytes.
+ */
+void LETMECREATE_CORE_EXPORT uart_set_timeout(uint32_t timeout);
 
 /**
  * @brief Release all UART devices.
@@ -92,6 +111,6 @@ int uart_receive(uint8_t *buffer, uint32_t count);
  *
  * @return 0 if successful, -1 otherwise
  */
-int uart_release(void);
+int LETMECREATE_CORE_EXPORT uart_release(void);
 
 #endif

@@ -1,9 +1,9 @@
 #include <stdbool.h>
 #include <stdio.h>
-#include "letmecreate/click/ir_distance.h"
-#include "letmecreate/core/adc.h"
-#include "letmecreate/core/common.h"
-#include "letmecreate/core/gpio.h"
+#include <letmecreate/click/ir_distance.h>
+#include <letmecreate/core/adc.h>
+#include <letmecreate/core/common.h>
+#include <letmecreate/core/gpio.h>
 
 
 static int set_enable_pin(uint8_t mikrobus_index, bool enable)

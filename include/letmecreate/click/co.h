@@ -28,14 +28,17 @@
 #ifndef __LETMECREATE_CLICK_CO_H__
 #define __LETMECREATE_CLICK_CO_H__
 
+#include <stdint.h>
+#include <letmecreate/click/export.h>
+
 /**
  * @brief Reads current PPM for CO in air. Please read data sheet for MQ-7 sensor used in MikroE click. It might
  * require warmup before proper readings can be received.
  *
- * @param mikrobus_index Index of the mikrobus used by the click (see #MIKROBUS_INDEX)
- * @param[out] value current concentration of CO in air given in PPM.
+ * @param[in] mikrobus_index Index of the mikrobus used by the click (see #MIKROBUS_INDEX)
+ * @param[out] concentration current concentration of CO in air given in PPM.
  * @return 0 if success, -1 if error occurred
  */
-uint8_t co_click_read_ppm(uint8_t mikrobus_index, float* value);
+int LETMECREATE_CLICK_EXPORT co_click_read_ppm(uint8_t mikrobus_index, float *concentration);
 
 #endif /* __LETMECREATE_CLICK_CO_H__ */

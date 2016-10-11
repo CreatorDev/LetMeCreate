@@ -10,6 +10,7 @@
 #define __LETMECREATE_CORE_SWITCH_H__
 
 #include <stdint.h>
+#include <letmecreate/core/export.h>
 
 /** Event that can be triggered by the two switches */
 enum SWITCH_EVENT {
@@ -25,7 +26,7 @@ enum SWITCH_EVENT {
  *
  * @return 0 if successful, -1 otherwise.
  */
-int switch_init(void);
+int LETMECREATE_CORE_EXPORT switch_init(void);
 
 /**
  * @brief Attach a callback to switch events
@@ -34,7 +35,7 @@ int switch_init(void);
  * @param[in] callback Pointer to a function (must not be null)
  * @return ID of the callback, -1 if it fails.
  */
-int switch_add_callback(uint8_t event_mask, void (*callback)(void));
+int LETMECREATE_CORE_EXPORT switch_add_callback(uint8_t event_mask, void (*callback)(void));
 
 /**
  * @brief Remove a callback
@@ -42,13 +43,13 @@ int switch_add_callback(uint8_t event_mask, void (*callback)(void));
  * @param[in] callback_ID ID of the callback to remove
  * @return 0 if successful, -1 otherwise
  */
-int switch_remove_callback(int callback_ID);
+int LETMECREATE_CORE_EXPORT switch_remove_callback(int callback_ID);
 
 /**
  * @brief Stop monitoring switch events
  *
  * @return 0 if successful, -1 otherwise
  */
-int switch_release(void);
+int LETMECREATE_CORE_EXPORT switch_release(void);
 
 #endif

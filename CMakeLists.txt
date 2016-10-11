@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(LetMeCreate C)
+project(LetMeCreate)
 
 
 set(LETMECREATE_MAJOR_VERSION 1)
-set(LETMECREATE_MINOR_VERSION 1)
+set(LETMECREATE_MINOR_VERSION 2)
 set(LETMECREATE_PATCH_VERSION 0)
 set(LETMECREATE_VERSION ${LETMECREATE_MAJOR_VERSION}.${LETMECREATE_MINOR_VERSION}.${LETMECREATE_PATCH_VERSION})
 set(PROJECT_VERSION ${LETMECREATE_VERSION})
@@ -25,8 +25,16 @@ add_library(letmecreate_core SHARED ${core_srcs} ${core_hdrs})
 add_library(letmecreate_click SHARED ${click_srcs} ${click_hdrs})
 target_link_libraries(letmecreate_click letmecreate_core)
 
-target_compile_definitions(letmecreate_core PUBLIC "LETMECREATE_CORE_DEBUG=$<CONFIG:Debug>")
-target_compile_definitions(letmecreate_click PUBLIC "LETMECREATE_CLICK_DEBUG=$<CONFIG:Debug>")
+# Export symbols
+include(GenerateExportHeader)
+generate_export_header(letmecreate_core EXPORT_FILE_NAME "include/letmecreate/core/export.h")
+generate_export_header(letmecreate_click EXPORT_FILE_NAME "include/letmecreate/click/export.h")
+set_target_properties(letmecreate_core PROPERTIES C_VISIBILITY_PRESET hidden)
+set_target_properties(letmecreate_click PROPERTIES C_VISIBILITY_PRESET hidden)
+
+# Enable warnings
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wextra -ggdb3")
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wall -Wextra -O2")
 
 
 target_include_directories(

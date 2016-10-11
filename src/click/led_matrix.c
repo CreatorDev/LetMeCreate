@@ -1,8 +1,8 @@
 #include <stdbool.h>
 #include <stdio.h>
-#include "letmecreate/click/common.h"
-#include "letmecreate/click/led_matrix.h"
-#include "letmecreate/core/spi.h"
+#include <letmecreate/click/common.h>
+#include <letmecreate/click/led_matrix.h>
+#include <letmecreate/core/spi.h>
 
 /* Commands */
 #define SHUTDOWN        (0x0C)
@@ -16,7 +16,6 @@
 #define NO_DECODE       (0x00)
 #define COL_CNT         (0x08)
 
-#define MIN_DISPLAYED   (0x00)
 #define MAX_DISPLAYED   (0x63)
 
 static bool enabled = false;
@@ -103,7 +102,7 @@ int led_matrix_click_display_number(uint8_t number)
     int i;
     int digits[2];
 
-    if(number < MIN_DISPLAYED || number > MAX_DISPLAYED) {
+    if(number > MAX_DISPLAYED) {
         fprintf(stderr, "led_matrix: Requested an out of bounds number for display");
         return -1;
     }

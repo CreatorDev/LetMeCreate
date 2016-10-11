@@ -11,27 +11,39 @@
  products derived from this software without specific prior written permission.
  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+ DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
- WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE 
+ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ************************************************************************************************************************/
-#include <letmecreate/letmecreate.h>
+
 #include <math.h>
+#include <stdio.h>
+#include <letmecreate/click/co.h>
+#include <letmecreate/core/adc.h>
 
-uint8_t co_click_read_ppm(uint8_t mikrobus_index, float* value) {
+#define Rl      (5000.0)
 
-    float Vrl;
-    if (adc_get_value(mikrobus_index, &Vrl) < 0) {
+
+int co_click_read_ppm(uint8_t mikrobus_index, float *concentration)
+{
+    float adc_value;
+    double Rs, ratio, lgPPM, ppm;
+
+    if (concentration == NULL) {
+        fprintf(stderr, "co: Cannot store concentration using null pointer.\n");
         return -1;
     }
 
-    const double Rl = 5000.0;
-    double Rs = Rl * (5 - Vrl) / Vrl;
-    double ratio = Rs / Rl;
-    double lgPPM = (log10(ratio) * -3.7) + 0.9948;
-    double ppm = pow(10, lgPPM);
-    *value = (float)ppm;
+    if (adc_get_value(mikrobus_index, &adc_value) < 0)
+        return -1;
+
+    Rs = Rl * (5.f - adc_value) / adc_value;
+    ratio = Rs / Rl;
+    lgPPM = (log10(ratio) * -3.7) + 0.9948;
+    ppm = pow(10, lgPPM);
+    *concentration = (float)ppm;
+
     return 0;
 }

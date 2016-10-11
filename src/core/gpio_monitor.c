@@ -6,8 +6,8 @@
 #include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include "letmecreate/core/common.h"
-#include "letmecreate/core/gpio_monitor.h"
+#include <letmecreate/core/common.h>
+#include <letmecreate/core/gpio_monitor.h>
 
 
 #define GPIO_PATH_FORMAT      "/sys/class/gpio/gpio%d/"
@@ -87,7 +87,7 @@ static void call_callbacks(uint8_t gpio_pin, uint8_t event_type)
     pthread_mutex_unlock(&gpio_watch_mutex);
 }
 
-static void* monitor_gpio(void *arg)
+static void* monitor_gpio(void __attribute__ ((unused))*arg)
 {
     thread_running = true;
     while (thread_running) {
@@ -228,13 +228,13 @@ static int remove_inotify_watch(uint8_t gpio_pin)
     return 0;
 }
 
-static void remove_gpio_watch(int callbackID)
+static void remove_gpio_watch(uint32_t ID)
 {
     struct gpio_watch *cur = gpio_watch_list_head;
     struct gpio_watch *prev = NULL;
 
     while (cur) {
-        if (cur->ID == callbackID)
+        if (cur->ID == ID)
             break;
         prev = cur;
         cur = cur->next;
@@ -316,9 +316,14 @@ int gpio_monitor_add_callback(uint8_t gpio_pin, uint8_t event_mask, void(*callba
         }
     }
 
-    /* Create new watch */
+    /* Create new watch ID. Because users use signed integers as ID, and the
+     * wrapper use unsigned integers, there is a limit of about 2 billions
+     * callbacks that can be created. Past this point, it will be unable for the
+     * 2 billions to create callbacks. Then, it can create callbacks again...
+     */
     watch->ID = current_watch_ID;
     ++current_watch_ID;
+
     watch->gpio_pin = gpio_pin;
     watch->event_mask = event_mask;
     watch->callback = callback;
@@ -345,15 +350,22 @@ int gpio_monitor_remove_callback(int callbackID)
 {
     struct gpio_watch *cur = gpio_watch_list_head;
     uint8_t gpio_pin = 0;
+    uint32_t ID = 0;
 
-    if (callbackID < 0 || callbackID >= current_watch_ID) {
+    if (callbackID < 0) {
+        fprintf(stderr, "gpio_monitor: Invalid callback ID.\n");
+        return -1;
+    }
+
+    ID = (uint32_t)callbackID;
+    if (ID >= current_watch_ID) {
         fprintf(stderr, "gpio_monitor: Invalid callback ID.\n");
         return -1;
     }
 
     /* Find gpio from callback ID */
     while (cur) {
-        if (cur->ID == callbackID) {
+        if (cur->ID == ID) {
             gpio_pin = cur->gpio_pin;
             break;
         }
@@ -364,7 +376,7 @@ int gpio_monitor_remove_callback(int callbackID)
         return -1;
     }
 
-    remove_gpio_watch(callbackID);
+    remove_gpio_watch(ID);
 
     /* No more callback associated with gpio, remove inotify watch */
     if (is_gpio_monitored(gpio_pin) == false) {

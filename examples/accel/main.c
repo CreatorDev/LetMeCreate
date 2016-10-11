@@ -1,3 +1,14 @@
+/**
+ * This example shows how to use the Accel Click wrapper of the LetMeCreate to
+ * obtain 3-axis accelerometer data.
+ *
+ * It continuously displays latest accelerometer measurements with at a rate
+ * of 10Hz. The user has to interrupt the program to exit it by pressing Ctrl+C.
+ *
+ * The Accel Click must be inserted in Mikrobus 1 before running this program.
+ */
+
+
 #include <linux/spi/spidev.h>
 #include <signal.h>
 #include <stdbool.h>
@@ -7,11 +18,10 @@
 
 static volatile bool running = true;
 
-static void exit_program(int signo)
+static void exit_program(int __attribute__ ((unused))signo)
 {
     running = false;
 }
-
 
 int main(void)
 {

@@ -10,6 +10,7 @@
 #define __LETMECREATE_CLICK_RELAY_H__
 
 #include <stdint.h>
+#include <letmecreate/click/export.h>
 
 /**
  * @brief Enable relay 1 on Relay Click.
@@ -19,7 +20,7 @@
  * @param[in] mikrobus_index Index of the mikrobus (see #MIKROBUS_INDEX)
  * @return 0 if successful, -1 otherwise
  */
-int relay_click_enable_relay_1(uint8_t mikrobus_index);
+int LETMECREATE_CLICK_EXPORT relay_click_enable_relay_1(uint8_t mikrobus_index);
 
 /**
  * @brief Disable relay 1 on Relay Click.
@@ -29,6 +30,6 @@ int relay_click_enable_relay_1(uint8_t mikrobus_index);
  * @param[in] mikrobus_index Index of the mikrobus (see #MIKROBUS_INDEX)
  * @return 0 if successful, -1 otherwise
  */
-int relay_click_disable_relay_1(uint8_t mikrobus_index);
+int LETMECREATE_CLICK_EXPORT relay_click_disable_relay_1(uint8_t mikrobus_index);
 
 #endif

@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=letmecreate
-PKG_VERSION:=1.1.0
+PKG_VERSION:=1.2.0
 
 PKG_LICENSE_FILE:=LICENSE
 PKG_LICENSE:=BSD-3-Clause
@@ -66,11 +66,15 @@ define Package/letmecreate/install
 	if [ -d "$(PKG_BUILD_DIR)/examples/bin/" ]; then \
 		mkdir -p $(1)/usr/bin/letmecreate_examples; \
 		$(INSTALL_BIN) $(PKG_BUILD_DIR)/examples/bin/* $(1)/usr/bin/letmecreate_examples; \
+		mkdir -p $(1)/usr/bin/letmecreate_examples/data; \
+		$(INSTALL_DATA) $(PKG_BUILD_DIR)/examples/data/* $(1)/usr/bin/letmecreate_examples/data; \
 	fi
 
 	if [ -d "$(PKG_BUILD_DIR)/tests/bin/" ]; then \
 		mkdir -p $(1)/usr/bin/letmecreate_tests; \
 		$(INSTALL_BIN) $(PKG_BUILD_DIR)/tests/bin/* $(1)/usr/bin/letmecreate_tests; \
+		mkdir -p $(1)/usr/bin/letmecreate_tests/data; \
+		$(INSTALL_DATA) $(PKG_BUILD_DIR)/tests/data/* $(1)/usr/bin/letmecreate_tests/data; \
 	fi
 
 	$(INSTALL_DIR) $(1)/usr/lib

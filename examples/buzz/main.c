@@ -1,3 +1,12 @@
+/**
+ * This example shows a use case of the PWM wrapper of the LetMeCreate library
+ * to make noise using a Buzz Click.
+ *
+ * It does three beeps of 100ms each.
+ *
+ * The Buzz Click must be inserted in Mikrobus 1 before running this program.
+ */
+
 #include <letmecreate/letmecreate.h>
 #include "examples/common.h"
 

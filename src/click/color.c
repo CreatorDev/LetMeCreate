@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <time.h>
-#include "letmecreate/click/common.h"
-#include "letmecreate/click/color.h"
-#include "letmecreate/core/i2c.h"
+#include <letmecreate/click/common.h>
+#include <letmecreate/click/color.h>
+#include <letmecreate/core/i2c.h>
 
 #define ENABLE_REG_ADDRESS      (0x00) // register for enabling/disabling the color click and settings
 #define TCS3471_ADDRESS         (0x29) // address of the TCS3471 color sensor

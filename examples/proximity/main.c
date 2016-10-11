@@ -1,3 +1,11 @@
+/**
+ * This example shows how to use the Proximity Click wrapper of the LetMeCreate library.
+ *
+ * It reads one proximity measurement from the click and exits.
+ *
+ * The Proximity Click must be inserted in Mikrobus 1 before running this program.
+ */
+
 #include <stdio.h>
 #include <letmecreate/letmecreate.h>
 

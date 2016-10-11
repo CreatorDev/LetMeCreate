@@ -9,6 +9,7 @@
 #define __LETMECREATE_CLICK_ALCOHOL_H__
 
 #include <stdint.h>
+#include <letmecreate/click/export.h>
 
 /**
  * @brief Get a measure from Alcohol Click.
@@ -21,6 +22,6 @@
  *
  * @return 0 if successful, otherwise it returns -1.
  */
-int alcohol_click_get_measure(uint8_t mikrobus_index, uint16_t *measure);
+int LETMECREATE_CLICK_EXPORT alcohol_click_get_measure(uint8_t mikrobus_index, uint16_t *measure);
 
 #endif

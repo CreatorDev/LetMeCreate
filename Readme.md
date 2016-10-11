@@ -1,5 +1,16 @@
 # LetMeCreate library
 
+## Build status
+
+Master
+[![Build Status](https://travis-ci.org/francois-berder/LetMeCreate.svg?branch=master)](https://travis-ci.org/francois-berder/LetMeCreate)
+
+
+Dev
+[![Build Status](https://travis-ci.org/francois-berder/LetMeCreate.svg?branch=dev)](https://travis-ci.org/francois-berder/LetMeCreate)
+
+## Introduction
+
 This library is a collection of small wrappers for some interfaces of the Ci40. It aims at making easier to develop on this platform. Also, it provides some wrappers for a few clicks. Notice that you cannot compile the library on Ci40 because cmake cannot run on it.
 
 Interface supported:
@@ -13,23 +24,27 @@ Interface supported:
   - ADC
 
 MikroClick board supported:
-  - Thermo3
-  - Proximity
-  - Motion
-  - Relay (partial support)
-  - Relay2
-  - Joystick
-  - Air quality
-  - Accel
+  - 7Seg
   - 8x8R (Led Matrix)
+  - Accel
+  - ADC
+  - Air quality
   - Alcohol
-  - IR eclipse
-  - IR distance
+  - Bargraph
+  - CO
   - Color
   - Color2
-  - Bargraph
-  - 7Seg
-  - ADC
+  - EVE
+  - IR distance
+  - IR eclipse
+  - Joystick
+  - Motion
+  - Opto
+  - Proximity
+  - Relay (partial support)
+  - Relay2
+  - Relay4 (partial support)
+  - Thermo3
 
 Examples are installed in /usr/bin/letmecreate_examples.
 Tests are installed in /usr/bin/letmecreate_tests.

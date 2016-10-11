@@ -9,7 +9,7 @@
 #define __LETMECREATE_CLICK_MOTION_H__
 
 #include <stdint.h>
-
+#include <letmecreate/click/export.h>
 
 /**
  * @brief Enable the Motion Click.
@@ -17,7 +17,7 @@
  * @param[in] mikrobus_index Index of the mikrobus used by the click board (see #MIKROBUS_INDEX)
  * @return 0 if successful, -1 otherwise
  */
-int motion_click_enable(uint8_t mikrobus_index);
+int LETMECREATE_CLICK_EXPORT motion_click_enable(uint8_t mikrobus_index);
 
 /**
  * @brief Attach a callback if movement is detected or if no movement is detected anymore.
@@ -31,7 +31,7 @@ int motion_click_enable(uint8_t mikrobus_index);
  * @param[in] callback Function to call if movement is detected
  * @return ID of the callback (positive integer) if successful, -1 otherwise.
  */
-int motion_click_attach_callback(uint8_t mikrobus_index, void(*callback)(uint8_t));
+int LETMECREATE_CLICK_EXPORT motion_click_attach_callback(uint8_t mikrobus_index, void(*callback)(uint8_t));
 
 /**
  * @brief Disable the Motion Click.
@@ -39,6 +39,6 @@ int motion_click_attach_callback(uint8_t mikrobus_index, void(*callback)(uint8_t
  * @param[in] mikrobus_index Index of the mikrobus used by the click board (see #MIKROBUS_INDEX)
  * @return 0 if successful, -1 otherwise
  */
-int motion_click_disable(uint8_t mikrobus_index);
+int LETMECREATE_CLICK_EXPORT motion_click_disable(uint8_t mikrobus_index);
 
 #endif

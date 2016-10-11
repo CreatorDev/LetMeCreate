@@ -11,6 +11,7 @@
 #define __LETMECREATE_CLICK_JOYSTICK_H__
 
 #include <stdint.h>
+#include <letmecreate/click/export.h>
 
 /**
  * @brief Get the x coordinate of the joystick
@@ -19,7 +20,7 @@
  * coordinate of the click (must not be null)
  * @return 0 if successful, otherwise it returns -1.
  */
-int joystick_click_get_x(int8_t * x);
+int LETMECREATE_CLICK_EXPORT joystick_click_get_x(int8_t * x);
 
 /**
  * @brief Get the y coordinate of the joystick
@@ -28,7 +29,7 @@ int joystick_click_get_x(int8_t * x);
  * coordinate of the click (must not be null)
  * @return 0 if successful, otherwise it returns -1.
  */
-int joystick_click_get_y(int8_t * y);
+int LETMECREATE_CLICK_EXPORT joystick_click_get_y(int8_t * y);
 
 /**
  * @brief Get the x and y coordinates of the joystick
@@ -39,7 +40,7 @@ int joystick_click_get_y(int8_t * y);
  * coordinate of the click (must not be null)
  * @return 0 if successful, otherwise it returns -1.
  */
-int joystick_click_get_position(int8_t * x, int8_t * y);
+int LETMECREATE_CLICK_EXPORT joystick_click_get_position(int8_t * x, int8_t * y);
 
 #endif
 

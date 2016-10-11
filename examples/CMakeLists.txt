@@ -57,3 +57,19 @@ install(TARGETS letmecreate_7seg_example RUNTIME DESTINATION bin)
 add_executable(letmecreate_adc_example adc/main.c)
 target_link_libraries(letmecreate_adc_example letmecreate_click letmecreate_core)
 install(TARGETS letmecreate_adc_example RUNTIME DESTINATION bin)
+
+add_executable(letmecreate_eve_1_example eve/main.c)
+target_link_libraries(letmecreate_eve_1_example letmecreate_click letmecreate_core)
+install(TARGETS letmecreate_eve_1_example RUNTIME DESTINATION bin)
+
+add_executable(letmecreate_eve_2_example eve/main2.c)
+target_link_libraries(letmecreate_eve_2_example letmecreate_click letmecreate_core)
+install(TARGETS letmecreate_eve_2_example RUNTIME DESTINATION bin)
+
+add_executable(letmecreate_eve_3_example eve/main3.c)
+target_link_libraries(letmecreate_eve_3_example letmecreate_click letmecreate_core)
+install(TARGETS letmecreate_eve_3_example RUNTIME DESTINATION bin)
+
+add_executable(letmecreate_eve_4_example eve/main4.c)
+target_link_libraries(letmecreate_eve_4_example letmecreate_click letmecreate_core)
+install(TARGETS letmecreate_eve_4_example RUNTIME DESTINATION bin)
