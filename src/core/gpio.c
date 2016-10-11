@@ -160,11 +160,10 @@ int gpio_init(uint8_t gpio_pin)
         return -1;
 
     /* Export a GPIO by writing its index to file /sys/class/gpio/export. */
-    if (is_gpio_exported(gpio_pin))
-        return 0;
-
-    if (export_pin(GPIO_DIR_BASE_PATH, gpio_pin) < 0)
-        return -1;
+    if (!is_gpio_exported(gpio_pin)) {
+        if (export_pin(GPIO_DIR_BASE_PATH, gpio_pin) < 0)
+            return -1;
+    }
 
     return gpio_set_direction(gpio_pin, GPIO_INPUT);
 }
