@@ -2,7 +2,7 @@ language: C
 dist: trusty
 env:
   global:
-    - CI40_SDK="OpenWrt-SDK-0.9.7-pistachio-marduk_gcc-5.3.0_musl-1.1.14.Linux-x86_64"
+    - CI40_SDK="OpenWrt-SDK-0.10.4-pistachio-marduk_gcc-5.3.0_musl-1.1.14.Linux-x86_64"
     - CI40_SDK_URL="https://downloads.creatordev.io/pistachio/marduk/"
 before_install:
   - sudo apt-get -qq update
