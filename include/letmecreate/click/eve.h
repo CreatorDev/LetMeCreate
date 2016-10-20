@@ -189,7 +189,7 @@ int LETMECREATE_CLICK_EXPORT eve_click_translate(int32_t tx, int32_t ty);
  * eve_click_set_matrix must be called to update the bitmap transform matrix.
  *
  * @param[in] sx signed 16.16 fixed-point x factor
- * @param[in] sy signed 16.16 fixed-point x factor
+ * @param[in] sy signed 16.16 fixed-point y factor
  * @return 0 if successful, -1 otherwise.
  */
 int LETMECREATE_CLICK_EXPORT eve_click_scale(int32_t sx, int32_t sy);
