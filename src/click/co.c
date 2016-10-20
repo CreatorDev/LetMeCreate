@@ -18,32 +18,24 @@
  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ************************************************************************************************************************/
 
-#include <math.h>
 #include <stdio.h>
 #include <letmecreate/click/co.h>
 #include <letmecreate/core/adc.h>
 
-#define Rl      (5000.0)
 
-
-int co_click_read_ppm(uint8_t mikrobus_index, float *concentration)
+int co_click_get_measure(uint8_t mikrobus_index, uint16_t *measure)
 {
-    float adc_value;
-    double Rs, ratio, lgPPM, ppm;
+    float tmp = 0.f;
 
-    if (concentration == NULL) {
-        fprintf(stderr, "co: Cannot store concentration using null pointer.\n");
+    if (measure == NULL) {
+        fprintf(stderr, "co: Cannot store measure using null pointer.\n");
         return -1;
     }
 
-    if (adc_get_value(mikrobus_index, &adc_value) < 0)
+    if (adc_get_value(mikrobus_index, &tmp) < 0)
         return -1;
 
-    Rs = Rl * (5.f - adc_value) / adc_value;
-    ratio = Rs / Rl;
-    lgPPM = (log10(ratio) * -3.7) + 0.9948;
-    ppm = pow(10, lgPPM);
-    *concentration = (float)ppm;
+    *measure = (tmp / 5.f) * 65535;
 
     return 0;
 }
