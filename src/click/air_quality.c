@@ -1,43 +1,21 @@
 #include <stdio.h>
 #include <letmecreate/click/air_quality.h>
-#include <letmecreate/core/common.h>
-#include <letmecreate/core/gpio.h>
-#include <letmecreate/core/gpio_monitor.h>
+#include <letmecreate/core/adc.h>
 
 
-int air_quality_click_set_callback(uint8_t mikrobus_index, void(*callback)(uint8_t))
+int air_quality_click_get_measure(uint8_t mikrobus_index, uint16_t *measure)
 {
-    uint8_t output_pin = 0;
-    int callback_ID;
+    float tmp = 0.f;
 
-    if (callback == NULL) {
-        fprintf(stderr, "air quality: Callback must not be null.\n");
+    if (measure == NULL) {
+        fprintf(stderr, "air quality: Cannot store measure using null pointer.\n");
         return -1;
     }
 
-    switch (mikrobus_index) {
-    case MIKROBUS_1:
-        output_pin = MIKROBUS_1_AN;
-        break;
-    case MIKROBUS_2:
-        output_pin = MIKROBUS_2_AN;
-        break;
-    default:
-        fprintf(stderr, "air quality: Invalid mikrobus index.\n");
-        return -1;
-    }
-
-    if (gpio_init(output_pin) < 0
-    ||  gpio_set_direction(output_pin, GPIO_INPUT) < 0) {
-        fprintf(stderr, "air quality: Failed to configure pin as an input.\n");
-        return -1;
-    }
-
-    if (gpio_monitor_init() < 0)
+    if (adc_get_value(mikrobus_index, &tmp) < 0)
         return -1;
 
-    if ((callback_ID = gpio_monitor_add_callback(output_pin, GPIO_FALLING, callback)) < 0)
-        fprintf(stderr, "air quality: Failed to add callback.\n");
+    *measure = (tmp / 5.f) * 65535;
 
-    return callback_ID;
+    return 0;
 }
