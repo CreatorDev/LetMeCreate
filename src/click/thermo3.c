@@ -23,6 +23,11 @@ int thermo3_click_enable(uint8_t add_bit)
 {
     uint8_t buffer[3];
 
+    if (add_bit != 0 && add_bit != 1) {
+        fprintf(stderr, "thermo3: Invalid add_bit, must be 0 or 1\n");
+        return -1;
+    }
+
     last_address_bit = add_bit;
 
     buffer[0] = CONFIGURATION_REG_ADDRESS;
