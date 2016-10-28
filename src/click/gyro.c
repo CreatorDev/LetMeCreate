@@ -3,7 +3,7 @@
 #include <letmecreate/click/gyro.h>
 
 /* I2C address of device */
-#define L3GD20_ADDRESS          (0x6B)
+#define L3GD20_ADDRESS          (0x6A | (last_address_bit & 0x1))
 
 /* Register addresses */
 #define L3GD20_DEVICE_ID_REG    (0x0F)
@@ -28,10 +28,18 @@
 
 #define DPS_PER_LSB             (0.007629395f)  /* 250/32768 */
 
+static uint8_t last_address_bit = 0;
 
-int gyro_click_enable(void)
+int gyro_click_enable(uint8_t add_bit)
 {
     uint8_t device_id = 0;
+
+    if (add_bit != 0 && add_bit != 1) {
+        fprintf(stderr, "gyro: Invalid add_bit, must be 0 or 1\n");
+        return -1;
+    }
+
+    last_address_bit = add_bit;
 
     /* Check device ID */
     if (i2c_read_register(L3GD20_ADDRESS, L3GD20_DEVICE_ID_REG, &device_id) < 0)

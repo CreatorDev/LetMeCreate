@@ -16,9 +16,10 @@
  * Note that the I2C bus must be initialised before attempting to enable the
  * device.
  *
+ * @param[in] add_bit GYRO click has a jumper on its board to change its I2C address (must be 0 or 1)
  * @return 0 if successful, -1 otherwise
  */
-int LETMECREATE_CLICK_EXPORT gyro_click_enable(void);
+int LETMECREATE_CLICK_EXPORT gyro_click_enable(uint8_t add_bit);
 
 /**
  * @brief Read measurement from GYRO Click.
