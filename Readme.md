@@ -45,6 +45,7 @@ MikroClick board supported:
   - Relay (partial support)
   - Relay2
   - Relay4 (partial support)
+  - RTC
   - Thermo3
 
 Examples are installed in /usr/bin/letmecreate_examples.
