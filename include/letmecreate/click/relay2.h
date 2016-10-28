@@ -13,6 +13,7 @@
 #include <stdint.h>
 #include <letmecreate/click/export.h>
 
+/** Relay Click channel index */
 enum RELAY2_CLICK_RELAY {
     RELAY2_CLICK_RELAY_1,
     RELAY2_CLICK_RELAY_2,
