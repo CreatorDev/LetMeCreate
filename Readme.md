@@ -35,7 +35,7 @@ MikroClick board supported:
   - Color
   - Color2
   - EVE
-  - GYRO (I2C only)
+  - GYRO
   - IR distance
   - IR eclipse
   - Joystick
