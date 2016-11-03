@@ -35,6 +35,7 @@ MikroClick board supported:
   - Color
   - Color2
   - EVE
+  - Fan
   - GYRO
   - IR distance
   - IR eclipse
