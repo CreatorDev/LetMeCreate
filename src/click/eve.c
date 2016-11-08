@@ -845,7 +845,7 @@ static void interrupt_handler(uint8_t __attribute__ ((unused))event)
     if (flags & FT800_INT_CMD_FIFO_EMPTY)
         fifo_empty = true;
 
-    if (flags & FT800_INT_TOUCH) {
+    if (flags & FT800_INT_CONVCOMPLETE) {
         if (touch_callback != NULL) {
             uint32_t tmp = 0;
             if (read_32bit_reg(FT800_REG_TOUCH_SCREEN_XY, &tmp) < 0)
@@ -1015,7 +1015,7 @@ int eve_click_enable(uint8_t mikrobus_index)
     /* Enable touch screen */
     if (write_8bit_reg(FT800_REG_TOUCH_OVERSAMPLE, 15) < 0   /* Max oversampling */
     ||  write_8bit_reg(FT800_REG_TOUCH_ADC_MODE, 1) < 0 /* Differential mode for better accuracy */
-    ||  write_8bit_reg(FT800_REG_TOUCH_MODE, FT800_TOUCH_MODE_CONTINUOUS) < 0) {
+    ||  write_8bit_reg(FT800_REG_TOUCH_MODE, FT800_TOUCH_MODE_FRAME_SYNC) < 0) {
         fprintf(stderr, "eve: Failed to set touch controller mode.\n");
         return -1;
     }
@@ -1026,7 +1026,7 @@ int eve_click_enable(uint8_t mikrobus_index)
         fprintf(stderr, "eve: Failed to attach interrupt handler.\n");
         return -1;
     }
-    if (write_8bit_reg(FT800_REG_INT_MASK, FT800_INT_CMD_FIFO_EMPTY | FT800_INT_TOUCH) < 0
+    if (write_8bit_reg(FT800_REG_INT_MASK, FT800_INT_CMD_FIFO_EMPTY | FT800_INT_CONVCOMPLETE) < 0
     ||  write_8bit_reg(FT800_REG_INT_EN, 1) < 0)
         return -1;
 
