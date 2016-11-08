@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <letmecreate/core/spi.h>
-#include <letmecreate/click/common.h>
+#include <letmecreate/core/i2c.h>
 #include <letmecreate/click/gyro.h>
 
 /* I2C address of device */
