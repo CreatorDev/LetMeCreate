@@ -89,12 +89,21 @@ static void alphanum_click_sleep_cycles(void)
 /*
  * Convert char to 14 segment display value.
  */
-uint16_t alphanum_click_get_char(char c)
+int alphanum_click_get_char(char c, uint16_t *value)
 {
-    if ((c >= '-') && (c <= '_'))
-        return alphanum_click_char_table[c - '-'];
-    else
-        return 0;
+    if (value == NULL) {
+        fprintf(stderr, "alphanum: Cannot store value using null pointer.\n");
+        return -1;
+    }
+
+    if (c < '-' || c > '_') {
+        fprintf(stderr, "alphanum: Invalid character.\n");
+        return -1;
+    }
+
+    *value = alphanum_click_char_table[c - '-'];
+
+    return 0;
 }
 
 /*
@@ -164,7 +173,13 @@ int alphanum_click_raw_write(uint16_t a, uint16_t b)
  */
 int alphanum_click_write(char a, char b)
 {
-    return alphanum_click_raw_write(alphanum_click_get_char(toupper(a)), alphanum_click_get_char(toupper(b)));
+    uint16_t valA = 0, valB = 0;
+
+    if (alphanum_click_get_char(toupper(a), &valA) < 0
+    ||  alphanum_click_get_char(toupper(b), &valB) < 0)
+        return -1;
+
+    return alphanum_click_raw_write(valA, valB);
 }
 
 /*

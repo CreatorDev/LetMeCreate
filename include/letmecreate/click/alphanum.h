@@ -11,7 +11,7 @@
 int LETMECREATE_CLICK_EXPORT alphanum_click_init(uint8_t);
 
 /* Converts a char into a 14 segment display value */
-uint16_t LETMECREATE_CLICK_EXPORT alphanum_click_get_char(char);
+int LETMECREATE_CLICK_EXPORT alphanum_click_get_char(char c, uint16_t *value);
 
 /* Write the two chars to */
 int LETMECREATE_CLICK_EXPORT alphanum_click_write(char, char);
