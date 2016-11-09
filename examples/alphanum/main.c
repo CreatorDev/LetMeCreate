@@ -32,7 +32,6 @@ int main(void)
     /* This alternately switches on the output of either the two shift registers
      * to appear to print two characters at the same time.
      */
-    alphanum_click_switch_cycles(0);
 
     return 0;
 }

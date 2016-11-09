@@ -73,20 +73,6 @@ static const uint16_t alphanum_click_char_table[51] = {
 };
 
 /*
- * Sleep for switch cycles.
- */
-static void alphanum_click_sleep_cycles(void)
-{
-    struct timespec slept, cycles;
-
-    cycles.tv_sec = ALPHANUM_SWITCH_INTERVAL / 1000;
-    cycles.tv_nsec = ALPHANUM_SWITCH_INTERVAL * 1000 * 1000 - (cycles.tv_sec * 1000);
-
-    while (nanosleep(&cycles, &slept))
-        cycles = slept;
-}
-
-/*
  * Convert char to 14 segment display value.
  */
 int alphanum_click_get_char(char c, uint16_t *value)
@@ -217,27 +203,4 @@ int alphanum_click_init(uint8_t bus)
         return -1;
 
     return 0;
-}
-
-/*
- * Periodically switch between segments a and b to keep the illusion of
- * a simultaneous display of both values.
- */
-void alphanum_click_switch_cycles(int num)
-{
-    int i = 0;
-    while (i < num || num == 0) {
-        if (gpio_set_value(gpio_pin_oe, 1) < 0
-        ||  gpio_set_value(gpio_pin_oe2, 0) < 0)
-            return;
-
-        alphanum_click_sleep_cycles();
-
-        if (gpio_set_value(gpio_pin_oe2, 1) < 0
-        ||  gpio_set_value(gpio_pin_oe, 0) < 0)
-            return;
-
-        alphanum_click_sleep_cycles();
-        ++i;
-    }
 }
