@@ -15,7 +15,7 @@ static uint8_t gpio_pin_oe2;
 /*
  * Translation table between a character and a 14 segment display value.
  */
-static const uint16_t alphanum_char_table[51] = {
+static const uint16_t alphanum_click_char_table[51] = {
  //-------------------
  // Hex            Symbol
  //-------------------
@@ -75,7 +75,7 @@ static const uint16_t alphanum_char_table[51] = {
 /*
  * Sleep for switch cycles.
  */
-static void alphanum_sleep_cycles(void)
+static void alphanum_click_sleep_cycles(void)
 {
     struct timespec slept, cycles;
 
@@ -89,10 +89,10 @@ static void alphanum_sleep_cycles(void)
 /*
  * Convert char to 14 segment display value.
  */
-uint16_t alphanum_get_char(char c)
+uint16_t alphanum_click_get_char(char c)
 {
     if ((c >= '-') && (c <= '_'))
-        return alphanum_char_table[c - '-'];
+        return alphanum_click_char_table[c - '-'];
     else
         return 0;
 }
@@ -100,7 +100,7 @@ uint16_t alphanum_get_char(char c)
 /*
  * Write value on segments a (left) and b (right).
  */
-int alphanum_raw_write(uint16_t a, uint16_t b)
+int alphanum_click_raw_write(uint16_t a, uint16_t b)
 {
     /* Set all GPIO to 1 */
     if (gpio_set_value(gpio_pin_le2, 1)) {
@@ -170,17 +170,17 @@ int alphanum_raw_write(uint16_t a, uint16_t b)
 
 /*
  * Write 2 chars on the segment display.
- * Wrapper around alphanum_raw_write().
+ * Wrapper around alphanum_click_raw_write().
  */
-int alphanum_write(char a, char b)
+int alphanum_click_write(char a, char b)
 {
-    return alphanum_raw_write(alphanum_get_char(toupper(a)), alphanum_get_char(toupper(b)));
+    return alphanum_click_raw_write(alphanum_click_get_char(toupper(a)), alphanum_click_get_char(toupper(b)));
 }
 
 /*
  * Init the alphanum clicker.
  */
-int alphanum_init(uint8_t bus)
+int alphanum_click_init(uint8_t bus)
 {
     int ret = 0;
 
@@ -238,7 +238,7 @@ int alphanum_init(uint8_t bus)
  * Periodically switch between segments a and b to keep the illusion of
  * a simultaneous display of both values.
  */
-void alphanum_switch_cycles(int num)
+void alphanum_click_switch_cycles(int num)
 {
     int i = 0;
     while (i < num || num == 0) {
@@ -251,7 +251,7 @@ void alphanum_switch_cycles(int num)
             return;
         }
 
-        alphanum_sleep_cycles();
+        alphanum_click_sleep_cycles();
 
         if (gpio_set_value(gpio_pin_oe2, 1)) {
             printf("Error 2: cannot set value le2\n");
@@ -262,7 +262,7 @@ void alphanum_switch_cycles(int num)
             return;
         }
 
-        alphanum_sleep_cycles();
+        alphanum_click_sleep_cycles();
         ++i;
     }
 }
@@ -271,7 +271,7 @@ void alphanum_switch_cycles(int num)
  * Write 2 or more characters on the alphanum clicker as a
  * "running text".
  */
-void alphanum_write_running_text(const char *s, int ntimes)
+void alphanum_click_write_running_text(const char *s, int ntimes)
 {
     unsigned int i;
     int cnt;
@@ -291,8 +291,8 @@ void alphanum_write_running_text(const char *s, int ntimes)
     while (1) {
         if ((i + 1) >= strlen(str)) {
             if ((i + 1) == (strlen(str) + 1)) {
-                alphanum_raw_write(0x00, 0x00);
-                alphanum_switch_cycles(cycles);
+                alphanum_click_raw_write(0x00, 0x00);
+                alphanum_click_switch_cycles(cycles);
                 i = 0;
                 if (ntimes == cnt && ntimes > 0) {
                     break;
@@ -300,13 +300,13 @@ void alphanum_write_running_text(const char *s, int ntimes)
                     ++cnt;
                 }
             } else {
-                alphanum_raw_write(alphanum_get_char(str[i]), 0x00);
-                alphanum_switch_cycles(cycles);
+                alphanum_click_raw_write(alphanum_click_get_char(str[i]), 0x00);
+                alphanum_click_switch_cycles(cycles);
                 ++i;
             }
         } else {
-            alphanum_raw_write(alphanum_get_char(str[i]), alphanum_get_char(str[i + 1]));
-            alphanum_switch_cycles(cycles);
+            alphanum_click_raw_write(alphanum_click_get_char(str[i]), alphanum_click_get_char(str[i + 1]));
+            alphanum_click_switch_cycles(cycles);
             ++i;
         }
     }

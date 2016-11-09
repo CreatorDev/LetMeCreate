@@ -11,23 +11,23 @@
 #define STR_MAX 10
 
 /* Init the alphanum clicker */
-int LETMECREATE_CLICK_EXPORT alphanum_init(uint8_t);
+int LETMECREATE_CLICK_EXPORT alphanum_click_init(uint8_t);
 
 /* Converts a char into a 14 segment display value */
-uint16_t LETMECREATE_CLICK_EXPORT alphanum_get_char(char);
+uint16_t LETMECREATE_CLICK_EXPORT alphanum_click_get_char(char);
 
 /* Write the two chars to */
-int LETMECREATE_CLICK_EXPORT alphanum_write(char, char);
+int LETMECREATE_CLICK_EXPORT alphanum_click_write(char, char);
 
 /* Raw write  */
-int LETMECREATE_CLICK_EXPORT alphanum_raw_write(uint16_t, uint16_t);
+int LETMECREATE_CLICK_EXPORT alphanum_click_raw_write(uint16_t, uint16_t);
 
 /* This peridically switch between segment a and b to keep the illusion of a
  * simultanous display of both values
  */
-void LETMECREATE_CLICK_EXPORT alphanum_switch_cycles(int);
+void LETMECREATE_CLICK_EXPORT alphanum_click_switch_cycles(int);
 
 /* Write a text with more than two characters */
-void LETMECREATE_CLICK_EXPORT alphanum_write_running_text(const char *, int);
+void LETMECREATE_CLICK_EXPORT alphanum_click_write_running_text(const char *, int);
 
 #endif

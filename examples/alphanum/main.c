@@ -16,13 +16,13 @@ int main(void)
     }
 
     /* Initialize the alphanum clicker */
-    if (alphanum_init(MIKROBUS_2) != 0) {
+    if (alphanum_click_init(MIKROBUS_2) != 0) {
         printf("Error: Clicker cannot be initiliazed\n");
         return 1;
     }
 
     printf("Writing: %s\n", str);
-    if (alphanum_write(str[0], str[1]) != 0) {
+    if (alphanum_click_write(str[0], str[1]) != 0) {
         printf("Error: Cannot write to alphanum clicker\n");
         return 1;
     }
@@ -30,7 +30,7 @@ int main(void)
     /* This alternately switches on the output of either the two shift registers
      * to appear to print two characters at the same time.
      */
-    alphanum_switch_cycles(0);
+    alphanum_click_switch_cycles(0);
 
     return 0;
 }
