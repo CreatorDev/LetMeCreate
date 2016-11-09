@@ -24,7 +24,4 @@ int LETMECREATE_CLICK_EXPORT alphanum_click_raw_write(uint16_t, uint16_t);
  */
 void LETMECREATE_CLICK_EXPORT alphanum_click_switch_cycles(int);
 
-/* Write a text with more than two characters */
-void LETMECREATE_CLICK_EXPORT alphanum_click_write_running_text(const char *, int);
-
 #endif
