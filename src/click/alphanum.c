@@ -119,13 +119,13 @@ int alphanum_click_raw_write(uint16_t a, uint16_t b)
 
     /* Write b */
     if (spi_transfer((uint8_t *) &b, NULL, sizeof(b)) < 0) {
-        fprintf(stderr, "spi write register failed.\n");
+        fprintf(stderr, "alphanum: spi write register failed.\n");
         return -1;
     }
 
     /* Enable output A */
     if (gpio_set_value(gpio_pin_oe, 0)) {
-        printf("Error: cannot set value\n");
+        fprintf(stderr, "alphanum: Cannot set value\n");
         return -1;
     }
 
@@ -137,30 +137,30 @@ int alphanum_click_raw_write(uint16_t a, uint16_t b)
 
     /* Latch B */
     if (gpio_set_value(gpio_pin_le2, 0)) {
-        printf("Error: cannot set value\n");
+        fprintf(stderr, "alphanum: cannot set value\n");
         return -1;
     }
 
     /* Disable Latch B */
     if (gpio_set_value(gpio_pin_le2, 1)) {
-        printf("Error: cannot set value\n");
+        fprintf(stderr, "alphanum: cannot set value\n");
         return -1;
     }
 
     /* Enable, disable B */
     if (gpio_set_value(gpio_pin_oe2, 0)) {
-        printf("Error: cannot set value\n");
+        fprintf(stderr, "alphanum: cannot set value\n");
         return -1;
     }
 
     if (gpio_set_value(gpio_pin_oe2, 1)) {
-        printf("Error: cannot set value\n");
+        fprintf(stderr, "alphanum: cannot set value\n");
         return -1;
     }
 
     /* Enable a */
     if (gpio_set_value(gpio_pin_oe, 0)) {
-        printf("Error: cannot set value\n");
+        fprintf(stderr, "alphanum: cannot set value\n");
         return -1;
     }
 
@@ -200,7 +200,7 @@ int alphanum_click_init(uint8_t bus)
             gpio_pin_oe2 = MIKROBUS_2_PWM;
             break;
         default:
-            printf("Error: Bus not found!\n");
+            fprintf(stderr, "alphanum: Invalid mikrobus index.\n");
             return -1;
     }
 
