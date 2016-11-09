@@ -1,6 +1,9 @@
 #ifndef __LETMECREATE_CLICK_ALPHANUM_H__
 #define __LETMECREATE_CLICK_ALPHANUM_H__
 
+#include <stdint.h>
+#include <letmecreate/click/export.h>
+
 /* Switch interval in ms */
 #define ALPHANUM_SWITCH_INTERVAL 8
 
@@ -8,27 +11,27 @@
 #define STR_MAX 10
 
 /* Init the alphanum clicker */
-int alphanum_init(uint8_t);
+int LETMECREATE_CLICK_EXPORT alphanum_init(uint8_t);
 
 /* Converts a char into a 14 segment display value */
-uint16_t alphanum_get_char(char);
+uint16_t LETMECREATE_CLICK_EXPORT alphanum_get_char(char);
 
 /* Write the two chars to */
-int alphanum_write(char, char);
+int LETMECREATE_CLICK_EXPORT alphanum_write(char, char);
 
 /* Raw write  */
-int alphanum_raw_write(uint16_t, uint16_t);
+int LETMECREATE_CLICK_EXPORT alphanum_raw_write(uint16_t, uint16_t);
 
 /* This peridically switch between segment a and b to keep the illusion of a
  * simultanous display of both values
  */
-void alphanum_switch_cycles(int);
+void LETMECREATE_CLICK_EXPORT alphanum_switch_cycles(int);
 
 /* Write a text with more than two characters */
-void alphanum_write_running_text(const char *, int);
+void LETMECREATE_CLICK_EXPORT alphanum_write_running_text(const char *, int);
 
 /* Sleep for switch cycles */
-static void alphanum_sleep_cycles(void);
+static void LETMECREATE_CLICK_EXPORT alphanum_sleep_cycles(void);
 
 /*
  * Translation table between a character and a 14 segment display value.
