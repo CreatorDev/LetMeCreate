@@ -1,3 +1,12 @@
+/**
+ * @file alphanum.h
+ * @author Michael Schnell, Francois Berder
+ * @date 2016
+ * @copyright 3-clause BSD
+ *
+ * @example alphanum/main.c
+ */
+
 #ifndef __LETMECREATE_CLICK_ALPHANUM_H__
 #define __LETMECREATE_CLICK_ALPHANUM_H__
 
