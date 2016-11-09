@@ -4,8 +4,7 @@
 /*
  * Example to write the characters on the alphanum clicker.
  */
-int
-main(int argc, char *argv[])
+int main(void)
 {
     int ret = 0;
     char str[] = "Hi"; /* String to print */

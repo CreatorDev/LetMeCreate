@@ -181,7 +181,7 @@ alphanum_raw_write(uint16_t a, uint16_t b)
 int
 alphanum_write(char a, char b)
 {
-    alphanum_raw_write(alphanum_get_char(toupper(a)), alphanum_get_char(toupper(b)));
+    return alphanum_raw_write(alphanum_get_char(toupper(a)), alphanum_get_char(toupper(b)));
 }
 
 /*
@@ -283,7 +283,8 @@ alphanum_switch_cycles(int num)
 void
 alphanum_write_running_text(const char *s, int ntimes)
 {
-    int i, cnt;
+    unsigned int i;
+    int cnt;
     int cycles = 25;
     char *str;
 
