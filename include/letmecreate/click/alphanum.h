@@ -7,9 +7,6 @@
 /* Switch interval in ms */
 #define ALPHANUM_SWITCH_INTERVAL 8
 
-/* Max string length for running text */
-#define STR_MAX 10
-
 /* Init the alphanum clicker */
 int LETMECREATE_CLICK_EXPORT alphanum_click_init(uint8_t);
 
