@@ -1,16 +1,5 @@
 #include <stdio.h>
-#include <dirent.h>
-#include <ctype.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <stdbool.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
-
-#include "letmecreate/letmecreate.h"
+#include <letmecreate/letmecreate.h>
 
 /*
  * Example to write the characters on the alphanum clicker.

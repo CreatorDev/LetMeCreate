@@ -1,20 +1,12 @@
-#include <sys/ioctl.h>
-#include <linux/spi/spidev.h>
-#include <stdio.h>
-#include <dirent.h>
 #include <ctype.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
-
-#include "letmecreate/click/alphanum.h"
-#include "letmecreate/core.h"
+#include <letmecreate/click/alphanum.h>
+#include <letmecreate/core/common.h>
+#include <letmecreate/core/gpio.h>
+#include <letmecreate/core/spi.h>
 
 static uint8_t gpio_pin_le2;
 static uint8_t gpio_pin_oe;
