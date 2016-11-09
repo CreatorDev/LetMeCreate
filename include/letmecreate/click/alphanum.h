@@ -1,3 +1,6 @@
+#ifndef __LETMECREATE_CLICK_ALPHANUM_H__
+#define __LETMECREATE_CLICK_ALPHANUM_H__
+
 /* Switch interval in ms */
 #define ALPHANUM_SWITCH_INTERVAL 8
 
@@ -87,3 +90,4 @@ const uint16_t alphanum_char_table[51] = {
     0x0800,        // '_'
 };
 
+#endif
