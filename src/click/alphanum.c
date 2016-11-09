@@ -202,7 +202,7 @@ int alphanum_click_init(uint8_t bus)
     ||  gpio_set_direction(gpio_pin_oe2, GPIO_OUTPUT) < 0)
         return -1;
 
-    return 0;
+    return alphanum_click_select_left_display();
 }
 
 int alphanum_click_select_left_display(void)
