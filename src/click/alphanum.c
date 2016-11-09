@@ -204,3 +204,21 @@ int alphanum_click_init(uint8_t bus)
 
     return 0;
 }
+
+int alphanum_click_select_left_display(void)
+{
+    if (gpio_set_value(gpio_pin_oe, 1) < 0
+    ||  gpio_set_value(gpio_pin_oe2, 0) < 0)
+        return -1;
+
+    return 0;
+}
+
+int alphanum_click_select_right_display(void)
+{
+    if (gpio_set_value(gpio_pin_oe2, 1) < 0
+    ||  gpio_set_value(gpio_pin_oe, 0) < 0)
+        return -1;
+
+    return 0;
+}

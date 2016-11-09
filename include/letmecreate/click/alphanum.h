@@ -25,4 +25,8 @@ int LETMECREATE_CLICK_EXPORT alphanum_click_write(char a, char b);
 /* Raw write  */
 int LETMECREATE_CLICK_EXPORT alphanum_click_raw_write(uint16_t a, uint16_t b);
 
+int LETMECREATE_CLICK_EXPORT alphanum_click_select_left_display(void);
+
+int LETMECREATE_CLICK_EXPORT alphanum_click_select_right_display(void);
+
 #endif
