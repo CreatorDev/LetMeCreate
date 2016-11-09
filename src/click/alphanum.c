@@ -229,8 +229,6 @@ int alphanum_click_init(uint8_t bus)
         return ret;
     }
 
-    spi_select_bus(bus);
-
     return ret;
 }
 

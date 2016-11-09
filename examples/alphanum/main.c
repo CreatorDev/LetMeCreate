@@ -15,6 +15,8 @@ int main(void)
         return ret;
     }
 
+    spi_select_bus(MIKROBUS_2);
+
     /* Initialize the alphanum clicker */
     if (alphanum_click_init(MIKROBUS_2) != 0) {
         printf("Error: Clicker cannot be initiliazed\n");
