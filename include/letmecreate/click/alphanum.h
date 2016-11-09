@@ -30,7 +30,4 @@ void LETMECREATE_CLICK_EXPORT alphanum_switch_cycles(int);
 /* Write a text with more than two characters */
 void LETMECREATE_CLICK_EXPORT alphanum_write_running_text(const char *, int);
 
-/* Sleep for switch cycles */
-static void LETMECREATE_CLICK_EXPORT alphanum_sleep_cycles(void);
-
 #endif
