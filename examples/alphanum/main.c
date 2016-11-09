@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <letmecreate/letmecreate.h>
-
+#include "examples/common.h"
 
 int main(void)
 {
