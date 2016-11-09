@@ -8,9 +8,9 @@
 #include <letmecreate/core/gpio.h>
 #include <letmecreate/core/spi.h>
 
-static uint8_t gpio_pin_le2;
-static uint8_t gpio_pin_oe;
-static uint8_t gpio_pin_oe2;
+static uint8_t gpio_pin_le2 = 0;
+static uint8_t gpio_pin_oe = 0;
+static uint8_t gpio_pin_oe2 = 0;
 
 /*
  * Translation table between a character and a 14 segment display value.
