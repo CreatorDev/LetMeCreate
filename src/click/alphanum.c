@@ -75,38 +75,32 @@ static const uint16_t alphanum_char_table[51] = {
 /*
  * Sleep for switch cycles.
  */
-static void
-alphanum_sleep_cycles(void)
+static void alphanum_sleep_cycles(void)
 {
-    struct timespec cycles;
-    struct timespec slept;
+    struct timespec slept, cycles;
 
     cycles.tv_sec = ALPHANUM_SWITCH_INTERVAL / 1000;
     cycles.tv_nsec = ALPHANUM_SWITCH_INTERVAL * 1000 * 1000 - (cycles.tv_sec * 1000);
 
-    while (nanosleep(&cycles, &slept) != 0) {
+    while (nanosleep(&cycles, &slept))
         cycles = slept;
-    }
 }
 
 /*
  * Convert char to 14 segment display value.
  */
-uint16_t
-alphanum_get_char(char c)
+uint16_t alphanum_get_char(char c)
 {
-    if ((c >= '-') && (c <= '_')) {
+    if ((c >= '-') && (c <= '_'))
         return alphanum_char_table[c - '-'];
-    } else {
+    else
         return 0;
-    }
 }
 
 /*
  * Write value on segments a (left) and b (right).
  */
-int
-alphanum_raw_write(uint16_t a, uint16_t b)
+int alphanum_raw_write(uint16_t a, uint16_t b)
 {
     /* Set all GPIO to 1 */
     if (gpio_set_value(gpio_pin_le2, 1)) {
@@ -178,8 +172,7 @@ alphanum_raw_write(uint16_t a, uint16_t b)
  * Write 2 chars on the segment display.
  * Wrapper around alphanum_raw_write().
  */
-int
-alphanum_write(char a, char b)
+int alphanum_write(char a, char b)
 {
     return alphanum_raw_write(alphanum_get_char(toupper(a)), alphanum_get_char(toupper(b)));
 }
@@ -187,8 +180,7 @@ alphanum_write(char a, char b)
 /*
  * Init the alphanum clicker.
  */
-int
-alphanum_init(uint8_t bus)
+int alphanum_init(uint8_t bus)
 {
     int ret = 0;
 
@@ -246,8 +238,7 @@ alphanum_init(uint8_t bus)
  * Periodically switch between segments a and b to keep the illusion of
  * a simultaneous display of both values.
  */
-void
-alphanum_switch_cycles(int num)
+void alphanum_switch_cycles(int num)
 {
     int i = 0;
     while (i < num || num == 0) {
@@ -280,8 +271,7 @@ alphanum_switch_cycles(int num)
  * Write 2 or more characters on the alphanum clicker as a
  * "running text".
  */
-void
-alphanum_write_running_text(const char *s, int ntimes)
+void alphanum_write_running_text(const char *s, int ntimes)
 {
     unsigned int i;
     int cnt;
@@ -293,9 +283,8 @@ alphanum_write_running_text(const char *s, int ntimes)
         return;
     }
 
-    for (i = 0; i < strlen(s); ++i) {
+    for (i = 0; i < strlen(s); ++i)
         str[i] = toupper(s[i]);
-    }
 
     i = 0;
     cnt = 1;
