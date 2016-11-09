@@ -103,20 +103,10 @@ uint16_t alphanum_click_get_char(char c)
 int alphanum_click_raw_write(uint16_t a, uint16_t b)
 {
     /* Set all GPIO to 1 */
-    if (gpio_set_value(gpio_pin_le2, 1)) {
-        printf("Error: cannot set value\n");
+    if (gpio_set_value(gpio_pin_le2, 1) < 0
+    ||  gpio_set_value(gpio_pin_oe, 1) < 0
+    ||  gpio_set_value(gpio_pin_oe2, 1) < 0)
         return -1;
-    }
-
-    if (gpio_set_value(gpio_pin_oe, 1)) {
-        printf("Error: cannot set value\n");
-        return -1;
-    }
-
-    if (gpio_set_value(gpio_pin_oe2, 1)) {
-        printf("Error: cannot set value\n");
-        return -1;
-    }
 
     /* Write b */
     if (spi_transfer((uint8_t *) &b, NULL, sizeof(b)) < 0) {
@@ -182,8 +172,6 @@ int alphanum_click_write(char a, char b)
  */
 int alphanum_click_init(uint8_t bus)
 {
-    int ret = 0;
-
     /* Setup GPIO */
     switch(bus) {
         case MIKROBUS_1:
@@ -202,34 +190,18 @@ int alphanum_click_init(uint8_t bus)
     }
 
     /* Init GPIO pins */
-    if ((ret = gpio_init(gpio_pin_le2)) != 0) {
-        printf("Error: Cannot initialize gpio\n");
-        return ret;
-    }
-    if ((ret = gpio_init(gpio_pin_oe)) != 0) {
-        printf("Error: Cannot initialize gpio\n");
-        return ret;
-    }
-    if ((ret = gpio_init(gpio_pin_oe2)) != 0) {
-        printf("Error: Cannot initialize gpio\n");
-        return ret;
-    }
+    if (gpio_init(gpio_pin_le2) < 0
+    ||  gpio_init(gpio_pin_oe) < 0
+    ||  gpio_init(gpio_pin_oe2) < 0)
+        return -1;
 
     /* Set directions for the GPIO pins */
-    if ((ret = gpio_set_direction(gpio_pin_le2, GPIO_OUTPUT)) != 0) {
-        printf("Error: Cannot gpio directions\n");
-        return ret;
-    }
-    if ((ret = gpio_set_direction(gpio_pin_oe, GPIO_OUTPUT)) != 0) {
-        printf("Error: Cannot gpio directions\n");
-        return ret;
-    }
-    if ((ret = gpio_set_direction(gpio_pin_oe2, GPIO_OUTPUT)) != 0) {
-        printf("Error: Cannot gpio directions\n");
-        return ret;
-    }
+    if (gpio_set_direction(gpio_pin_le2, GPIO_OUTPUT) < 0
+    ||  gpio_set_direction(gpio_pin_oe, GPIO_OUTPUT) < 0
+    ||  gpio_set_direction(gpio_pin_oe2, GPIO_OUTPUT) < 0)
+        return -1;
 
-    return ret;
+    return 0;
 }
 
 /*
@@ -240,25 +212,15 @@ void alphanum_click_switch_cycles(int num)
 {
     int i = 0;
     while (i < num || num == 0) {
-        if (gpio_set_value(gpio_pin_oe, 1)) {
-            printf("Error: cannot set value\n");
+        if (gpio_set_value(gpio_pin_oe, 1) < 0
+        ||  gpio_set_value(gpio_pin_oe2, 0) < 0)
             return;
-        }
-        if (gpio_set_value(gpio_pin_oe2, 0)) {
-            printf("Error 1: cannot set value le2\n");
-            return;
-        }
 
         alphanum_click_sleep_cycles();
 
-        if (gpio_set_value(gpio_pin_oe2, 1)) {
-            printf("Error 2: cannot set value le2\n");
+        if (gpio_set_value(gpio_pin_oe2, 1) < 0
+        ||  gpio_set_value(gpio_pin_oe, 0) < 0)
             return;
-        }
-        if (gpio_set_value(gpio_pin_oe, 0)) {
-            printf("Error: cannot set value\n");
-            return;
-        }
 
         alphanum_click_sleep_cycles();
         ++i;
