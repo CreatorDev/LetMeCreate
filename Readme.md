@@ -41,6 +41,7 @@ MikroClick board supported:
   - IR eclipse
   - Joystick
   - Motion
+  - OLED
   - Opto
   - Proximity
   - Relay (partial support)
