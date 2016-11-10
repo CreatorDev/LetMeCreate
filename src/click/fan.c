@@ -1,10 +1,7 @@
 #include <stdbool.h>
 #include <stdio.h>
-#include "letmecreate/click/common.h"
-#include "letmecreate/click/fan.h"
-#include "letmecreate/core/common.h"
-#include "letmecreate/core/gpio.h"
-#include "letmecreate/core/gpio_monitor.h"
+#include <letmecreate/click/fan.h>
+#include <letmecreate/core/i2c.h>
 
 
 /* I2C address of EMC2301 */
