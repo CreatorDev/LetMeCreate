@@ -18,7 +18,12 @@
 #define PAGE_PER_LINE               (2)
 
 
-/* The default monospace font lookup table */
+/* The default monospace font lookup table.
+ *
+ * Each character takes 11x16 pixels. Each byte represents 1x8 pixels. The
+ * first 11 bytes stores the top half of the character and the consecutive
+ * 11 bytes stores the bottom half.
+ */
 static const uint8_t char_table[][22] = {
     {0x0, 0x0, 0x0, 0x0, 0xfe, 0xfe, 0xfe, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x33, 0x33, 0x33, 0x0, 0x0, 0x0, 0x0},               /* ! */
     {0x0, 0x0, 0x0, 0x3e, 0x3e, 0x0, 0x0, 0x3e, 0x3e, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0},                 /* " */
@@ -237,7 +242,7 @@ int oled_click_write_text(char *str)
         if (oled_click_get_char(str[i], &bitmap) < 0)
             return -1;
 
-        /* Each character takes 11x8 pixels, so it requires writing on
+        /* Each character takes 11x16 pixels, so it requires writing on
          * two pages.
          *
          * page no
