@@ -16,6 +16,8 @@
 /* Initialize the oled clicker */
 int LETMECREATE_CLICK_EXPORT oled_click_init(void);
 
+int LETMECREATE_CLICK_EXPORT oled_click_set_contrast(uint8_t contrast);
+
 /* Write a raw picture */
 int LETMECREATE_CLICK_EXPORT oled_click_raw_write(uint8_t *data);
 

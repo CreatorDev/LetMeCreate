@@ -217,6 +217,15 @@ int oled_click_init(void)
     return 0;
 }
 
+int oled_click_set_contrast(uint8_t contrast)
+{
+    if (oled_click_cmd(SSD1306_SETCONTRAST) < 0
+    ||  oled_click_cmd(contrast) < 0)
+        return -1;
+
+    return 0;
+}
+
 /*
  * Set the current page address.
  */

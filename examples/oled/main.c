@@ -10,5 +10,7 @@ int main(void)
     oled_click_init();
     oled_click_write_text("Hello   Creator!");
 
+    oled_click_set_contrast(0xFF);
+
     return 0;
 }
