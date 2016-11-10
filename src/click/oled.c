@@ -4,8 +4,8 @@
 #include <letmecreate/click/oled.h>
 #include <letmecreate/core/i2c.h>
 
-/* Command and data registers */
-const uint16_t cmd_addr = 0x3C;
+/* I2C address of SSD1306 */
+#define SSD1306_ADDRESS             (0x3C)
 
 /* The default monospace font lookup table */
 static const uint8_t char_table[][22] = {
@@ -122,7 +122,7 @@ int oled_click_get_char(char c, const uint8_t **out)
 
 int oled_click_cmd(uint8_t cmd)
 {
-    return i2c_write_register(cmd_addr, 0b0000000, cmd);
+    return i2c_write_register(SSD1306_ADDRESS, 0b0000000, cmd);
 }
 
  /*
@@ -130,7 +130,7 @@ int oled_click_cmd(uint8_t cmd)
   */
 int oled_click_data(uint8_t data)
 {
-    return i2c_write_register(cmd_addr, 0b1100000, data);
+    return i2c_write_register(SSD1306_ADDRESS, 0b1100000, data);
 }
 
 /*
