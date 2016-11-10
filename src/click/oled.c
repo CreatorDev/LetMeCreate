@@ -165,23 +165,6 @@ static const uint8_t char_table[][22] = {
     {0x0, 0x80, 0x0, 0x0, 0x0, 0x80, 0x80, 0x80, 0x80, 0x0, 0x0, 0x0, 0x1, 0x3, 0x3, 0x3, 0x1, 0x1, 0x1, 0x1, 0x3, 0x0}                 /* ~ */
 };
 
-/*
- * Translate character into raster font graphics.
- */
-int oled_click_get_char(char c, const uint8_t **out)
-{
-    if (out == NULL)
-        return -1;
-    if (c < '!' || c > '~') {
-        fprintf(stderr, "oled: Cannot convert character %c.", c);
-        return -1;
-    }
-
-    *out = char_table[c - '!'];
-
-    return 0;
-}
-
 static int oled_click_cmd(uint8_t cmd)
 {
     return i2c_write_register(SSD1306_ADDRESS, 0b0000000, cmd);
@@ -198,10 +181,16 @@ static void sleep_50ms(void)
         req = rem;
 }
 
+static int oled_click_set_page_addr(uint8_t pageno)
+{
+    if (pageno >= SSD1306_PAGE_COUNT) {
+        fprintf(stderr, "oled: Invalid page number.");
+        return -1;
+    }
 
-/*
- * Initialize the oled display.
- */
+    return oled_click_cmd(0xb0 | pageno);
+}
+
 int oled_click_enable(uint8_t mikrobus_index)
 {
     uint8_t reset_pin = 0 , sa0_pin = 0;
@@ -245,6 +234,7 @@ int oled_click_enable(uint8_t mikrobus_index)
         return -1;
     }
 
+    /* Initialize the oled display. */
     if (oled_click_cmd(SSD1306_DISPLAYOFF) < 0                /* 0xAE Set OLED Display Off */
     ||  oled_click_cmd(SSD1306_SETDISPLAYCLOCKDIV) < 0        /* 0xD5 Set Display Clock Divide Ratio/Oscillator Frequency */
     ||  oled_click_cmd(0x80) < 0
@@ -281,23 +271,6 @@ int oled_click_set_contrast(uint8_t contrast)
     return 0;
 }
 
-/*
- * Set the current page address.
- */
-static int oled_click_set_page_addr(uint8_t pageno)
-{
-    if (pageno >= SSD1306_PAGE_COUNT) {
-        fprintf(stderr, "oled: Invalid page number.");
-        return -1;
-    }
-
-    return oled_click_cmd(0xb0 | pageno);
-}
-
-/*
- * Write a picture saved in returned raster graphics to the oled
- * display.
- */
 int oled_click_raw_write(uint8_t *data)
 {
     uint8_t i = 0;
@@ -381,6 +354,20 @@ int oled_click_write_text(char *str)
     }
 
     return oled_click_raw_write(data);
+}
+
+int oled_click_get_char(char c, const uint8_t **out)
+{
+    if (out == NULL)
+        return -1;
+    if (c < '!' || c > '~') {
+        fprintf(stderr, "oled: Cannot convert character %c.", c);
+        return -1;
+    }
+
+    *out = char_table[c - '!'];
+
+    return 0;
 }
 
 int oled_click_disable(void)
