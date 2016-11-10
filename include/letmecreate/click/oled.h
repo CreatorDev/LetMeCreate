@@ -29,7 +29,7 @@ int LETMECREATE_CLICK_EXPORT oled_click_set_page_addr(uint8_t);
 int LETMECREATE_CLICK_EXPORT oled_click_raw_write(uint8_t *data);
 
 /* Write a text with the default monospace font */
-void LETMECREATE_CLICK_EXPORT oled_click_write_text(char *);
+int LETMECREATE_CLICK_EXPORT oled_click_write_text(char *str);
 
 /* Translate character into raster font graphics */
 int LETMECREATE_CLICK_EXPORT oled_click_get_char(char c, const uint8_t **out);

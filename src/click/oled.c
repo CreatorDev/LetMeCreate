@@ -6,9 +6,16 @@
 
 /* I2C address of SSD1306 */
 #define SSD1306_ADDRESS             (0x3C)
+
 #define SSD1306_LCDWIDTH            (96)    /* in pixels */
 #define SSD1306_LCDHEIGHT           (39)    /* in pixels */
-#define SSD1306_PAGE_COUNT          (5)     /* Each page represents 128x8 pixels, so page count is 5 */ 
+#define SSD1306_PAGE_COUNT          (5)     /* Each page represents 128x8 pixels, so page count is 5 */
+#define CHARACTER_WIDTH             (11)
+#define CHARACTER_COUNT_PER_LINE    (SSD1306_LCDWIDTH / CHARACTER_WIDTH)
+#define OLED_CLICK_LINE_COUNT       (2)
+#define OLED_CLICK_MAX_STR_LEN      (OLED_CLICK_LINE_COUNT * CHARACTER_COUNT_PER_LINE)
+#define PAGE_PER_LINE               (2)
+
 
 /* The default monospace font lookup table */
 static const uint8_t char_table[][22] = {
@@ -205,93 +212,63 @@ int oled_click_raw_write(uint8_t *data)
     return 0;
 }
 
-/*
- * Write a text string to the oled display.
- * The display is divided with the default monospace font into two lines a
- * 8 characters per line. The whole (visible) set of ASCII characters are
- * available.
- */
-void oled_click_write_text(char *str)
+int oled_click_write_text(char *str)
 {
-    unsigned char i,j;
-    uint8_t data;
-    const uint8_t *ch;
-    int ch_addr;
-    int ch_num;
-    int start, end;
-    int width = 11;
-    int col_offset = -6;
-    int char_per_line = 8;
+    uint8_t data[SSD1306_PAGE_COUNT * SSD1306_LCDWIDTH];
+    uint32_t str_length = 0;
+    uint8_t i = 0;  /* OLED_CLICK_MAX_STR_LEN fits in a byte */
 
-    int str_len = strlen(str);
-
-    printf("Writing: %s (length: %i)\n", str, str_len);
-
-    for (i = 0 ; i < SSD1306_PAGE_COUNT; ++i) {
-        oled_click_set_page_addr(i);
-        oled_click_cmd(0x10);
-        oled_click_cmd(0x40);
-
-        data = 0x00;
-        ch_num = char_per_line - 1;
-        for (j = 0; j < SSD1306_LCDWIDTH; ++j) {
-            /* Line 1 */
-            if (i == 0 || i == 1) {
-                start = (char_per_line - ch_num) * width + col_offset;
-                end = (char_per_line - ch_num) * width + width - 1 + col_offset;
-                if (ch_num < str_len && ch_num >= 0) {
-                    if (j >= start && j <= end) {
-                        ch_addr = (j - start) + width * (i - 0);
-                        if (str[ch_num] == ' ') {
-                            data = 0x00;
-                        } else {
-                             oled_click_get_char(str[ch_num], &ch);
-                            if (ch == NULL) {
-                                data = 0x00;
-                            } else {
-                                data = ch[ch_addr];
-                            }
-                        }
-                    } else {
-                        data = 0x00;
-                    }
-                } else {
-                    data = 0x00;
-                }
-                if (j == end) {
-                    --ch_num;
-                }
-            /* Line 2 */
-            } else if ((i == 2 || i == 3) && ((str_len - char_per_line) > 0)) {
-                start = (char_per_line - ch_num) * width + col_offset;
-                end = (char_per_line - ch_num) * width + width - 1 + col_offset;
-                if (ch_num < (str_len - char_per_line) && ch_num >= 0) {
-                    if (j >= start && j <= end) {
-                        ch_addr = (j - start) + width * (i - 2);
-                        if (str[ch_num + char_per_line] == ' ') {
-                            data = 0x00;
-                        } else {
-                            oled_click_get_char(str[ch_num + char_per_line], &ch);
-                            if (ch == NULL) {
-                                data = 0x00;
-                            } else {
-                                data = ch[ch_addr];
-                            }
-                        }
-                    } else {
-                        data = 0x00;
-                    }
-                } else {
-                    data = 0x00;
-                }
-                if (j == end) {
-                    --ch_num;
-                }
-            } else {
-                data = 0x00;
-            }
-
-            oled_click_data(data);
-        }
+    if (str == NULL) {
+        fprintf(stderr, "oled: Cannot write text using null pointer.\n");
+        return -1;
     }
+
+    str_length = (uint32_t)strlen(str);
+    if (str_length > OLED_CLICK_MAX_STR_LEN) {
+        fprintf(stderr, "oled: Text is too long ! Maximum text length is %u.\n", OLED_CLICK_MAX_STR_LEN);
+        return -1;
+    }
+
+    memset(data, 0, sizeof(data));
+
+    for (i = 0; i < str_length; ++i) {
+        const uint8_t *bitmap = NULL;
+        uint8_t j = 0;
+        uint32_t offset = 0;
+
+        /* Since data is already filled with 0, we can skip spaces */
+        if (str[i] == ' ')
+            continue;
+
+        if (oled_click_get_char(str[i], &bitmap) < 0)
+            return -1;
+
+        /* Each character takes 11x8 pixels, so it requires writing on
+         * two pages.
+         *
+         * page no
+         *    0   |first line |
+         *    1   |  of text  |
+         *  -------------------
+         *    2   |second line|
+         *    3   |  of text  |
+         *
+         * The origin is at the top right corner.
+         */
+        offset = (i / CHARACTER_COUNT_PER_LINE) * PAGE_PER_LINE * SSD1306_LCDWIDTH;
+        offset += SSD1306_LCDWIDTH - ((i % CHARACTER_COUNT_PER_LINE) + 1) * CHARACTER_WIDTH;
+
+        /* Writing top half of the character */
+        for (j = 0; j < CHARACTER_WIDTH; ++j)
+            data[offset + j] = bitmap[j];
+
+        /* Moving offset to next page */
+        offset += SSD1306_LCDWIDTH;
+
+        /* Writing bottom half of the character */
+        for (j = 0; j < CHARACTER_WIDTH; ++j)
+            data[offset + j] = bitmap[CHARACTER_WIDTH + j];
+    }
+
+    return oled_click_raw_write(data);
 }
