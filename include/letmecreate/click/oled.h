@@ -23,7 +23,7 @@ int LETMECREATE_CLICK_EXPORT oled_write_pic(uint8_t *);
 void LETMECREATE_CLICK_EXPORT oled_write_text(char *);
 
 /* Translate character into raster font graphics */
-uint8_t* LETMECREATE_CLICK_EXPORT oled_get_char(char);
+int LETMECREATE_CLICK_EXPORT oled_get_char(char c, uint8_t **out);
 
 /*
  * System registers of the OLED display clicker

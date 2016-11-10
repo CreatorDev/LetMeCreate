@@ -116,19 +116,21 @@ static const uint8_t oled_char_table[][22] = {
     {0x0, 0x80, 0x0, 0x0, 0x0, 0x80, 0x80, 0x80, 0x80, 0x0, 0x0, 0x0, 0x1, 0x3, 0x3, 0x3, 0x1, 0x1, 0x1, 0x1, 0x3, 0x0}                 /* ~ */
 };
 
-uint8_t *
-oled_get_char(char c)
-{
-    if ((c >= '!') && (c <= '~')) {
-        return oled_char_table[c - '!'];
-    }
-
-    return NULL;
-}
-
 /*
  * Translate character into raster font graphics.
  */
+int oled_get_char(char c, uint8_t **out)
+{
+    if (out == NULL)
+        return -1;
+    if (c < '!' || c > '~')
+        return -1;
+
+    *out = oled_char_table[c - '!'];
+
+    return 0;
+}
+
 int oled_cmd(uint8_t cmd)
 {
     return i2c_write_register(oled_cmd_addr, 0b0000000, cmd);
@@ -247,7 +249,7 @@ void oled_write_text(char *str)
                         if (str[ch_num] == ' ') {
                             data = 0x00;
                         } else {
-                            ch = oled_get_char(str[ch_num]);
+                             oled_get_char(str[ch_num], &ch);
                             if (ch == NULL) {
                                 data = 0x00;
                             } else {
@@ -273,7 +275,7 @@ void oled_write_text(char *str)
                         if (str[ch_num + char_per_line] == ' ') {
                             data = 0x00;
                         } else {
-                            ch = oled_get_char(str[ch_num + char_per_line]);
+                            oled_get_char(str[ch_num + char_per_line], &ch);
                             if (ch == NULL) {
                                 data = 0x00;
                             } else {
