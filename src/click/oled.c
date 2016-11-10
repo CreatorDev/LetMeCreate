@@ -180,24 +180,29 @@ int oled_click_set_page_addr(uint8_t add)
  * Write a picture saved in returned raster graphics to the oled
  * display.
  */
-int oled_click_raw_write(uint8_t *pic)
+int oled_click_raw_write(uint8_t *data)
 {
-    unsigned char i, j;
-    int ret = 0;
+    uint8_t i = 0;
 
-    for (i = 0; i < SSD1306_PAGE_COUNT; i++) {
+    if (data == NULL) {
+        fprintf(stderr, "oled: Cannot write data using null pointer.\n");
+        return -1;
+    }
+
+    for (; i < SSD1306_PAGE_COUNT; ++i) {
+        uint8_t j = 0;
         oled_click_set_page_addr(i);
         oled_click_cmd(0x10);
         oled_click_cmd(0x40);
-        for (j = 0; j < SSD1306_LCDWIDTH; j++){
-            if ((ret = oled_click_data(pic[i * SSD1306_LCDWIDTH + j])) < 0 ) {
-                printf("Error: Cannot write to oled display\n");
-                return ret;
+        for (; j < SSD1306_LCDWIDTH; ++j) {
+            if (oled_click_data(data[i * SSD1306_LCDWIDTH + j]) < 0) {
+                fprintf(stderr, "oled: Failed to write data to display controller.\n");
+                return -1;
             }
         }
     }
 
-    return ret;
+    return 0;
 }
 
 /*
