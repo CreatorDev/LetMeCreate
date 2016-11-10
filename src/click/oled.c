@@ -5,11 +5,11 @@
 #include <letmecreate/core/i2c.h>
 
 /* Command and data registers */
-const uint16_t oled_cmd_addr = 0x3C;
-const uint16_t oled_data_addr = 0x3D;
+const uint16_t cmd_addr = 0x3C;
+const uint16_t data_addr = 0x3D;
 
 /* The default monospace font lookup table */
-static const uint8_t oled_char_table[][22] = {
+static const uint8_t char_table[][22] = {
     {0x0, 0x0, 0x0, 0x0, 0xfe, 0xfe, 0xfe, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x33, 0x33, 0x33, 0x0, 0x0, 0x0, 0x0},               /* ! */
     {0x0, 0x0, 0x0, 0x3e, 0x3e, 0x0, 0x0, 0x3e, 0x3e, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0},                 /* " */
     {0x60, 0x6c, 0xfc, 0xf0, 0x60, 0x7c, 0xfc, 0xe0, 0x60, 0x60, 0x0, 0x0, 0x6, 0x6, 0xf, 0x3f, 0x36, 0x6, 0xf, 0x3f, 0x36, 0x6},       /* # */
@@ -109,58 +109,58 @@ static const uint8_t oled_char_table[][22] = {
 /*
  * Translate character into raster font graphics.
  */
-int oled_get_char(char c, const uint8_t **out)
+int oled_click_get_char(char c, const uint8_t **out)
 {
     if (out == NULL)
         return -1;
     if (c < '!' || c > '~')
         return -1;
 
-    *out = oled_char_table[c - '!'];
+    *out = char_table[c - '!'];
 
     return 0;
 }
 
-int oled_cmd(uint8_t cmd)
+int oled_click_cmd(uint8_t cmd)
 {
-    return i2c_write_register(oled_cmd_addr, 0b0000000, cmd);
+    return i2c_write_register(cmd_addr, 0b0000000, cmd);
 }
 
  /*
   * Write data to a page.
   */
-int oled_data(uint8_t data)
+int oled_click_data(uint8_t data)
 {
-    return i2c_write_register(oled_cmd_addr, 0b1100000, data);
+    return i2c_write_register(cmd_addr, 0b1100000, data);
 }
 
 /*
  * Initialize the oled display.
  */
-int oled_init(void)
+int oled_click_init(void)
 {
-    if (oled_cmd(SSD1306_DISPLAYOFF) < 0                /* 0xAE Set OLED Display Off */
-    ||  oled_cmd(SSD1306_SETDISPLAYCLOCKDIV) < 0        /* 0xD5 Set Display Clock Divide Ratio/Oscillator Frequency */
-    ||  oled_cmd(0x80) < 0
-    ||  oled_cmd(SSD1306_SETMULTIPLEX) < 0              /* 0xA8 Set Multiplex Ratio */
-    ||  oled_cmd(0x27) < 0
-    ||  oled_cmd(SSD1306_SETDISPLAYOFFSET) < 0          /* 0xD3 Set Display Offset */
-    ||  oled_cmd(0x00) < 0
-    ||  oled_cmd(SSD1306_SETSTARTLINE) < 0              /* 0x40 Set Display Start Line */
-    ||  oled_cmd(SSD1306_CHARGEPUMP) < 0                /* 0x8D Set Charge Pump */
-    ||  oled_cmd(0x14) < 0                              /* 0x14 Enable Charge Pump */
-    ||  oled_cmd(SSD1306_COMSCANDEC) < 0                /* 0xC8 Set COM Output Scan Direction */
-    ||  oled_cmd(SSD1306_SETCOMPINS) < 0                /* 0xDA Set COM Pins Hardware Configuration */
-    ||  oled_cmd(0x12) < 0
-    ||  oled_cmd(SSD1306_SETCONTRAST) < 0               /* 0x81 Set Contrast Control */
-    ||  oled_cmd(0xAF) < 0
-    ||  oled_cmd(SSD1306_SETPRECHARGE) < 0              /* 0xD9 Set Pre-Charge Period */
-    ||  oled_cmd(0x25) < 0
-    ||  oled_cmd(SSD1306_SETVCOMDETECT) < 0             /* 0xDB Set VCOMH Deselect Level */
-    ||  oled_cmd(0x20) < 0
-    ||  oled_cmd(SSD1306_DISPLAYALLON_RESUME) < 0       /* 0xA4 Set Entire Display On/Off */
-    ||  oled_cmd(SSD1306_NORMALDISPLAY) < 0             /* 0xA6 Set Normal/Inverse Display */
-    ||  oled_cmd(SSD1306_DISPLAYON) < 0)                /* 0xAF Set OLED Display On */
+    if (oled_click_cmd(SSD1306_DISPLAYOFF) < 0                /* 0xAE Set OLED Display Off */
+    ||  oled_click_cmd(SSD1306_SETDISPLAYCLOCKDIV) < 0        /* 0xD5 Set Display Clock Divide Ratio/Oscillator Frequency */
+    ||  oled_click_cmd(0x80) < 0
+    ||  oled_click_cmd(SSD1306_SETMULTIPLEX) < 0              /* 0xA8 Set Multiplex Ratio */
+    ||  oled_click_cmd(0x27) < 0
+    ||  oled_click_cmd(SSD1306_SETDISPLAYOFFSET) < 0          /* 0xD3 Set Display Offset */
+    ||  oled_click_cmd(0x00) < 0
+    ||  oled_click_cmd(SSD1306_SETSTARTLINE) < 0              /* 0x40 Set Display Start Line */
+    ||  oled_click_cmd(SSD1306_CHARGEPUMP) < 0                /* 0x8D Set Charge Pump */
+    ||  oled_click_cmd(0x14) < 0                              /* 0x14 Enable Charge Pump */
+    ||  oled_click_cmd(SSD1306_COMSCANDEC) < 0                /* 0xC8 Set COM Output Scan Direction */
+    ||  oled_click_cmd(SSD1306_SETCOMPINS) < 0                /* 0xDA Set COM Pins Hardware Configuration */
+    ||  oled_click_cmd(0x12) < 0
+    ||  oled_click_cmd(SSD1306_SETCONTRAST) < 0               /* 0x81 Set Contrast Control */
+    ||  oled_click_cmd(0xAF) < 0
+    ||  oled_click_cmd(SSD1306_SETPRECHARGE) < 0              /* 0xD9 Set Pre-Charge Period */
+    ||  oled_click_cmd(0x25) < 0
+    ||  oled_click_cmd(SSD1306_SETVCOMDETECT) < 0             /* 0xDB Set VCOMH Deselect Level */
+    ||  oled_click_cmd(0x20) < 0
+    ||  oled_click_cmd(SSD1306_DISPLAYALLON_RESUME) < 0       /* 0xA4 Set Entire Display On/Off */
+    ||  oled_click_cmd(SSD1306_NORMALDISPLAY) < 0             /* 0xA6 Set Normal/Inverse Display */
+    ||  oled_click_cmd(SSD1306_DISPLAYON) < 0)                /* 0xAF Set OLED Display On */
         return -1;
 
     return 0;
@@ -169,26 +169,26 @@ int oled_init(void)
 /*
  * Set the current page address.
  */
-int oled_set_page_addr(uint8_t add)
+int oled_click_set_page_addr(uint8_t add)
 {
-    return oled_cmd(0xb0 | add);
+    return oled_click_cmd(0xb0 | add);
 }
 
 /*
  * Write a picture saved in returned raster graphics to the oled
  * display.
  */
-int oled_write_pic(uint8_t *pic)
+int oled_click_write_pic(uint8_t *pic)
 {
     unsigned char i, j;
     int ret = 0;
 
     for (i = 0; i < 0x05; i++) {
-        oled_set_page_addr(i);
-        oled_cmd(0x10);
-        oled_cmd(0x40);
+        oled_click_set_page_addr(i);
+        oled_click_cmd(0x10);
+        oled_click_cmd(0x40);
         for (j = 0; j < 0x60; j++){
-            if ((ret = oled_data(pic[i * 0x60 + j])) < 0 ) {
+            if ((ret = oled_click_data(pic[i * 0x60 + j])) < 0 ) {
                 printf("Error: Cannot write to oled display\n");
                 return ret;
             }
@@ -204,7 +204,7 @@ int oled_write_pic(uint8_t *pic)
  * 8 characters per line. The whole (visible) set of ASCII characters are
  * available.
  */
-void oled_write_text(char *str)
+void oled_click_write_text(char *str)
 {
     unsigned char i,j;
     uint8_t data;
@@ -221,9 +221,9 @@ void oled_write_text(char *str)
     printf("Writing: %s (length: %i)\n", str, str_len);
 
     for (i = 0 ; i < 5; ++i) {
-        oled_set_page_addr(i);
-        oled_cmd(0x10);
-        oled_cmd(0x40);
+        oled_click_set_page_addr(i);
+        oled_click_cmd(0x10);
+        oled_click_cmd(0x40);
 
         data = 0x00;
         ch_num = char_per_line - 1;
@@ -238,7 +238,7 @@ void oled_write_text(char *str)
                         if (str[ch_num] == ' ') {
                             data = 0x00;
                         } else {
-                             oled_get_char(str[ch_num], &ch);
+                             oled_click_get_char(str[ch_num], &ch);
                             if (ch == NULL) {
                                 data = 0x00;
                             } else {
@@ -264,7 +264,7 @@ void oled_write_text(char *str)
                         if (str[ch_num + char_per_line] == ' ') {
                             data = 0x00;
                         } else {
-                            oled_get_char(str[ch_num + char_per_line], &ch);
+                            oled_click_get_char(str[ch_num + char_per_line], &ch);
                             if (ch == NULL) {
                                 data = 0x00;
                             } else {
@@ -284,7 +284,7 @@ void oled_write_text(char *str)
                 data = 0x00;
             }
 
-            oled_data(data);
+            oled_click_data(data);
         }
     }
 }
