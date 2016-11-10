@@ -202,7 +202,7 @@ static void sleep_50ms(void)
 /*
  * Initialize the oled display.
  */
-int oled_click_init(uint8_t mikrobus_index)
+int oled_click_enable(uint8_t mikrobus_index)
 {
     uint8_t reset_pin;
 
