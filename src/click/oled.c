@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 #include <letmecreate/click/oled.h>
-#include <letmecreate/click/oled.h>
+#include <letmecreate/core/common.h>
+#include <letmecreate/core/gpio.h>
 #include <letmecreate/core/i2c.h>
 
 /* I2C address of SSD1306 */
@@ -185,11 +187,52 @@ static int oled_click_cmd(uint8_t cmd)
     return i2c_write_register(SSD1306_ADDRESS, 0b0000000, cmd);
 }
 
+static void sleep_50ms(void)
+{
+    struct timespec rem, req = {
+        .tv_nsec = 50000000,
+        .tv_sec = 0
+    };
+
+    while (nanosleep(&req, &rem))
+        req = rem;
+}
+
+
 /*
  * Initialize the oled display.
  */
-int oled_click_init(void)
+int oled_click_init(uint8_t mikrobus_index)
 {
+    uint8_t reset_pin;
+
+    switch (mikrobus_index) {
+        case MIKROBUS_1:
+            reset_pin = MIKROBUS_1_RST;
+            break;
+        case MIKROBUS_2:
+            reset_pin = MIKROBUS_2_RST;
+            break;
+        default:
+            fprintf(stderr, "oled: Invalid mikrobus index.\n");
+            return -1;
+    }
+
+    /* Reset device */
+    if (gpio_init(reset_pin) < 0
+    ||  gpio_set_direction(reset_pin, GPIO_OUTPUT) < 0
+    ||  gpio_set_value(reset_pin, 0) < 0) {
+        fprintf(stderr, "oled: Failed to reset device.\n");
+        return -1;
+    }
+
+    sleep_50ms();
+
+    if (gpio_set_value(reset_pin, 1) < 0) {
+        fprintf(stderr, "oled: Failed to reset device.\n");
+        return -1;
+    }
+
     if (oled_click_cmd(SSD1306_DISPLAYOFF) < 0                /* 0xAE Set OLED Display Off */
     ||  oled_click_cmd(SSD1306_SETDISPLAYCLOCKDIV) < 0        /* 0xD5 Set Display Clock Divide Ratio/Oscillator Frequency */
     ||  oled_click_cmd(0x80) < 0

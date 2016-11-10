@@ -14,7 +14,7 @@
 #include <letmecreate/click/export.h>
 
 /* Initialize the oled clicker */
-int LETMECREATE_CLICK_EXPORT oled_click_init(void);
+int LETMECREATE_CLICK_EXPORT oled_click_init(uint8_t mikrobus_index);
 
 int LETMECREATE_CLICK_EXPORT oled_click_set_contrast(uint8_t contrast);
 
