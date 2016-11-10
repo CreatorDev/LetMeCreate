@@ -19,9 +19,6 @@ int LETMECREATE_CLICK_EXPORT oled_click_init(void);
 /* Write a command to the cmd register */
 int LETMECREATE_CLICK_EXPORT oled_click_cmd(uint8_t);
 
-/* Set the page address */
-int LETMECREATE_CLICK_EXPORT oled_click_set_page_addr(uint8_t);
-
 /* Write a raw picture */
 int LETMECREATE_CLICK_EXPORT oled_click_raw_write(uint8_t *data);
 

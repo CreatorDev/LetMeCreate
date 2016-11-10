@@ -178,9 +178,14 @@ int oled_click_init(void)
 /*
  * Set the current page address.
  */
-int oled_click_set_page_addr(uint8_t add)
+static int oled_click_set_page_addr(uint8_t pageno)
 {
-    return oled_click_cmd(0xb0 | add);
+    if (pageno >= SSD1306_PAGE_COUNT) {
+        fprintf(stderr, "oled: Invalid page number.");
+        return -1;
+    }
+
+    return oled_click_cmd(0xb0 | pageno);
 }
 
 /*
