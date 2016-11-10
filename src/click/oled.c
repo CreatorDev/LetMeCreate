@@ -138,7 +138,7 @@ int oled_click_get_char(char c, const uint8_t **out)
     return 0;
 }
 
-int oled_click_cmd(uint8_t cmd)
+static int oled_click_cmd(uint8_t cmd)
 {
     return i2c_write_register(SSD1306_ADDRESS, 0b0000000, cmd);
 }
