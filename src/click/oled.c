@@ -6,7 +6,6 @@
 
 /* Command and data registers */
 const uint16_t cmd_addr = 0x3C;
-const uint16_t data_addr = 0x3D;
 
 /* The default monospace font lookup table */
 static const uint8_t char_table[][22] = {
