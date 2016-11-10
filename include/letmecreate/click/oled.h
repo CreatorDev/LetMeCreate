@@ -1,3 +1,12 @@
+/**
+ * @file oled.h
+ * @author Michael Schnell, Francois Berder
+ * @date 2016
+ * @copyright 3-clause BSD
+ *
+ * @example oled/main.c
+ */
+
 #ifndef __LETMECREATE_CLICK_OLED_H__
 #define __LETMECREATE_CLICK_OLED_H__
 
