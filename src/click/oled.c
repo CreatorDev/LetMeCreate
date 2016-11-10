@@ -122,8 +122,10 @@ int oled_click_get_char(char c, const uint8_t **out)
 {
     if (out == NULL)
         return -1;
-    if (c < '!' || c > '~')
+    if (c < '!' || c > '~') {
+        fprintf(stderr, "oled: Cannot convert character %c.", c);
         return -1;
+    }
 
     *out = char_table[c - '!'];
 
