@@ -1,26 +1,29 @@
 #ifndef __LETMECREATE_CLICK_OLED_H__
 #define __LETMECREATE_CLICK_OLED_H__
 
+#include <stdint.h>
+#include <letmecreate/click/export.h>
+
 /* Initialize the oled clicker */
-int oled_init(uint8_t);
+int LETMECREATE_CLICK_EXPORT oled_init(uint8_t);
 
 /* Write a command to the cmd register */
-int oled_cmd(uint8_t);
+int LETMECREATE_CLICK_EXPORT oled_cmd(uint8_t);
 
 /* Write a command */
-int oled_data(uint8_t);
+int LETMECREATE_CLICK_EXPORT oled_data(uint8_t);
 
 /* Set the page address */
-int oled_set_page_addr(uint8_t);
+int LETMECREATE_CLICK_EXPORT oled_set_page_addr(uint8_t);
 
 /* Write a raw picture */
-int oled_write_pic(uint8_t *);
+int LETMECREATE_CLICK_EXPORT oled_write_pic(uint8_t *);
 
 /* Write a text with the default monospace font */
-void oled_write_text(char *);
+void LETMECREATE_CLICK_EXPORT oled_write_text(char *);
 
 /* Translate character into raster font graphics */
-uint8_t *oled_get_char(char);
+uint8_t* LETMECREATE_CLICK_EXPORT oled_get_char(char);
 
 /*
  * System registers of the OLED display clicker
