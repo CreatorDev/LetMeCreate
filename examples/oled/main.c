@@ -1,16 +1,23 @@
+/**
+ * This example shows how to use the OLED Click wrapper of the LetMeCreate library.
+ *
+ * It displays some text for three seconds and then, it exits.
+ *
+ * The OLED Click must be inserted in Mikrobus 1 before running this program.
+ */
+
 #include <stdio.h>
+#include <unistd.h>
 #include <letmecreate/letmecreate.h>
 
-/*
- * Example how to write a text to the OLED display.
- */
 int main(void)
 {
     i2c_init();
     oled_click_enable(MIKROBUS_1);
     oled_click_write_text("Hello   Creator!");
-
-    oled_click_set_contrast(0xFF);
+    sleep(3);
+    oled_click_disable();
+    i2c_release();
 
     return 0;
 }
