@@ -327,3 +327,8 @@ int oled_click_write_text(char *str)
 
     return oled_click_raw_write(data);
 }
+
+int oled_click_disable(void)
+{
+    return oled_click_cmd(SSD1306_DISPLAYOFF);
+}

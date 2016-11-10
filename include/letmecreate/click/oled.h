@@ -27,4 +27,6 @@ int LETMECREATE_CLICK_EXPORT oled_click_write_text(char *str);
 /* Translate character into raster font graphics */
 int LETMECREATE_CLICK_EXPORT oled_click_get_char(char c, const uint8_t **out);
 
+int LETMECREATE_CLICK_EXPORT oled_click_disable(void);
+
 #endif
