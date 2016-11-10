@@ -6,6 +6,9 @@
 
 /* I2C address of SSD1306 */
 #define SSD1306_ADDRESS             (0x3C)
+#define SSD1306_LCDWIDTH            (96)    /* in pixels */
+#define SSD1306_LCDHEIGHT           (39)    /* in pixels */
+#define SSD1306_PAGE_COUNT          (5)     /* Each page represents 128x8 pixels, so page count is 5 */ 
 
 /* The default monospace font lookup table */
 static const uint8_t char_table[][22] = {
@@ -182,12 +185,12 @@ int oled_click_write_pic(uint8_t *pic)
     unsigned char i, j;
     int ret = 0;
 
-    for (i = 0; i < 0x05; i++) {
+    for (i = 0; i < SSD1306_PAGE_COUNT; i++) {
         oled_click_set_page_addr(i);
         oled_click_cmd(0x10);
         oled_click_cmd(0x40);
-        for (j = 0; j < 0x60; j++){
-            if ((ret = oled_click_data(pic[i * 0x60 + j])) < 0 ) {
+        for (j = 0; j < SSD1306_LCDWIDTH; j++){
+            if ((ret = oled_click_data(pic[i * SSD1306_LCDWIDTH + j])) < 0 ) {
                 printf("Error: Cannot write to oled display\n");
                 return ret;
             }
@@ -219,14 +222,14 @@ void oled_click_write_text(char *str)
 
     printf("Writing: %s (length: %i)\n", str, str_len);
 
-    for (i = 0 ; i < 5; ++i) {
+    for (i = 0 ; i < SSD1306_PAGE_COUNT; ++i) {
         oled_click_set_page_addr(i);
         oled_click_cmd(0x10);
         oled_click_cmd(0x40);
 
         data = 0x00;
         ch_num = char_per_line - 1;
-        for (j = 0; j < 96; ++j) {
+        for (j = 0; j < SSD1306_LCDWIDTH; ++j) {
             /* Line 1 */
             if (i == 0 || i == 1) {
                 start = (char_per_line - ch_num) * width + col_offset;

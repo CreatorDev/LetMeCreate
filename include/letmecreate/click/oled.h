@@ -38,8 +38,6 @@ int LETMECREATE_CLICK_EXPORT oled_click_get_char(char c, const uint8_t **out);
  * System registers of the OLED display clicker
  */
 #define SSD1306_96_39
-#define SSD1306_LCDWIDTH 96
-#define SSD1306_LCDHEIGHT 39
 
 #define SSD1306_DISPLAYOFF 0xAE
 #define SSD1306_SETDISPLAYCLOCKDIV 0xD5
