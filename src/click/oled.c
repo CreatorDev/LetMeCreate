@@ -135,14 +135,6 @@ int oled_click_cmd(uint8_t cmd)
     return i2c_write_register(SSD1306_ADDRESS, 0b0000000, cmd);
 }
 
- /*
-  * Write data to a page.
-  */
-int oled_click_data(uint8_t data)
-{
-    return i2c_write_register(SSD1306_ADDRESS, 0b1100000, data);
-}
-
 /*
  * Initialize the oled display.
  */
@@ -197,16 +189,15 @@ int oled_click_raw_write(uint8_t *data)
     }
 
     for (; i < SSD1306_PAGE_COUNT; ++i) {
-        uint8_t j = 0;
+        uint8_t buffer[SSD1306_LCDWIDTH + 1];
         oled_click_set_page_addr(i);
         oled_click_cmd(0x10);
         oled_click_cmd(0x40);
-        for (; j < SSD1306_LCDWIDTH; ++j) {
-            if (oled_click_data(data[i * SSD1306_LCDWIDTH + j]) < 0) {
-                fprintf(stderr, "oled: Failed to write data to display controller.\n");
-                return -1;
-            }
-        }
+
+        buffer[0] = 0b1100000;
+        memcpy(&buffer[1], &data[i * SSD1306_LCDWIDTH], SSD1306_LCDWIDTH);
+        if (i2c_write(SSD1306_ADDRESS, buffer, sizeof(buffer)) < 0)
+            return -1;
     }
 
     return 0;
