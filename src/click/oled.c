@@ -119,7 +119,7 @@ static const uint8_t oled_char_table[][22] = {
 /*
  * Translate character into raster font graphics.
  */
-int oled_get_char(char c, uint8_t **out)
+int oled_get_char(char c, const uint8_t **out)
 {
     if (out == NULL)
         return -1;
@@ -191,7 +191,6 @@ int oled_set_page_addr(uint8_t add)
 int oled_write_pic(uint8_t *pic)
 {
     unsigned char i, j;
-    unsigned char num=0;
     int ret = 0;
 
     for (i = 0; i < 0x05; i++) {
@@ -219,7 +218,7 @@ void oled_write_text(char *str)
 {
     unsigned char i,j;
     uint8_t data;
-    uint8_t *ch;
+    const uint8_t *ch;
     int ch_addr;
     int ch_num;
     int start, end;
