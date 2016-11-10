@@ -180,7 +180,7 @@ int oled_click_set_page_addr(uint8_t add)
  * Write a picture saved in returned raster graphics to the oled
  * display.
  */
-int oled_click_write_pic(uint8_t *pic)
+int oled_click_raw_write(uint8_t *pic)
 {
     unsigned char i, j;
     int ret = 0;

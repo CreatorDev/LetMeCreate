@@ -26,7 +26,7 @@ int LETMECREATE_CLICK_EXPORT oled_click_data(uint8_t);
 int LETMECREATE_CLICK_EXPORT oled_click_set_page_addr(uint8_t);
 
 /* Write a raw picture */
-int LETMECREATE_CLICK_EXPORT oled_click_write_pic(uint8_t *);
+int LETMECREATE_CLICK_EXPORT oled_click_raw_write(uint8_t *);
 
 /* Write a text with the default monospace font */
 void LETMECREATE_CLICK_EXPORT oled_click_write_text(char *);
