@@ -204,18 +204,30 @@ static void sleep_50ms(void)
  */
 int oled_click_enable(uint8_t mikrobus_index)
 {
-    uint8_t reset_pin;
+    uint8_t reset_pin = 0 , sa0_pin = 0;
 
     switch (mikrobus_index) {
         case MIKROBUS_1:
             reset_pin = MIKROBUS_1_RST;
+            sa0_pin = MIKROBUS_1_PWM;
             break;
         case MIKROBUS_2:
             reset_pin = MIKROBUS_2_RST;
+            sa0_pin = MIKROBUS_2_PWM;
             break;
         default:
             fprintf(stderr, "oled: Invalid mikrobus index.\n");
             return -1;
+    }
+
+    /* Set SA0 (the least significant bit of the slave address) to 0.
+     * It ensures that the address of the device is 0x3C.
+     */
+    if (gpio_init(sa0_pin) < 0
+    ||  gpio_set_direction(sa0_pin, GPIO_OUTPUT) < 0
+    ||  gpio_set_value(sa0_pin, 0) < 0) {
+        fprintf(stderr, "oled: Failed to set SA0 to 0.\n");
+        return -1;
     }
 
     /* Reset device */
