@@ -1,18 +1,8 @@
 #include <stdio.h>
-#include <dirent.h>
-#include <ctype.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <stdbool.h>
-#include <stdlib.h>
 #include <string.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
-
-#include "letmecreate/click/oled.h"
-#include "letmecreate/click/common.h"
-#include "letmecreate/core.h"
+#include <letmecreate/click/oled.h>
+#include <letmecreate/click/oled.h>
+#include <letmecreate/core/i2c.h>
 
 /* Command and data registers */
 const uint16_t oled_cmd_addr = 0x3C;
