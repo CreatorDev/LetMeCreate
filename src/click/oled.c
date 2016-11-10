@@ -11,8 +11,9 @@
 #define SSD1306_LCDHEIGHT           (39)    /* in pixels */
 #define SSD1306_PAGE_COUNT          (5)     /* Each page represents 128x8 pixels, so page count is 5 */
 #define CHARACTER_WIDTH             (11)
+#define CHARACTER_HEIGHT            (16)
 #define CHARACTER_COUNT_PER_LINE    (SSD1306_LCDWIDTH / CHARACTER_WIDTH)
-#define OLED_CLICK_LINE_COUNT       (2)
+#define OLED_CLICK_LINE_COUNT       (SSD1306_LCDHEIGHT / CHARACTER_HEIGHT)
 #define OLED_CLICK_MAX_STR_LEN      (OLED_CLICK_LINE_COUNT * CHARACTER_COUNT_PER_LINE)
 #define PAGE_PER_LINE               (2)
 
