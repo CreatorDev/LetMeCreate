@@ -5,7 +5,7 @@
 #include <letmecreate/click/export.h>
 
 /* Initialize the oled clicker */
-int LETMECREATE_CLICK_EXPORT oled_init(uint8_t);
+int LETMECREATE_CLICK_EXPORT oled_init(void);
 
 /* Write a command to the cmd register */
 int LETMECREATE_CLICK_EXPORT oled_cmd(uint8_t);

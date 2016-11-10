@@ -7,7 +7,7 @@
 int main(void)
 {
     i2c_init();
-    oled_init(MIKROBUS_2);
+    oled_init();
     oled_write_text("Hello   Creator!");
 
     return 0;

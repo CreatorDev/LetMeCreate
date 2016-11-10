@@ -162,11 +162,9 @@ oled_data(uint8_t data){
  * Initialize the oled display.
  */
 int
-oled_init(uint8_t bus)
+oled_init(void)
 {
     int ret = 0;
-
-    i2c_select_bus(bus); /* select bus */
 
     ret = oled_cmd(SSD1306_DISPLAYOFF);             /* 0xAE Set OLED Display Off */
     ret += oled_cmd(SSD1306_SETDISPLAYCLOCKDIV);     /* 0xD5 Set Display Clock Divide Ratio/Oscillator Frequency */
