@@ -9,6 +9,8 @@
 /* I2C address of SSD1306 */
 #define SSD1306_ADDRESS             (0x3C)
 
+#define DATA_ONLY                   (0xC0)
+
 /* Commands of the OLED display controller */
 #define SSD1306_DISPLAYOFF              (0xAE)
 #define SSD1306_SETDISPLAYCLOCKDIV      (0xD5)
@@ -24,6 +26,9 @@
 #define SSD1306_DISPLAYALLON_RESUME     (0xA4)
 #define SSD1306_NORMALDISPLAY           (0xA6)
 #define SSD1306_DISPLAYON               (0xAF)
+#define SSD1306_SETSTARTPAGEADDR        (0xB0)
+#define SSD1306_SETHIGHCOLSTARTADDR     (0x10)
+#define SSD1306_SETDISPLAYSTARTLINE     (0x40)
 
 #define SSD1306_LCDWIDTH            (96)    /* in pixels */
 #define SSD1306_LCDHEIGHT           (39)    /* in pixels */
@@ -141,7 +146,7 @@ static const uint8_t char_table[][22] = {
 
 static int oled_click_cmd(uint8_t cmd)
 {
-    return i2c_write_register(SSD1306_ADDRESS, 0b0000000, cmd);
+    return i2c_write_register(SSD1306_ADDRESS, 0, cmd);
 }
 
 static void sleep_50ms(void)
@@ -162,7 +167,7 @@ static int oled_click_set_page_addr(uint8_t pageno)
         return -1;
     }
 
-    return oled_click_cmd(0xb0 | pageno);
+    return oled_click_cmd(SSD1306_SETSTARTPAGEADDR | pageno);
 }
 
 int oled_click_enable(uint8_t mikrobus_index)
@@ -257,10 +262,10 @@ int oled_click_raw_write(uint8_t *data)
     for (; i < SSD1306_PAGE_COUNT; ++i) {
         uint8_t buffer[SSD1306_LCDWIDTH + 1];
         oled_click_set_page_addr(i);
-        oled_click_cmd(0x10);
-        oled_click_cmd(0x40);
+        oled_click_cmd(SSD1306_SETHIGHCOLSTARTADDR);
+        oled_click_cmd(SSD1306_SETDISPLAYSTARTLINE);
 
-        buffer[0] = 0b1100000;
+        buffer[0] = DATA_ONLY;
         memcpy(&buffer[1], &data[i * SSD1306_LCDWIDTH], SSD1306_LCDWIDTH);
         if (i2c_write(SSD1306_ADDRESS, buffer, sizeof(buffer)) < 0)
             return -1;
