@@ -30,6 +30,7 @@ MikroClick board supported:
   - ADC
   - Air quality
   - Alcohol
+  - Alphanum
   - Bargraph
   - CO
   - Color
@@ -41,7 +42,7 @@ MikroClick board supported:
   - IR eclipse
   - Joystick
   - Motion
-  - OLED
+  - OLED (only I2C)
   - Opto
   - Proximity
   - Relay (partial support)
