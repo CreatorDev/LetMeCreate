@@ -25,7 +25,7 @@ include_directories(include)
 # Create targets
 add_library(letmecreate_core SHARED ${core_srcs} ${core_hdrs})
 add_library(letmecreate_click SHARED ${click_srcs} ${click_hdrs})
-add_library(letmecreate_bosh SHARED ${click_srcs} ${click_hdrs})
+add_library(letmecreate_bosh SHARED ${bosh_srcs} ${bosh_hdrs})
 target_link_libraries(letmecreate_core pthread)
 target_link_libraries(letmecreate_click letmecreate_core letmecreate_bosh)
 
