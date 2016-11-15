@@ -29,6 +29,9 @@ static int reset_atmel_chip(void)
     if (gpio_set_value(GPIO_21, 1) < 0)
         return -1;
 
+    sleep_50ms();
+    sleep_50ms();
+
     return 0;
 }
 
