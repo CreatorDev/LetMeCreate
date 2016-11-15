@@ -80,8 +80,8 @@ static int read_calibration_data(void)
     float rh0, rh1;
 
     /* Reading raw_t0 and raw_t1 */
-    if (i2c_read_16b_register(HTS221_ADDRESS, HTS221_T0_OUT_L_REG, HTS221_T0_OUT_H_REG, &raw_t0) < 0
-    ||  i2c_read_16b_register(HTS221_ADDRESS, HTS221_T1_OUT_L_REG, HTS221_T1_OUT_H_REG, &raw_t1) < 0)
+    if (i2c_read_16b_register(HTS221_ADDRESS, HTS221_T0_OUT_L_REG, HTS221_T0_OUT_H_REG, (uint16_t*)&raw_t0) < 0
+    ||  i2c_read_16b_register(HTS221_ADDRESS, HTS221_T1_OUT_L_REG, HTS221_T1_OUT_H_REG, (uint16_t*)&raw_t1) < 0)
         return -1;
 
     /* Since we divide by (raw_t1 - raw_t0) for computing temperature_a,
