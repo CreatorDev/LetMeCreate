@@ -1,6 +1,7 @@
 #include <time.h>
 #include <letmecreate/core/gpio.h>
 #include <letmecreate/rpisensehat/board.h>
+#include <letmecreate/rpisensehat/hts221.h>
 
 
 static void sleep_50ms(void)
@@ -35,6 +36,27 @@ int rpisensehat_init(void)
 {
     /* Reset Atmel Chip otherwise it hangs the I2C bus. */
     if (reset_atmel_chip() < 0)
+        return -1;
+
+    if (hts221_enable() < 0)    /* Enable humidity sensor */
+        return -1;
+
+    return 0;
+}
+
+int rpisensehat_get_temperature(float *temperature)
+{
+    return hts221_get_temperature_measure(temperature);
+}
+
+int rpisensehat_get_humidity(float *humidity)
+{
+    return hts221_get_humidity_measure(humidity);
+}
+
+int rpisensehat_release(void)
+{
+    if (hts221_disable() < 0)    /* Disable humidity sensor */
         return -1;
 
     return 0;
