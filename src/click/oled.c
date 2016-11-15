@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
@@ -5,6 +6,7 @@
 #include <letmecreate/core/common.h>
 #include <letmecreate/core/gpio.h>
 #include <letmecreate/core/i2c.h>
+#include <letmecreate/core/spi.h>
 
 /* I2C address of SSD1306 */
 #define SSD1306_ADDRESS             (0x3C)
@@ -144,9 +146,15 @@ static const uint8_t char_table[][22] = {
     {0x0, 0x80, 0x0, 0x0, 0x0, 0x80, 0x80, 0x80, 0x80, 0x0, 0x0, 0x0, 0x1, 0x3, 0x3, 0x3, 0x1, 0x1, 0x1, 0x1, 0x3, 0x0}                 /* ~ */
 };
 
+static bool use_spi = false;
+static uint8_t dc_pin = 0;          /* Only used for SPI to send data or commands */
+
 static int oled_click_cmd(uint8_t cmd)
 {
-    return i2c_write_register(SSD1306_ADDRESS, 0, cmd);
+    if (use_spi) /* Do not set D/C pin low, we assume this is the default state */
+        return spi_transfer(&cmd, NULL, sizeof(cmd));
+    else
+        return i2c_write_register(SSD1306_ADDRESS, 0, cmd);
 }
 
 static void sleep_50ms(void)
@@ -170,6 +178,16 @@ static int oled_click_set_page_addr(uint8_t pageno)
     return oled_click_cmd(SSD1306_SETSTARTPAGEADDR | pageno);
 }
 
+void oled_click_use_spi(void)
+{
+    use_spi = true;
+}
+
+void oled_click_use_i2c(void)
+{
+    use_spi = false;
+}
+
 int oled_click_enable(uint8_t mikrobus_index)
 {
     uint8_t reset_pin = 0 , sa0_pin = 0;
@@ -177,25 +195,40 @@ int oled_click_enable(uint8_t mikrobus_index)
     switch (mikrobus_index) {
         case MIKROBUS_1:
             reset_pin = MIKROBUS_1_RST;
-            sa0_pin = MIKROBUS_1_PWM;
+            if (use_spi)
+                dc_pin = MIKROBUS_1_PWM;
+            else
+                sa0_pin = MIKROBUS_1_PWM;
             break;
         case MIKROBUS_2:
             reset_pin = MIKROBUS_2_RST;
-            sa0_pin = MIKROBUS_2_PWM;
+            if (use_spi)
+                dc_pin = MIKROBUS_2_PWM;
+            else
+                sa0_pin = MIKROBUS_2_PWM;
             break;
         default:
             fprintf(stderr, "oled: Invalid mikrobus index.\n");
             return -1;
     }
 
-    /* Set SA0 (the least significant bit of the slave address) to 0.
-     * It ensures that the address of the device is 0x3C.
-     */
-    if (gpio_init(sa0_pin) < 0
-    ||  gpio_set_direction(sa0_pin, GPIO_OUTPUT) < 0
-    ||  gpio_set_value(sa0_pin, 0) < 0) {
-        fprintf(stderr, "oled: Failed to set SA0 to 0.\n");
-        return -1;
+    if (use_spi) {
+        if (gpio_init(dc_pin) < 0
+        ||  gpio_set_direction(dc_pin, GPIO_OUTPUT) < 0
+        ||  gpio_set_value(dc_pin, 0) < 0) {
+            fprintf(stderr, "oled: Failed to set D/C pin to 0.\n");
+            return -1;
+        }
+    } else {
+        /* Set SA0 (the least significant bit of the slave address) to 0.
+         * It ensures that the address of the device is 0x3C.
+         */
+        if (gpio_init(sa0_pin) < 0
+        ||  gpio_set_direction(sa0_pin, GPIO_OUTPUT) < 0
+        ||  gpio_set_value(sa0_pin, 0) < 0) {
+            fprintf(stderr, "oled: Failed to set SA0 to 0.\n");
+            return -1;
+        }
     }
 
     /* Reset device */
@@ -265,10 +298,23 @@ int oled_click_raw_write(uint8_t *data)
         oled_click_cmd(SSD1306_SETHIGHCOLSTARTADDR);
         oled_click_cmd(SSD1306_SETDISPLAYSTARTLINE);
 
-        buffer[0] = DATA_ONLY;
         memcpy(&buffer[1], &data[i * SSD1306_LCDWIDTH], SSD1306_LCDWIDTH);
-        if (i2c_write(SSD1306_ADDRESS, buffer, sizeof(buffer)) < 0)
-            return -1;
+        if (use_spi) {
+            int ret = 0;
+            if (gpio_set_value(dc_pin, 1) < 0)
+                return -1;
+            ret = spi_transfer(&buffer[1], NULL, sizeof(buffer) - 1);
+
+            /* Set the D/C pin low even if the spi transfer failed */
+            if (gpio_set_value(dc_pin, 0) < 0)
+                return -1;
+            if (ret < 0)
+                return ret;
+        } else {
+            buffer[0] = DATA_ONLY;
+            if (i2c_write(SSD1306_ADDRESS, buffer, sizeof(buffer)) < 0)
+                return -1;
+        }
     }
 
     return 0;
