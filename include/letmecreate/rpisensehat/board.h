@@ -9,6 +9,7 @@
 #ifndef __LETMECREATE_RPISENSEHAT_BOARD_H__
 #define __LETMECREATE_RPISENSEHAT_BOARD_H__
 
+#include <stdint.h>
 #include <letmecreate/rpisensehat/export.h>
 
 int LETMECREATE_RPISENSEHAT_EXPORT rpisensehat_init(void);
@@ -24,6 +25,12 @@ int LETMECREATE_RPISENSEHAT_EXPORT rpisensehat_get_accelerometer_measure(float *
 int LETMECREATE_RPISENSEHAT_EXPORT rpisensehat_get_gyroscope_measure(float *gyroX, float *gyroY, float *gyroZ);
 
 int LETMECREATE_RPISENSEHAT_EXPORT rpisensehat_get_magnetometer_measure(float *magX, float *magY, float *magZ);
+
+int LETMECREATE_RPISENSEHAT_EXPORT rpisensehat_get_joystick_input(uint8_t *state);
+
+int LETMECREATE_RPISENSEHAT_EXPORT rpisensehat_set_leds_state(uint8_t *pixels);
+
+int LETMECREATE_RPISENSEHAT_EXPORT rpisensehat_display_rainbow(void);
 
 int LETMECREATE_RPISENSEHAT_EXPORT rpisensehat_release(void);
 
