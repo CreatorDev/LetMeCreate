@@ -17,6 +17,8 @@ int LETMECREATE_RPISENSEHAT_EXPORT rpisensehat_get_temperature(float *temperatur
 
 int LETMECREATE_RPISENSEHAT_EXPORT rpisensehat_get_humidity(float *humidity);
 
+int LETMECREATE_RPISENSEHAT_EXPORT rpisensehat_get_pressure(float *pressure);
+
 int LETMECREATE_RPISENSEHAT_EXPORT rpisensehat_release(void);
 
 #endif

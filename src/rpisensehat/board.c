@@ -1,6 +1,7 @@
 #include <time.h>
 #include <letmecreate/core/gpio.h>
 #include <letmecreate/rpisensehat/board.h>
+#include <letmecreate/rpisensehat/lps25h.h>
 #include <letmecreate/rpisensehat/hts221.h>
 
 
@@ -41,7 +42,8 @@ int rpisensehat_init(void)
     if (reset_atmel_chip() < 0)
         return -1;
 
-    if (hts221_enable() < 0)    /* Enable humidity sensor */
+    if (hts221_enable() < 0     /* Enable humidity sensor */
+    ||  lps25h_enable() < 0)    /* Enable pressure sensor */
         return -1;
 
     return 0;
@@ -57,9 +59,15 @@ int rpisensehat_get_humidity(float *humidity)
     return hts221_get_humidity_measure(humidity);
 }
 
+int rpisensehat_get_pressure(float *pressure)
+{
+    return lps25h_get_pressure_measure(pressure);
+}
+
 int rpisensehat_release(void)
 {
-    if (hts221_disable() < 0)    /* Disable humidity sensor */
+    if (hts221_disable() < 0    /* Disable humidity sensor */
+    ||  lps25h_disable() < 0)   /* Disable pressure sensor */
         return -1;
 
     return 0;
