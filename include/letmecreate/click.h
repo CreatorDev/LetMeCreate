@@ -9,8 +9,6 @@
 #ifndef __LETMECREATE_CLICK_H__
 #define __LETMECREATE_CLICK_H__
 
-#include "letmecreate/bosch/bme280.h"
-
 #include <letmecreate/click/7seg.h>
 #include <letmecreate/click/accel.h>
 #include <letmecreate/click/adc.h>

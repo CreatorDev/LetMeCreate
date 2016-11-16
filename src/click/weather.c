@@ -19,6 +19,7 @@
  ************************************************************************************************************************/
 
 #include <letmecreate/letmecreate.h>
+#include <letmecreate/bosch/bme280.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <unistd.h>
@@ -97,7 +98,7 @@ int weather_click_read_measurements(double* temperature, double* pressure, doubl
     return operationResult != 0 ? -1 : readResult;
 }
 
-int weather_click_enable()
+int weather_click_enable(void)
 {
     readResult = 0;
 
@@ -120,7 +121,7 @@ int weather_click_enable()
     return readResult;
 }
 
-int weather_click_disable()
+int weather_click_disable(void)
 {
     readResult = 0;
 

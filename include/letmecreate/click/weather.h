@@ -20,6 +20,7 @@
 
 #ifndef __LETMECREATE_CLICK_WEATHER_H__
 #define __LETMECREATE_CLICK_WEATHER_H__
+#include <letmecreate/click/export.h>
 
 /**
  * @brief Read current values of temperature, pressure, humidity from sensor.
@@ -29,18 +30,18 @@
  * @param[out] humidity measured by sensor, or NULL if not interested in this value.
  * @return 0 if success otherwise -1
  */
-int weather_click_read_measurements(double* temperature, double* pressure, double* humidity);
+int LETMECREATE_CLICK_EXPORT weather_click_read_measurements(double* temperature, double* pressure, double* humidity);
 
 /**
  * @brief Setup sensor configuration as recommended for indoor measurement in Bosh BME 280 data sheet.
  * @return 0 if success otherwise -1
  */
-int weather_click_enable();
+int LETMECREATE_CLICK_EXPORT weather_click_enable(void);
 
 /**
  * @brief Power off sensor.
  * @return 0 if success otherwise -1
  */
-int weather_click_disable();
+int LETMECREATE_CLICK_EXPORT weather_click_disable(void);
 
 #endif /* __LETMECREATE_CLICK_WEATHER_H__ */

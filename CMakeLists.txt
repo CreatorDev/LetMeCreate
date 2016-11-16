@@ -35,9 +35,11 @@ target_link_libraries(letmecreate_rpisensehat letmecreate_core)
 
 # Export symbols
 include(GenerateExportHeader)
+generate_export_header(letmecreate_bosch EXPORT_FILE_NAME "include/letmecreate/bosch/export.h")
 generate_export_header(letmecreate_core EXPORT_FILE_NAME "include/letmecreate/core/export.h")
 generate_export_header(letmecreate_click EXPORT_FILE_NAME "include/letmecreate/click/export.h")
 generate_export_header(letmecreate_rpisensehat EXPORT_FILE_NAME "include/letmecreate/rpisensehat/export.h")
+set_target_properties(letmecreate_bosch PROPERTIES C_VISIBILITY_PRESET hidden)
 set_target_properties(letmecreate_core PROPERTIES C_VISIBILITY_PRESET hidden)
 set_target_properties(letmecreate_click PROPERTIES C_VISIBILITY_PRESET hidden)
 set_target_properties(letmecreate_rpisensehat PROPERTIES C_VISIBILITY_PRESET hidden)

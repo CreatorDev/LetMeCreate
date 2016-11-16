@@ -59,6 +59,7 @@
 #ifndef __BME280_H__
 #define __BME280_H__
 
+#include <letmecreate/bosch/export.h>
 
 /*!
 * @brief The following definition uses for define the data types
@@ -872,7 +873,7 @@ struct bme280_t {
  *
  *
 */
-BME280_RETURN_FUNCTION_TYPE bme280_init(struct bme280_t *bme280);
+BME280_RETURN_FUNCTION_TYPE LETMECREATE_BOSCH_EXPORT bme280_init(struct bme280_t *bme280);
 /**************************************************************/
 /**\name	FUNCTION FOR  INTIALIZATION UNCOMPENSATED TEMPERATURE */
 /**************************************************************/
@@ -893,7 +894,7 @@ BME280_RETURN_FUNCTION_TYPE bme280_init(struct bme280_t *bme280);
  *
  *
 */
-BME280_RETURN_FUNCTION_TYPE bme280_read_uncomp_temperature(
+BME280_RETURN_FUNCTION_TYPE LETMECREATE_BOSCH_EXPORT bme280_read_uncomp_temperature(
 s32 *v_uncomp_temperature_s32);
 /**************************************************************/
 /**\name	FUNCTION FOR  INTIALIZATION TRUE TEMPERATURE */
@@ -911,7 +912,7 @@ s32 *v_uncomp_temperature_s32);
  *  @return Returns the actual temperature
  *
 */
-s32 bme280_compensate_temperature_int32(s32 v_uncomp_temperature_s32);
+s32 LETMECREATE_BOSCH_EXPORT bme280_compensate_temperature_int32(s32 v_uncomp_temperature_s32);
 /*!
  * @brief Reads actual temperature from uncompensated temperature
  * @note Returns the value with 500LSB/DegC centred around 24 DegC
@@ -925,7 +926,7 @@ s32 bme280_compensate_temperature_int32(s32 v_uncomp_temperature_s32);
  *  @return Return the actual temperature as s16 output
  *
 */
-s16 bme280_compensate_temperature_int32_sixteen_bit_output(
+s16 LETMECREATE_BOSCH_EXPORT bme280_compensate_temperature_int32_sixteen_bit_output(
 s32 v_uncomp_temperature_s32);
 /**************************************************************/
 /**\name	FUNCTION FOR  INTIALIZATION UNCOMPENSATED PRESSURE */
@@ -949,7 +950,7 @@ s32 v_uncomp_temperature_s32);
  *
  *
 */
-BME280_RETURN_FUNCTION_TYPE bme280_read_uncomp_pressure(
+BME280_RETURN_FUNCTION_TYPE LETMECREATE_BOSCH_EXPORT bme280_read_uncomp_pressure(
 s32 *v_uncomp_pressure_s32);
 /**************************************************************/
 /**\name	FUNCTION FOR  INTIALIZATION TRUE PRESSURE */
@@ -969,7 +970,7 @@ s32 *v_uncomp_pressure_s32);
  *  @return Return the actual pressure output as u32
  *
 */
-u32 bme280_compensate_pressure_int32(s32 v_uncomp_pressure_s32);
+u32 LETMECREATE_BOSCH_EXPORT bme280_compensate_pressure_int32(s32 v_uncomp_pressure_s32);
 /**************************************************************/
 /**\name	FUNCTION FOR  INTIALIZATION UNCOMPENSATED HUMIDITY */
 /**************************************************************/
@@ -991,7 +992,7 @@ u32 bme280_compensate_pressure_int32(s32 v_uncomp_pressure_s32);
  *
  *
 */
-BME280_RETURN_FUNCTION_TYPE bme280_read_uncomp_humidity(
+BME280_RETURN_FUNCTION_TYPE LETMECREATE_BOSCH_EXPORT bme280_read_uncomp_humidity(
 s32 *v_uncomp_humidity_s32);
 /**************************************************************/
 /**\name	FUNCTION FOR  INTIALIZATION RELATIVE HUMIDITY */
@@ -1010,7 +1011,7 @@ s32 *v_uncomp_humidity_s32);
  *  @return Return the actual relative humidity output as u32
  *
 */
-u32 bme280_compensate_humidity_int32(s32 v_uncomp_humidity_s32);
+u32 LETMECREATE_BOSCH_EXPORT bme280_compensate_humidity_int32(s32 v_uncomp_humidity_s32);
 /*!
  * @brief Reads actual humidity from uncompensated humidity
  * @note Returns the value in %rH as unsigned 16bit integer
@@ -1025,7 +1026,7 @@ u32 bme280_compensate_humidity_int32(s32 v_uncomp_humidity_s32);
  *  @return Return the actual relative humidity output as u16
  *
 */
-u16 bme280_compensate_humidity_int32_sixteen_bit_output(
+u16 LETMECREATE_BOSCH_EXPORT bme280_compensate_humidity_int32_sixteen_bit_output(
 s32 v_uncomp_humidity_s32);
 /**************************************************************/
 /**\name	FUNCTION FOR  INTIALIZATION UNCOMPENSATED PRESSURE,
@@ -1050,7 +1051,7 @@ s32 v_uncomp_humidity_s32);
  *
  *
 */
-BME280_RETURN_FUNCTION_TYPE bme280_read_uncomp_pressure_temperature_humidity(
+BME280_RETURN_FUNCTION_TYPE LETMECREATE_BOSCH_EXPORT bme280_read_uncomp_pressure_temperature_humidity(
 s32 *v_uncomp_pressure_s32,
 s32 *v_uncomp_temperature_s32, s32 *v_uncomp_humidity_s32);
 /**************************************************************/
@@ -1074,7 +1075,7 @@ s32 *v_uncomp_temperature_s32, s32 *v_uncomp_humidity_s32);
  *
  *
 */
-BME280_RETURN_FUNCTION_TYPE bme280_read_pressure_temperature_humidity(
+BME280_RETURN_FUNCTION_TYPE LETMECREATE_BOSCH_EXPORT bme280_read_pressure_temperature_humidity(
 u32 *v_pressure_u32, s32 *v_temperature_s32, u32 *v_humidity_u32);
 /**************************************************************/
 /**\name	FUNCTION FOR CALIBRATION */
@@ -1107,7 +1108,7 @@ u32 *v_pressure_u32, s32 *v_temperature_s32, u32 *v_humidity_u32);
  *
  *
 */
-BME280_RETURN_FUNCTION_TYPE bme280_get_calib_param(void);
+BME280_RETURN_FUNCTION_TYPE LETMECREATE_BOSCH_EXPORT bme280_get_calib_param(void);
 /**************************************************************/
 /**\name	FUNCTION FOR TEMPERATURE OVER SAMPLING */
 /**************************************************************/
@@ -1136,7 +1137,7 @@ BME280_RETURN_FUNCTION_TYPE bme280_get_calib_param(void);
  *
  *
 */
-BME280_RETURN_FUNCTION_TYPE bme280_get_oversamp_temperature(
+BME280_RETURN_FUNCTION_TYPE LETMECREATE_BOSCH_EXPORT bme280_get_oversamp_temperature(
 u8 *v_value_u8);
 /*!
  *	@brief This API is used to set
@@ -1163,7 +1164,7 @@ u8 *v_value_u8);
  *
  *
 */
-BME280_RETURN_FUNCTION_TYPE bme280_set_oversamp_temperature(
+BME280_RETURN_FUNCTION_TYPE LETMECREATE_BOSCH_EXPORT bme280_set_oversamp_temperature(
 u8 v_value_u8);
 /**************************************************************/
 /**\name	FUNCTION FOR PRESSURE OVER SAMPLING */
@@ -1193,7 +1194,7 @@ u8 v_value_u8);
  *
  *
 */
-BME280_RETURN_FUNCTION_TYPE bme280_get_oversamp_pressure(
+BME280_RETURN_FUNCTION_TYPE LETMECREATE_BOSCH_EXPORT bme280_get_oversamp_pressure(
 u8 *v_value_u8);
 /*!
  *	@brief This API is used to set
@@ -1220,7 +1221,7 @@ u8 *v_value_u8);
  *
  *
 */
-BME280_RETURN_FUNCTION_TYPE bme280_set_oversamp_pressure(
+BME280_RETURN_FUNCTION_TYPE LETMECREATE_BOSCH_EXPORT bme280_set_oversamp_pressure(
 u8 v_value_u8);
 /**************************************************************/
 /**\name	FUNCTION FOR HUMIDITY OVER SAMPLING */
@@ -1250,7 +1251,7 @@ u8 v_value_u8);
  *
  *
 */
-BME280_RETURN_FUNCTION_TYPE bme280_get_oversamp_humidity(u8 *v_value_u8);
+BME280_RETURN_FUNCTION_TYPE LETMECREATE_BOSCH_EXPORT bme280_get_oversamp_humidity(u8 *v_value_u8);
 /*!
  *	@brief This API is used to set
  *	the humidity oversampling setting in the register 0xF2
@@ -1290,7 +1291,7 @@ BME280_RETURN_FUNCTION_TYPE bme280_get_oversamp_humidity(u8 *v_value_u8);
  *
  *
 */
-BME280_RETURN_FUNCTION_TYPE bme280_set_oversamp_humidity(
+BME280_RETURN_FUNCTION_TYPE LETMECREATE_BOSCH_EXPORT bme280_set_oversamp_humidity(
 u8 v_value_u8);
 /**************************************************************/
 /**\name	FUNCTION FOR POWER MODE*/
@@ -1314,7 +1315,7 @@ u8 v_value_u8);
  *
  *
 */
-BME280_RETURN_FUNCTION_TYPE bme280_get_power_mode(u8 *v_power_mode_u8);
+BME280_RETURN_FUNCTION_TYPE LETMECREATE_BOSCH_EXPORT bme280_get_power_mode(u8 *v_power_mode_u8);
 /*!
  *	@brief This API used to set the
  *	Operational Mode from the sensor in the register 0xF4 bit 0 and 1
@@ -1334,7 +1335,7 @@ BME280_RETURN_FUNCTION_TYPE bme280_get_power_mode(u8 *v_power_mode_u8);
  *
  *
 */
-BME280_RETURN_FUNCTION_TYPE bme280_set_power_mode(u8 v_power_mode_u8);
+BME280_RETURN_FUNCTION_TYPE LETMECREATE_BOSCH_EXPORT bme280_set_power_mode(u8 v_power_mode_u8);
 /**************************************************************/
 /**\name	FUNCTION FOR SOFT RESET*/
 /**************************************************************/
@@ -1353,7 +1354,7 @@ BME280_RETURN_FUNCTION_TYPE bme280_set_power_mode(u8 v_power_mode_u8);
  *
  *
 */
-BME280_RETURN_FUNCTION_TYPE bme280_set_soft_rst(void);
+BME280_RETURN_FUNCTION_TYPE LETMECREATE_BOSCH_EXPORT bme280_set_soft_rst(void);
 /**************************************************************/
 /**\name	FUNCTION FOR SPI ENABLE*/
 /**************************************************************/
@@ -1377,7 +1378,7 @@ BME280_RETURN_FUNCTION_TYPE bme280_set_soft_rst(void);
  *
  *
 */
-BME280_RETURN_FUNCTION_TYPE bme280_get_spi3(u8 *v_enable_disable_u8);
+BME280_RETURN_FUNCTION_TYPE LETMECREATE_BOSCH_EXPORT bme280_get_spi3(u8 *v_enable_disable_u8);
 /*!
  *	@brief This API used to set the sensor
  *	SPI mode(communication type) in the register 0xF5 bit 0
@@ -1398,7 +1399,7 @@ BME280_RETURN_FUNCTION_TYPE bme280_get_spi3(u8 *v_enable_disable_u8);
  *
  *
 */
-BME280_RETURN_FUNCTION_TYPE bme280_set_spi3(u8 v_enable_disable_u8);
+BME280_RETURN_FUNCTION_TYPE LETMECREATE_BOSCH_EXPORT bme280_set_spi3(u8 v_enable_disable_u8);
 /**************************************************************/
 /**\name	FUNCTION FOR IIR FILTER*/
 /**************************************************************/
@@ -1424,7 +1425,7 @@ BME280_RETURN_FUNCTION_TYPE bme280_set_spi3(u8 v_enable_disable_u8);
  *
  *
 */
-BME280_RETURN_FUNCTION_TYPE bme280_get_filter(u8 *v_value_u8);
+BME280_RETURN_FUNCTION_TYPE LETMECREATE_BOSCH_EXPORT bme280_get_filter(u8 *v_value_u8);
 /*!
  *	@brief This API is used to write filter setting
  *	in the register 0xF5 bit 3 and 4
@@ -1447,7 +1448,7 @@ BME280_RETURN_FUNCTION_TYPE bme280_get_filter(u8 *v_value_u8);
  *
  *
 */
-BME280_RETURN_FUNCTION_TYPE bme280_set_filter(u8 v_value_u8);
+BME280_RETURN_FUNCTION_TYPE LETMECREATE_BOSCH_EXPORT bme280_set_filter(u8 v_value_u8);
 /**************************************************************/
 /**\name	FUNCTION FOR STANDBY DURATION*/
 /**************************************************************/
@@ -1474,7 +1475,7 @@ BME280_RETURN_FUNCTION_TYPE bme280_set_filter(u8 v_value_u8);
  *
  *
 */
-BME280_RETURN_FUNCTION_TYPE bme280_get_standby_durn(u8 *v_standby_durn_u8);
+BME280_RETURN_FUNCTION_TYPE LETMECREATE_BOSCH_EXPORT bme280_get_standby_durn(u8 *v_standby_durn_u8);
 /*!
  *	@brief This API used to write the
  *	standby duration time from the sensor in the register 0xF5 bit 5 to 7
@@ -1508,7 +1509,7 @@ BME280_RETURN_FUNCTION_TYPE bme280_get_standby_durn(u8 *v_standby_durn_u8);
  *
  *
 */
-BME280_RETURN_FUNCTION_TYPE bme280_set_standby_durn(u8 v_standby_durn_u8);
+BME280_RETURN_FUNCTION_TYPE LETMECREATE_BOSCH_EXPORT bme280_set_standby_durn(u8 v_standby_durn_u8);
 /**************************************************************/
 /**\name	FUNCTION FOR WORK MODE*/
 /**************************************************************/
@@ -1554,7 +1555,7 @@ BME280_RETURN_FUNCTION_TYPE bme280_set_standby_durn(u8 v_standby_durn_u8);
  *
 */
 BME280_RETURN_FUNCTION_TYPE
-bme280_get_forced_uncomp_pressure_temperature_humidity(
+LETMECREATE_BOSCH_EXPORT bme280_get_forced_uncomp_pressure_temperature_humidity(
 s32 *v_uncom_pressure_s32,
 s32 *v_uncom_temperature_s32, s32 *v_uncom_humidity_s32);
 /**************************************************************/
@@ -1577,7 +1578,7 @@ s32 *v_uncom_temperature_s32, s32 *v_uncom_humidity_s32);
  *
  *
  */
-BME280_RETURN_FUNCTION_TYPE bme280_write_register(u8 v_addr_u8,
+BME280_RETURN_FUNCTION_TYPE LETMECREATE_BOSCH_EXPORT bme280_write_register(u8 v_addr_u8,
 u8 *v_data_u8, u8 v_len_u8);
 /*!
  * @brief
@@ -1596,7 +1597,7 @@ u8 *v_data_u8, u8 v_len_u8);
  *
  *
  */
-BME280_RETURN_FUNCTION_TYPE bme280_read_register(u8 v_addr_u8,
+BME280_RETURN_FUNCTION_TYPE LETMECREATE_BOSCH_EXPORT bme280_read_register(u8 v_addr_u8,
 u8 *v_data_u8, u8 v_len_u8);
 /**************************************************************/
 /**\name	FUNCTION FOR FLOAT OUTPUT TEMPERATURE*/
@@ -1616,7 +1617,7 @@ u8 *v_data_u8, u8 v_len_u8);
  *  @return  Return the actual temperature in floating point
  *
 */
-double bme280_compensate_temperature_double(
+double LETMECREATE_BOSCH_EXPORT bme280_compensate_temperature_double(
 s32 v_uncom_temperature_s32);
 /**************************************************************/
 /**\name	FUNCTION FOR FLOAT OUTPUT PRESSURE*/
@@ -1634,7 +1635,7 @@ s32 v_uncom_temperature_s32);
  *  @return  Return the actual pressure in floating point
  *
 */
-double bme280_compensate_pressure_double(s32 v_uncom_pressure_s32);
+double LETMECREATE_BOSCH_EXPORT bme280_compensate_pressure_double(s32 v_uncom_pressure_s32);
 /**************************************************************/
 /**\name	FUNCTION FOR FLOAT OUTPUT HUMIDITY*/
 /**************************************************************/
@@ -1650,7 +1651,7 @@ double bme280_compensate_pressure_double(s32 v_uncom_pressure_s32);
  *  @return Return the actual humidity in floating point
  *
 */
-double bme280_compensate_humidity_double(s32 v_uncom_humidity_s32);
+double LETMECREATE_BOSCH_EXPORT bme280_compensate_humidity_double(s32 v_uncom_humidity_s32);
 #endif
 /**************************************************************/
 /**\name	FUNCTION FOR 64BIT OUTPUT PRESSURE*/
@@ -1672,7 +1673,7 @@ double bme280_compensate_humidity_double(s32 v_uncom_humidity_s32);
  *  @return Return the actual pressure in u32
  *
 */
-u32 bme280_compensate_pressure_int64(s32 v_uncom_pressure_s32);
+u32 LETMECREATE_BOSCH_EXPORT bme280_compensate_pressure_int64(s32 v_uncom_pressure_s32);
 /**************************************************************/
 /**\name	FUNCTION FOR 24BIT OUTPUT PRESSURE*/
 /**************************************************************/
@@ -1690,7 +1691,7 @@ u32 bme280_compensate_pressure_int64(s32 v_uncom_pressure_s32);
  *  @return the actual pressure in u32
  *
 */
-u32 bme280_compensate_pressure_int64_twentyfour_bit_output(
+u32 LETMECREATE_BOSCH_EXPORT bme280_compensate_pressure_int64_twentyfour_bit_output(
 s32 v_uncom_pressure_s32);
 #endif
 /**************************************************************/
@@ -1709,6 +1710,6 @@ s32 v_uncom_pressure_s32);
  *
  *
  */
-BME280_RETURN_FUNCTION_TYPE bme280_compute_wait_time(u8
+BME280_RETURN_FUNCTION_TYPE LETMECREATE_BOSCH_EXPORT bme280_compute_wait_time(u8
 *v_delaytime_u8);
 #endif
