@@ -28,9 +28,9 @@
 static struct bme280_t bme280;
 static uint8_t readResult = 0;
 
-int8_t weather_click_i2c_bus_read(uint8_t dev_addr, uint8_t reg_addr, uint8_t *reg_data, uint8_t cnt)
+static s8 weather_click_i2c_bus_read(u8 dev_addr, u8 reg_addr, u8 *reg_data, u8 cnt)
 {
-    s32 iError = BME280_INIT_VALUE;
+    int iError = BME280_INIT_VALUE;
 
     for(int t = 0; t < cnt; t++) {
         uint8_t tmp = reg_addr + t;
@@ -43,12 +43,12 @@ int8_t weather_click_i2c_bus_read(uint8_t dev_addr, uint8_t reg_addr, uint8_t *r
         }
     }
 
-    return (int8_t)iError;
+    return (s8)iError;
 }
 
-static int8_t weather_click_i2c_bus_write(uint8_t dev_addr, uint8_t reg_addr, uint8_t *reg_data, uint8_t cnt)
+static s8 weather_click_i2c_bus_write(u8 dev_addr, u8 reg_addr, u8 *reg_data, u8 cnt)
 {
-    s32 iError = BME280_INIT_VALUE;
+    int iError = BME280_INIT_VALUE;
     uint8_t array[2];
 
     for(int t = 0; t < cnt; t++) {
@@ -61,7 +61,7 @@ static int8_t weather_click_i2c_bus_write(uint8_t dev_addr, uint8_t reg_addr, ui
         }
     }
 
-    return (int8_t)iError;
+    return (s8)iError;
 }
 
 static void weather_click_delay_ms(u32 ms)
@@ -80,9 +80,9 @@ static void weather_click_delay_ms(u32 ms)
 int weather_click_read_measurements(double* temperature, double* pressure, double* humidity)
 {
     readResult = 0;
-    s32 uncompTemp = BME280_INIT_VALUE;
-    s32 uncompPress = BME280_INIT_VALUE;
-    s32 uncompHumidity = BME280_INIT_VALUE;
+    int32_t uncompTemp = BME280_INIT_VALUE;
+    int32_t uncompPress = BME280_INIT_VALUE;
+    int32_t uncompHumidity = BME280_INIT_VALUE;
 
     uint8_t operationResult = bme280_read_uncomp_pressure_temperature_humidity(&uncompPress, &uncompTemp, &uncompHumidity);
 
