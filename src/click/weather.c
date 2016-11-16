@@ -20,17 +20,19 @@
 
 #include <letmecreate/letmecreate.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <unistd.h>
 #include <time.h>
 
-struct bme280_t bme280;
+static struct bme280_t bme280;
 static uint8_t readResult = 0;
 
-s8 weather_click_i2c_bus_read(u8 dev_addr, u8 reg_addr, u8 *reg_data, u8 cnt) {
+int8_t weather_click_i2c_bus_read(uint8_t dev_addr, uint8_t reg_addr, uint8_t *reg_data, uint8_t cnt)
+{
     s32 iError = BME280_INIT_VALUE;
 
     for(int t = 0; t < cnt; t++) {
-        u8 tmp = reg_addr + t;
+        uint8_t tmp = reg_addr + t;
         i2c_write(dev_addr, &tmp, 1);
         iError = i2c_read(dev_addr, &tmp, 1) >= 0 ? 0 : -1;
         *(reg_data + t) = tmp;
@@ -40,12 +42,13 @@ s8 weather_click_i2c_bus_read(u8 dev_addr, u8 reg_addr, u8 *reg_data, u8 cnt) {
         }
     }
 
-    return (s8) iError;
+    return (int8_t)iError;
 }
 
-s8 weather_click_i2c_bus_write(u8 dev_addr, u8 reg_addr, u8 *reg_data, u8 cnt) {
+static int8_t weather_click_i2c_bus_write(uint8_t dev_addr, uint8_t reg_addr, uint8_t *reg_data, uint8_t cnt)
+{
     s32 iError = BME280_INIT_VALUE;
-    u8 array[2];
+    uint8_t array[2];
 
     for(int t = 0; t < cnt; t++) {
         array[0] = reg_addr;
@@ -57,23 +60,24 @@ s8 weather_click_i2c_bus_write(u8 dev_addr, u8 reg_addr, u8 *reg_data, u8 cnt) {
         }
     }
 
-    return (s8) iError;
+    return (int8_t)iError;
 }
 
-void weather_click_delay_msek(u32 msek) {
+static void weather_click_delay_ms(u32 ms)
+{
     struct timespec req, rem;
 
-    req.tv_sec = msek / 1000;
-    msek -= req.tv_sec * 1000;
-    req.tv_nsec = msek * 1000000;
+    req.tv_sec = ms / 1000;
+    ms -= req.tv_sec * 1000;
+    req.tv_nsec = ms * 1000000;
 
     while (nanosleep(&req, &rem)) {
         req = rem;
     }
 }
 
-uint8_t weather_click_read_measurements(double* temperature, double* pressure, double* humidity) {
-
+int weather_click_read_measurements(double* temperature, double* pressure, double* humidity)
+{
     readResult = 0;
     s32 uncompTemp = BME280_INIT_VALUE;
     s32 uncompPress = BME280_INIT_VALUE;
@@ -81,63 +85,47 @@ uint8_t weather_click_read_measurements(double* temperature, double* pressure, d
 
     uint8_t operationResult = bme280_read_uncomp_pressure_temperature_humidity(&uncompPress, &uncompTemp, &uncompHumidity);
 
-    if (temperature != NULL) {
+    if (temperature != NULL)
         *temperature = bme280_compensate_temperature_double(uncompTemp);
-    }
 
-    if (pressure != NULL) {
+    if (pressure != NULL)
         *pressure = bme280_compensate_pressure_double(uncompPress);
-    }
 
-    if (humidity != NULL) {
+    if (humidity != NULL)
         *humidity = bme280_compensate_humidity_double(uncompHumidity);
-    }
+
     return operationResult != 0 ? -1 : readResult;
 }
 
-uint8_t weather_click_enable() {
+int weather_click_enable()
+{
     readResult = 0;
 
     bme280.bus_write = weather_click_i2c_bus_write;
     bme280.bus_read = weather_click_i2c_bus_read;
     bme280.dev_addr = BME280_I2C_ADDRESS1;
-    bme280.delay_msec = weather_click_delay_msek;
+    bme280.delay_msec = weather_click_delay_ms;
 
-    if (bme280_init(&bme280) != 0) {
+    if (bme280_init(&bme280) != 0
+        || bme280_set_power_mode(BME280_SLEEP_MODE) != 0
+        || bme280_get_calib_param() != 0
+        || bme280_set_standby_durn(BME280_STANDBY_TIME_1_MS)  != 0
+        || bme280_set_oversamp_humidity(BME280_OVERSAMP_1X) != 0
+        || bme280_set_oversamp_pressure(BME280_OVERSAMP_16X) != 0
+        || bme280_set_oversamp_temperature(BME280_OVERSAMP_2X) != 0
+        || bme280_set_filter(BME280_FILTER_COEFF_16) != 0
+        || bme280_set_power_mode(BME280_NORMAL_MODE) != 0)
         return -1;
-    }
+    
+    return readResult;
+}
 
-    if (bme280_set_power_mode(BME280_SLEEP_MODE) != 0) {
+int weather_click_disable()
+{
+    readResult = 0;
+
+    if (bme280_set_power_mode(BME280_SLEEP_MODE) != 0)
         return -1;
-    }
-
-    if (bme280_get_calib_param() != 0) {
-        return -1;
-    }
-
-    if (bme280_set_standby_durn(BME280_STANDBY_TIME_1_MS)  != 0) {
-        return -1;
-    }
-
-    if (bme280_set_oversamp_humidity(BME280_OVERSAMP_1X) != 0) {
-        return -1;
-    }
-
-    if (bme280_set_oversamp_pressure(BME280_OVERSAMP_16X) != 0) {
-        return -1;
-    }
-
-    if (bme280_set_oversamp_temperature(BME280_OVERSAMP_2X) != 0) {
-        return -1;
-    }
-
-    if (bme280_set_filter(BME280_FILTER_COEFF_16) != 0) {
-        return -1;
-    }
-
-    if (bme280_set_power_mode(BME280_NORMAL_MODE) != 0) {
-        return -1;
-    }
-
+    
     return readResult;
 }
