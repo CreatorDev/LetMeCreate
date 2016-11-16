@@ -12,12 +12,12 @@ set(PROJECT_VERSION ${LETMECREATE_VERSION})
 option(BUILD_EXAMPLES "Build examples" OFF)
 option(BUILD_TESTS "Build tests" OFF)
 
-file(GLOB bosh_srcs src/bosh/*.c)
+file(GLOB bosch_srcs src/bosch/*.c)
 file(GLOB core_srcs src/core/*.c)
 file(GLOB click_srcs src/click/*.c)
 file(GLOB rpisensehat_srcs src/rpisensehat/*.c)
 
-file(GLOB bosh_hdrs include/letmecreate/bosh/*.h)
+file(GLOB bosch_hdrs include/letmecreate/bosch/*.h)
 file(GLOB core_hdrs include/letmecreate/core/*.h)
 file(GLOB click_hdrs include/letmecreate/click/*.h)
 file(GLOB rpisensehat_hdrs include/letmecreate/rpisensehat/*.h)
@@ -27,10 +27,10 @@ include_directories(include)
 # Create targets
 add_library(letmecreate_core SHARED ${core_srcs} ${core_hdrs})
 add_library(letmecreate_click SHARED ${click_srcs} ${click_hdrs})
-add_library(letmecreate_bosh SHARED ${bosh_srcs} ${bosh_hdrs})
+add_library(letmecreate_bosch SHARED ${bosch_srcs} ${bosch_hdrs})
 add_library(letmecreate_rpisensehat SHARED ${rpisensehat_srcs} ${rpisensehat_hdrs})
 target_link_libraries(letmecreate_core pthread)
-target_link_libraries(letmecreate_click letmecreate_core letmecreate_bosh)
+target_link_libraries(letmecreate_click letmecreate_core letmecreate_bosch)
 target_link_libraries(letmecreate_rpisensehat letmecreate_core)
 
 # Export symbols
@@ -58,7 +58,7 @@ target_include_directories(
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
 )
 target_include_directories(
-    letmecreate_bosh PUBLIC
+    letmecreate_bosch PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>"
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
 )
@@ -93,7 +93,7 @@ configure_package_config_file(
 )
 
 install(
-    TARGETS letmecreate_core letmecreate_click letmecreate_bosh letmecreate_rpisensehat
+    TARGETS letmecreate_core letmecreate_click letmecreate_bosch letmecreate_rpisensehat
     EXPORT "${targets_export_name}"
     LIBRARY DESTINATION "lib"
     ARCHIVE DESTINATION "lib"
