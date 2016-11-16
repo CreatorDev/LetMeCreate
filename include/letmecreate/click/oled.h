@@ -14,6 +14,21 @@
 #include <letmecreate/click/export.h>
 
 /**
+ * @brief Use SPI bus to communicate with OLED Click.
+ *
+ * By default, it uses I2C to communicate with OLED Click. This function should
+ * be called before using the device.
+ */
+void LETMECREATE_CLICK_EXPORT oled_click_use_spi(void);
+
+/**
+ * @brief Use I2C bus to communicate with OLED Click.
+ *
+ * This function should be called before using the device.
+ */
+void LETMECREATE_CLICK_EXPORT oled_click_use_i2c(void);
+
+/**
  * @brief Enable the OLED Click.
  *
  * Upon initialisation, the screen is blank and the constrast is set to 127.

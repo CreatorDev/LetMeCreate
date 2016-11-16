@@ -1691,3 +1691,41 @@ int eve_click_calibrate(void)
 
     return 0;
 }
+
+int eve_click_get_calibration_matrix(uint32_t *a, uint32_t *b, uint32_t *c,
+                                     uint32_t *d, uint32_t *e, uint32_t *f)
+{
+    if (a == NULL || b == NULL || c == NULL
+    ||  d == NULL || e == NULL || f == NULL) {
+        fprintf(stderr, "eve: Cannot store calibration matrix using null pointer.\n");
+        return -1;
+    }
+
+    if (read_32bit_reg(FT800_REG_TOUCH_TRANSFORM_A, a) < 0
+    ||  read_32bit_reg(FT800_REG_TOUCH_TRANSFORM_B, b) < 0
+    ||  read_32bit_reg(FT800_REG_TOUCH_TRANSFORM_C, c) < 0
+    ||  read_32bit_reg(FT800_REG_TOUCH_TRANSFORM_D, d) < 0
+    ||  read_32bit_reg(FT800_REG_TOUCH_TRANSFORM_E, e) < 0
+    ||  read_32bit_reg(FT800_REG_TOUCH_TRANSFORM_F, f) < 0) {
+        fprintf(stderr, "eve: Failed to read calibration matrix.\n");
+        return -1;
+    }
+
+    return 0;
+}
+
+int eve_click_set_calibration_matrix(uint32_t a, uint32_t b, uint32_t c,
+                                     uint32_t d, uint32_t e, uint32_t f)
+{
+    if (write_32bit_reg(FT800_REG_TOUCH_TRANSFORM_A, a) < 0
+    ||  write_32bit_reg(FT800_REG_TOUCH_TRANSFORM_B, b) < 0
+    ||  write_32bit_reg(FT800_REG_TOUCH_TRANSFORM_C, c) < 0
+    ||  write_32bit_reg(FT800_REG_TOUCH_TRANSFORM_D, d) < 0
+    ||  write_32bit_reg(FT800_REG_TOUCH_TRANSFORM_E, e) < 0
+    ||  write_32bit_reg(FT800_REG_TOUCH_TRANSFORM_F, f) < 0) {
+        fprintf(stderr, "eve: Failed to write calibration matrix.\n");
+        return -1;
+    }
+
+    return 0;
+}

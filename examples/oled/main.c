@@ -4,6 +4,7 @@
  * It displays some text for three seconds and then, it exits.
  *
  * The OLED Click must be inserted in Mikrobus 1 before running this program.
+ * In addition, the OLED Click must be configured to use I2C.
  */
 
 #include <stdio.h>

@@ -15,10 +15,12 @@ option(BUILD_TESTS "Build tests" OFF)
 file(GLOB bosh_srcs src/bosh/*.c)
 file(GLOB core_srcs src/core/*.c)
 file(GLOB click_srcs src/click/*.c)
+file(GLOB rpisensehat_srcs src/rpisensehat/*.c)
 
 file(GLOB bosh_hdrs include/letmecreate/bosh/*.h)
 file(GLOB core_hdrs include/letmecreate/core/*.h)
 file(GLOB click_hdrs include/letmecreate/click/*.h)
+file(GLOB rpisensehat_hdrs include/letmecreate/rpisensehat/*.h)
 
 include_directories(include)
 
@@ -26,12 +28,19 @@ include_directories(include)
 add_library(letmecreate_core SHARED ${core_srcs} ${core_hdrs})
 add_library(letmecreate_click SHARED ${click_srcs} ${click_hdrs})
 add_library(letmecreate_bosh SHARED ${bosh_srcs} ${bosh_hdrs})
+add_library(letmecreate_rpisensehat SHARED ${rpisensehat_srcs} ${rpisensehat_hdrs})
 target_link_libraries(letmecreate_core pthread)
 target_link_libraries(letmecreate_click letmecreate_core letmecreate_bosh)
+target_link_libraries(letmecreate_rpisensehat letmecreate_core)
 
-target_compile_definitions(letmecreate_core PUBLIC "LETMECREATE_CORE_DEBUG=$<CONFIG:Debug>")
-target_compile_definitions(letmecreate_click PUBLIC "LETMECREATE_CLICK_DEBUG=$<CONFIG:Debug>")
-target_compile_definitions(letmecreate_bosh PUBLIC "LETMECREATE_BOSH_DEBUG=$<CONFIG:Debug>")
+# Export symbols
+include(GenerateExportHeader)
+generate_export_header(letmecreate_core EXPORT_FILE_NAME "include/letmecreate/core/export.h")
+generate_export_header(letmecreate_click EXPORT_FILE_NAME "include/letmecreate/click/export.h")
+generate_export_header(letmecreate_rpisensehat EXPORT_FILE_NAME "include/letmecreate/rpisensehat/export.h")
+set_target_properties(letmecreate_core PROPERTIES C_VISIBILITY_PRESET hidden)
+set_target_properties(letmecreate_click PROPERTIES C_VISIBILITY_PRESET hidden)
+set_target_properties(letmecreate_rpisensehat PROPERTIES C_VISIBILITY_PRESET hidden)
 
 # Enable warnings
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wextra -ggdb3")
@@ -50,6 +59,11 @@ target_include_directories(
 )
 target_include_directories(
     letmecreate_bosh PUBLIC
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>"
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
+)
+target_include_directories(
+    letmecreate_rpisensehat PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>"
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
 )
@@ -79,7 +93,7 @@ configure_package_config_file(
 )
 
 install(
-    TARGETS letmecreate_core letmecreate_click letmecreate_bosh
+    TARGETS letmecreate_core letmecreate_click letmecreate_bosh letmecreate_rpisensehat
     EXPORT "${targets_export_name}"
     LIBRARY DESTINATION "lib"
     ARCHIVE DESTINATION "lib"
