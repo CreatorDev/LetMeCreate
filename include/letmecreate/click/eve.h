@@ -348,7 +348,7 @@ int LETMECREATE_CLICK_EXPORT eve_click_screensaver(void);
  *
  * By default, the intensity is set to maximum.
  *
- * @param[in] intensity Must be in range 0..100
+ * @param[in] intensity Must be in range 0..128
  * @return 0 if successful, -1 otherwise.
  */
 int LETMECREATE_CLICK_EXPORT eve_click_set_backlight_intensity(uint8_t intensity);
@@ -367,9 +367,12 @@ int LETMECREATE_CLICK_EXPORT eve_click_set_backlight_intensity(uint8_t intensity
  * @brief Attach a callback
  *
  * If you want to remove the callback, call this function again with NULL argument.
+ * The callback is called every time a touch screen coordinate conversion is
+ * complete (60 times a second).
  *
  * @param[in] callback Arguments to this callback are the screen coordinates of
- * the detected touch point.
+ * the touch point. If the screen is not touched, the screen coordinate is set
+ * to (32768, 32768).
  */
 void LETMECREATE_CLICK_EXPORT eve_click_attach_touch_callback(void (*callback)(uint16_t, uint16_t));
 
