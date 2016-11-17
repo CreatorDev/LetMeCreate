@@ -7,20 +7,20 @@ int main(void)
     while (1) {
         switch (counter % 4) {
         case 0:
-            relay2_click_disable_relay_1(MIKROBUS_1);
-            relay2_click_disable_relay_2(MIKROBUS_1);
+            relay2_click_disable_relay(MIKROBUS_1, RELAY2_CLICK_RELAY_1);
+            relay2_click_disable_relay(MIKROBUS_1, RELAY2_CLICK_RELAY_1);
             break;
         case 1:
-            relay2_click_enable_relay_1(MIKROBUS_1);
-            relay2_click_disable_relay_2(MIKROBUS_1);
+            relay2_click_enable_relay(MIKROBUS_1, RELAY2_CLICK_RELAY_1);
+            relay2_click_disable_relay(MIKROBUS_1, RELAY2_CLICK_RELAY_2);
             break;
         case 2:
-            relay2_click_disable_relay_1(MIKROBUS_1);
-            relay2_click_enable_relay_2(MIKROBUS_1);
+            relay2_click_disable_relay(MIKROBUS_1, RELAY2_CLICK_RELAY_1);
+            relay2_click_enable_relay(MIKROBUS_1, RELAY2_CLICK_RELAY_2);
             break;
         case 3:
-            relay2_click_enable_relay_1(MIKROBUS_1);
-            relay2_click_enable_relay_2(MIKROBUS_1);
+            relay2_click_enable_relay(MIKROBUS_1, RELAY2_CLICK_RELAY_1);
+            relay2_click_enable_relay(MIKROBUS_1, RELAY2_CLICK_RELAY_2);
             break;
         }
 

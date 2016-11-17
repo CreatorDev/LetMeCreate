@@ -26,6 +26,8 @@ enum OPTO_CLICK_CHANNEL_INDEX {
  * @brief Attach a callback to a channel of the Opto Click.
  *
  * Channel 2 is not supported on Ci40.
+ * The callback is called on each edge, the parameter of the callback indicates
+ * whether it is a raising or falling edge.
  *
  * @param[in] mikrobus_index Index of the mikrobus (see #MIKROBUS_INDEX)
  * @param[in] channel_index Index of the channel (see #OPTO_CLICK_CHANNEL_INDEX)

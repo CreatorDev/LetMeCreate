@@ -44,7 +44,28 @@ enum GPIO_PIN {
     GPIO_82        = 82,
     GPIO_83        = 83,
     GPIO_84        = 84,
-    GPIO_85        = 85
+    GPIO_85        = 85,
+
+    RPI_GPIO_4     = 22,
+    RPI_GPIO_5     = 27,
+    RPI_GPIO_6     = 72,
+    RPI_GPIO_9     = 89,
+    RPI_GPIO_10    = 88,
+    RPI_GPIO_11    = 31,
+    RPI_GPIO_12    = 74,
+    RPI_GPIO_13    = 80,
+    RPI_GPIO_14    = 14,
+    RPI_GPIO_15    = 75,
+    RPI_GPIO_16    = 82,
+    RPI_GPIO_17    = 25,
+    RPI_GPIO_19    = 81,
+    RPI_GPIO_20    = 84,
+    RPI_GPIO_21    = 85,
+    RPI_GPIO_22    = 24,
+    RPI_GPIO_24    = 73,
+    RPI_GPIO_25    = 21,
+    RPI_GPIO_26    = 83,
+    RPI_GPIO_27    = 23
 };
 
 /** GPIO direction */

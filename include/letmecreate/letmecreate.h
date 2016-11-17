@@ -11,5 +11,6 @@
 
 #include <letmecreate/core.h>
 #include <letmecreate/click.h>
+#include <letmecreate/rpisensehat.h>
 
 #endif

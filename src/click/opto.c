@@ -52,7 +52,7 @@ int opto_click_attach_callback(uint8_t mikrobus_index, uint8_t channel_index, vo
     gpio_pin = channel_pins[mikrobus_index][channel_index];
     if (gpio_init(gpio_pin) < 0
     ||  gpio_monitor_init() < 0
-    ||  gpio_monitor_add_callback(gpio_pin, GPIO_RAISING, callback) < 0)
+    ||  gpio_monitor_add_callback(gpio_pin, GPIO_EDGE, callback) < 0)
         return -1;
 
     return 0;

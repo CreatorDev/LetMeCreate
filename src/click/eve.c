@@ -28,6 +28,7 @@ static bool cmd_buffering = true;
 static bool use_timeout = true;
 
 static void (*touch_callback)(uint16_t, uint16_t) = NULL;
+static void (*touch_event_callback)(void) = NULL;
 
 static void sleep_ms(unsigned int ms)
 {
@@ -845,7 +846,7 @@ static void interrupt_handler(uint8_t __attribute__ ((unused))event)
     if (flags & FT800_INT_CMD_FIFO_EMPTY)
         fifo_empty = true;
 
-    if (flags & FT800_INT_TOUCH) {
+    if (flags & FT800_INT_CONVCOMPLETE) {
         if (touch_callback != NULL) {
             uint32_t tmp = 0;
             if (read_32bit_reg(FT800_REG_TOUCH_SCREEN_XY, &tmp) < 0)
@@ -853,6 +854,11 @@ static void interrupt_handler(uint8_t __attribute__ ((unused))event)
 
             touch_callback(tmp >> 16, tmp);
         }
+    }
+
+    if (flags & FT800_INT_TOUCH) {
+        if (touch_event_callback != NULL)
+            touch_event_callback();
     }
 }
 
@@ -1015,7 +1021,7 @@ int eve_click_enable(uint8_t mikrobus_index)
     /* Enable touch screen */
     if (write_8bit_reg(FT800_REG_TOUCH_OVERSAMPLE, 15) < 0   /* Max oversampling */
     ||  write_8bit_reg(FT800_REG_TOUCH_ADC_MODE, 1) < 0 /* Differential mode for better accuracy */
-    ||  write_8bit_reg(FT800_REG_TOUCH_MODE, FT800_TOUCH_MODE_CONTINUOUS) < 0) {
+    ||  write_8bit_reg(FT800_REG_TOUCH_MODE, FT800_TOUCH_MODE_FRAME_SYNC) < 0) {
         fprintf(stderr, "eve: Failed to set touch controller mode.\n");
         return -1;
     }
@@ -1026,7 +1032,7 @@ int eve_click_enable(uint8_t mikrobus_index)
         fprintf(stderr, "eve: Failed to attach interrupt handler.\n");
         return -1;
     }
-    if (write_8bit_reg(FT800_REG_INT_MASK, FT800_INT_CMD_FIFO_EMPTY | FT800_INT_TOUCH) < 0
+    if (write_8bit_reg(FT800_REG_INT_MASK, FT800_INT_CMD_FIFO_EMPTY | FT800_INT_CONVCOMPLETE | FT800_INT_TOUCH) < 0
     ||  write_8bit_reg(FT800_REG_INT_EN, 1) < 0)
         return -1;
 
@@ -1637,6 +1643,11 @@ void eve_click_attach_touch_callback(void (*callback)(uint16_t, uint16_t))
     touch_callback = callback;
 }
 
+void eve_click_attach_touch_event_callback(void (*callback)(void))
+{
+    touch_event_callback = callback;
+}
+
 int eve_click_calibrate(void)
 {
     bool prev_buffering = true;
@@ -1688,6 +1699,44 @@ int eve_click_calibrate(void)
 
     if (calibration_failure)
         return -1;
+
+    return 0;
+}
+
+int eve_click_get_calibration_matrix(uint32_t *a, uint32_t *b, uint32_t *c,
+                                     uint32_t *d, uint32_t *e, uint32_t *f)
+{
+    if (a == NULL || b == NULL || c == NULL
+    ||  d == NULL || e == NULL || f == NULL) {
+        fprintf(stderr, "eve: Cannot store calibration matrix using null pointer.\n");
+        return -1;
+    }
+
+    if (read_32bit_reg(FT800_REG_TOUCH_TRANSFORM_A, a) < 0
+    ||  read_32bit_reg(FT800_REG_TOUCH_TRANSFORM_B, b) < 0
+    ||  read_32bit_reg(FT800_REG_TOUCH_TRANSFORM_C, c) < 0
+    ||  read_32bit_reg(FT800_REG_TOUCH_TRANSFORM_D, d) < 0
+    ||  read_32bit_reg(FT800_REG_TOUCH_TRANSFORM_E, e) < 0
+    ||  read_32bit_reg(FT800_REG_TOUCH_TRANSFORM_F, f) < 0) {
+        fprintf(stderr, "eve: Failed to read calibration matrix.\n");
+        return -1;
+    }
+
+    return 0;
+}
+
+int eve_click_set_calibration_matrix(uint32_t a, uint32_t b, uint32_t c,
+                                     uint32_t d, uint32_t e, uint32_t f)
+{
+    if (write_32bit_reg(FT800_REG_TOUCH_TRANSFORM_A, a) < 0
+    ||  write_32bit_reg(FT800_REG_TOUCH_TRANSFORM_B, b) < 0
+    ||  write_32bit_reg(FT800_REG_TOUCH_TRANSFORM_C, c) < 0
+    ||  write_32bit_reg(FT800_REG_TOUCH_TRANSFORM_D, d) < 0
+    ||  write_32bit_reg(FT800_REG_TOUCH_TRANSFORM_E, e) < 0
+    ||  write_32bit_reg(FT800_REG_TOUCH_TRANSFORM_F, f) < 0) {
+        fprintf(stderr, "eve: Failed to write calibration matrix.\n");
+        return -1;
+    }
 
     return 0;
 }

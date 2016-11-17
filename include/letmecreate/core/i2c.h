@@ -83,6 +83,43 @@ int LETMECREATE_CORE_EXPORT i2c_write_byte(uint16_t slave_address, uint8_t data)
 int LETMECREATE_CORE_EXPORT i2c_read_byte(uint16_t slave_address, uint8_t *data);
 
 /**
+ * @brief Write a 8bit register to a slave.
+ *
+ * This function writes two bytes to the slave. The first byte is the register
+ * address and the second byte is the value of the register.
+ *
+ * @param[in] slave_address Address (7-bit or 10-bit) of the slave to read from
+ * @param[in] reg_address Address of the register to write
+ * @param[in] data New value of the register
+ * @return 1 if successful, otherwise it returns -1.
+ */
+int LETMECREATE_CORE_EXPORT i2c_write_register(uint16_t slave_address, uint8_t reg_address, uint8_t data);
+
+/**
+ * @brief Read a 8bit register from a slave.
+ *
+ * This function writes the register address and then reads one byte from the
+ * slave.
+ *
+ * @param[in] slave_address Address (7-bit or 10-bit) of the slave to read from
+ * @param[in] reg_address Address of the register to read
+ * @param[out] data Pointer to store content of register (must not be null)
+ * @return 1 if successful, otherwise it returns -1.
+ */
+int LETMECREATE_CORE_EXPORT i2c_read_register(uint16_t slave_address, uint8_t reg_address, uint8_t *data);
+
+/**
+ * @brief Read a 16bit register from a slave over I²C.
+ *
+ * @param[in] address Address (7 bits or 10 bits) of the slave
+ * @param[in] reg_low_address Address of the lower half of the register on the slave
+ * @param[in] reg_high_address Address of the upper half of the register on the slave
+ * @param[out] data Pointer to a 16-bit variable to store the value of the register read from the slave
+ * @return 1 if successful, otherwise it returns -1.
+ */
+int LETMECREATE_CORE_EXPORT i2c_read_16b_register(uint16_t address, uint8_t reg_low_address, uint8_t reg_high_address, uint16_t *data);
+
+/**
  * @brief Close all file descriptor.
  *
  * @return Returns -1 if it fails, otherwise it returns 0.

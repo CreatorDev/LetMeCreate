@@ -189,7 +189,7 @@ int LETMECREATE_CLICK_EXPORT eve_click_translate(int32_t tx, int32_t ty);
  * eve_click_set_matrix must be called to update the bitmap transform matrix.
  *
  * @param[in] sx signed 16.16 fixed-point x factor
- * @param[in] sy signed 16.16 fixed-point x factor
+ * @param[in] sy signed 16.16 fixed-point y factor
  * @return 0 if successful, -1 otherwise.
  */
 int LETMECREATE_CLICK_EXPORT eve_click_scale(int32_t sx, int32_t sy);
@@ -348,7 +348,7 @@ int LETMECREATE_CLICK_EXPORT eve_click_screensaver(void);
  *
  * By default, the intensity is set to maximum.
  *
- * @param[in] intensity Must be in range 0..100
+ * @param[in] intensity Must be in range 0..128
  * @return 0 if successful, -1 otherwise.
  */
 int LETMECREATE_CLICK_EXPORT eve_click_set_backlight_intensity(uint8_t intensity);
@@ -367,11 +367,24 @@ int LETMECREATE_CLICK_EXPORT eve_click_set_backlight_intensity(uint8_t intensity
  * @brief Attach a callback
  *
  * If you want to remove the callback, call this function again with NULL argument.
+ * The callback is called every time a touch screen coordinate conversion is
+ * complete (60 times a second).
  *
  * @param[in] callback Arguments to this callback are the screen coordinates of
- * the detected touch point.
+ * the touch point. If the screen is not touched, the screen coordinate is set
+ * to (32768, 32768).
  */
 void LETMECREATE_CLICK_EXPORT eve_click_attach_touch_callback(void (*callback)(uint16_t, uint16_t));
+
+/**
+ * @brief Attach a callback
+ *
+ * If you want to remove the callback, call this function again with NULL argument.
+ * The callback is called once whenever the screen gets touched.
+ *
+ * @param[in] callback
+ */
+void LETMECREATE_CLICK_EXPORT eve_click_attach_touch_event_callback(void (*callback)(void));
 
 /**
  * @brief Calibrate touch screen.
@@ -384,4 +397,34 @@ void LETMECREATE_CLICK_EXPORT eve_click_attach_touch_callback(void (*callback)(u
  */
 int LETMECREATE_CLICK_EXPORT eve_click_calibrate(void);
 
+/**
+ * @brief Retrieve touch screen calibration matrix.
+ *
+ * This function should be called after a calibration of the touch screen has
+ * been performed.
+ *
+ * @param[out] a 15.15 fixed point number
+ * @param[out] b 15.15 fixed point number
+ * @param[out] c 15.15 fixed point number
+ * @param[out] d 15.15 fixed point number
+ * @param[out] e 15.15 fixed point number
+ * @param[out] f 15.15 fixed point number
+ * @return 0 if successful, -1 otherwise.
+ */
+int LETMECREATE_CLICK_EXPORT eve_click_get_calibration_matrix(uint32_t *a, uint32_t *b, uint32_t *c,
+                                                              uint32_t *d, uint32_t *e, uint32_t *f);
+
+/**
+ * @brief Set the touch screen calibration matrix.
+ *
+ * @param[in] a 15.15 fixed point number
+ * @param[in] b 15.15 fixed point number
+ * @param[in] c 15.15 fixed point number
+ * @param[in] d 15.15 fixed point number
+ * @param[in] e 15.15 fixed point number
+ * @param[in] f 15.15 fixed point number
+ * @return 0 if successful, -1 otherwise.
+ */
+int LETMECREATE_CLICK_EXPORT eve_click_set_calibration_matrix(uint32_t a, uint32_t b, uint32_t c,
+                                                              uint32_t d, uint32_t e, uint32_t f);
 #endif
