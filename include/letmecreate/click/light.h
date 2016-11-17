@@ -17,9 +17,10 @@
  * The Light click's jumper must be configured to AN.
  *
  * @param[in] mikrobus_index Index of the mikrobus used by the click (see #MIKROBUS_INDEX)
- * @param[out] measure Light intensity in range 0-65535
+ * @param[out] measure 12 bits value representing light intensity
+ * @param[in] use_spi 0: use AN output, otherwise read value from SPI
  * @return 0 if successful, -1 otherwise
  */
-int LETMECREATE_CLICK_EXPORT light_click_get_measure(uint8_t mikrobus_index, uint16_t *measure);
+int LETMECREATE_CLICK_EXPORT light_click_get_measure(uint8_t mikrobus_index, uint16_t *measure, uint8_t use_spi);
 
 #endif
