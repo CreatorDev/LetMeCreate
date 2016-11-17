@@ -28,6 +28,7 @@ static bool cmd_buffering = true;
 static bool use_timeout = true;
 
 static void (*touch_callback)(uint16_t, uint16_t) = NULL;
+static void (*touch_event_callback)(void) = NULL;
 
 static void sleep_ms(unsigned int ms)
 {
@@ -854,6 +855,11 @@ static void interrupt_handler(uint8_t __attribute__ ((unused))event)
             touch_callback(tmp >> 16, tmp);
         }
     }
+
+    if (flags & FT800_INT_TOUCH) {
+        if (touch_event_callback != NULL)
+            touch_event_callback();
+    }
 }
 
 static int attach_interrupt_handler(uint8_t mikrobus_index)
@@ -1026,7 +1032,7 @@ int eve_click_enable(uint8_t mikrobus_index)
         fprintf(stderr, "eve: Failed to attach interrupt handler.\n");
         return -1;
     }
-    if (write_8bit_reg(FT800_REG_INT_MASK, FT800_INT_CMD_FIFO_EMPTY | FT800_INT_CONVCOMPLETE) < 0
+    if (write_8bit_reg(FT800_REG_INT_MASK, FT800_INT_CMD_FIFO_EMPTY | FT800_INT_CONVCOMPLETE | FT800_INT_TOUCH) < 0
     ||  write_8bit_reg(FT800_REG_INT_EN, 1) < 0)
         return -1;
 
@@ -1635,6 +1641,11 @@ int eve_click_set_backlight_intensity(uint8_t intensity)
 void eve_click_attach_touch_callback(void (*callback)(uint16_t, uint16_t))
 {
     touch_callback = callback;
+}
+
+void eve_click_attach_touch_event_callback(void (*callback)(void))
+{
+    touch_event_callback = callback;
 }
 
 int eve_click_calibrate(void)

@@ -374,6 +374,16 @@ int LETMECREATE_CLICK_EXPORT eve_click_set_backlight_intensity(uint8_t intensity
 void LETMECREATE_CLICK_EXPORT eve_click_attach_touch_callback(void (*callback)(uint16_t, uint16_t));
 
 /**
+ * @brief Attach a callback
+ *
+ * If you want to remove the callback, call this function again with NULL argument.
+ * The callback is called once whenever the screen gets touched.
+ *
+ * @param[in] callback
+ */
+void LETMECREATE_CLICK_EXPORT eve_click_attach_touch_event_callback(void (*callback)(void));
+
+/**
  * @brief Calibrate touch screen.
  *
  * This function flushes the command buffer.
