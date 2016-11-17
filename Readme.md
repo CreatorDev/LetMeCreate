@@ -41,7 +41,7 @@ MikroClick board supported:
   - IR distance
   - IR eclipse
   - Joystick
-  - Light (only AN output)
+  - Light
   - Motion
   - OLED
   - Opto
