@@ -13,31 +13,6 @@
 #include <stdint.h>
 #include <letmecreate/click/export.h>
 
-enum WEEKDAY {
-    MONDAY,
-    TUESDAY,
-    WEDNESDAY,
-    THURSDAY,
-    FRIDAY,
-    SATURDAY,
-    SUNDAY
-};
-
-enum MONTH {
-    JANUARY,
-    FEBRUARY,
-    MARCH,
-    APRIL,
-    MAY,
-    JUNE,
-    JULY,
-    AUGUST,
-    SEPTEMBER,
-    OCTOBER,
-    NOVEMBER,
-    DECEMBER
-};
-
 /** Structure to represent a date */
 struct date {
     uint16_t year;          /**< Must be in range year_offset..year_offset+3 */
