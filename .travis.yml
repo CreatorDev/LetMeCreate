@@ -14,6 +14,7 @@ script:
   - export CI40_FILE_URL="$CI40_SDK_URL$CI40_SDK.tar.bz2"
   - echo $CI40_FILE_URL
   - cd $HOME/build && wget $CI40_FILE_URL && tar xfj $CI40_SDK.tar.bz2
-  - cd $CI40_SDK && echo src-link custom $HOME/build/letmecreatefeed/ >> feeds.conf.default
+  - cd $CI40_SDK && sed --in-place '/Creator-feed/d' feeds.conf.default
+  - echo src-link custom $HOME/build/letmecreatefeed/ >> feeds.conf.default
   - ./scripts/feeds update -a && ./scripts/feeds install -a
   - make package/letmecreate/compile -j1 V=s
