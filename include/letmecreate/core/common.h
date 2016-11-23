@@ -11,7 +11,12 @@
 
 #include <stdint.h>
 
+/** Maximum string length when opening device file
+ *  for I2C, SPI, GPIO, PWM...
+ */
 #define MAX_STR_LENGTH          (255)
+
+/** Number of MIKROBUS on Ci40 */
 #define MIKROBUS_COUNT          (2)
 
 /** Index of Mikrobus interfaces */
