@@ -14,9 +14,8 @@
 /**
  * @brief Get light intensity measurement from Light Click.
  *
- * The Light click's jumper must be configured to AN.
- *
  * @param[in] mikrobus_index Index of the mikrobus used by the click (see #MIKROBUS_INDEX)
+ * This parameter is ignored if use_spi is different from 0.
  * @param[out] measure 12 bits value representing light intensity
  * @param[in] use_spi 0: use AN output, otherwise read value from SPI
  * @return 0 if successful, -1 otherwise
