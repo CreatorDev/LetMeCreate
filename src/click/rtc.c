@@ -85,8 +85,8 @@ int rtc_click_set_date(struct date date)
     ++date.month;
     date.year -= year_offset;
 
-    if (date.second > 60
-    ||  date.minute > 60
+    if (date.second > 59
+    ||  date.minute > 59
     ||  date.hour > 23
     ||  date.day == 0
     ||  date.month == 0
