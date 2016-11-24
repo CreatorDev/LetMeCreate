@@ -2,10 +2,17 @@
 #include <letmecreate/click/joystick.h>
 #include <letmecreate/core/i2c.h>
 
-#define JOYSTICK_ADDRESS (0x40)
+#define JOYSTICK_ADDRESS (0x40 | add_bit)
 
 #define X_REG       (0x10)
 #define Y_REG       (0x11)
+
+static uint8_t add_bit = 0;
+
+void joystick_click_set_add_bit(uint8_t lsb)
+{
+    add_bit = !!lsb;
+}
 
 int joystick_click_get_x(int8_t *x)
 {
