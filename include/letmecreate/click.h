@@ -37,6 +37,7 @@
 #include <letmecreate/click/relay4.h>
 #include <letmecreate/click/rtc.h>
 #include <letmecreate/click/thermo3.h>
+#include <letmecreate/click/uni_hall.h>
 #include <letmecreate/click/weather.h>
 
 #endif
