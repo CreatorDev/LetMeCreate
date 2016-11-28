@@ -42,6 +42,7 @@ MikroClick board supported:
   - IR eclipse
   - Joystick
   - Light
+  - LIN Hall
   - Motion
   - OLED
   - Opto
