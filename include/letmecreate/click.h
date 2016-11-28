@@ -28,6 +28,7 @@
 #include <letmecreate/click/joystick.h>
 #include <letmecreate/click/led_matrix.h>
 #include <letmecreate/click/light.h>
+#include <letmecreate/click/lin_hall.h>
 #include <letmecreate/click/motion.h>
 #include <letmecreate/click/oled.h>
 #include <letmecreate/click/opto.h>
