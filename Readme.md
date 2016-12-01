@@ -1,59 +1,42 @@
+![logo](https://static.creatordev.io/logo-md-s.svg)
+
 # LetMeCreate library
 
 ## Build status
 
-Master
+**Master**  
 [![Build Status](https://travis-ci.org/francois-berder/LetMeCreate.svg?branch=master)](https://travis-ci.org/francois-berder/LetMeCreate)
 
-
-Dev
+**Dev**  
 [![Build Status](https://travis-ci.org/francois-berder/LetMeCreate.svg?branch=dev)](https://travis-ci.org/francois-berder/LetMeCreate)
 
 ## Introduction
 
-This library is a collection of small wrappers for some interfaces of the Ci40. It aims at making easier to develop on this platform. Also, it provides some wrappers for a few clicks. Notice that you cannot compile the library on Ci40 because cmake cannot run on it.
+This library is a collection of small wrappers for some interfaces of the Ci40. It aims at making easier to develop on this platform. Also, it provides some wrappers for a few clicks. Notice that you cannot compile the library on Ci40 because cmake cannot run on it. There exists a Python binding of this library called [PyLetMeCreate](https://github.com/francois-berder/PyLetMeCreate).
 
-Interface supported:
-  - I²C
-  - SPI
-  - UART
-  - LED's
-  - Switch
-  - GPIO (Mikrobus and Raspberry Pi interfaces)
-  - PWM
-  - ADC
+Supported interfaces:  
 
-MikroClick board supported:
-  - 7Seg
-  - 8x8R (Led Matrix)
-  - Accel
-  - ADC
-  - Air quality
-  - Alcohol
-  - Alphanum
-  - Bargraph
-  - CO
-  - Color
-  - Color2
-  - EVE
-  - Fan
-  - GYRO
-  - IR distance
-  - IR eclipse
-  - Joystick
-  - Light
-  - LIN Hall
-  - Motion
-  - OLED
-  - Opto
-  - Proximity
-  - Relay (partial support)
-  - Relay2
-  - Relay4 (partial support)
-  - RTC
-  - Thermo3
-  - UNI Hall
-  - Weather
+|Interface|-|
+|:------------| :-------------------|
+|I²C|SPI|
+|UART|LED's|
+|Switch|GPIO (Mikrobus and Raspberry Pi interfaces)|
+|PWM| ADC|
+
+MikroClick board supported:  
+ 
+|Interface|||
+|:------------|:-------------------|:-------------------|
+|7Seg|8x8R (Led Matrix)|Accel|
+|ADC|Air quality|Alcohol|
+|Alphanum|Bargraph|CO|
+|Color|Color2|EVE|
+|Fan|GYRO|IR distance|
+|IR eclipse|Joystick|Light|
+|LIN Hall|Motion|OLED|
+|Opto|Proximity|Relay (partial support)|
+|Relay2|Relay4 (partial support)|RTC|
+|Thermo3|UNI Hall|Weather|
 
 The Raspberry PI sense Hat is supported by the library, except the EEPROM because the pins are not connected on the I2C bus. The atmel chip is confusing the I2C driver of the Ci40 which makes it sometimes impossible to communicate with the hat. Inserting the hat after the board finished booting often solves the issue (assuming it does not cause a reset of the Ci40 because of a brown-out reset).
 
@@ -76,5 +59,61 @@ Keep examples very simple and avoid parsing arguments. Examples are there to sho
 
 ## Integration in Openwrt
 
-The library is intended to be used with the Openwrt version from Imagination Technologies available [here](https://github.com/Creatordev/openwrt). The package definition of this library is already part of the [Creator feed](https://github.com/CreatorDev/Creator-feed).
+The library is already part of Imagination Technologies' OpenWrt.
+To compile the library (only possible once you built Openwrt once):
 
+```sh
+$ make package/letmecreate/{clean,compile} -j1 V=s
+```
+
+### Installation steps
+
+You can install LetMeCreate package on OpenWRT executing:
+
+```sh
+$ opkg install letmecreate
+```
+
+Each release has the ipk as an attachment. You can download the ipk, copy it to your Ci40 and install with opkg:
+
+```sh
+$ opkg install path-to-the-ipk
+```
+
+### Usage example
+```c
+/**
+ * This example shows how to use the Thermo3 Click wrapper of the LetMeCreate
+ * library.
+ *
+ * It reads the temperature from the sensor and exits.
+ *
+ * The Thermo3 Click must be inserted in Mikrobus 1 before running this program.
+ */
+
+#include <stdio.h>
+#include <letmecreate/letmecreate.h>
+
+
+int main(void)
+{
+    float temperature = 0.f;
+
+    i2c_init();
+    i2c_select_bus(MIKROBUS_1);
+
+    thermo3_click_enable(0);
+    thermo3_click_get_temperature(&temperature);
+    printf("temperature: %.3f°C\n", temperature);
+    thermo3_click_disable();
+
+    i2c_release();
+
+    return 0;
+}
+```
+You can compile the C code example using **GCC**. Execute:
+```sh
+$ gcc thermo3.c -o thermo3 -lletmecreate_core -lletmecreate_click
+$ ./thermo3
+```
