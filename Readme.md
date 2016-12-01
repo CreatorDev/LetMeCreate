@@ -1,57 +1,42 @@
+![logo](https://static.creatordev.io/logo-md-s.svg)
+
 # LetMeCreate library
 
 ## Build status
 
-Master
+**Master**  
 [![Build Status](https://travis-ci.org/francois-berder/LetMeCreate.svg?branch=master)](https://travis-ci.org/francois-berder/LetMeCreate)
 
-
-Dev
+**Dev**  
 [![Build Status](https://travis-ci.org/francois-berder/LetMeCreate.svg?branch=dev)](https://travis-ci.org/francois-berder/LetMeCreate)
 
 ## Introduction
 
 This library is a collection of small wrappers for some interfaces of the Ci40. It aims at making easier to develop on this platform. Also, it provides some wrappers for a few clicks. Notice that you cannot compile the library on Ci40 because cmake cannot run on it.
 
-Interface supported:
-  - I²C
-  - SPI
-  - UART
-  - LED's
-  - Switch
-  - GPIO (Mikrobus and Raspberry Pi interfaces)
-  - PWM
-  - ADC
+Supported interfaces:
 
-MikroClick board supported:
-  - 7Seg
-  - 8x8R (Led Matrix)
-  - Accel
-  - ADC
-  - Air quality
-  - Alcohol
-  - Alphanum
-  - Bargraph
-  - CO
-  - Color
-  - Color2
-  - EVE
-  - Fan
-  - GYRO
-  - IR distance
-  - IR eclipse
-  - Joystick
-  - Light
-  - Motion
-  - OLED
-  - Opto
-  - Proximity
-  - Relay (partial support)
-  - Relay2
-  - Relay4 (partial support)
-  - RTC
-  - Thermo3
-  - Weather
+|Interface|-|
+|:------------| :-------------------|
+|I²C|SPI|
+|UART|LED's|
+|Switch|GPIO (Mikrobus and Raspberry Pi interfaces)|
+|PWM| ADC|
+
+MikroClick board supported: 
+ 
+|Interface|||
+|:------------|:-------------------|:-------------------|
+|7Seg|8x8R (Led Matrix)|Accel|
+|ADC|Air quality|Alcohol|
+|Alphanum|Bargraph|CO|
+|Color|Color2|EVE|
+|Fan|GYRO|IR distance|
+|IR eclipse|Joystick|Light|
+|Motion|OLED|Opto|
+|Proximity|Relay (partial support)|Relay2|
+|Relay4 (partial support)|RTC|Thermo3|
+|Weather|-|-|
 
 The Raspberry PI sense Hat is supported by the library, except the EEPROM because the pins are not connected on the I2C bus. The atmel chip is confusing the I2C driver of the Ci40 which makes it sometimes impossible to communicate with the hat. Inserting the hat after the board finished booting often solves the issue (assuming it does not cause a reset of the Ci40 because of a brown-out reset).
 
@@ -78,14 +63,48 @@ To add new packages, Openwrt relies on feeds: a collection of packages.
 
 ### Installation steps
 
-Clone the library and openwrt somewhere on you computer:
+You can install LetMeCreate package on OpenWRT executing:
 
 ```sh
-$ mkdir ci-40
-$ cd ci-40
-$ git clone https://github.com/CreatorDev/openwrt.git
-$ mkdir -p custom/letmecreate
-$ cd custom/letmecreate
+# opkg install letmecreate
+```
+
+### Usage example
+```c
+/**
+ * This example shows how to use the Thermo3 Click wrapper of the LetMeCreate
+ * library.
+ *
+ * It reads the temperature from the sensor and exits.
+ *
+ * The Thermo3 Click must be inserted in Mikrobus 1 before running this program.
+ */
+
+#include <stdio.h>
+#include <letmecreate/letmecreate.h>
+
+
+int main(void)
+{
+    float temperature = 0.f;
+
+    i2c_init();
+    i2c_select_bus(MIKROBUS_1);
+
+    thermo3_click_enable(0);
+    thermo3_click_get_temperature(&temperature);
+    printf("temperature: %.3f°C\n", temperature);
+    thermo3_click_disable();
+
+    i2c_release();
+
+    return 0;
+}
+```
+You can compile the C code example using **GCC**. Execute:
+```bash
+# gcc thermo3.c -o thermo3 -lletmecreate_core -lletmecreate_click
+# ./thermo3
 ```
 
 #### Stable release
