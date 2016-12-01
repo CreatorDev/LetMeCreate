@@ -76,64 +76,18 @@ Keep examples very simple and avoid parsing arguments. Examples are there to sho
 
 To add new packages, Openwrt relies on feeds: a collection of packages.
 
-### Installation steps
+### Installation Steps
 
-Clone the library and openwrt somewhere on you computer:
+You can install LetMeCreate package on OpenWRT by:
 
-```sh
-$ mkdir ci-40
-$ cd ci-40
-$ git clone https://github.com/CreatorDev/openwrt.git
-$ mkdir -p custom/letmecreate
-$ cd custom/letmecreate
+```bash
+# opkg install letmecreate
 ```
 
-#### Stable release
+### Usage Example
 
-If you are only interested in getting the latest release of LetMeCreate library, then download a copy of Makefile.stable and Config.in.stable located in miscellaneous folder. Copy these files inside the letmecreate folder you have just created and rename it to Makefile and Config.in respectively.
-
-#### Development configuration
-
-If you are interested in modifying the library, getting the lastest changes, then clone it:
-
-```sh
-$ git clone https://github.com/francois-berder/LetMeCreate.git
-```
-
-Copy the Makefile and the Config.in to the right location:
-```sh
-$ cp LetMeCreate/miscellaneous/Makefile.devel Makefile
-$ cp LetMeCreate/miscellaneous/Config.in.devel Config.in
-```
-
-This project uses two branches. The dev branch contains all the latest changes and should not be considered as stable. The dev branch is sometimes merged to master once new features are considered stable.
-
-#### Register the library in Openwrt
-
-To register the feed in openwrt, go back in openwrt folder and open feeds.conf.default.
-Add this line:
-```
-src-link custom /change/this/path/to/the/location/of/ci-40/custom/directory/
-```
-
-Update and install all feeds:
-```sh
-$ ./scripts/feeds update -a
-$ ./scripts/feeds install -a
-```
-In make menuconfig, select Libraries, you should see an entry for letmecreate library:
-
-![Libraries menu](/miscellaneous/libraries_menu.png)
-
-Select the letmecreate library in make menuconfig, and compile Openwrt:
-
-```sh
-$ make -j1 V=s
-```
-In the image (a tarball in bin/pistachio), you should see the examples in /usr/bin/letmecreate_examples.
-
-To compile only the library (only possible once you built Openwrt once):
-
-```sh
-$ make package/letmecreate/{clean,compile} -j1 V=s
+You can compile C code using **GCC**. For example:
+```bash
+# gcc my_example.c -o my_example -lletmecreate_core -lletmecreate_click
+# ./my_example
 ```
