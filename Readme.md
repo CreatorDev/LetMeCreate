@@ -14,7 +14,7 @@
 
 This library is a collection of small wrappers for some interfaces of the Ci40. It aims at making easier to develop on this platform. Also, it provides some wrappers for a few clicks. Notice that you cannot compile the library on Ci40 because cmake cannot run on it. There exists a Python binding of this library called [PyLetMeCreate](https://github.com/francois-berder/PyLetMeCreate).
 
-Supported interfaces:
+Supported interfaces:  
 
 |Interface|-|
 |:------------| :-------------------|
@@ -23,7 +23,7 @@ Supported interfaces:
 |Switch|GPIO (Mikrobus and Raspberry Pi interfaces)|
 |PWM| ADC|
 
-MikroClick board supported: 
+MikroClick board supported:  
  
 |Interface|||
 |:------------|:-------------------|:-------------------|
@@ -59,14 +59,25 @@ Keep examples very simple and avoid parsing arguments. Examples are there to sho
 
 ## Integration in Openwrt
 
-To add new packages, Openwrt relies on feeds: a collection of packages.
+The library is already part of Imagination Technologies' OpenWrt.
+To compile the library (only possible once you built Openwrt once):
+
+```sh
+$ make package/letmecreate/{clean,compile} -j1 V=s
+```
 
 ### Installation steps
 
 You can install LetMeCreate package on OpenWRT executing:
 
 ```sh
-# opkg install letmecreate
+$ opkg install letmecreate
+```
+
+Each release has the ipk as an attachment. You can download the ipk, copy it to your Ci40 and install with opkg:
+
+```sh
+$ opkg install path-to-the-ipk
 ```
 
 ### Usage example
@@ -102,57 +113,7 @@ int main(void)
 }
 ```
 You can compile the C code example using **GCC**. Execute:
-```bash
-# gcc thermo3.c -o thermo3 -lletmecreate_core -lletmecreate_click
-# ./thermo3
-```
-
-#### Stable release
-
-If you are only interested in getting the latest release of LetMeCreate library, then download a copy of Makefile.stable and Config.in.stable located in miscellaneous folder. Copy these files inside the letmecreate folder you have just created and rename it to Makefile and Config.in respectively.
-
-#### Development configuration
-
-If you are interested in modifying the library, getting the lastest changes, then clone it:
-
 ```sh
-$ git clone https://github.com/francois-berder/LetMeCreate.git
-```
-
-Copy the Makefile and the Config.in to the right location:
-```sh
-$ cp LetMeCreate/miscellaneous/Makefile.devel Makefile
-$ cp LetMeCreate/miscellaneous/Config.in.devel Config.in
-```
-
-This project uses two branches. The dev branch contains all the latest changes and should not be considered as stable. The dev branch is sometimes merged to master once new features are considered stable.
-
-#### Register the library in Openwrt
-
-To register the feed in openwrt, go back in openwrt folder and open feeds.conf.default.
-Add this line:
-```
-src-link custom /change/this/path/to/the/location/of/ci-40/custom/directory/
-```
-
-Update and install all feeds:
-```sh
-$ ./scripts/feeds update -a
-$ ./scripts/feeds install -a
-```
-In make menuconfig, select Libraries, you should see an entry for letmecreate library:
-
-![Libraries menu](/miscellaneous/libraries_menu.png)
-
-Select the letmecreate library in make menuconfig, and compile Openwrt:
-
-```sh
-$ make -j1 V=s
-```
-In the image (a tarball in bin/pistachio), you should see the examples in /usr/bin/letmecreate_examples.
-
-To compile only the library (only possible once you built Openwrt once):
-
-```sh
-$ make package/letmecreate/{clean,compile} -j1 V=s
+$ gcc thermo3.c -o thermo3 -lletmecreate_core -lletmecreate_click
+$ ./thermo3
 ```
