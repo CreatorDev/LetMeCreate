@@ -13,7 +13,7 @@
 
 This library is a collection of small wrappers for some interfaces of the Ci40. It aims at making easier to develop on this platform. Also, it provides some wrappers for a few clicks. Notice that you cannot compile the library on Ci40 because cmake cannot run on it.
 
-Supported interfaces:
+Supported interfaces:  
 |Interface|-|
 |:------------| :-------------------|
 |I²C|SPI|
@@ -21,7 +21,7 @@ Supported interfaces:
 |Switch|GPIO (Mikrobus and Raspberry Pi interfaces)|
 |PWM| ADC|
 
-MikroClick board supported:
+MikroClick board supported:  
 |Interface|||
 |:------------|:-------------------|:-------------------|
 |7Seg|8x8R (Led Matrix)|Accel|
