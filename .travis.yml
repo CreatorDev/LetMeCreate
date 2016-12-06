@@ -4,15 +4,16 @@ env:
   global:
     - CI40_SDK="OpenWrt-SDK-0.10.4-pistachio-marduk_gcc-5.3.0_musl-1.1.14.Linux-x86_64"
     - CI40_SDK_URL="https://downloads.creatordev.io/pistachio/marduk/"
+    - GIST_LOC="https://gist.githubusercontent.com/francois-berder/0082cf4b5633546edf20af0d9c74053c/raw/81c50a4f6d180721b56822b46a6c787c5e4f84e5/"
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y gnupg git-core build-essential libssl-dev libncurses5-dev unzip gawk subversion mercurial
 script:
   - mkdir -p $HOME/build/letmecreatefeed/letmecreate && ln -s $TRAVIS_BUILD_DIR $HOME/build/letmecreatefeed/letmecreate/LetMeCreate
-  - cp $TRAVIS_BUILD_DIR/miscellaneous/Makefile.devel $HOME/build/letmecreatefeed/letmecreate/Makefile
-  - cp $TRAVIS_BUILD_DIR/miscellaneous/Config.in.devel $HOME/build/letmecreatefeed/letmecreate/Config.in
+  - cd $HOME/build/letmecreatefeed/letmecreate/
+  - wget $GIST_LOC/Makefile
+  - wget $GIST_LOC/Config.in
   - export CI40_FILE_URL="$CI40_SDK_URL$CI40_SDK.tar.bz2"
-  - echo $CI40_FILE_URL
   - cd $HOME/build && wget $CI40_FILE_URL && tar xfj $CI40_SDK.tar.bz2
   - cd $CI40_SDK && sed --in-place '/Creator-feed/d' feeds.conf.default
   - echo src-link custom $HOME/build/letmecreatefeed/ >> feeds.conf.default
