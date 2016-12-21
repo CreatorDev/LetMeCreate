@@ -105,7 +105,7 @@ static int receive_line(char *line)
 
         LOG_DEBUG("c=%02X\n", c);
 
-        if (state == 0 && c == '\r')
+        if (state == 0 && (c == '\r' || c == '\n'))
             state = 1;
         else if (state == 1 && c == '\n')
             state = 2;
