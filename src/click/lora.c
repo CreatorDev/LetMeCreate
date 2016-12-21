@@ -306,23 +306,6 @@ int lora_click_enable(struct lora_click_config config)
         return -1;
     }
 
-    /*
-    printf("ret=%d\n", send_cmd("mac pause\r\n"));
-    printf("ret=%d\n", send_cmd("radio set mod lora\r\n"));
-    printf("ret=%d\n", send_cmd("radio set freq 868000000\r\n"));
-    printf("ret=%d\n", send_cmd("radio set pwr 14\r\n"));
-    printf("ret=%d\n", send_cmd("radio set sf sf12\r\n"));
-    printf("ret=%d\n", send_cmd("radio set afcbw 125\r\n"));
-    printf("ret=%d\n", send_cmd("radio set rxbw 250\r\n"));
-    printf("ret=%d\n", send_cmd("radio set fdev 5000\r\n"));
-    printf("ret=%d\n", send_cmd("radio set prlen 8\r\n"));
-    printf("ret=%d\n", send_cmd("radio set crc on\r\n"));
-    printf("ret=%d\n", send_cmd("radio set cr 4/8\r\n"));
-    printf("ret=%d\n", send_cmd("radio set wdt 0\r\n"));
-    printf("ret=%d\n", send_cmd("radio set sync 12\r\n"));
-    printf("ret=%d\n", send_cmd("radio set bw 250\r\n"));
-    */
-
     return 0;
 }
 
