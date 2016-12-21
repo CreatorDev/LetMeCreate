@@ -250,12 +250,15 @@ int lora_click_enable(struct lora_click_config config)
     case LORA_CLICK_BANDWIDTH_125KHZ:
         if (send_cmd("radio set bw 125\r\n") < 0)
             return -1;
+        break;
     case LORA_CLICK_BANDWIDTH_250KHZ:
         if (send_cmd("radio set bw 250\r\n") < 0)
             return -1;
+        break;
     case LORA_CLICK_BANDWIDTH_500KHZ:
         if (send_cmd("radio set bw 500\r\n") < 0)
             return -1;
+        break;
     default:
         fprintf(stderr, "lora: Invalid bandwidth.\n");
         return -1;
