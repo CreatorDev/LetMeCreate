@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <letmecreate/click/export.h>
 
 /** Automatic frequency corrections supported by RN2483 */
 enum LORA_CLICK_AUTO_FREQ_BAND {
@@ -59,10 +60,10 @@ struct lora_click_config {
     bool enable_crc_header;
 };
 
-struct lora_click_config lora_click_get_default_configuration(void);
-int lora_click_enable(struct lora_click_config config);
-int lora_click_send(uint8_t *data, uint32_t count);
-int lora_click_receive(uint8_t *data, uint32_t count);
-int lora_click_disable(void);
+struct lora_click_config LETMECREATE_CLICK_EXPORT lora_click_get_default_configuration(void);
+int LETMECREATE_CLICK_EXPORT lora_click_enable(struct lora_click_config config);
+int LETMECREATE_CLICK_EXPORT lora_click_send(uint8_t *data, uint32_t count);
+int LETMECREATE_CLICK_EXPORT lora_click_receive(uint8_t *data, uint32_t count);
+int LETMECREATE_CLICK_EXPORT lora_click_disable(void);
 
 #endif
