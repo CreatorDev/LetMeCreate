@@ -228,7 +228,7 @@ int lora_click_enable(struct lora_click_config config)
         fprintf(stderr, "lora: Invalid auto freq band.\n");
         return -1;
     }
-    sprintf(buffer, "radio set afcbw %s", auto_freq_str[config.auto_freq_band]);
+    sprintf(buffer, "radio set afcbw %s\r\n", auto_freq_str[config.auto_freq_band]);
     if (send_cmd(buffer) < 0) {
         fprintf(stderr, "lora: Failed to set auto freq band.\n");
         return -1;
@@ -239,7 +239,7 @@ int lora_click_enable(struct lora_click_config config)
         fprintf(stderr, "lora: Invalid coding rate.\n");
         return -1;
     }
-    sprintf(buffer, "radio set cr %s", coding_rate_str[config.coding_rate]);
+    sprintf(buffer, "radio set cr %s\r\n", coding_rate_str[config.coding_rate]);
     if (send_cmd(buffer) < 0) {
         fprintf(stderr, "lora: Failed to set coding rate.\n");
         return -1;
@@ -266,7 +266,7 @@ int lora_click_enable(struct lora_click_config config)
         fprintf(stderr, "lora: Invalid power.\n");
         return -1;
     }
-    sprintf(buffer, "radio set pwr %d", config.power);
+    sprintf(buffer, "radio set pwr %d\r\n", config.power);
     if (send_cmd(buffer) < 0) {
         fprintf(stderr, "lora: Failed to set power.\n");
         return -1;
