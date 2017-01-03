@@ -90,7 +90,6 @@ int read_int_file(const char *path, uint32_t *value)
 
 int export_pin(const char *dir_path, uint32_t pin_no)
 {
-    int fd = -1;
     char path[MAX_STR_LENGTH];
     char str[MAX_STR_LENGTH];
 
@@ -104,25 +103,11 @@ int export_pin(const char *dir_path, uint32_t pin_no)
         return -1;
     }
 
-    if ((fd = open(path, O_WRONLY)) < 0) {
-        fprintf(stderr, "Failed to open file %s\n", path);
-        return -1;
-    }
-
-    if (write(fd, str, strlen(str)+1) < 0) {
-        fprintf(stderr, "Failed to write %s to file %s.\n", str, path);
-        close(fd);
-        return -1;
-    }
-
-    close(fd);
-
-    return 0;
+    return write_str_file(path, str);
 }
 
 int unexport_pin(const char *dir_path, uint32_t pin_no)
 {
-    int fd = -1;
     char path[MAX_STR_LENGTH];
     char str[MAX_STR_LENGTH];
 
@@ -136,18 +121,5 @@ int unexport_pin(const char *dir_path, uint32_t pin_no)
         return -1;
     }
 
-    if ((fd = open(path, O_WRONLY)) < 0) {
-        fprintf(stderr, "Failed to open file %s\n", path);
-        return -1;
-    }
-
-    if (write(fd, str, strlen(str)+1) < 0) {
-        fprintf(stderr, "Failed to write %s to file %s.\n", str, path);
-        close(fd);
-        return -1;
-    }
-
-    close(fd);
-
-    return 0;
+    return write_str_file(path, str);
 }
