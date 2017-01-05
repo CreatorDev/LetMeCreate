@@ -28,7 +28,7 @@
 #include <unistd.h>
 #include <letmecreate/core/switch.h>
 
-#define DEVICE_FILE         "/dev/input/event1"
+#define DEVICE_FILE         "/dev/input/event0"
 #define TIMEOUT             (20)        /* 20 ms timeout while polling */
 #define SWITCH_1_CODE       (257)
 #define SWITCH_2_CODE       (258)
