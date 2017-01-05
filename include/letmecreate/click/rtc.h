@@ -16,12 +16,12 @@
 /** Structure to represent a date */
 struct date {
     uint16_t year;          /**< Must be in range year_offset..year_offset+3 */
-    unsigned int month:4;   /**< Must be in range 0..11 */
-    unsigned int day:5;     /**< Must be in range 1..31 */
-    unsigned int weekday:4; /**< Must be in range 0..6 */
-    unsigned int hour:5;    /**< Must be in range 0..23 */
-    unsigned int minute:6;  /**< Must be in range 0..59 */
-    unsigned int second:6;  /**< Must be in range 0..59 */
+    uint8_t month;          /**< Must be in range 0..11 */
+    uint8_t day;            /**< Must be in range 1..31 */
+    uint8_t weekday;        /**< Must be in range 0..6 */
+    uint8_t hour;           /**< Must be in range 0..23 */
+    uint8_t minute;         /**< Must be in range 0..59 */
+    uint8_t second;         /**< Must be in range 0..59 */
 };
 
 /**
