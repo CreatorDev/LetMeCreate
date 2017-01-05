@@ -325,19 +325,12 @@ int gpio_monitor_add_callback(uint8_t gpio_pin, uint8_t event_mask, void(*callba
     watch->gpio_pin = gpio_pin;
     watch->event_mask = event_mask;
     watch->callback = callback;
-    watch->next = NULL;
 
     /* Add to end of gpio watch list */
-    if (gpio_watch_list_head == NULL) {
-        pthread_mutex_lock(&gpio_watch_mutex);
-        gpio_watch_list_head = watch;
-        pthread_mutex_unlock(&gpio_watch_mutex);
-    } else {
-        pthread_mutex_lock(&gpio_watch_mutex);
-        watch->next = gpio_watch_list_head;
-        gpio_watch_list_head = watch;
-        pthread_mutex_unlock(&gpio_watch_mutex);
-    }
+    pthread_mutex_lock(&gpio_watch_mutex);
+    watch->next = gpio_watch_list_head;
+    gpio_watch_list_head = watch;
+    pthread_mutex_unlock(&gpio_watch_mutex);
 
     return watch->ID;
 }
