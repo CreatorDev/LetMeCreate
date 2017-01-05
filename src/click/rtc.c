@@ -89,10 +89,10 @@ int rtc_click_set_date(struct date date)
     ||  date.minute > 59
     ||  date.hour > 23
     ||  date.day == 0
-    ||  date.month == 0
     ||  date.month > 12
     ||  (date.day > 31 && (date.month == 1 || date.month == 3 || date.month == 5 || date.month == 7 || date.month == 8 || date.month == 10 || date.month == 12))
     ||  (date.day > 30 && (date.month == 4 || date.month == 6 || date.month == 9 || date.month == 11))
+    ||  (date.day > 29 && date.month == 2)
     ||  date.weekday > 6
     ||  date.year > 3) {
         fprintf(stderr, "Invalid date.\n");
