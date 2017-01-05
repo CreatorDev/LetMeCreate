@@ -30,5 +30,5 @@ int uni_hall_click_attach_callback(uint8_t mikrobus_index, void (*callback)(uint
     ||  gpio_monitor_init() < 0)
         return -1;
 
-    return gpio_monitor_add_callback(gpio_pin, GPIO_FALLING, callback);
+    return gpio_monitor_add_callback(gpio_pin, GPIO_EDGE, callback);
 }
