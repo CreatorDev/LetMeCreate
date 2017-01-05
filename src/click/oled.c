@@ -11,7 +11,7 @@
 /* I2C address of SSD1306 */
 #define SSD1306_ADDRESS             (0x3C)
 
-#define DATA_ONLY                   (0xC0)
+#define DATA_ONLY                   (0x60)
 
 /* Commands of the OLED display controller */
 #define SSD1306_DISPLAYOFF              (0xAE)
@@ -251,7 +251,7 @@ int oled_click_enable(uint8_t mikrobus_index)
     ||  oled_click_cmd(SSD1306_SETDISPLAYCLOCKDIV) < 0        /* 0xD5 Set Display Clock Divide Ratio/Oscillator Frequency */
     ||  oled_click_cmd(0x80) < 0
     ||  oled_click_cmd(SSD1306_SETMULTIPLEX) < 0              /* 0xA8 Set Multiplex Ratio */
-    ||  oled_click_cmd(0x27) < 0
+    ||  oled_click_cmd(SSD1306_LCDHEIGHT) < 0
     ||  oled_click_cmd(SSD1306_SETDISPLAYOFFSET) < 0          /* 0xD3 Set Display Offset */
     ||  oled_click_cmd(0x00) < 0
     ||  oled_click_cmd(SSD1306_SETSTARTLINE) < 0              /* 0x40 Set Display Start Line */
