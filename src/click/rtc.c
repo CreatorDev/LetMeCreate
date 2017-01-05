@@ -9,8 +9,8 @@
 #define PCF8583_SECOND_REG      (0x02)
 #define PCF8583_TIMER_REG       (0x07)
 
-#define TWELVE_HOUR_FORMAT          (0x80)
-#define PM_FLAG             (0x40)
+#define TWELVE_HOUR_FORMAT      (0x80)
+#define PM_FLAG                 (0x40)
 
 static uint16_t year_offset = 0;
 
@@ -93,8 +93,6 @@ int rtc_click_set_date(struct date date)
     ||  date.month > 12
     ||  (date.day > 31 && (date.month == 1 || date.month == 3 || date.month == 5 || date.month == 7 || date.month == 8 || date.month == 10 || date.month == 12))
     ||  (date.day > 30 && (date.month == 4 || date.month == 6 || date.month == 9 || date.month == 11))
-    ||  (date.day > 29 && date.year == 0)
-    ||  (date.day > 28 && date.year != 0)
     ||  date.weekday > 6
     ||  date.year > 3) {
         fprintf(stderr, "Invalid date.\n");
