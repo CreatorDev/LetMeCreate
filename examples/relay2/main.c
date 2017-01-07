@@ -8,7 +8,7 @@ int main(void)
         switch (counter % 4) {
         case 0:
             relay2_click_disable_relay(MIKROBUS_1, RELAY2_CLICK_RELAY_1);
-            relay2_click_disable_relay(MIKROBUS_1, RELAY2_CLICK_RELAY_1);
+            relay2_click_disable_relay(MIKROBUS_1, RELAY2_CLICK_RELAY_2);
             break;
         case 1:
             relay2_click_enable_relay(MIKROBUS_1, RELAY2_CLICK_RELAY_1);
