@@ -13,8 +13,12 @@
 #include "examples/common.h"
 
 
-void flash_leds(uint8_t __attribute__ ((unused))null)
+void flash_leds(uint8_t arg)
 {
+    /* Only flash LED's when motion starts getting detected. */
+    if (arg != 1)
+        return;
+
     int x = 0;
     for(; x < 10; ++x) {
         led_switch_on(ALL_LEDS);
