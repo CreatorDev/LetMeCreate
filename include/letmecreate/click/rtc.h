@@ -13,45 +13,21 @@
 #include <stdint.h>
 #include <letmecreate/click/export.h>
 
-enum WEEKDAY {
-    MONDAY,
-    TUESDAY,
-    WEDNESDAY,
-    THURSDAY,
-    FRIDAY,
-    SATURDAY,
-    SUNDAY
-};
-
-enum MONTH {
-    JANUARY,
-    FEBRUARY,
-    MARCH,
-    APRIL,
-    MAY,
-    JUNE,
-    JULY,
-    AUGUST,
-    SEPTEMBER,
-    OCTOBER,
-    NOVEMBER,
-    DECEMBER
-};
-
+/** Structure to represent a date */
 struct date {
     uint16_t year;          /**< Must be in range year_offset..year_offset+3 */
-    unsigned int month:4;   /**< Must be in range 0..11 */
-    unsigned int day:5;
-    unsigned int weekday:4; /**< Must be in range 0..6 */
-    unsigned int hour:5;
-    unsigned int minute:6;
-    unsigned int second:6;
+    uint8_t month;          /**< Must be in range 0..11 */
+    uint8_t day;            /**< Must be in range 1..31 */
+    uint8_t weekday;        /**< Must be in range 0..6 */
+    uint8_t hour;           /**< Must be in range 0..23 */
+    uint8_t minute;         /**< Must be in range 0..59 */
+    uint8_t second;         /**< Must be in range 0..59 */
 };
 
 /**
  * @brief Initialise the RTC Click.
  *
- * @param[in] year_offset RTC Click store year on 2 bits only. year_offset is
+ * @param[in] year_offset RTC Click stores year on 2 bits only. year_offset is
  * used to compute year as year_offset + 2bits from RTC click.
  * @return 0 if successful, -1 otherwise
  */

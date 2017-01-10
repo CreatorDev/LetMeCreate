@@ -16,7 +16,6 @@
 #define SHUTDOWN_MODE           (0x01)
 #define CONVERSION_RATE         (0xC0)
 
-static bool enabled = false;
 static uint8_t last_address_bit = 0;
 
 int thermo3_click_enable(uint8_t add_bit)
@@ -38,8 +37,6 @@ int thermo3_click_enable(uint8_t add_bit)
         return -1;
     }
 
-    enabled = true;
-
     return 0;
 }
 
@@ -49,11 +46,6 @@ int thermo3_click_get_temperature(float *temperature)
 
     if (temperature == NULL) {
         fprintf(stderr, "thermo3: Cannot store temperature using null pointer.\n");
-        return -1;
-    }
-
-    if (enabled == false) {
-        fprintf(stderr, "thermo3: Cannot get temperature from disabled sensor.\n");
         return -1;
     }
 
@@ -131,8 +123,6 @@ int thermo3_click_disable(void)
         fprintf(stderr, "thermo3: Failed to shutdown sensor.\n");
         return -1;
     }
-
-    enabled = false;
 
     return 0;
 }

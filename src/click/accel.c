@@ -40,7 +40,6 @@
 
 #define G_PER_LSB           (0.004f)   /* 4mg/LSB */
 
-static bool enabled = false;
 static bool use_spi = true;
 static uint16_t slave_address = ADXL345_ADDRESS_0;
 
@@ -68,9 +67,6 @@ void accel_click_use_i2c(uint8_t add_bit)
 
 int accel_click_enable(void)
 {
-    if (enabled)
-        return 0;
-
     if (write_register(POWER_CTRL_REG, MEASURE_EN | WAKEUP_DATA_RATE) < 0) {
         fprintf(stderr, "accel: Failed to enable device.\n");
         return -1;
@@ -91,8 +87,6 @@ int accel_click_enable(void)
         return -1;
     }
 
-    enabled = true;
-
     return 0;
 }
 
@@ -100,11 +94,6 @@ int accel_click_get_measure(float *accelX, float *accelY, float *accelZ)
 {
     uint8_t rx_buffer[7];
     int16_t x, y, z;
-
-    if (enabled == false) {
-        fprintf(stderr, "accel: Cannot get measure while device is shutdown.\n");
-        return -1;
-    }
 
     if (accelX == NULL || accelY == NULL || accelZ == NULL) {
         fprintf(stderr, "accel: Cannot store acceleration using null pointers.\n");
@@ -138,15 +127,10 @@ int accel_click_get_measure(float *accelX, float *accelY, float *accelZ)
 
 int accel_click_disable(void)
 {
-    if (enabled == false)
-        return 0;
-
     if (write_register(POWER_CTRL_REG, SLEEP_EN) < 0) {
         fprintf(stderr, "accel: Failed to shutdown device.\n");
         return -1;
     }
-
-    enabled = false;
 
     return 0;
 }

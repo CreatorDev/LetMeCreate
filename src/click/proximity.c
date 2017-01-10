@@ -21,13 +21,8 @@
 #define PROXIMITY_RATE          (1)         /* 3.90625 measurements per second */
 #define LED_CURRENT             (4)         /* 40mA */
 
-static bool enabled = false;
-
 int proximity_click_enable(void)
 {
-    if (enabled)
-        return 0;
-
     if (i2c_write_register(VCNL4010_ADDRESS, PROXRATE_REG, PROXIMITY_RATE) < 0) {
         fprintf(stderr, "proximity: Failed to set measurement rate.\n");
         return -1;
@@ -44,8 +39,6 @@ int proximity_click_enable(void)
         return -1;
     }
 
-    enabled = true;
-
     return 0;
 }
 
@@ -55,11 +48,6 @@ int proximity_click_get_measure(uint16_t *measure)
 
     if (measure == NULL) {
         fprintf(stderr, "proximity: Cannot store measure using null pointer.\n");
-        return -1;
-    }
-
-    if (enabled == false) {
-        fprintf(stderr, "proximity: Cannot get measure from disabled sensor.\n");
         return -1;
     }
 
@@ -80,15 +68,10 @@ int proximity_click_get_measure(uint16_t *measure)
 
 int proximity_click_disable(void)
 {
-    if (enabled == false)
-        return 0;
-
     if (i2c_write_register(VCNL4010_ADDRESS, COMMAND_REG, 0) < 0) {
         fprintf(stderr, "proximity: Failed to disable sensor.\n");
         return -1;
     }
-
-    enabled = false;
 
     return 0;
 }

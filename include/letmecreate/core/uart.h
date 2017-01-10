@@ -23,12 +23,14 @@ enum UART_BAUDRATE {
     UART_BD_57600   = 57600
 };
 
-#define UART_TIMEOUT_NEVER 0
+/** Special timeout value to disable it. Make uart_read blocking */
+#define UART_TIMEOUT_NEVER      (0)
 
 /**
  * @brief Initialise all UART devices.
  *
- * Set the baud rate to 9600. Set current UART device to MIKROBUS_1.
+ * Set the baud rate to 9600. Set current UART device to MIKROBUS_1. Disable
+ * timeout (set it to 0).
  *
  * @return 0 if successful, -1 otherwise
  */

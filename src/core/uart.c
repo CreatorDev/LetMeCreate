@@ -83,6 +83,8 @@ static int uart_init_bus(uint8_t mikrobus_index)
         return -1;
     }
 
+    timeout_for_bus[mikrobus_index] = UART_TIMEOUT_NEVER;
+
     return 0;
 }
 

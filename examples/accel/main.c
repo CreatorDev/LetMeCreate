@@ -35,6 +35,7 @@ int main(void)
 
     spi_init();
     spi_select_bus(MIKROBUS_1);
+    accel_click_use_spi();
     accel_click_enable();
 
     printf("Press Ctrl+c to exit program.\n");

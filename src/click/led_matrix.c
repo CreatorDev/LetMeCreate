@@ -18,8 +18,6 @@
 
 #define MAX_DISPLAYED   (0x63)
 
-static bool enabled = false;
-
 static uint8_t display_numbers[10][COL_CNT/2] = {
     { 0x3C, 0x42, 0x42, 0x3C }, // 0
     { 0x00, 0x7E, 0x20, 0x10 }, // 1
@@ -35,9 +33,6 @@ static uint8_t display_numbers[10][COL_CNT/2] = {
 
 int led_matrix_click_enable(void)
 {
-    if (enabled)
-        return 0;
-
     if (spi_write_register(SHUTDOWN, 0x01) < 0) {
         fprintf(stderr, "led_matrix: Failed to leave shutdown mode.\n");
         return -1;
@@ -58,8 +53,6 @@ int led_matrix_click_enable(void)
         return -1;
     }
 
-    enabled = true;
-
     return 0;
 }
 
@@ -68,11 +61,6 @@ int led_matrix_click_set_intensity(uint8_t intensity)
     uint8_t i = intensity;
     if (intensity > MAX_INTENSITY)
         i = MAX_INTENSITY;
-
-    if (enabled == false) {
-        fprintf(stderr, "led_matrix: Cannot set intensity if disabled.\n");
-        return -1;
-    }
 
     if (spi_write_register(INTENSITY, i) < 0) {
         fprintf(stderr, "led_matrix: Failed to set intensity.\n");
@@ -86,11 +74,6 @@ int led_matrix_click_set_column(uint8_t column_index, uint8_t data)
 {
     if (column_index >= COL_CNT) {
         fprintf(stderr, "led_matrix: Invalid column index.\n");
-        return -1;
-    }
-
-    if (enabled == false) {
-        fprintf(stderr, "led_matrix: Cannot switch on/off leds while device is shutdown.\n");
         return -1;
     }
 
@@ -136,11 +119,6 @@ int led_matrix_click_set(const uint8_t *columns)
         return -1;
     }
 
-    if (enabled == false) {
-        fprintf(stderr, "led_matrix: Cannot switch on/off leds while device is shutdown.\n");
-        return -1;
-    }
-
     for (i = 0; i < COL_CNT; ++i) {
         if (spi_write_register(COL(i), columns[i]) < 0) {
             fprintf(stderr, "led_matrix: Failed to switch on/off leds.\n");
@@ -153,15 +131,10 @@ int led_matrix_click_set(const uint8_t *columns)
 
 int led_matrix_click_disable(void)
 {
-    if (enabled == false)
-        return 0;
-
     if (spi_write_register(SHUTDOWN, 0x00) < 0) {
         fprintf(stderr, "led_matrix: Failed to shutdown device.\n");
         return -1;
     }
-
-    enabled = false;
 
     return 0;
 }

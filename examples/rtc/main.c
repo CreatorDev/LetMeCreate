@@ -15,6 +15,30 @@
 #include <unistd.h>
 #include <letmecreate/letmecreate.h>
 
+enum WEEKDAY {
+    MONDAY,
+    TUESDAY,
+    WEDNESDAY,
+    THURSDAY,
+    FRIDAY,
+    SATURDAY,
+    SUNDAY
+};
+
+enum MONTH {
+    JANUARY,
+    FEBRUARY,
+    MARCH,
+    APRIL,
+    MAY,
+    JUNE,
+    JULY,
+    AUGUST,
+    SEPTEMBER,
+    OCTOBER,
+    NOVEMBER,
+    DECEMBER
+};
 
 static char *weekday_str[] = {
     "Monday",

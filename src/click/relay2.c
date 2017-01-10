@@ -62,7 +62,7 @@ int relay2_click_set_relay_state(uint8_t mikrobus_index, uint8_t relay, uint8_t 
     return 0;
 }
 
-int LETMECREATE_CLICK_EXPORT relay2_click_get_relay_state(uint8_t mikrobus_index, uint8_t relay, uint8_t *state)
+int relay2_click_get_relay_state(uint8_t mikrobus_index, uint8_t relay, uint8_t *state)
 {
     uint8_t gpio_pin = 0;
     int ret = 0;

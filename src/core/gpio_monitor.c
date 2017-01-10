@@ -187,11 +187,9 @@ static int add_inotify_watch(uint8_t gpio_pin)
         inotify_watch_list_head = watch;
         pthread_mutex_unlock(&inotify_watch_mutex);
     } else {
-        struct inotify_watch *last = inotify_watch_list_head;
-        while (last->next)
-            last = last->next;
         pthread_mutex_lock(&inotify_watch_mutex);
-        last->next = watch;
+        watch->next = inotify_watch_list_head;
+        inotify_watch_list_head = watch;
         pthread_mutex_unlock(&inotify_watch_mutex);
     }
 
@@ -327,21 +325,12 @@ int gpio_monitor_add_callback(uint8_t gpio_pin, uint8_t event_mask, void(*callba
     watch->gpio_pin = gpio_pin;
     watch->event_mask = event_mask;
     watch->callback = callback;
-    watch->next = NULL;
 
     /* Add to end of gpio watch list */
-    if (gpio_watch_list_head == NULL) {
-        pthread_mutex_lock(&gpio_watch_mutex);
-        gpio_watch_list_head = watch;
-        pthread_mutex_unlock(&gpio_watch_mutex);
-    } else {
-        struct gpio_watch *last = gpio_watch_list_head;
-        while (last->next)
-            last = last->next;
-        pthread_mutex_lock(&gpio_watch_mutex);
-        last->next = watch;
-        pthread_mutex_unlock(&gpio_watch_mutex);
-    }
+    pthread_mutex_lock(&gpio_watch_mutex);
+    watch->next = gpio_watch_list_head;
+    gpio_watch_list_head = watch;
+    pthread_mutex_unlock(&gpio_watch_mutex);
 
     return watch->ID;
 }

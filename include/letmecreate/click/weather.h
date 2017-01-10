@@ -18,8 +18,16 @@
  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ************************************************************************************************************************/
 
+/**
+ * @file weather.h
+ * @author Rafal Baranowski, Bartlomiej Zarnowski
+ * @date 2016
+ * @copyright 3-clause BSD
+ */
+
 #ifndef __LETMECREATE_CLICK_WEATHER_H__
 #define __LETMECREATE_CLICK_WEATHER_H__
+
 #include <letmecreate/click/export.h>
 
 /**

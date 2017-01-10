@@ -52,7 +52,7 @@ int LETMECREATE_CLICK_EXPORT oled_click_set_contrast(uint8_t contrast);
  * Each bit of the array represents the state of a pixel. The first 96 bytes represent
  * the first page (96x8 pixels), the following 96 bytes represent the second page...
  *
- * @param[in] data Array of bytes of length 258 (96x4).
+ * @param[in] data Array of bytes of length 384 (96x4).
  * @return 0 if successful, -1 otherwise
  */
 int LETMECREATE_CLICK_EXPORT oled_click_raw_write(uint8_t *data);

@@ -58,7 +58,7 @@ int opto_click_attach_callback(uint8_t mikrobus_index, uint8_t channel_index, vo
     return 0;
 }
 
-int LETMECREATE_CLICK_EXPORT opto_click_read_channel(uint8_t mikrobus_index, uint8_t channel_index, uint8_t *state)
+int opto_click_read_channel(uint8_t mikrobus_index, uint8_t channel_index, uint8_t *state)
 {
     uint8_t gpio_pin = 0;
 
