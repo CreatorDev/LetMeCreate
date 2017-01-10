@@ -20,7 +20,7 @@ int main(void)
 
     thermo3_click_enable(0);
     thermo3_click_get_temperature(&temperature);
-    printf("temperature: %.3f°C\n", temperature);
+    printf("temperature: %.3f degrees celsius\n", temperature);
     thermo3_click_disable();
 
     i2c_release();
