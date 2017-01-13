@@ -5,10 +5,10 @@
 ## Build status
 
 **Master**  
-[![Build Status](https://travis-ci.org/francois-berder/LetMeCreate.svg?branch=master)](https://travis-ci.org/francois-berder/LetMeCreate)
+[![Build Status](https://travis-ci.org/CreatorDev/LetMeCreate.svg?branch=master)](https://travis-ci.org/CreatorDev/LetMeCreate)
 
 **Dev**  
-[![Build Status](https://travis-ci.org/francois-berder/LetMeCreate.svg?branch=dev)](https://travis-ci.org/francois-berder/LetMeCreate)
+[![Build Status](https://travis-ci.org/CreatorDev/LetMeCreate.svg?branch=dev)](https://travis-ci.org/CreatorDev/LetMeCreate)
 
 ## Introduction
 
