@@ -8,6 +8,10 @@
 #ifndef __LETMECREATE_RPISENSEHAT_LSM9DS1_H__
 #define __LETMECREATE_RPISENSEHAT_LSM9DS1_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 /**
  * @brief Enable sensor.
  *
@@ -61,5 +65,9 @@ int lsm9ds1_get_magnetometer_measure(float *magX, float *magY, float *magZ);
  * @return 0 if successful, -1 otherwise
  */
 int lsm9ds1_disable(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

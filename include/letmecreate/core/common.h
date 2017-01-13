@@ -9,6 +9,10 @@
 #ifndef __LETMECREATE_CORE_COMMON_H__
 #define __LETMECREATE_CORE_COMMON_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdint.h>
 
 /** Maximum string length when opening device file
@@ -79,5 +83,9 @@ int export_pin(const char *dir_path, uint32_t pin_no);
  * @return 0 if successful, -1 otherwise
  */
 int unexport_pin(const char *dir_path, uint32_t pin_no);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

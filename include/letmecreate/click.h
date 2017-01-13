@@ -9,6 +9,10 @@
 #ifndef __LETMECREATE_CLICK_H__
 #define __LETMECREATE_CLICK_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <letmecreate/click/7seg.h>
 #include <letmecreate/click/accel.h>
 #include <letmecreate/click/adc.h>
@@ -40,5 +44,9 @@
 #include <letmecreate/click/thermo3.h>
 #include <letmecreate/click/uni_hall.h>
 #include <letmecreate/click/weather.h>
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

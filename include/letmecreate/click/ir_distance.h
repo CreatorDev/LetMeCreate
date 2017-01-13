@@ -8,6 +8,10 @@
 #ifndef __LETMECREATE_CLICK_IR_DISTANCE_H__
 #define __LETMECREATE_CLICK_IR_DISTANCE_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdint.h>
 #include <letmecreate/click/export.h>
 
@@ -35,5 +39,9 @@ int LETMECREATE_CLICK_EXPORT ir_distance_click_get_measure(uint8_t mikrobus_inde
  * @return 0 if successful, -1 otherwise
  */
 int LETMECREATE_CLICK_EXPORT ir_distance_click_disable(uint8_t mikrobus_index);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

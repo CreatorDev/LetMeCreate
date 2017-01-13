@@ -10,6 +10,10 @@
 #ifndef __LETMECREATE_CLICK_OPTO_H__
 #define __LETMECREATE_CLICK_OPTO_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdint.h>
 #include <letmecreate/click/export.h>
 
@@ -47,5 +51,9 @@ int LETMECREATE_CLICK_EXPORT opto_click_attach_callback(uint8_t mikrobus_index, 
  * @return 0 if successful, -1 otherwise
  */
 int LETMECREATE_CLICK_EXPORT opto_click_read_channel(uint8_t mikrobus_index, uint8_t channel_index, uint8_t *state);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

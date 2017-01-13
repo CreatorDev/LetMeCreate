@@ -9,6 +9,10 @@
 #ifndef __LETMECREATE_CORE_UART_H__
 #define __LETMECREATE_CORE_UART_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdint.h>
 #include <letmecreate/core/export.h>
 
@@ -114,5 +118,9 @@ void LETMECREATE_CORE_EXPORT uart_set_timeout(uint32_t timeout);
  * @return 0 if successful, -1 otherwise
  */
 int LETMECREATE_CORE_EXPORT uart_release(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

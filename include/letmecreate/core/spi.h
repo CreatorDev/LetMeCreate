@@ -9,6 +9,10 @@
 #ifndef __LETMECREATE_CORE_SPI_H__
 #define __LETMECREATE_CORE_SPI_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdint.h>
 #include <letmecreate/core/export.h>
 
@@ -96,5 +100,9 @@ int LETMECREATE_CORE_EXPORT spi_transfer(const uint8_t *tx_buffer, uint8_t *rx_b
  * @return 0 if successful, otherwise it returns -1.
  */
 int LETMECREATE_CORE_EXPORT spi_release(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

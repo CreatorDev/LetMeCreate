@@ -9,6 +9,14 @@
 #ifndef __LETMECREATE_RPISENSEHAT_H__
 #define __LETMECREATE_RPISENSEHAT_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <letmecreate/rpisensehat/board.h>
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

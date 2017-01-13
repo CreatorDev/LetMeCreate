@@ -9,6 +9,10 @@
 #ifndef __LETMECREATE_CORE_GPIO_H__
 #define __LETMECREATE_CORE_GPIO_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdint.h>
 #include <letmecreate/core/export.h>
 
@@ -131,5 +135,9 @@ int LETMECREATE_CORE_EXPORT gpio_get_value(uint8_t gpio_pin, uint8_t *value);
  * @return 0 if successful, -1 otherwise
  */
 int LETMECREATE_CORE_EXPORT gpio_release(uint8_t gpio_pin);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

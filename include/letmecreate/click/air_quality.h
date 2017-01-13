@@ -9,6 +9,10 @@
 #ifndef __LETMECREATE_CLICK_AIR_QUALITY_H__
 #define __LETMECREATE_CLICK_AIR_QUALITY_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdint.h>
 #include <letmecreate/click/export.h>
 
@@ -20,5 +24,9 @@
  * @return 0 if successful, -1 otherwise.
  */
 int LETMECREATE_CLICK_EXPORT air_quality_click_get_measure(uint8_t mikrobus_index, uint16_t *measure);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

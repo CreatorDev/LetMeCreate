@@ -10,6 +10,10 @@
 #ifndef __LETMECREATE_CLICK_RELAY2_H__
 #define __LETMECREATE_CLICK_RELAY2_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdint.h>
 #include <letmecreate/click/export.h>
 
@@ -57,5 +61,9 @@ int relay2_click_set_relay_state(uint8_t mikrobus_index, uint8_t relay, uint8_t 
  * @return 0 if successful, -1 otherwise
  */
 int LETMECREATE_CLICK_EXPORT relay2_click_get_relay_state(uint8_t mikrobus_index, uint8_t relay, uint8_t *state);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

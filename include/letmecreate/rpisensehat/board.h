@@ -9,6 +9,10 @@
 #ifndef __LETMECREATE_RPISENSEHAT_BOARD_H__
 #define __LETMECREATE_RPISENSEHAT_BOARD_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdint.h>
 #include <letmecreate/rpisensehat/export.h>
 
@@ -118,5 +122,9 @@ int LETMECREATE_RPISENSEHAT_EXPORT rpisensehat_display_rainbow(void);
  * @return 0 if successful, -1 otherwise.
  */
 int LETMECREATE_RPISENSEHAT_EXPORT rpisensehat_release(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

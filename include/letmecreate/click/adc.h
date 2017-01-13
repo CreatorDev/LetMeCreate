@@ -10,6 +10,9 @@
 #ifndef __LETMECREATE_CLICK_ADC_H__
 #define __LETMECREATE_CLICK_ADC_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
 
 #include <stdint.h>
 #include <letmecreate/click/export.h>
@@ -32,5 +35,9 @@ enum ADC_CLICK_CHANNEL_INDEX {
  * @return 0 if successful, otherwise it returns -1.
  */
 int LETMECREATE_CLICK_EXPORT adc_click_get_raw_value(uint8_t channel, uint16_t *value);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -10,6 +10,10 @@
 #ifndef __LETMECREATE_CLICK_JOYSTICK_H__
 #define __LETMECREATE_CLICK_JOYSTICK_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdint.h>
 #include <letmecreate/click/export.h>
 
@@ -54,6 +58,10 @@ int LETMECREATE_CLICK_EXPORT joystick_click_get_y(int8_t * y);
  * @return 0 if successful, otherwise it returns -1.
  */
 int LETMECREATE_CLICK_EXPORT joystick_click_get_position(int8_t * x, int8_t * y);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

@@ -8,6 +8,10 @@
 #ifndef __LETMECREATE_CLICK_GYRO_H__
 #define __LETMECREATE_CLICK_GYRO_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <letmecreate/click/export.h>
 
 
@@ -54,5 +58,9 @@ int LETMECREATE_CLICK_EXPORT gyro_click_get_measure(float *x, float *y, float *z
  * @return 0 if successful, -1 otherwise
  */
 int LETMECREATE_CLICK_EXPORT gyro_click_disable(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

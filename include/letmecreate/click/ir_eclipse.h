@@ -8,6 +8,10 @@
 #ifndef __LETMECREATE_CLICK_IR_ECLIPSE_H__
 #define __LETMECREATE_CLICK_IR_ECLIPSE_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdint.h>
 #include <letmecreate/click/export.h>
 
@@ -22,5 +26,9 @@
  * @return A callback ID (positive integer) if successful, -1 otherwise
  */
 int LETMECREATE_CLICK_EXPORT ir_eclipse_click_add_callback(uint8_t mikrobus_index, void (*callback)(uint8_t));
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

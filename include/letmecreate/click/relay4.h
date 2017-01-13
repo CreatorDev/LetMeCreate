@@ -30,6 +30,10 @@
 #ifndef __LETMECREATE_CLICK_RELAY4_H__
 #define __LETMECREATE_CLICK_RELAY4_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdint.h>
 #include <letmecreate/click/export.h>
 
@@ -78,5 +82,9 @@ int LETMECREATE_CLICK_EXPORT relay4_click_get_state(uint8_t pin_index, uint8_t* 
  * @return 0 if successful, -1 otherwise
  */
 int LETMECREATE_CLICK_EXPORT relay4_click_toggle(uint8_t pin_index);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __LETMECREATE_CLICK_RELAY4_H__ */

@@ -8,6 +8,10 @@
 #ifndef __LETMECREATE_CORE_I2C_H__
 #define __LETMECREATE_CORE_I2C_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdint.h>
 #include <letmecreate/core/export.h>
 
@@ -125,5 +129,9 @@ int LETMECREATE_CORE_EXPORT i2c_read_16b_register(uint16_t address, uint8_t reg_
  * @return Returns -1 if it fails, otherwise it returns 0.
  */
 int LETMECREATE_CORE_EXPORT i2c_release(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

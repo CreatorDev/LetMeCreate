@@ -9,6 +9,10 @@
 #ifndef __LETMECREATE_RPISENSEHAT_ATTINY88_H__
 #define __LETMECREATE_RPISENSEHAT_ATTINY88_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdint.h>
 
 /** Values for each joystick position */
@@ -66,5 +70,9 @@ int attiny88_display_rainbow(void);
  * @return 0 if successful, -1 otherwise
  */
 int attiny88_disable(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

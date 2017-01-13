@@ -9,6 +9,10 @@
 #ifndef __LETMECREATE_RPISENSEHAT_HTS221_H__
 #define __LETMECREATE_RPISENSEHAT_HTS221_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 /**
  * @brief Enable and configure sensor.
  *
@@ -50,5 +54,9 @@ int hts221_get_humidity_measure(float *humidity);
  * @return 0 if successful, -1 otherwise
  */
 int hts221_disable(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -10,6 +10,10 @@
 #ifndef __LETMECREATE_CLICK_LED_MATRIX_H__
 #define __LETMECREATE_CLICK_LED_MATRIX_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdint.h>
 #include <letmecreate/click/export.h>
 
@@ -66,5 +70,9 @@ int LETMECREATE_CLICK_EXPORT led_matrix_click_set(const uint8_t *columns);
  * @return 0 if successful, -1 otherwise
  */
 int LETMECREATE_CLICK_EXPORT led_matrix_click_disable(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

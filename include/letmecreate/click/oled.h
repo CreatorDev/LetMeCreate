@@ -10,6 +10,10 @@
 #ifndef __LETMECREATE_CLICK_OLED_H__
 #define __LETMECREATE_CLICK_OLED_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdint.h>
 #include <letmecreate/click/export.h>
 
@@ -80,5 +84,9 @@ int LETMECREATE_CLICK_EXPORT oled_click_get_char(char c, const uint8_t **out);
  * @return 0 if successful, -1 otherwise
  */
 int LETMECREATE_CLICK_EXPORT oled_click_disable(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

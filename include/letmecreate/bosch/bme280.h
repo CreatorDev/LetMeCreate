@@ -59,6 +59,7 @@
 #ifndef __BME280_H__
 #define __BME280_H__
 
+
 #include <letmecreate/bosch/export.h>
 
 /*!
@@ -1712,4 +1713,9 @@ s32 v_uncom_pressure_s32);
  */
 BME280_RETURN_FUNCTION_TYPE LETMECREATE_BOSCH_EXPORT bme280_compute_wait_time(u8
 *v_delaytime_u8);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif
