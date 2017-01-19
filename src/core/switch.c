@@ -5,10 +5,14 @@
  * This polling activity is executed in a different thread to avoid blocking the
  * rest of the application. This thread is called the monitoring thread.
  *
- * The monitoring thread waits for events being written to /dev/input/event1. To do
- * so, it relies on the poll function whose return value indicates if some data can
- * be read or not. Once an event is read, the monitoring thread iterates through
- * the list of callbacks and call those who subscribed to this event. Notice, that
+ * At initilisation, the wrapper reads /proc/bus/input/devices which contains
+ * the list of input devices and their associated file in /dev/input.
+ *
+ * The monitoring thread waits for events being written to one of the input
+ * file (typicall /dev/input/event0 or /dev/input/event1). To do so, it relies
+ * on the poll function whose return value indicates if some data can be read
+ * or not. Once an event is read, the monitoring thread iterates through the
+ * list of callbacks and call those who subscribed to this event. Notice, that
  * the monitoring thread never modifies (add/remove entries) the callback list.
  *
  * The rest of the code is executed in the main thread. To ensure that the
@@ -119,7 +123,9 @@ static void* switch_update(void __attribute__ ((unused))*arg)
     running = true;
     while (running) {
         /*
-         * Polls on file /dev/input/event1.
+         * Polls on file returned by function find_file_descriptor
+         * (typically /dev/input/event0 or /dev/input/event1).
+         *
          * The timeout is set to 20ms. Hence, the function will return after at most
          * 20ms. This is required to ensure that the boolean variable running
          * is checked frequently. If no timeout was given and no events detected,
