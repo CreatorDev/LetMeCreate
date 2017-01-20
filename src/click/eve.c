@@ -1512,6 +1512,7 @@ int eve_click_snapshot(uint32_t ptr, uint8_t *data)
 {
     uint32_t buffer[2];
     uint32_t total_bytes_to_read = 480 * 272 * 2;
+    uint32_t maximum_tranfer_length = 0;
 
     if (ft800_enabled == false)
         return -1;
@@ -1537,13 +1538,16 @@ int eve_click_snapshot(uint32_t ptr, uint8_t *data)
         return -1;
     }
 
-    /* Read in chunk of max 4092 bytes because SPI driver fails to do transfer
-     * of more than 4kB.
-     */
+    if (spi_get_maximum_tranfer_length(&maximum_tranfer_length) < 0)
+        maximum_tranfer_length = FIFO_SIZE;
+    else
+        maximum_tranfer_length &= ~0x3;
+    maximum_tranfer_length -= FIFO_CMD_SIZE;
+
     while (total_bytes_to_read > 0) {
         uint32_t count = total_bytes_to_read;
-        if (count > (FIFO_SIZE - FIFO_CMD_SIZE))
-            count = FIFO_SIZE - FIFO_CMD_SIZE;
+        if (count > maximum_tranfer_length)
+            count = maximum_tranfer_length;
 
         if (memory_read(ptr, data, count) < 0)
             return -1;
