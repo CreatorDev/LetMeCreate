@@ -1,6 +1,6 @@
 /**
  * @file gpio.h
- * @author Francois Berder
+ * @author Francois Berder, Michal Tusnio
  * @date 2016
  * @copyright 3-clause BSD
  */
@@ -15,6 +15,15 @@ extern "C"{
 
 #include <stdint.h>
 #include <letmecreate/core/export.h>
+
+/** Mikrobus pin type */
+enum PIN_TYPE {
+    TYPE_AN,
+    TYPE_RST,
+    TYPE_PWM,
+    TYPE_INT,
+    TYPE_COUNT
+};
 
 /** GPIO pin number */
 enum GPIO_PIN {
@@ -87,6 +96,16 @@ enum GPIO_DIR {
  * @return 0 if successful, -1 otherwise
  */
 int LETMECREATE_CORE_EXPORT gpio_init(uint8_t gpio_pin);
+
+/**
+ * @brief Returns GPIO index of a pin on provided mikrobus
+ *
+ * @param[in] mikrobus_index Index of the Mikrobus
+ * @param[in] pin_type Type of the desired pin
+ * @param[out] pin Pointer to a variable awaiting the pin index
+ * @return 0 if successful, -1 otherwise
+ */
+int LETMECREATE_CORE_EXPORT gpio_get_pin(uint8_t mikrobus_index, uint8_t pin_type, uint8_t * pin);
 
 /**
  * @brief Configure GPIO as input or output.

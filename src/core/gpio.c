@@ -47,6 +47,11 @@
 #define GPIO_PATH_FORMAT        "/sys/class/gpio/gpio%d/%s"
 
 
+static const uint8_t pin_lookup[MIKROBUS_COUNT][TYPE_COUNT] = {
+  { MIKROBUS_1_AN, MIKROBUS_1_RST, MIKROBUS_1_PWM, MIKROBUS_1_INT },
+  { MIKROBUS_2_AN, MIKROBUS_2_RST, MIKROBUS_2_PWM, MIKROBUS_2_INT }
+};
+
 static bool check_pin(uint8_t pin)
 {
     switch (pin) {
@@ -166,6 +171,26 @@ int gpio_init(uint8_t gpio_pin)
     }
 
     return gpio_set_direction(gpio_pin, GPIO_INPUT);
+}
+
+int gpio_get_pin(uint8_t mikrobus_index, uint8_t pin_type, uint8_t * pin)
+{
+    if (pin == NULL) {
+        fprintf(stderr, "gpio: Pin cannot be null\n");
+        return -1;
+    }
+
+    if (check_valid_mikrobus(mikrobus_index) < 0) {
+        fprintf(stderr, "gpio: Invalid mikrobus index\n");
+        return -1;
+    }
+
+    if (pin_type >= TYPE_COUNT) {
+        fprintf(stderr, "gpio: Invalid pin type\n");
+        return -1;
+    }
+
+    return pin_lookup[mikrobus_index][pin_type];
 }
 
 int gpio_set_direction(uint8_t gpio_pin, uint8_t dir)
