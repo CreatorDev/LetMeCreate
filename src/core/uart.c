@@ -66,6 +66,7 @@ static int uart_init_bus(uint8_t mikrobus_index)
     pts.c_lflag = 0;
     pts.c_oflag = 0;
     pts.c_iflag &= ~(IXON | IXOFF | IXANY);
+    pts.c_iflag &= ~(IGNCR | INLCR | ICRNL);
     pts.c_cc[VMIN] = 1;
     pts.c_cc[VTIME] = 0;
 
