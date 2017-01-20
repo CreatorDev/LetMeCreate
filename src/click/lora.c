@@ -129,11 +129,11 @@ static int receive_line(char *line)
  * @brief Send a command to the device
  *
  * @param[in] cmd ASCII commands
- * @param[out] output Assume that output array can hold at least 65 bytes. Otherwise,
- * discard output.
+ * @param[in] check_response Checks that the device returns ok\n\n if it is set
+ * to true.
  * @return 0 if successful, -1 otherwise
  */
-static int send_cmd(char *cmd)
+static int send_cmd(char *cmd, bool check_response)
 {
     char rx_buffer[65];
     int cmd_length = strlen(cmd);
@@ -145,6 +145,11 @@ static int send_cmd(char *cmd)
     if (receive_line(rx_buffer) < 0)
         return -1;
     LOG_DEBUG("response: %s", rx_buffer);
+
+    if (check_response) {
+        if (strcmp(rx_buffer, "ok\r\n") != 0)
+            return -1;
+    }
 
     return 0;
 }
@@ -184,13 +189,13 @@ int lora_click_enable(struct lora_click_config config)
 {
     char buffer[65];
     /* Reset device */
-    if (send_cmd("sys reset\r\n") < 0)
+    if (send_cmd("sys reset\r\n", false) < 0)
         return -1;
 
-    if (send_cmd("mac pause\r\n") < 0
-    ||  send_cmd("radio set mod lora\r\n") < 0
-    ||  send_cmd("radio set wdt 0\r\n") < 0         /* Disable watchdog */
-    ||  send_cmd("radio set sync 12\r\n") < 0)
+    if (send_cmd("mac pause\r\n", false) < 0
+    ||  send_cmd("radio set mod lora\r\n", true) < 0
+    ||  send_cmd("radio set wdt 0\r\n", true) < 0         /* Disable watchdog */
+    ||  send_cmd("radio set sync 12\r\n", true) < 0)
         return -1;
 
     /* Set frequency */
@@ -199,7 +204,7 @@ int lora_click_enable(struct lora_click_config config)
         return -1;
     }
     sprintf(buffer, "radio set freq %u\r\n", config.frequency);
-    if (send_cmd(buffer) < 0) {
+    if (send_cmd(buffer, true) < 0) {
         fprintf(stderr, "lora: Failed to set frequency.\n");
         return -1;
     }
@@ -210,7 +215,7 @@ int lora_click_enable(struct lora_click_config config)
         return -1;
     }
     sprintf(buffer, "radio set sf sf%u\r\n", config.spreading_factor);
-    if (send_cmd(buffer) < 0) {
+    if (send_cmd(buffer, true) < 0) {
         fprintf(stderr, "lora: Failed to set spreading factor.\n");
         return -1;
     }
@@ -221,7 +226,7 @@ int lora_click_enable(struct lora_click_config config)
         return -1;
     }
     sprintf(buffer, "radio set afcbw %s\r\n", auto_freq_str[config.auto_freq_band]);
-    if (send_cmd(buffer) < 0) {
+    if (send_cmd(buffer, true) < 0) {
         fprintf(stderr, "lora: Failed to set auto freq band.\n");
         return -1;
     }
@@ -232,7 +237,7 @@ int lora_click_enable(struct lora_click_config config)
         return -1;
     }
     sprintf(buffer, "radio set cr %s\r\n", coding_rate_str[config.coding_rate]);
-    if (send_cmd(buffer) < 0) {
+    if (send_cmd(buffer, true) < 0) {
         fprintf(stderr, "lora: Failed to set coding rate.\n");
         return -1;
     }
@@ -240,15 +245,15 @@ int lora_click_enable(struct lora_click_config config)
     /* Set bandwidth */
     switch (config.bandwidth) {
     case LORA_CLICK_BANDWIDTH_125KHZ:
-        if (send_cmd("radio set bw 125\r\n") < 0)
+        if (send_cmd("radio set bw 125\r\n", false) < 0)
             return -1;
         break;
     case LORA_CLICK_BANDWIDTH_250KHZ:
-        if (send_cmd("radio set bw 250\r\n") < 0)
+        if (send_cmd("radio set bw 250\r\n", false) < 0)
             return -1;
         break;
     case LORA_CLICK_BANDWIDTH_500KHZ:
-        if (send_cmd("radio set bw 500\r\n") < 0)
+        if (send_cmd("radio set bw 500\r\n", false) < 0)
             return -1;
         break;
     default:
@@ -262,28 +267,28 @@ int lora_click_enable(struct lora_click_config config)
         return -1;
     }
     sprintf(buffer, "radio set pwr %d\r\n", config.power);
-    if (send_cmd(buffer) < 0) {
+    if (send_cmd(buffer, true) < 0) {
         fprintf(stderr, "lora: Failed to set power.\n");
         return -1;
     }
 
     /* Set bitrate */
     sprintf(buffer, "radio set bitrate %u\r\n", config.bitrate);
-    if (send_cmd(buffer) < 0) {
+    if (send_cmd(buffer, true) < 0) {
         fprintf(stderr, "lora: Failed to set bitrate.\n");
         return -1;
     }
 
     /* Set frequency deviation */
     sprintf(buffer, "radio set fdev %u\r\n", config.freq_deviation);
-    if (send_cmd(buffer) < 0) {
+    if (send_cmd(buffer, true) < 0) {
         fprintf(stderr, "lora: Failed to set frequency deviation.\n");
         return -1;
     }
 
     /* Set preamble length */
     sprintf(buffer, "radio set prlen %u\r\n", config.preamble_length);
-    if (send_cmd(buffer) < 0) {
+    if (send_cmd(buffer, true) < 0) {
         fprintf(stderr, "lora: Failed to set preamble length.\n");
         return -1;
     }
@@ -293,7 +298,7 @@ int lora_click_enable(struct lora_click_config config)
         sprintf(buffer, "radio set crc on\r\n");
     else
         sprintf(buffer, "radio set crc off\r\n");
-    if (send_cmd(buffer) < 0) {
+    if (send_cmd(buffer, true) < 0) {
         fprintf(stderr, "lora: Failed to enable/disable crc header.\n");
         return -1;
     }
@@ -324,7 +329,7 @@ int lora_click_send(uint8_t *data, uint32_t count)
         strcpy(buffer, "radio tx ");
         memcpy(&buffer[9], &data[byte_sent_count], chunk_length);
         strcpy(&buffer[9+chunk_length], "\r\n");
-        if ((ret = send_cmd(buffer)) < 0) {
+        if ((ret = send_cmd(buffer, true)) < 0) {
             fprintf(stderr, "lora: Failed to send data.\n");
             return ret;
         }
@@ -357,7 +362,7 @@ int lora_click_receive(uint8_t *data, uint32_t count)
         uint8_t i = 0;
         char buffer[65];
 
-        if ((ret = send_cmd("radio rx 0\r\n", buffer)) < 0) {
+        if ((ret = send_cmd("radio rx 0\r\n", true)) < 0) {
             fprintf(stderr, "lora: Failed to receive data.\n");
             return ret;
         }
