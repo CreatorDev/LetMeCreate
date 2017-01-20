@@ -133,7 +133,7 @@ static int receive_line(char *line)
  * discard output.
  * @return 0 if successful, -1 otherwise
  */
-static int send_cmd_with_output(char *cmd, char *output)
+static int send_cmd(char *cmd)
 {
     char rx_buffer[65];
     int cmd_length = strlen(cmd);
@@ -146,15 +146,7 @@ static int send_cmd_with_output(char *cmd, char *output)
         return -1;
     LOG_DEBUG("response: %s", rx_buffer);
 
-    if (output != NULL)
-        strcpy(output, rx_buffer);
-
     return 0;
-}
-
-static int send_cmd(char *cmd)
-{
-    return send_cmd_with_output(cmd, NULL);
 }
 
 static int wait_for_answer(char *expected)
@@ -365,7 +357,7 @@ int lora_click_receive(uint8_t *data, uint32_t count)
         uint8_t i = 0;
         char buffer[65];
 
-        if ((ret = send_cmd_with_output("radio rx 0\r\n", buffer)) < 0) {
+        if ((ret = send_cmd("radio rx 0\r\n", buffer)) < 0) {
             fprintf(stderr, "lora: Failed to receive data.\n");
             return ret;
         }
