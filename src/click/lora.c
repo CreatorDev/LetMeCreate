@@ -320,13 +320,15 @@ int lora_click_send(uint8_t *data, uint32_t count)
         int ret = 0;
         char buffer[BUFFER_LENGTH];
         uint32_t chunk_length = count;
+        uint32_t i = 0;
 
         if (chunk_length > MAX_CHUNK_LENGTH)
             chunk_length = MAX_CHUNK_LENGTH;
 
         strcpy(buffer, "radio tx ");
-        memcpy(&buffer[9], &data[byte_sent_count], chunk_length);
-        strcpy(&buffer[9+chunk_length], "\r\n");
+        for (i = 0; i < chunk_length; ++i)
+            sprintf(&buffer[9+i*2], "%02X", data[byte_sent_count + i]);
+        strcpy(&buffer[9+chunk_length*2], "\r\n");
         if ((ret = send_cmd(buffer, true)) < 0) {
             fprintf(stderr, "lora: Failed to send data.\n");
             return ret;
