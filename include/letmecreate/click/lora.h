@@ -1,3 +1,10 @@
+/**
+ * @file lora.h
+ * @author Francois Berder
+ * @date 2017
+ * @copyright 3-clause BSD
+ */
+
 #ifndef __LETMECREATE_CLICK_LORA_H__
 #define __LETMECREATE_CLICK_LORA_H__
 
