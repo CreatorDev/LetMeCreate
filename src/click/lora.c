@@ -3,7 +3,7 @@
 #include <letmecreate/click/lora.h>
 #include <letmecreate/core/uart.h>
 
-#define MAX_CHUNK_LENGTH        (1000)
+#define MAX_CHUNK_LENGTH        (255)
 #define BUFFER_LENGTH           (MAX_CHUNK_LENGTH + 12)
 #define MAX_LINE_LENGTH         (64)
 
