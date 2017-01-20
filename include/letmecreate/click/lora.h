@@ -1,5 +1,5 @@
-#ifndef LORA_H
-#define LORA_H
+#ifndef __LETMECREATE_CLICK_LORA_H__
+#define __LETMECREATE_CLICK_LORA_H__
 
 #include <stdbool.h>
 #include <stdint.h>
