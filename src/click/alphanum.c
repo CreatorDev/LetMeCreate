@@ -173,22 +173,16 @@ int alphanum_click_write(char a, char b)
  */
 int alphanum_click_init(uint8_t bus)
 {
-    /* Setup GPIO */
-    switch(bus) {
-        case MIKROBUS_1:
-            gpio_pin_le2 = MIKROBUS_1_RST;
-            gpio_pin_oe = MIKROBUS_1_INT;
-            gpio_pin_oe2 = MIKROBUS_1_PWM;
-            break;
-        case MIKROBUS_2:
-            gpio_pin_le2 = MIKROBUS_2_RST;
-            gpio_pin_oe = MIKROBUS_2_INT;
-            gpio_pin_oe2 = MIKROBUS_2_PWM;
-            break;
-        default:
-            fprintf(stderr, "alphanum: Invalid mikrobus index.\n");
-            return -1;
+    if (check_valid_mikrobus(bus) < 0) {
+        fprintf(stderr, "alphanum: Invalid mikrobus index.\n");
+        return -1;
     }
+
+    /* Setup GPIO */
+    if (gpio_get_pin(bus, TYPE_RST, &gpio_pin_le2) < 0
+    ||  gpio_get_pin(bus, TYPE_INT, &gpio_pin_oe) < 0
+    ||  gpio_get_pin(bus, TYPE_PWM, &gpio_pin_oe2) < 0)
+        return -1;
 
     /* Init GPIO pins */
     if (gpio_init(gpio_pin_le2) < 0

@@ -9,15 +9,8 @@ int ir_eclipse_click_add_callback(uint8_t mikrobus_index, void (*callback)(uint8
 {
     uint8_t gpio_pin;
 
-    switch (mikrobus_index) {
-    case MIKROBUS_1:
-        gpio_pin = MIKROBUS_1_INT;
-        break;
-    case MIKROBUS_2:
-        gpio_pin = MIKROBUS_2_INT;
-        break;
-    default:
-        fprintf(stderr, "ir_eclipse: Invalid mikrobus index.\n");
+    if (gpio_get_pin(mikrobus_index, TYPE_INT, &gpio_pin) < 0) {
+        fprintf(stderr, "ir_eclipse: Could not find pin\n");
         return -1;
     }
 

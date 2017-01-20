@@ -865,16 +865,8 @@ static int attach_interrupt_handler(uint8_t mikrobus_index)
 {
     uint8_t int_pin;
 
-    switch(mikrobus_index) {
-    case MIKROBUS_1:
-        int_pin = MIKROBUS_1_INT;
-        break;
-    case MIKROBUS_2:
-        int_pin = MIKROBUS_2_INT;
-        break;
-    default:
+    if (gpio_get_pin(mikrobus_index, TYPE_INT, &int_pin) < 0)
         return -1;
-    }
 
     if (gpio_init(int_pin) < 0
     ||  gpio_monitor_init() < 0)
@@ -890,16 +882,8 @@ static int detach_interrupt_handler(uint8_t mikrobus_index)
 {
     uint8_t int_pin;
 
-    switch(mikrobus_index) {
-    case MIKROBUS_1:
-        int_pin = MIKROBUS_1_INT;
-        break;
-    case MIKROBUS_2:
-        int_pin = MIKROBUS_2_INT;
-        break;
-    default:
+    if (gpio_get_pin(mikrobus_index, TYPE_INT, &int_pin) < 0)
         return -1;
-    }
 
     if (int_callback_id < 0)
         return 0;
@@ -926,16 +910,8 @@ static int ft800_power(uint8_t bus_index, bool enable)
 {
     uint8_t pd_n_pin;
 
-    switch (bus_index) {
-    case MIKROBUS_1:
-        pd_n_pin = MIKROBUS_1_RST;
-        break;
-    case MIKROBUS_2:
-        pd_n_pin = MIKROBUS_2_RST;
-        break;
-    default:
+    if (gpio_get_pin(bus_index, TYPE_RST, &pd_n_pin) < 0)
         return -1;
-    }
 
     if (gpio_init(pd_n_pin) < 0
     || gpio_set_direction(pd_n_pin, GPIO_OUTPUT) < 0
@@ -951,16 +927,8 @@ static int ft800_use_spi(uint8_t bus_index)
 {
     uint8_t mode_pin;
 
-    switch (bus_index) {
-    case MIKROBUS_1:
-        mode_pin = MIKROBUS_1_AN;
-        break;
-    case MIKROBUS_2:
-        mode_pin = MIKROBUS_2_AN;
-        break;
-    default:
+    if (gpio_get_pin(bus_index, TYPE_AN, &mode_pin) < 0)
         return -1;
-    }
 
     if (gpio_init(mode_pin) < 0
     || gpio_set_direction(mode_pin, GPIO_OUTPUT) < 0
