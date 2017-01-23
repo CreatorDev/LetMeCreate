@@ -103,7 +103,7 @@ static int receive_line(char *line)
             return -1;
         }
 
-        if (state == 0 && (c == '\r' || c == '\n'))
+        if (state == 0 && c == '\r')
             state = 1;
         else if (state == 1 && c == '\n')
             state = 2;
