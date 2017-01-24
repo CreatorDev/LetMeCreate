@@ -10,15 +10,8 @@ static int set_enable_pin(uint8_t mikrobus_index, bool enable)
 {
     uint8_t rst_pin;
 
-    switch (mikrobus_index) {
-    case MIKROBUS_1:
-        rst_pin = MIKROBUS_1_RST;
-        break;
-    case MIKROBUS_2:
-        rst_pin = MIKROBUS_2_RST;
-        break;
-    default:
-        fprintf(stderr, "ir_distance: Invalid mikrobus_index.\n");
+    if (gpio_get_pin(mikrobus_index, TYPE_RST, &rst_pin) < 0) {
+        fprintf(stderr, "ir_distance: Failed to find pin\n");
         return -1;
     }
 

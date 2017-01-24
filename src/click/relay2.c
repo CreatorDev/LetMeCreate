@@ -8,26 +8,22 @@ static int find_gpio(uint8_t mikrobus_index, uint8_t relay)
 {
     uint8_t gpio_pin = 0;
 
-    if (mikrobus_index != MIKROBUS_1 && mikrobus_index != MIKROBUS_2) {
-        fprintf(stderr, "relay2: Invalid mikrobus index.\n");
-        return -1;
-    }
-
     if (relay >= RELAY2_CLICK_RELAY_COUNT) {
         fprintf(stderr, "relay2: Invalid relay index.\n");
         return -1;
     }
 
-    if (mikrobus_index == MIKROBUS_1) {
-        if (relay == RELAY2_CLICK_RELAY_1)
-            gpio_pin = MIKROBUS_1_PWM;
-        else
-            gpio_pin = MIKROBUS_1_AN;
-    } else { /* mikrobus_index == MIKROBUS_2 */
-        if (relay == RELAY2_CLICK_RELAY_1)
-            gpio_pin = MIKROBUS_2_PWM;
-        else
-            gpio_pin = MIKROBUS_2_AN;
+    if (relay == RELAY2_CLICK_RELAY_1) {
+        if (gpio_get_pin(mikrobus_index, TYPE_PWM, &gpio_pin) < 0) {
+            fprintf(stderr, "relay2: Invalid pin type\n");
+            return -1;
+        }
+    }
+    else {
+        if (gpio_get_pin(mikrobus_index, TYPE_AN, &gpio_pin) < 0) {
+            fprintf(stderr, "relay2: Invalid pin type\n");
+            return -1;
+        }
     }
 
     return gpio_pin;
