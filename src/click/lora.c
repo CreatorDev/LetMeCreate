@@ -19,6 +19,8 @@
 #define RN2483_EEPROM_START_ADDRESS     (0x300)
 #define RN2483_EEPROM_SIZE              (0x100)
 
+#define EUI_SIZE                (8)
+
 #define LOG_DEBUG(FMT,...)                  \
     do {                                    \
         printf("[%s:%d]: "FMT,              \
@@ -526,4 +528,30 @@ int lora_click_read_eeprom(uint32_t start_address, uint8_t *data, uint32_t lengt
     }
 
     return length;
+}
+
+int lora_click_get_eui(uint8_t *eui)
+{
+    char line[64];
+    char *buffer = "sys get hweui\r\n";
+    int buffer_length = strlen(buffer);
+    uint8_t i = 0;
+
+    if (eui == NULL) {
+        fprintf(stderr, "lora: Cannot read EUI using null pointer.\n");
+        return -1;
+    }
+
+    if (uart_send((uint8_t*)buffer, buffer_length) != buffer_length) {
+        fprintf(stderr, "lora: Failed to send get EUI command.\n");
+        return -1;
+    }
+
+    if (receive_line(line) < 0)
+        return -1;
+
+    for (i = 0; i < EUI_SIZE; ++i)
+        eui[i] = convert_hex_byte(line[i*2], line[i*2+1]);
+
+    return 0;
 }
