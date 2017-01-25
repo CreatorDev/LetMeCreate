@@ -72,5 +72,7 @@ int LETMECREATE_CLICK_EXPORT lora_click_init(struct lora_click_config config);
 int LETMECREATE_CLICK_EXPORT lora_click_configure(struct lora_click_config config);
 int LETMECREATE_CLICK_EXPORT lora_click_send(uint8_t *data, uint32_t count);
 int LETMECREATE_CLICK_EXPORT lora_click_receive(uint8_t *data, uint32_t count);
+int LETMECREATE_CLICK_EXPORT lora_click_write_eeprom(uint32_t start_address, const uint8_t *data, uint32_t length);
+int LETMECREATE_CLICK_EXPORT lora_click_read_eeprom(uint32_t start_address, uint8_t *data, uint32_t length);
 
 #endif

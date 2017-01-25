@@ -16,6 +16,9 @@
 #define MIN_POWER               (-3)
 #define MAX_POWER               (15)
 
+#define RN2483_EEPROM_START_ADDRESS     (0x300)
+#define RN2483_EEPROM_SIZE              (0x100)
+
 #define LOG_DEBUG(FMT,...)                  \
     do {                                    \
         printf("[%s:%d]: "FMT,              \
@@ -456,4 +459,71 @@ int lora_click_receive(uint8_t *data, uint32_t count)
     }
 
     return byte_received_count;
+}
+
+int lora_click_write_eeprom(uint32_t start_address, const uint8_t *data, uint32_t length)
+{
+    uint32_t i = 0;
+
+    if (start_address < RN2483_EEPROM_START_ADDRESS
+    ||  start_address + length >= RN2483_EEPROM_START_ADDRESS + RN2483_EEPROM_SIZE) {
+        fprintf(stderr, "lora: Invalid start address or length.\n");
+        return -1;
+    }
+
+    if (data == NULL) {
+        fprintf(stderr, "lora: Cannot write to EEPROM using null pointer.\n");
+        return -1;
+    }
+
+    if (length == 0)
+        return 0;
+
+    for (i = 0; i < length; ++i) {
+        char buffer[64];
+        sprintf(buffer, "sys set nvm %03X %02X\r\n", start_address + i, data[i]);
+        if (send_cmd(buffer, true) < 0) {
+            fprintf(stderr, "lora: Failed to write byte at address 0x%03X.\n", start_address + i);
+            return -1;
+        }
+    }
+
+    return length;
+}
+
+int lora_click_read_eeprom(uint32_t start_address, uint8_t *data, uint32_t length)
+{
+    uint32_t i = 0;
+
+    if (start_address < RN2483_EEPROM_START_ADDRESS
+    ||  start_address + length >= RN2483_EEPROM_START_ADDRESS + RN2483_EEPROM_SIZE) {
+        fprintf(stderr, "lora: Invalid start address or length.\n");
+        return -1;
+    }
+
+    if (data == NULL) {
+        fprintf(stderr, "lora: Cannot read from EEPROM using null pointer.\n");
+        return -1;
+    }
+
+    if (length == 0)
+        return 0;
+
+    for (i = 0; i < length; ++i) {
+        char buffer[64];
+        int buffer_length = 0;
+        sprintf(buffer, "sys get nvm %03X\r\n", start_address + i);
+        buffer_length = strlen(buffer);
+        if (uart_send((uint8_t*)buffer, buffer_length) != buffer_length) {
+            fprintf(stderr, "lora: Failed to read byte at address 0x%03X.\n", start_address + i);
+            return -1;
+        }
+
+        if (receive_line(buffer) < 0)
+            return -1;
+
+        data[i] = convert_hex_byte(buffer[0], buffer[1]);
+    }
+
+    return length;
 }
