@@ -334,6 +334,10 @@ int lora_click_init(struct lora_click_config config)
         return -1;
     }
 
+    /* Discard any existing data in rx_buffer */
+    memset(rx_buffer, 0, sizeof(rx_buffer));
+    available_byte_count = 0;
+
     return 0;
 }
 
