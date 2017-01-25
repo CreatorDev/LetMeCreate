@@ -24,6 +24,9 @@
             ##__VA_ARGS__);                 \
     }while(0)
 
+static char rx_buffer[MAX_CHUNK_LENGTH];
+static uint32_t available_byte_count = 0;
+
 static const char* auto_freq_str[LORA_CLICK_AUTO_FREQ_BAND_COUNT] = {
     "250",
     "125",
@@ -70,6 +73,36 @@ static bool isValidSpreadingFactor(uint8_t spreading_factor)
 static bool isValidPower(int8_t power)
 {
     return power >= MIN_POWER && power <= MAX_POWER;
+}
+
+static int convert_hex_byte(char dec, char digit)
+{
+    int res = 0;
+
+    if (dec >= '0' && dec <= '9')
+        res += (dec - '0');
+    else if (dec >= 'A' && dec <= 'F')
+        res += 10 + (dec - 'A');
+
+    res <<= 4;
+
+    if (digit >= '0' && digit <= '9')
+        res += (digit - '0');
+    else if (digit >= 'A' && digit <= 'F')
+        res += 10 + (digit - 'A');
+
+    return res;
+}
+
+/**
+ * Bytes are received from the device in hexadecimal format.
+ * For instance "48656c6C6F" corresponds to Hello.
+ */
+static void convert_received_data(char *dst, char *src, uint32_t num)
+{
+    uint32_t i;
+    for (i = 0; i < num; ++i)
+        dst[i] = convert_hex_byte(src[i*2], src[i*2+1]);
 }
 
 /**
@@ -357,35 +390,55 @@ int lora_click_receive(uint8_t *data, uint32_t count)
     if (count == 0)
         return 0;
 
+    /* Check if there is some data left from rx_buffer */
+    if (available_byte_count != 0) {
+        byte_received_count = available_byte_count;
+        if (count < byte_received_count)
+            byte_received_count = count;
+
+        memcpy(data, rx_buffer, byte_received_count);
+        available_byte_count -= byte_received_count;
+
+        /* Shift left remaining bytes in rx_buffer, since rx_buffer is not a
+         * circular buffer.
+         */
+        memmove(rx_buffer, &rx_buffer[byte_received_count], available_byte_count);
+    }
+
     while (byte_received_count < count) {
-        int ret = 0;
-        uint8_t i = 0;
+        uint32_t packet_byte_count = 0, byte_copied_count = 0;
+        uint32_t remaining_byte_count = count - byte_received_count;
         char buffer[65];
 
-        if ((ret = send_cmd("radio rx 0\r\n", true)) < 0) {
+        if (send_cmd("radio rx 0\r\n", true) < 0) {
             fprintf(stderr, "lora: Failed to receive data.\n");
-            return ret;
+            return -1;
         }
 
         if (receive_line(buffer) < 0)
             return -1;
 
-        if (strcmp(buffer, "busy\r\n") == 0)
-            continue;
-        if (strcmp(buffer, "invalid_param\r\n") == 0)
+        if(strncmp("radio_err\r\n", buffer, 9) == 0)
             return -1;
 
-        /* Assume at this point, previous answer was ok */
+        /* radio_rx data\r\n */
+        packet_byte_count = strlen(buffer) - 12; /* 12 is the length of "radio_rx  " and \r\n */
+        packet_byte_count /= 2; /* Each byte uses two characters */
+        LOG_DEBUG("Received %u bytes\n", packet_byte_count);
 
-        if (receive_line(buffer) < 0)
-            return -1;
+        /* Copy from buffer to data */
+        byte_copied_count = packet_byte_count;
+        if (byte_copied_count > remaining_byte_count)
+            byte_copied_count = remaining_byte_count;
 
-        if(strncmp("radio_err", buffer, 9) == 0)
-            return -1;
+        convert_received_data(&data[byte_received_count], &buffer[10], byte_copied_count);
+        byte_received_count += byte_copied_count;
 
-        while (buffer[i] != '\r' && byte_received_count < count) {
-            data[byte_received_count++] = buffer[10+i];
-            ++i;
+        /* Store in rx_buffer if it received too many bytes than requested */
+        if (byte_received_count == count) {
+            uint32_t leftover_byte_count = packet_byte_count - remaining_byte_count;
+            convert_received_data(rx_buffer, &buffer[10+byte_copied_count*2], leftover_byte_count);
+            available_byte_count = leftover_byte_count;
         }
     }
 
