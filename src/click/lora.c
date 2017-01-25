@@ -200,7 +200,7 @@ static int wait_for_answer(char *expected)
 
 struct lora_click_config lora_click_get_default_configuration(void)
 {
-    static struct lora_click_config config = {
+    static const struct lora_click_config config = {
         .frequency = 868000000,
         .spreading_factor = 12,
         .auto_freq_band = LORA_CLICK_AUTO_FREQ_BAND_125KHZ,
