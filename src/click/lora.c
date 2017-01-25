@@ -444,8 +444,3 @@ int lora_click_receive(uint8_t *data, uint32_t count)
 
     return byte_received_count;
 }
-
-int lora_click_disable(void)
-{
-    return -1;
-}

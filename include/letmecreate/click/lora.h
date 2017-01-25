@@ -71,6 +71,5 @@ struct lora_click_config LETMECREATE_CLICK_EXPORT lora_click_get_default_configu
 int LETMECREATE_CLICK_EXPORT lora_click_enable(struct lora_click_config config);
 int LETMECREATE_CLICK_EXPORT lora_click_send(uint8_t *data, uint32_t count);
 int LETMECREATE_CLICK_EXPORT lora_click_receive(uint8_t *data, uint32_t count);
-int LETMECREATE_CLICK_EXPORT lora_click_disable(void);
 
 #endif
