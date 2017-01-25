@@ -218,7 +218,6 @@ struct lora_click_config lora_click_get_default_configuration(void)
 
 int lora_click_init(struct lora_click_config config)
 {
-    char buffer[65];
     /* Reset device */
     if (send_cmd("sys reset\r\n", false) < 0)
         return -1;
@@ -228,6 +227,20 @@ int lora_click_init(struct lora_click_config config)
     ||  send_cmd("radio set wdt 0\r\n", true) < 0         /* Disable watchdog */
     ||  send_cmd("radio set sync 12\r\n", true) < 0)
         return -1;
+
+    if (lora_click_configure(config) < 0)
+        return -1;
+
+    /* Discard any existing data in rx_buffer */
+    memset(rx_buffer, 0, sizeof(rx_buffer));
+    available_byte_count = 0;
+
+    return 0;
+}
+
+int LETMECREATE_CLICK_EXPORT lora_click_configure(struct lora_click_config config)
+{
+    char buffer[65];
 
     /* Set frequency */
     if (!isValidFrequency(config.frequency)) {
@@ -333,10 +346,6 @@ int lora_click_init(struct lora_click_config config)
         fprintf(stderr, "lora: Failed to enable/disable crc header.\n");
         return -1;
     }
-
-    /* Discard any existing data in rx_buffer */
-    memset(rx_buffer, 0, sizeof(rx_buffer));
-    available_byte_count = 0;
 
     return 0;
 }
