@@ -36,7 +36,7 @@ int main(int argc, char** argv)
     uart_init();
     uart_select_bus(MIKROBUS_1);
     uart_set_baudrate(UART_BD_57600);
-    lora_click_enable(lora_click_get_default_configuration());
+    lora_click_init(lora_click_get_default_configuration());
 
      while (1) {
         if (mode == 's') {

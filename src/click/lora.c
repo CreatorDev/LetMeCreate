@@ -216,7 +216,7 @@ struct lora_click_config lora_click_get_default_configuration(void)
     return config;
 }
 
-int lora_click_enable(struct lora_click_config config)
+int lora_click_init(struct lora_click_config config)
 {
     char buffer[65];
     /* Reset device */
