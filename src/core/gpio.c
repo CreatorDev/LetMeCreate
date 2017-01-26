@@ -190,7 +190,8 @@ int gpio_get_pin(uint8_t mikrobus_index, uint8_t pin_type, uint8_t * pin)
         return -1;
     }
 
-    return pin_lookup[mikrobus_index][pin_type];
+    *pin = pin_lookup[mikrobus_index][pin_type];
+    return 0;
 }
 
 int gpio_set_direction(uint8_t gpio_pin, uint8_t dir)
