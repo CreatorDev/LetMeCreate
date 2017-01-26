@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <letmecreate/click/lora.h>
+#include <letmecreate/core/gpio.h>
 #include <letmecreate/core/uart.h>
 
 #define MAX_CHUNK_LENGTH        (255)
@@ -221,8 +222,20 @@ struct lora_click_config lora_click_get_default_configuration(void)
     return config;
 }
 
-int lora_click_init(struct lora_click_config config)
+int lora_click_init(uint8_t mikrobus_index, struct lora_click_config config)
 {
+    uint8_t rst_pin = 0;
+
+    /* Ensure that RESET_N pin is high */
+    if (gpio_get_pin(mikrobus_index, TYPE_RST, &rst_pin) < 0)
+        return -1;
+    if (gpio_init(rst_pin) < 0
+    ||  gpio_set_direction(rst_pin, GPIO_OUTPUT) < 0
+    ||  gpio_set_value(rst_pin, 1) < 0) {
+        fprintf(stderr, "lora: Failed to set reset pin high.\n");
+        return -1;
+    }
+
     /* Reset device */
     if (send_cmd("sys reset\r\n", false) < 0)
         return -1;

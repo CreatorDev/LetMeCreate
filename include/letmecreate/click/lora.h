@@ -85,10 +85,11 @@ struct lora_click_config LETMECREATE_CLICK_EXPORT lora_click_get_default_configu
 /**
  * @brief Initialize the Lora Click and configure it.
  *
+ * @param[in] mikrobus_index
  * @param[in] config Configuration of the Lora Click
  * @return 0 if successful, -1 otherwise
  */
-int LETMECREATE_CLICK_EXPORT lora_click_init(struct lora_click_config config);
+int LETMECREATE_CLICK_EXPORT lora_click_init(uint8_t mikrobus_index, struct lora_click_config config);
 
 /**
  * @brief Configure the Lora Click
