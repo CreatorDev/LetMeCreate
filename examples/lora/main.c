@@ -1,3 +1,22 @@
+/**
+ * This example shows how to use the Lora Click wrapper of the LetMeCreate to
+ * send or receive data.
+ *
+ * Depending on the mode selected, it either continuously sends a message every
+ * second, or it waits for data and prints what it receives.
+ * The user has to interrupt the program to exit it by pressing Ctrl+C.
+ *
+ * To run the example in send mode:
+ * $ ./letmecreate_lora_example s
+ *
+ * To run the example in receive mode:
+ * $ ./letmecreate_lora_example r
+ *
+ * The Lora Click must be inserted in Mikrobus 1 before running this program.
+ */
+
+
+
 #include <signal.h>
 #include <stdio.h>
 #include <string.h>
