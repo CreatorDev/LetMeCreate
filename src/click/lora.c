@@ -5,6 +5,7 @@
 #include <letmecreate/core/uart.h>
 
 #define RADIO_TX_PREFIX_LENGTH  (9)     /* number of characters in string "radio_tx " */
+#define RADIO_RX_PREFIX_LENGTH  (10)    /* number of characters in string  "radio_rx  " */
 #define MAX_CHUNK_LENGTH        (255)
 #define MAX_LINE_LENGTH         (64)
 
@@ -453,7 +454,7 @@ int lora_click_receive(uint8_t *data, uint32_t count)
             return -1;
 
         /* radio_rx data\r\n */
-        packet_byte_count = strlen(buffer) - 12; /* 12 is the length of "radio_rx  " and \r\n */
+        packet_byte_count = strlen(buffer) - RADIO_RX_PREFIX_LENGTH - 2; /* 2 corresponds to \r\n */
         packet_byte_count /= 2; /* Each byte uses two characters */
         LOG_DEBUG("Received %u bytes\n", packet_byte_count);
 
@@ -462,13 +463,13 @@ int lora_click_receive(uint8_t *data, uint32_t count)
         if (byte_copied_count > remaining_byte_count)
             byte_copied_count = remaining_byte_count;
 
-        convert_received_data((char*)&data[byte_received_count], &buffer[10], byte_copied_count);
+        convert_received_data((char*)&data[byte_received_count], &buffer[RADIO_RX_PREFIX_LENGTH], byte_copied_count);
         byte_received_count += byte_copied_count;
 
         /* Store in rx_buffer if it received too many bytes than requested */
         if (byte_received_count == count) {
             uint32_t leftover_byte_count = packet_byte_count - remaining_byte_count;
-            convert_received_data(rx_buffer, &buffer[10+byte_copied_count*2], leftover_byte_count);
+            convert_received_data(rx_buffer, &buffer[RADIO_RX_PREFIX_LENGTH + byte_copied_count*2], leftover_byte_count);
             available_byte_count = leftover_byte_count;
         }
     }
