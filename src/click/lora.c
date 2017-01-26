@@ -4,6 +4,7 @@
 #include <letmecreate/core/gpio.h>
 #include <letmecreate/core/uart.h>
 
+#define RADIO_TX_PREFIX_LENGTH  (9)     /* number of characters in string "radio_tx " */
 #define MAX_CHUNK_LENGTH        (255)
 #define BUFFER_LENGTH           (MAX_CHUNK_LENGTH + 12)
 #define MAX_LINE_LENGTH         (64)
@@ -382,7 +383,7 @@ int lora_click_send(const uint8_t *data, uint32_t count)
 
     while (byte_sent_count < count) {
         int ret = 0;
-        char buffer[BUFFER_LENGTH];
+        char buffer[RADIO_TX_PREFIX_LENGTH + MAX_CHUNK_LENGTH + 3];     /* Adding 3, for "\r\n" and null character at the end */
         uint32_t chunk_length = count;
         uint32_t i = 0;
 
@@ -391,8 +392,8 @@ int lora_click_send(const uint8_t *data, uint32_t count)
 
         strcpy(buffer, "radio tx ");
         for (i = 0; i < chunk_length; ++i)
-            sprintf(&buffer[9+i*2], "%02X", data[byte_sent_count + i]);
-        strcpy(&buffer[9+chunk_length*2], "\r\n");
+            sprintf(&buffer[RADIO_TX_PREFIX_LENGTH + i * 2], "%02X", data[byte_sent_count + i]);
+        strcpy(&buffer[RADIO_TX_PREFIX_LENGTH + chunk_length * 2], "\r\n");
         if ((ret = send_cmd(buffer, true)) < 0) {
             fprintf(stderr, "lora: Failed to send data.\n");
             return ret;
