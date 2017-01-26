@@ -1,8 +1,15 @@
+#include <signal.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 #include <letmecreate/letmecreate.h>
 
+static volatile bool running = true;
+
+static void exit_program(int __attribute__ ((unused))signo)
+{
+    running = false;
+}
 
 static void receive(void)
 {
@@ -24,6 +31,15 @@ int main(int argc, char** argv)
 {
     uint32_t n = 0;
     char mode;
+
+    /* Set signal handler to exit program when Ctrl+c is pressed */
+    struct sigaction action = {
+        .sa_handler = exit_program,
+        .sa_flags = 0
+    };
+    sigemptyset(&action.sa_mask);
+    sigaction (SIGINT, &action, NULL);
+
     if (argc < 2) {
         fprintf(stderr, "%s r|s\n", argv[0]);
         return -1;
@@ -35,12 +51,14 @@ int main(int argc, char** argv)
         return -1;
     }
 
+    printf("Press Ctrl+c to exit program.\n");
+
     uart_init();
     uart_select_bus(MIKROBUS_1);
     uart_set_baudrate(UART_BD_57600);
     lora_click_init(MIKROBUS_1, lora_click_get_default_configuration());
 
-    while (1) {
+    while (running) {
         if (mode == 's') {
             send(n);
             sleep(1);
