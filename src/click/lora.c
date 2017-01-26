@@ -355,7 +355,7 @@ int LETMECREATE_CLICK_EXPORT lora_click_configure(struct lora_click_config confi
     return 0;
 }
 
-int lora_click_send(uint8_t *data, uint32_t count)
+int lora_click_send(const uint8_t *data, uint32_t count)
 {
     uint32_t byte_sent_count = 0;
 

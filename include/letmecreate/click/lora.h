@@ -107,7 +107,7 @@ int LETMECREATE_CLICK_EXPORT lora_click_configure(struct lora_click_config confi
  * @param[in] count Number of bytes to send
  * @return number of bytes sent, -1 otherwise
  */
-int LETMECREATE_CLICK_EXPORT lora_click_send(uint8_t *data, uint32_t count);
+int LETMECREATE_CLICK_EXPORT lora_click_send(const uint8_t *data, uint32_t count);
 
 /**
  * @brief Receive bytes
