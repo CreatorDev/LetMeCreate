@@ -449,7 +449,7 @@ int lora_click_receive(uint8_t *data, uint32_t count)
         if (byte_copied_count > remaining_byte_count)
             byte_copied_count = remaining_byte_count;
 
-        convert_received_data(&data[byte_received_count], &buffer[10], byte_copied_count);
+        convert_received_data((char*)&data[byte_received_count], &buffer[10], byte_copied_count);
         byte_received_count += byte_copied_count;
 
         /* Store in rx_buffer if it received too many bytes than requested */
