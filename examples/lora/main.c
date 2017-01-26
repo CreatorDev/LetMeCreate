@@ -14,7 +14,10 @@ static void exit_program(int __attribute__ ((unused))signo)
 static void receive(void)
 {
     char buffer[16];
-    lora_click_receive((uint8_t*)buffer, sizeof(buffer) - 1);
+
+    if (lora_click_receive((uint8_t*)buffer, sizeof(buffer) - 1) < 0)
+        return;
+
     buffer[15] = '\0';
     printf("Received \"%s\"\n", buffer);
 }
@@ -23,7 +26,10 @@ static void send(unsigned int n)
 {
     char buffer[255];
     sprintf(buffer, "Hello, World! %u", n);
-    lora_click_send((uint8_t*)buffer, strlen(buffer));
+
+    if (lora_click_send((uint8_t*)buffer, strlen(buffer)) < 0)
+        return;
+
     printf("Sent \"%s\"\n", buffer);
 }
 
