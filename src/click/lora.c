@@ -440,7 +440,7 @@ int lora_click_receive(uint8_t *data, uint32_t count)
     while (byte_received_count < count) {
         uint32_t packet_byte_count = 0, byte_copied_count = 0;
         uint32_t remaining_byte_count = count - byte_received_count;
-        char buffer[65];
+        char buffer[RADIO_RX_PREFIX_LENGTH + 2 * MAX_CHUNK_LENGTH + 3];     /* Adding 3, for "\r\n" and null character at the end */
 
         if (send_cmd("radio rx 0\r\n", true) < 0) {
             fprintf(stderr, "lora: Failed to receive data.\n");
