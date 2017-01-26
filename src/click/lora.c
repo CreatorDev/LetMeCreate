@@ -7,7 +7,6 @@
 #define RADIO_TX_PREFIX_LENGTH  (9)     /* number of characters in string "radio_tx " */
 #define RADIO_RX_PREFIX_LENGTH  (10)    /* number of characters in string  "radio_rx  " */
 #define MAX_CHUNK_LENGTH        (255)
-#define MAX_LINE_LENGTH         (64)
 
 #define MIN_LOW_BAND            (433000000)
 #define MAX_LOW_BAND            (434800000)
@@ -115,10 +114,13 @@ static void convert_received_data(char *dst, char *src, uint32_t num)
 /**
  * @brief Receive a string terminated by \r\n
  *
- * @param[in,out] line (not null and at least 65 bytes long)
+ * Notice a null character is appended at the end of the line.
+ *
+ * @param[out] line
+ * @param[in] max_characters Size of buffer @p line
  * @return 0 if successfull -1 otherwise
  */
-static int receive_line(char *line)
+static int receive_line(char *line, uint32_t max_characters)
 {
     char c = 0;
     uint8_t state = 0;
@@ -150,7 +152,7 @@ static int receive_line(char *line)
         else
             state = 0;
 
-        if (byte_received_count > MAX_LINE_LENGTH) {
+        if (byte_received_count > max_characters) {
             fprintf(stderr, "lora: Line too long.\n");
             return -1;
         }
@@ -180,7 +182,7 @@ static int send_cmd(char *cmd, bool check_response)
         return -1;
     LOG_DEBUG("cmd: %s", cmd);
 
-    if (receive_line(rx_buffer) < 0)
+    if (receive_line(rx_buffer, sizeof(rx_buffer)) < 0)
         return -1;
     LOG_DEBUG("response: %s", rx_buffer);
 
@@ -196,7 +198,7 @@ static int wait_for_answer(char *expected)
 {
     char line[65];
 
-    if (receive_line(line) < 0)
+    if (receive_line(line, sizeof(line)) < 0)
         return -1;
 
     if (strcmp(line, expected) != 0)
@@ -447,7 +449,7 @@ int lora_click_receive(uint8_t *data, uint32_t count)
             return -1;
         }
 
-        if (receive_line(buffer) < 0)
+        if (receive_line(buffer, sizeof(buffer)) < 0)
             return -1;
 
         if(strncmp("radio_err\r\n", buffer, 9) == 0)
@@ -535,7 +537,7 @@ int lora_click_read_eeprom(uint32_t start_address, uint8_t *data, uint32_t lengt
             return -1;
         }
 
-        if (receive_line(buffer) < 0)
+        if (receive_line(buffer, sizeof(buffer)) < 0)
             return -1;
 
         data[i] = convert_hex_byte(buffer[0], buffer[1]);
@@ -561,7 +563,7 @@ int lora_click_get_eui(uint8_t *eui)
         return -1;
     }
 
-    if (receive_line(line) < 0)
+    if (receive_line(line, sizeof(line)) < 0)
         return -1;
 
     for (i = 0; i < EUI_SIZE; ++i)
