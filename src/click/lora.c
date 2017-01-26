@@ -383,7 +383,7 @@ int lora_click_send(const uint8_t *data, uint32_t count)
 
     while (byte_sent_count < count) {
         int ret = 0;
-        char buffer[RADIO_TX_PREFIX_LENGTH + MAX_CHUNK_LENGTH + 3];     /* Adding 3, for "\r\n" and null character at the end */
+        char buffer[RADIO_TX_PREFIX_LENGTH + 2 * MAX_CHUNK_LENGTH + 3];     /* Adding 3, for "\r\n" and null character at the end */
         uint32_t chunk_length = count;
         uint32_t i = 0;
 
