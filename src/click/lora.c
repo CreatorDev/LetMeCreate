@@ -6,7 +6,6 @@
 
 #define RADIO_TX_PREFIX_LENGTH  (9)     /* number of characters in string "radio_tx " */
 #define MAX_CHUNK_LENGTH        (255)
-#define BUFFER_LENGTH           (MAX_CHUNK_LENGTH + 12)
 #define MAX_LINE_LENGTH         (64)
 
 #define MIN_LOW_BAND            (433000000)
