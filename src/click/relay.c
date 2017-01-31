@@ -34,7 +34,7 @@ int relay_click_get_relay_1_state(uint8_t mikrobus_index, uint8_t *state)
         return -1;
 
     if (state == NULL) {
-        fprintf(stderr, "relay: \n");
+        fprintf(stderr, "relay: state cannot be null\n");
         return -1;
     }
 
