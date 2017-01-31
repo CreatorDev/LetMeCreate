@@ -17,24 +17,15 @@ static uint32_t timeout_for_bus[2] = {UART_TIMEOUT_NEVER, UART_TIMEOUT_NEVER};
 static struct termios old_pts[2];
 static uint8_t current_mikrobus_index = MIKROBUS_1;
 
-static bool check_mikrobus_index(uint8_t mikrobus_index)
-{
-    if (mikrobus_index == MIKROBUS_1)
-        return true;
-    if (mikrobus_index == MIKROBUS_2)
-        return true;
-
-    fprintf(stderr, "uart: Invalid mikrobus_index\n.");
-    return false;
-}
-
 static int uart_init_bus(uint8_t mikrobus_index)
 {
     char *device_file = NULL;
     struct termios pts;
 
-    if (!check_mikrobus_index(mikrobus_index))
+    if (check_valid_mikrobus(mikrobus_index) < 0) {
+        fprintf(stderr, "uart: Invalid mikrobus_index\n.");
         return -1;
+    }
 
     if (fds[mikrobus_index] >= 0)
         return 0;
@@ -91,8 +82,10 @@ static int uart_init_bus(uint8_t mikrobus_index)
 
 static int uart_release_bus(uint8_t mikrobus_index)
 {
-    if (!check_mikrobus_index(mikrobus_index))
+    if (check_valid_mikrobus(mikrobus_index) < 0) {
+        fprintf(stderr, "uart: Invalid mikrobus_index\n.");
         return -1;
+    }
 
     if (fds[mikrobus_index] < 0)
         return 0;
