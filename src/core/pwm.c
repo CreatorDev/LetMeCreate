@@ -52,17 +52,6 @@
 
 static bool pin_initialised[2] = { false, false };
 
-static bool check_mikrobus_index(uint8_t mikrobus_index)
-{
-    if (mikrobus_index == MIKROBUS_1)
-        return true;
-    if (mikrobus_index == MIKROBUS_2)
-        return true;
-
-    fprintf(stderr, "pwm: Invalid pin.\n");
-    return false;
-}
-
 /*
  * Check if the directory /sys/class/pwm/pwmchip0/pwm0 or
  * /sys/class/pwm/pwmchip0/pwm1 exists.
@@ -134,8 +123,10 @@ static int read_int_pwm_file(uint8_t mikrobus_index, const char *file_name, uint
 
 int pwm_init(uint8_t mikrobus_index)
 {
-    if (!check_mikrobus_index(mikrobus_index))
+    if (check_valid_mikrobus(mikrobus_index) < 0) {
+        fprintf(stderr, "pwm: Invalid mikrobus_index.\n");
         return -1;
+    }
 
     if (pin_initialised[mikrobus_index])
         return 0;
@@ -159,8 +150,10 @@ int pwm_init(uint8_t mikrobus_index)
 
 int pwm_enable(uint8_t mikrobus_index)
 {
-    if (!check_mikrobus_index(mikrobus_index))
+    if (check_valid_mikrobus(mikrobus_index) < 0) {
+        fprintf(stderr, "pwm: Invalid mikrobus_index.\n");
         return -1;
+    }
 
     if (!pin_initialised[mikrobus_index]) {
         fprintf(stderr, "pwm: Invalid operation, pin %d must be initialised first.\n", mikrobus_index);
@@ -175,8 +168,10 @@ int pwm_set_duty_cycle(uint8_t mikrobus_index, float percentage)
     uint32_t duty_cycle = 0;
     uint32_t period = 0;
 
-    if (!check_mikrobus_index(mikrobus_index))
+    if (check_valid_mikrobus(mikrobus_index) < 0) {
+        fprintf(stderr, "pwm: Invalid mikrobus_index.\n");
         return -1;
+    }
 
     if (!pin_initialised[mikrobus_index]) {
         fprintf(stderr, "pwm: Invalid operation, pin %d must be initialised first.\n", mikrobus_index);
@@ -203,8 +198,10 @@ int pwm_get_duty_cycle(uint8_t mikrobus_index, float *percentage)
     uint32_t duty_cycle = 0;
     uint32_t period = 0;
 
-    if (!check_mikrobus_index(mikrobus_index))
+    if (check_valid_mikrobus(mikrobus_index) < 0) {
+        fprintf(stderr, "pwm: Invalid mikrobus_index.\n");
         return -1;
+    }
 
     if (!pin_initialised[mikrobus_index]) {
         fprintf(stderr, "pwm: Invalid operation, pin %d must be initialised first.\n", mikrobus_index);
@@ -240,8 +237,10 @@ int pwm_set_period(uint8_t mikrobus_index, uint32_t period)
     float percentage = 0.f;
     uint32_t old_period = 0, old_duty_cycle = 0, duty_cycle = 0;
 
-    if (!check_mikrobus_index(mikrobus_index))
+    if (check_valid_mikrobus(mikrobus_index) < 0) {
+        fprintf(stderr, "pwm: Invalid mikrobus_index.\n");
         return -1;
+    }
 
     if (!pin_initialised[mikrobus_index]) {
         fprintf(stderr, "pwm: Invalid operation, pin %d must be initialised first.\n", mikrobus_index);
@@ -283,8 +282,10 @@ int pwm_set_period(uint8_t mikrobus_index, uint32_t period)
 
 int pwm_get_period(uint8_t mikrobus_index, uint32_t *period)
 {
-    if (!check_mikrobus_index(mikrobus_index))
+    if (check_valid_mikrobus(mikrobus_index) < 0) {
+        fprintf(stderr, "pwm: Invalid mikrobus_index.\n");
         return -1;
+    }
 
     if (!pin_initialised[mikrobus_index]) {
         fprintf(stderr, "pwm: Invalid operation, pin %d must be initialised first.\n", mikrobus_index);
@@ -318,8 +319,10 @@ int pwm_get_frequency(uint8_t mikrobus_index, uint32_t *frequency)
 
 int pwm_disable(uint8_t mikrobus_index)
 {
-    if (!check_mikrobus_index(mikrobus_index))
+    if (check_valid_mikrobus(mikrobus_index) < 0) {
+        fprintf(stderr, "pwm: Invalid mikrobus_index.\n");
         return -1;
+    }
 
     if (!pin_initialised[mikrobus_index]) {
         fprintf(stderr, "pwm: Invalid operation, pin %d must be initialised first.\n", mikrobus_index);
@@ -331,8 +334,10 @@ int pwm_disable(uint8_t mikrobus_index)
 
 int pwm_release(uint8_t mikrobus_index)
 {
-    if (!check_mikrobus_index(mikrobus_index))
+    if (check_valid_mikrobus(mikrobus_index) < 0) {
+        fprintf(stderr, "pwm: Invalid mikrobus_index.\n");
         return -1;
+    }
 
     if (!pin_initialised[mikrobus_index])
         return 0;
