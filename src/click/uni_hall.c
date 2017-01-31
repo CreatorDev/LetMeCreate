@@ -9,24 +9,13 @@ int uni_hall_click_attach_callback(uint8_t mikrobus_index, void (*callback)(uint
 {
     uint8_t gpio_pin = 0;
 
-    switch (mikrobus_index) {
-        case MIKROBUS_1:
-            gpio_pin = MIKROBUS_1_INT;
-            break;
-        case MIKROBUS_2:
-            gpio_pin = MIKROBUS_2_INT;
-            break;
-        default:
-            fprintf(stderr, "uni_hall: Invalid mikrobus index.\n");
-            return -1;
-    }
-
     if (callback == NULL) {
         fprintf(stderr, "uni_hall: Cannot attach null callback.\n");
         return -1;
     }
 
-    if (gpio_init(gpio_pin) < 0     /* It configures the gpio in input mode */
+    if (gpio_get_pin(mikrobus_index, TYPE_INT, &gpio_pin) < 0
+    ||  gpio_init(gpio_pin) < 0     /* It configures the gpio in input mode */
     ||  gpio_monitor_init() < 0)
         return -1;
 
