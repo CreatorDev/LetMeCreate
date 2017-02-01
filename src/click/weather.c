@@ -31,8 +31,9 @@ static uint8_t readResult = 0;
 static s8 weather_click_i2c_bus_read(u8 dev_addr, u8 reg_addr, u8 *reg_data, u8 cnt)
 {
     int iError = BME280_INIT_VALUE;
+    uint8_t t;
 
-    for(int t = 0; t < cnt; t++) {
+    for(t = 0; t < cnt; t++) {
         uint8_t tmp = reg_addr + t;
         i2c_write(dev_addr, &tmp, 1);
         iError = i2c_read(dev_addr, &tmp, 1) >= 0 ? 0 : -1;
@@ -50,8 +51,9 @@ static s8 weather_click_i2c_bus_write(u8 dev_addr, u8 reg_addr, u8 *reg_data, u8
 {
     int iError = BME280_INIT_VALUE;
     uint8_t array[2];
+    uint8_t t;
 
-    for(int t = 0; t < cnt; t++) {
+    for(t = 0; t < cnt; t++) {
         array[0] = reg_addr;
         array[1] = *(reg_data + t);
         iError = i2c_write(dev_addr, &array[0], 2) >= 0 ? 0 : -1;
