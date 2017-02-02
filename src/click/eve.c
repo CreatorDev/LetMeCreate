@@ -288,7 +288,7 @@ static int parse_display_list_cmd(uint32_t cmd, va_list args)
 
 static int parse_display_list_vcmd(uint32_t cmd, ...)
 {
-    int ret = -1;
+    int ret;
     va_list args;
 
     va_start(args, cmd);
@@ -655,7 +655,7 @@ static int parse_coprocessor_cmd(uint32_t opcode, va_list args)
 
 static int parse_coprocessor_vcmd(uint32_t opcode, ...)
 {
-    int ret = -1;
+    int ret;
     va_list args;
     va_start(args, opcode);
     ret = parse_coprocessor_cmd(opcode, args);
@@ -1611,7 +1611,7 @@ void eve_click_attach_touch_event_callback(void (*callback)(void))
 
 int eve_click_calibrate(void)
 {
-    bool prev_buffering = true;
+    bool prev_buffering = eve_click_is_buffering_enabled();
     bool calibration_failure = false;
     uint16_t offset = 0;
     uint32_t result = 0;
@@ -1619,7 +1619,6 @@ int eve_click_calibrate(void)
     /* Discard any previous content in cmds */
     cmd_cnt = 0;
 
-    prev_buffering = eve_click_is_buffering_enabled();
     eve_click_enable_buffering();
 
     if (parse_coprocessor_vcmd(FT800_DLSTART) < 0
