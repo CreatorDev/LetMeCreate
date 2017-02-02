@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 #include <letmecreate/click/alphanum.h>
+#include <letmecreate/click/common.h>
 #include <letmecreate/core/common.h>
 #include <letmecreate/core/gpio.h>
 #include <letmecreate/core/spi.h>
@@ -89,14 +89,6 @@ static void select_right_display(void)
     gpio_set_value(gpio_pin_oe, 0);
 }
 
-static void wait_5ms(void)
-{
-    struct timespec rem, req = { 0, 5 * 1000 * 1000 };
-
-    while (nanosleep(&req, &rem) != 0)
-        req = rem;
-}
-
 static void* refresh_display(void __attribute__ ((unused))*arg)
 {
     thread_running = true;
@@ -105,12 +97,12 @@ static void* refresh_display(void __attribute__ ((unused))*arg)
         pthread_mutex_lock(&mutex);
         select_left_display();
         pthread_mutex_unlock(&mutex);
-        wait_5ms();
+        sleep_ms(5);
 
         pthread_mutex_lock(&mutex);
         select_right_display();
         pthread_mutex_unlock(&mutex);
-        wait_5ms();
+        sleep_ms(5);
     }
 
     return NULL;

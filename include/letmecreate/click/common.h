@@ -24,6 +24,13 @@ extern "C"{
  */
 int spi_write_register(uint8_t reg_address, uint8_t data);
 
+/**
+ * @brief Sleep during X ms
+ *
+ * @param[in] ms
+ */
+void sleep_ms(uint32_t ms);
+
 #ifdef __cplusplus
 }
 #endif

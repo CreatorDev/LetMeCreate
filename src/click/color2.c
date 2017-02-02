@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include <time.h>
 #include <letmecreate/click/color2.h>
+#include <letmecreate/click/common.h>
 #include <letmecreate/core/i2c.h>
 
 #define ISL29125_ADDRESS        (0x44)
@@ -21,18 +21,6 @@
 #define ISL29125_DEVICE_ID      (0x7D)
 #define RGB_SENSOR_EN           (0x05)
 #define FULL_RANGE              (0x08)
-
-static void sleep_ms(unsigned int ms)
-{
-    struct timespec req, rem;
-
-    req.tv_sec = ms / 1000;
-    ms -= req.tv_sec * 1000;
-    req.tv_nsec = ms * 1000000;
-
-    while (nanosleep(&req, &rem))
-        req = rem;
-}
 
 int color2_click_enable(void)
 {

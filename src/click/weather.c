@@ -18,6 +18,7 @@
  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ************************************************************************************************************************/
 
+#include <letmecreate/click/common.h>
 #include <letmecreate/letmecreate.h>
 #include <letmecreate/bosch/bme280.h>
 #include <stdlib.h>
@@ -66,19 +67,6 @@ static s8 weather_click_i2c_bus_write(u8 dev_addr, u8 reg_addr, u8 *reg_data, u8
     return (s8)iError;
 }
 
-static void weather_click_delay_ms(u32 ms)
-{
-    struct timespec req, rem;
-
-    req.tv_sec = ms / 1000;
-    ms -= req.tv_sec * 1000;
-    req.tv_nsec = ms * 1000000;
-
-    while (nanosleep(&req, &rem)) {
-        req = rem;
-    }
-}
-
 int weather_click_read_measurements(double* temperature, double* pressure, double* humidity)
 {
     readResult = 0;
@@ -107,7 +95,7 @@ int weather_click_enable(void)
     bme280.bus_write = weather_click_i2c_bus_write;
     bme280.bus_read = weather_click_i2c_bus_read;
     bme280.dev_addr = BME280_I2C_ADDRESS1;
-    bme280.delay_msec = weather_click_delay_ms;
+    bme280.delay_msec = sleep_ms;
 
     if (bme280_init(&bme280) != 0
         || bme280_set_power_mode(BME280_SLEEP_MODE) != 0
@@ -119,7 +107,7 @@ int weather_click_enable(void)
         || bme280_set_filter(BME280_FILTER_COEFF_16) != 0
         || bme280_set_power_mode(BME280_NORMAL_MODE) != 0)
         return -1;
-    
+
     return readResult;
 }
 
@@ -129,6 +117,6 @@ int weather_click_disable(void)
 
     if (bme280_set_power_mode(BME280_SLEEP_MODE) != 0)
         return -1;
-    
+
     return readResult;
 }

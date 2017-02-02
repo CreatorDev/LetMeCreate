@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 #include <unistd.h>
+#include <letmecreate/click/common.h>
 #include <letmecreate/click/eve.h>
 #include <letmecreate/click/ft800_defs.h>
 #include <letmecreate/core/common.h>
@@ -28,16 +28,6 @@ static bool use_timeout = true;
 
 static void (*touch_callback)(uint16_t, uint16_t) = NULL;
 static void (*touch_event_callback)(void) = NULL;
-
-static void sleep_ms(unsigned int ms)
-{
-    struct timespec rem, req;
-    req.tv_sec = ms / 1000;
-    req.tv_nsec = (ms - req.tv_sec * 1000) * 1000000;
-
-    while (nanosleep(&req, &rem))
-        req = rem;
-}
 
 static int send_command(uint8_t cmd)
 {
