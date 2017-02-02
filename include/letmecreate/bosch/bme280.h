@@ -59,6 +59,9 @@
 #ifndef __BME280_H__
 #define __BME280_H__
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include <letmecreate/bosch/export.h>
 
