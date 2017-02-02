@@ -271,14 +271,6 @@ int uart_send(const uint8_t *buffer, uint32_t count)
     return sent_cnt;
 }
 
-uint32_t uart_get_timeout() {
-    return timeout_for_bus[current_mikrobus_index];
-}
-
-void uart_set_timeout(uint32_t timeout) {
-    timeout_for_bus[current_mikrobus_index] = timeout;
-}
-
 int uart_receive(uint8_t *buffer, uint32_t count)
 {
     uint32_t received_cnt = 0;
@@ -327,6 +319,16 @@ int uart_receive(uint8_t *buffer, uint32_t count)
     }
 
     return received_cnt;
+}
+
+uint32_t uart_get_timeout(void)
+{
+    return timeout_for_bus[current_mikrobus_index];
+}
+
+void uart_set_timeout(uint32_t timeout)
+{
+    timeout_for_bus[current_mikrobus_index] = timeout;
 }
 
 int uart_release(void)
