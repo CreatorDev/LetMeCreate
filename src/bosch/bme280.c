@@ -137,17 +137,19 @@ s32 *v_uncomp_temperature_s32)
 {
 	/* used to return the communication result*/
 	BME280_RETURN_FUNCTION_TYPE com_rslt = ERROR;
-	/* Array holding the MSB and LSb value
-	a_data_u8r[0] - Temperature MSB
-	a_data_u8r[1] - Temperature LSB
-	a_data_u8r[2] - Temperature XLSB
-	*/
-	u8 a_data_u8r[BME280_TEMPERATURE_DATA_SIZE] = {
-	BME280_INIT_VALUE, BME280_INIT_VALUE, BME280_INIT_VALUE};
+
 	/* check the p_bme280 structure pointer as NULL*/
 	if (p_bme280 == BME280_NULL) {
 		return E_BME280_NULL_PTR;
 		} else {
+		/* Array holding the MSB and LSb value
+		a_data_u8r[0] - Temperature MSB
+		a_data_u8r[1] - Temperature LSB
+		a_data_u8r[2] - Temperature XLSB
+		*/
+		u8 a_data_u8r[BME280_TEMPERATURE_DATA_SIZE] = {
+		BME280_INIT_VALUE, BME280_INIT_VALUE, BME280_INIT_VALUE};
+
 			com_rslt = p_bme280->BME280_BUS_READ_FUNC(
 			p_bme280->dev_addr,
 			BME280_TEMPERATURE_MSB_REG,
@@ -248,17 +250,19 @@ s32 *v_uncomp_pressure_s32)
 {
 	/* used to return the communication result*/
 	BME280_RETURN_FUNCTION_TYPE com_rslt = ERROR;
-	/* Array holding the MSB and LSb value
-	a_data_u8[0] - Pressure MSB
-	a_data_u8[1] - Pressure LSB
-	a_data_u8[2] - Pressure XLSB
-	*/
-	u8 a_data_u8[BME280_PRESSURE_DATA_SIZE] = {
-	BME280_INIT_VALUE, BME280_INIT_VALUE, BME280_INIT_VALUE};
+
 	/* check the p_bme280 structure pointer as NULL*/
 	if (p_bme280 == BME280_NULL) {
 		return E_BME280_NULL_PTR;
 		} else {
+			/* Array holding the MSB and LSb value
+			a_data_u8[0] - Pressure MSB
+			a_data_u8[1] - Pressure LSB
+			a_data_u8[2] - Pressure XLSB
+			*/
+			u8 a_data_u8[BME280_PRESSURE_DATA_SIZE] = {
+			BME280_INIT_VALUE, BME280_INIT_VALUE, BME280_INIT_VALUE};
+
 			com_rslt = p_bme280->BME280_BUS_READ_FUNC(
 			p_bme280->dev_addr,
 			BME280_PRESSURE_MSB_REG,
@@ -383,16 +387,16 @@ s32 *v_uncomp_humidity_s32)
 {
 	/* used to return the communication result*/
 	BME280_RETURN_FUNCTION_TYPE com_rslt = ERROR;
-	/* Array holding the MSB and LSb value
-	a_data_u8[0] - Humidity MSB
-	a_data_u8[1] - Humidity LSB
-	*/
-	u8 a_data_u8[BME280_HUMIDITY_DATA_SIZE] = {
-	BME280_INIT_VALUE, BME280_INIT_VALUE};
 	/* check the p_bme280 structure pointer as NULL*/
 	if (p_bme280 == BME280_NULL) {
 		return E_BME280_NULL_PTR;
 		} else {
+			/* Array holding the MSB and LSb value
+			a_data_u8[0] - Humidity MSB
+			a_data_u8[1] - Humidity LSB
+			*/
+			u8 a_data_u8[BME280_HUMIDITY_DATA_SIZE] = {
+			BME280_INIT_VALUE, BME280_INIT_VALUE};
 			com_rslt = p_bme280->BME280_BUS_READ_FUNC(
 			p_bme280->dev_addr,
 			BME280_HUMIDITY_MSB_REG, a_data_u8,
@@ -498,25 +502,26 @@ s32 *v_uncomp_temperature_s32, s32 *v_uncomp_humidity_s32)
 {
 	/* used to return the communication result*/
 	BME280_RETURN_FUNCTION_TYPE com_rslt = ERROR;
-	/* Array holding the MSB and LSb value of
-	a_data_u8[0] - Pressure MSB
-	a_data_u8[1] - Pressure LSB
-	a_data_u8[1] - Pressure LSB
-	a_data_u8[1] - Temperature MSB
-	a_data_u8[1] - Temperature LSB
-	a_data_u8[1] - Temperature LSB
-	a_data_u8[1] - Humidity MSB
-	a_data_u8[1] - Humidity LSB
-	*/
-	u8 a_data_u8[BME280_DATA_FRAME_SIZE] = {
-	BME280_INIT_VALUE, BME280_INIT_VALUE,
-	BME280_INIT_VALUE, BME280_INIT_VALUE,
-	BME280_INIT_VALUE, BME280_INIT_VALUE,
-	BME280_INIT_VALUE, BME280_INIT_VALUE};
 	/* check the p_bme280 structure pointer as NULL*/
 	if (p_bme280 == BME280_NULL) {
 		return E_BME280_NULL_PTR;
-		} else {
+	} else {
+		/* Array holding the MSB and LSb value of
+		a_data_u8[0] - Pressure MSB
+		a_data_u8[1] - Pressure LSB
+		a_data_u8[1] - Pressure LSB
+		a_data_u8[1] - Temperature MSB
+		a_data_u8[1] - Temperature LSB
+		a_data_u8[1] - Temperature LSB
+		a_data_u8[1] - Humidity MSB
+		a_data_u8[1] - Humidity LSB
+		*/
+		u8 a_data_u8[BME280_DATA_FRAME_SIZE] = {
+		BME280_INIT_VALUE, BME280_INIT_VALUE,
+		BME280_INIT_VALUE, BME280_INIT_VALUE,
+		BME280_INIT_VALUE, BME280_INIT_VALUE,
+		BME280_INIT_VALUE, BME280_INIT_VALUE};
+
         com_rslt = p_bme280->BME280_BUS_READ_FUNC(
                 p_bme280->dev_addr,
                 BME280_PRESSURE_MSB_REG,
@@ -538,7 +543,7 @@ s32 *v_uncomp_temperature_s32, s32 *v_uncomp_humidity_s32)
         *v_uncomp_humidity_s32 = (s32) ((((u32) (a_data_u8[
         BME280_DATA_FRAME_HUMIDITY_MSB_BYTE])) << BME280_SHIFT_BIT_POSITION_BY_08_BITS) | ((u32) (a_data_u8[
         BME280_DATA_FRAME_HUMIDITY_LSB_BYTE])));
-		}
+	}
 	return com_rslt;
 }
 /*!
