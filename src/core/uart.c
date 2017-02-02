@@ -12,9 +12,9 @@
 #define UART_1_DEVICE_FILE      "/dev/ttySC0"
 #define UART_2_DEVICE_FILE      "/dev/ttySC1"
 
-static int fds[2] = { -1, -1 };
-static uint32_t timeout_for_bus[2] = {NO_TIMEOUT, NO_TIMEOUT};
-static struct termios old_pts[2];
+static int fds[MIKROBUS_COUNT] = { -1, -1 };
+static uint32_t timeout_for_bus[MIKROBUS_COUNT] = {NO_TIMEOUT, NO_TIMEOUT};
+static struct termios old_pts[MIKROBUS_COUNT];
 static uint8_t current_mikrobus_index = MIKROBUS_1;
 
 static int uart_init_bus(uint8_t mikrobus_index)
@@ -32,7 +32,7 @@ static int uart_init_bus(uint8_t mikrobus_index)
 
     if (mikrobus_index == MIKROBUS_1)
         device_file = UART_1_DEVICE_FILE;
-    else
+    else if (mikrobus_index == MIKROBUS_2)
         device_file = UART_2_DEVICE_FILE;
 
     if ((fds[mikrobus_index] = open(device_file, O_RDWR)) < 0) {
