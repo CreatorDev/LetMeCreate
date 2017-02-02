@@ -93,3 +93,7 @@ install(TARGETS letmecreate_rpisensehat_example RUNTIME DESTINATION bin)
 add_executable(letmecreate_lora_example lora/main.c)
 target_link_libraries(letmecreate_lora_example letmecreate_click letmecreate_core)
 install(TARGETS letmecreate_lora_example RUNTIME DESTINATION bin)
+
+add_executable(letmecreate_switch_example switch/main.c)
+target_link_libraries(letmecreate_switch_example letmecreate_core)
+install(TARGETS letmecreate_switch_example RUNTIME DESTINATION bin)
