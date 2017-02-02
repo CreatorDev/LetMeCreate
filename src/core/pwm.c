@@ -50,7 +50,7 @@
 #define DEVICE_FILE_BASE_PATH           "/sys/class/pwm/pwmchip0/"
 #define PWM_DEVICE_FILE_BASE_PATH       "/sys/class/pwm/pwmchip0/pwm"
 
-static bool pin_initialised[2] = { false, false };
+static bool pin_initialised[MIKROBUS_COUNT] = { false, false };
 
 /*
  * Check if the directory /sys/class/pwm/pwmchip0/pwm0 or
