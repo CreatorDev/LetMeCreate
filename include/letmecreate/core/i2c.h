@@ -19,7 +19,8 @@ extern "C"{
  * @brief Initialise all I²C bus.
  *
  * This function creates a new file descriptor for the device file associated with each I²C bus
- * of the Ci-40. If the bus is already initialised, nothing is done.
+ * of the Ci-40. Timeout is set to 0.
+ * If the bus is already initialised, nothing is done.
  *
  * @return Returns -1 if it fails, otherwise it returns 0.
  */
@@ -122,6 +123,22 @@ int LETMECREATE_CORE_EXPORT i2c_read_register(uint16_t slave_address, uint8_t re
  * @return 1 if successful, otherwise it returns -1.
  */
 int LETMECREATE_CORE_EXPORT i2c_read_16b_register(uint16_t address, uint8_t reg_low_address, uint8_t reg_high_address, uint16_t *data);
+
+/**
+ * @brief Get timeout of currently selected I²C bus.
+ *
+ * @return timeout Timeout in ms after which uart_receive will return, even if it does not read the request amount of bytes.
+ */
+uint32_t LETMECREATE_CORE_EXPORT i2c_get_timeout(void);
+
+/**
+ * @brief Set timeout of currently selected I²C bus.
+ *
+ * Pass UART_TIMEOUT_NEVER to disable timeout functionality.
+ *
+ * @param[in] timeout Timeout in ms after which i2c_receive will return, even if it does not read the request amount of bytes.
+ */
+void LETMECREATE_CORE_EXPORT i2c_set_timeout(uint32_t timeout);
 
 /**
  * @brief Close all file descriptor.

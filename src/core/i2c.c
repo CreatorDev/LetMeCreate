@@ -2,6 +2,8 @@
 #include <linux/i2c-dev.h>
 #include <stdio.h>
 #include <sys/ioctl.h>
+#include <sys/select.h>
+#include <sys/time.h>
 #include <unistd.h>
 #include <letmecreate/core/i2c.h>
 #include <letmecreate/core/common.h>
@@ -12,6 +14,7 @@
 
 static int fds[] = { -1, -1 };
 static uint8_t current_mikrobus_index = MIKROBUS_1;
+static uint32_t timeout_for_bus[MIKROBUS_COUNT] = {NO_TIMEOUT, NO_TIMEOUT};
 
 static int i2c_select_slave(int fd, uint16_t address)
 {
@@ -43,6 +46,8 @@ static int i2c_init_bus(uint8_t mikrobus_index)
         fprintf(stderr, "i2c: Cannot open device for bus %d.\n", mikrobus_index);
         return -1;
     }
+
+    timeout_for_bus[mikrobus_index] = NO_TIMEOUT;
 
     return 0;
 }
@@ -124,7 +129,8 @@ int i2c_write(uint16_t slave_address, const uint8_t *buffer, uint32_t count)
 int i2c_read(uint16_t slave_address, uint8_t *buffer, uint32_t count)
 {
     int ret, fd;
-    uint32_t nbBytesReceived;
+    uint32_t nbBytesReceived = 0;
+    uint32_t timeout = timeout_for_bus[current_mikrobus_index];
 
     fd = fds[current_mikrobus_index];
     if (fd < 0) {
@@ -143,8 +149,25 @@ int i2c_read(uint16_t slave_address, uint8_t *buffer, uint32_t count)
     if ((ret = i2c_select_slave(fd, slave_address)) < 0)
         return ret;
 
-    nbBytesReceived = 0;
     while (nbBytesReceived < count) {
+        if (timeout != NO_TIMEOUT) {
+            fd_set set;
+            struct timeval tmp_timeout;
+            tmp_timeout.tv_sec = timeout / 1000;
+            tmp_timeout.tv_usec = (timeout % 1000) * 1000;
+            FD_ZERO(&set);
+            FD_SET(fds[current_mikrobus_index], &set);
+
+            ret = select(fds[current_mikrobus_index] + 1, &set, NULL, NULL, &tmp_timeout);
+            if (ret == -1) {
+                fprintf(stderr, "i2c: Failed to wait for data.\n");
+                return -1;
+            } else if (ret == 0) {
+                fprintf(stderr, "i2c: Read timeout.\n");
+                return nbBytesReceived;
+            }
+        }
+
         ret = read(fd, &buffer[nbBytesReceived], count - nbBytesReceived);
         if (ret < 0) {
             fprintf(stderr, "i2c: Failed to read.\n");
@@ -201,6 +224,16 @@ int i2c_read_16b_register(uint16_t address,
     *data |= low;
 
     return 0;
+}
+
+uint32_t i2c_get_timeout(void)
+{
+    return timeout_for_bus[current_mikrobus_index];
+}
+
+void i2c_set_timeout(uint32_t timeout)
+{
+    timeout_for_bus[current_mikrobus_index] = timeout;
 }
 
 int i2c_release(void)
