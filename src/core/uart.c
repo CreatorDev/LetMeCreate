@@ -13,7 +13,7 @@
 #define UART_2_DEVICE_FILE      "/dev/ttySC1"
 
 static int fds[2] = { -1, -1 };
-static uint32_t timeout_for_bus[2] = {UART_TIMEOUT_NEVER, UART_TIMEOUT_NEVER};
+static uint32_t timeout_for_bus[2] = {NO_TIMEOUT, NO_TIMEOUT};
 static struct termios old_pts[2];
 static uint8_t current_mikrobus_index = MIKROBUS_1;
 
@@ -75,7 +75,7 @@ static int uart_init_bus(uint8_t mikrobus_index)
         return -1;
     }
 
-    timeout_for_bus[mikrobus_index] = UART_TIMEOUT_NEVER;
+    timeout_for_bus[mikrobus_index] = NO_TIMEOUT;
 
     return 0;
 }
@@ -291,7 +291,7 @@ int uart_receive(uint8_t *buffer, uint32_t count)
     uint32_t timeout = timeout_for_bus[current_mikrobus_index];
     while (received_cnt < count) {
         int ret;
-        if (timeout != UART_TIMEOUT_NEVER) {
+        if (timeout != NO_TIMEOUT) {
             fd_set set;
             struct timeval tmp_timeout;
             tmp_timeout.tv_sec = timeout / 1000;

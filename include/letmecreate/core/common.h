@@ -21,6 +21,9 @@ extern "C"{
  */
 #define MAX_STR_LENGTH          (255)
 
+/** Special timeout value to disable it. Make uart_read blocking */
+#define NO_TIMEOUT              (0)
+
 /** Index of Mikrobus interfaces */
 enum MIKROBUS_INDEX {
     MIKROBUS_1,

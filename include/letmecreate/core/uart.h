@@ -27,9 +27,6 @@ enum UART_BAUDRATE {
     UART_BD_57600   = 57600
 };
 
-/** Special timeout value to disable it. Make uart_read blocking */
-#define UART_TIMEOUT_NEVER      (0)
-
 /**
  * @brief Initialise all UART devices.
  *
@@ -104,7 +101,7 @@ uint32_t LETMECREATE_CORE_EXPORT uart_get_timeout(void);
 /**
  * @brief Set timeout of currently selected UART bus.
  *
- * Pass UART_TIMEOUT_NEVER to disable timeout functionality.
+ * Pass NO_TIMEOUT (=0) to disable timeout functionality.
  *
  * @param[in] timeout Timeout in ms after which uart_receive will return, even if it does not read the request amount of bytes.
  */
