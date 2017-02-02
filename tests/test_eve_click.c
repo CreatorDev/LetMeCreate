@@ -323,7 +323,7 @@ static bool test_eve_click_snapshot(void)
     ||  eve_click_draw(FT800_VERTEX2II, 0, 0, 0, 0) < 0
     ||  eve_click_draw(FT800_END) < 0
     ||  eve_click_display() < 0)
-        ret = false;
+        return false;
     return ask_question("Do you see a red screen ?", 15) == 1;
 }
 
