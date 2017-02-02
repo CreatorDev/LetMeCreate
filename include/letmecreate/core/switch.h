@@ -1,8 +1,10 @@
 /**
  * @file switch.h
  * @author Francois Berder
- * @date 2016
+ * @date 2017
  * @copyright 3-clause BSD
+ *
+ * @example switch/main.c
  */
 
 
