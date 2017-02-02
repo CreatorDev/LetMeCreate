@@ -85,7 +85,7 @@ static int find_file_descriptor(char *file_descriptor_path)
             found_gpio_keys_device = true;
 
         if (found_gpio_keys_device
-        && sscanf(line, "H: Handlers=%s", file_descriptor_name) == 1) {
+        && sscanf(line, "H: Handlers=%29s", file_descriptor_name) == 1) {
             if (sprintf(file_descriptor_path, "/dev/input/%s", file_descriptor_name) < 0)
                 ret = -1;
             goto find_file_descriptor_end;
@@ -114,7 +114,6 @@ static void process_event(uint8_t switch_event)
 
 static void* switch_update(void __attribute__ ((unused))*arg)
 {
-    int ret;
     struct input_event event[2];
     struct pollfd pfd;
     pfd.fd = fd;
@@ -122,6 +121,7 @@ static void* switch_update(void __attribute__ ((unused))*arg)
 
     running = true;
     while (running) {
+        int ret;
         /*
          * Polls on file returned by function find_file_descriptor
          * (typically /dev/input/event0 or /dev/input/event1).
