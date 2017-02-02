@@ -1,8 +1,10 @@
 /**
  * @file uni_hall.h
  * @author Francois Berder
- * @date 2016
+ * @date 2017
  * @copyright 3-clause BSD
+ *
+ * @example uni_hall/main.c
  */
 
 #ifndef __LETMECREATE_CLICK_UNI_HALL_H__
