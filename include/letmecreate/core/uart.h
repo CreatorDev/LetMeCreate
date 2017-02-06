@@ -78,7 +78,7 @@ int LETMECREATE_CORE_EXPORT uart_get_baudrate(uint32_t *baudrate);
  *
  * @param[in] buffer Array of bytes
  * @param[in] count Number of bytes to send
- * @return 0 if successful, -1 otherwise
+ * @return @p count if successful, -1 otherwise
  */
 int LETMECREATE_CORE_EXPORT uart_send(const uint8_t *buffer, uint32_t count);
 
@@ -87,7 +87,7 @@ int LETMECREATE_CORE_EXPORT uart_send(const uint8_t *buffer, uint32_t count);
  *
  * @param[out] buffer Array of bytes
  * @param[in] count Number of bytes to receive
- * @return 0 if successful, -1 otherwise
+ * @return @p count if successful, -1 otherwise
  */
 int LETMECREATE_CORE_EXPORT uart_receive(uint8_t *buffer, uint32_t count);
 
