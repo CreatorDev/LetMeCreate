@@ -26,8 +26,7 @@ int motion_click_attach_callback(uint8_t mikrobus_index, void(*callback)(uint8_t
     if (gpio_get_pin(mikrobus_index, TYPE_INT, &gpio_pin) < 0)
         return -1;
 
-    if (!gpio_init(gpio_pin)
-    &&  !gpio_set_direction(gpio_pin, GPIO_INPUT)
+    if (!gpio_init(gpio_pin)        /* This configures the gpio as an input */
     &&  !gpio_monitor_init())
         return gpio_monitor_add_callback(gpio_pin, GPIO_EDGE, callback);
 
@@ -41,8 +40,7 @@ int motion_click_disable(uint8_t mikrobus_index)
     if (gpio_get_pin(mikrobus_index, TYPE_RST, &gpio_pin) < 0)
         return -1;
 
-    if (!gpio_init(gpio_pin)
-    &&  !gpio_set_direction(gpio_pin, GPIO_OUTPUT)
+    if (!gpio_init(gpio_pin)         /* This configures the gpio as an input */
     &&  !gpio_set_value(gpio_pin, 0))
         return 0;
 
