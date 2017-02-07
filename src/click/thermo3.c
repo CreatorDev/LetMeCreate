@@ -81,8 +81,7 @@ int thermo3_click_set_alarm(uint8_t mikrobus_index, float threshold, void(*callb
         return -1;
     }
 
-    if (gpio_init(alarm_pin) < 0
-    ||  gpio_set_direction(alarm_pin, GPIO_INPUT) < 0) {
+    if (gpio_init(alarm_pin) < 0) {
         fprintf(stderr, "thermo3: Failed to configure alert pin as an input.\n");
         return -1;
     }
