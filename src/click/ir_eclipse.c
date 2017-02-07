@@ -19,8 +19,7 @@ int ir_eclipse_click_add_callback(uint8_t mikrobus_index, void (*callback)(uint8
         return -1;
     }
 
-    if (gpio_init(gpio_pin) < 0
-    ||  gpio_set_direction(gpio_pin, GPIO_INPUT) < 0
+    if (gpio_init(gpio_pin) < 0     /* This configures the gpio as an input */
     ||  gpio_monitor_init() < 0)
         return -1;
 
