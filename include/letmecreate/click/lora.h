@@ -3,6 +3,8 @@
  * @author Francois Berder
  * @date 2017
  * @copyright 3-clause BSD
+ *
+ * @example lora/main.c
  */
 
 #ifndef __LETMECREATE_CLICK_LORA_H__
