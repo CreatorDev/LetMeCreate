@@ -6,9 +6,11 @@
 #include <letmecreate/core/gpio_monitor.h>
 
 
-static const uint8_t channel_pins[MIKROBUS_COUNT][OPTO_CLICK_CHANNEL_COUNT] = {
-    { MIKROBUS_1_INT, 0, MIKROBUS_1_RST, MIKROBUS_1_AN },
-    { MIKROBUS_2_INT, 0, MIKROBUS_2_RST, MIKROBUS_2_AN }
+static const uint8_t channel_pins[OPTO_CLICK_CHANNEL_COUNT] = {
+    TYPE_INT,
+    0,              /* Channel 2 is on CS pin, so ignore it */
+    TYPE_RST,
+    TYPE_AN
 };
 
 static bool check_channel_index(uint8_t channel_index)
@@ -39,8 +41,8 @@ int opto_click_attach_callback(uint8_t mikrobus_index, uint8_t channel_index, vo
         return -1;
     }
 
-    gpio_pin = channel_pins[mikrobus_index][channel_index];
-    if (gpio_init(gpio_pin) < 0
+    if (gpio_get_pin(mikrobus_index, channel_pins[channel_index], &gpio_pin) < 0
+    ||  gpio_init(gpio_pin) < 0
     ||  gpio_monitor_init() < 0
     ||  gpio_monitor_add_callback(gpio_pin, GPIO_EDGE, callback) < 0)
         return -1;
@@ -61,8 +63,8 @@ int opto_click_read_channel(uint8_t mikrobus_index, uint8_t channel_index, uint8
         return -1;
     }
 
-    gpio_pin = channel_pins[mikrobus_index][channel_index];
-    if (gpio_init(gpio_pin) < 0
+    if (gpio_get_pin(mikrobus_index, channel_pins[channel_index], &gpio_pin) < 0
+    ||  gpio_init(gpio_pin) < 0
     ||  gpio_get_value(gpio_pin, state) < 0)
         return -1;
 
