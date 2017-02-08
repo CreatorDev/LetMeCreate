@@ -259,7 +259,7 @@ int lora_click_init(uint8_t mikrobus_index, struct lora_click_config config)
     return 0;
 }
 
-int LETMECREATE_CLICK_EXPORT lora_click_configure(struct lora_click_config config)
+int lora_click_configure(struct lora_click_config config)
 {
     char buffer[65];
 
