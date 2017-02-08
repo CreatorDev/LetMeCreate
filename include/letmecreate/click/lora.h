@@ -10,6 +10,10 @@
 #ifndef __LETMECREATE_CLICK_LORA_H__
 #define __LETMECREATE_CLICK_LORA_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdbool.h>
 #include <stdint.h>
 #include <letmecreate/click/export.h>
@@ -156,5 +160,9 @@ int LETMECREATE_CLICK_EXPORT lora_click_read_eeprom(uint32_t start_address, uint
  * @return 0 if successful, -1 otherwise
  */
 int LETMECREATE_CLICK_EXPORT lora_click_get_eui(uint8_t *eui);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
