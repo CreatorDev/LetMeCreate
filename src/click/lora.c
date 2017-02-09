@@ -22,6 +22,8 @@
 
 #define EUI_SIZE                (8)
 
+#define DEBUG 0
+#if DEBUG
 #define LOG_DEBUG(FMT,...)                  \
     do {                                    \
         printf("[%s:%d]: "FMT,              \
@@ -29,6 +31,9 @@
             __LINE__,                       \
             ##__VA_ARGS__);                 \
     }while(0)
+#else
+#define LOG_DEBUG(FMT,...)
+#endif
 
 static char rx_buffer[MAX_CHUNK_LENGTH];
 static uint32_t available_byte_count = 0;
