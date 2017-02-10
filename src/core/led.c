@@ -174,7 +174,7 @@ int led_configure_timer_mode(uint8_t mask)
         }
     }
 
-    return led_set_delay(ALL_LEDS, 0, 500);
+    return led_set_delay(mask, 0, 500);
 }
 
 int led_get_mode(uint8_t led_index, uint8_t *led_mode)
