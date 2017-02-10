@@ -256,6 +256,10 @@ int led_release(void)
 {
     int i = 0;
 
+    /* Ensure that all LED's are in on/off mode before calling switch_off */
+    if (led_configure_on_off_mode(ALL_LEDS) < 0)
+        return -1;
+
     for (; i < LED_CNT; ++i) {
         if (fds[i] < 0)
             continue;
