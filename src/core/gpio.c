@@ -205,6 +205,9 @@ int gpio_set_direction(uint8_t gpio_pin, uint8_t dir)
 
     /* Only strings "out" and "in" can be written to file /sys/class/gpio/gpioN/direction/ */
     if (dir == GPIO_OUTPUT) {
+        /* Remove any existing IRQ on gpio */
+        if (write_str_gpio_file(gpio_pin, "edge", "none") < 0)
+            return -1;
         strcpy(str, "out");
     } else if (dir == GPIO_INPUT) {
         strcpy(str, "in");
