@@ -46,6 +46,7 @@
 #include <unistd.h>
 #include <letmecreate/core/pwm.h>
 #include <letmecreate/core/common.h>
+#include <letmecreate/core/gpio.h>
 
 #define DEVICE_FILE_BASE_PATH           "/sys/class/pwm/pwmchip0/"
 #define PWM_DEVICE_FILE_BASE_PATH       "/sys/class/pwm/pwmchip0/pwm"
@@ -123,6 +124,8 @@ static int read_int_pwm_file(uint8_t mikrobus_index, const char *file_name, uint
 
 int pwm_init(uint8_t mikrobus_index)
 {
+    uint8_t gpio_pin = 0;
+
     if (check_valid_mikrobus(mikrobus_index) < 0) {
         fprintf(stderr, "pwm: Invalid mikrobus_index.\n");
         return -1;
@@ -130,6 +133,11 @@ int pwm_init(uint8_t mikrobus_index)
 
     if (pin_initialised[mikrobus_index])
         return 0;
+
+    /* Ensure that PWM pin is not used as a GPIO */
+    if (gpio_get_pin(mikrobus_index, TYPE_PWM, &gpio_pin) < 0
+    ||  gpio_release(gpio_pin) < 0)
+        return -1;
 
     if (!is_pwm_pin_exported(mikrobus_index)) {
         if (export_pin(DEVICE_FILE_BASE_PATH, mikrobus_index) < 0)
