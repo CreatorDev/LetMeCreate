@@ -42,6 +42,7 @@
 #include <unistd.h>
 #include <letmecreate/core/gpio.h>
 #include <letmecreate/core/common.h>
+#include <letmecreate/core/pwm.h>
 
 #define GPIO_DIR_BASE_PATH      "/sys/class/gpio/"
 #define GPIO_PATH_FORMAT        "/sys/class/gpio/gpio%d/%s"
@@ -163,6 +164,16 @@ int gpio_init(uint8_t gpio_pin)
 {
     if (!check_pin(gpio_pin))
         return -1;
+
+    /* Ensure that PWM GPIO's are not used as PWM output at the same time */
+    switch (gpio_pin) {
+    case MIKROBUS_1_PWM:
+        pwm_release(MIKROBUS_1);
+        break;
+    case MIKROBUS_2_PWM:
+        pwm_release(MIKROBUS_2);
+        break;
+    }
 
     /* Export a GPIO by writing its index to file /sys/class/gpio/export. */
     if (!is_gpio_exported(gpio_pin)) {
