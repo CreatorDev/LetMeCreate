@@ -194,6 +194,37 @@ int gpio_get_pin(uint8_t mikrobus_index, uint8_t pin_type, uint8_t * pin)
     return 0;
 }
 
+int gpio_get_type(uint8_t gpio_pin, uint8_t *pin_type)
+{
+    if (pin_type == NULL) {
+        fprintf(stderr, "gpio: Cannot store type using null pointer.\n");
+        return -1;
+    }
+
+    switch (gpio_pin) {
+    case MIKROBUS_1_AN:
+    case MIKROBUS_2_AN:
+        *pin_type = TYPE_AN;
+        break;
+    case MIKROBUS_1_RST:
+    case MIKROBUS_2_RST:
+        *pin_type = TYPE_RST;
+        break;
+    case MIKROBUS_1_PWM:
+    case MIKROBUS_2_PWM:
+        *pin_type = TYPE_PWM;
+        break;
+    case MIKROBUS_1_INT:
+    case MIKROBUS_2_INT:
+        *pin_type = TYPE_INT;
+        break;
+    default:
+        return -1;
+    }
+
+    return 0;
+}
+
 int gpio_set_direction(uint8_t gpio_pin, uint8_t dir)
 {
     char str[4];

@@ -108,6 +108,17 @@ int LETMECREATE_CORE_EXPORT gpio_init(uint8_t gpio_pin);
 int LETMECREATE_CORE_EXPORT gpio_get_pin(uint8_t mikrobus_index, uint8_t pin_type, uint8_t * pin);
 
 /**
+ * @brief Returns the type of a GPIO
+ *
+ * Note that not all GPIO's have an associated type. In that case, -1 is returned.
+ *
+ * @param[in] gpio_pin
+ * @param[out] pin_type Pointer to a variable awaiting the type of pin (see #PIN_TYPE)
+ * @return 0 if successful, -1 otherwise
+ */
+int LETMECREATE_CORE_EXPORT gpio_get_type(uint8_t gpio_pin, uint8_t *pin_type);
+
+/**
  * @brief Configure GPIO as input or output.
  *
  * @param[in] gpio_pin Index of the GPIO
