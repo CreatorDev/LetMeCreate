@@ -10,6 +10,10 @@
 #ifndef __LETMECREATE_CORE_LED_H__
 #define __LETMECREATE_CORE_LED_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdint.h>
 #include <letmecreate/core/export.h>
 
@@ -116,5 +120,9 @@ int LETMECREATE_CORE_EXPORT led_set_delay(uint8_t mask, uint32_t delay_on, uint3
  * @return 0 if successful, -1 otherwise
  */
 int LETMECREATE_CORE_EXPORT led_release(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

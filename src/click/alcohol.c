@@ -12,8 +12,7 @@ int alcohol_click_get_measure(uint8_t mikrobus_index, uint16_t *measure)
         fprintf(stderr, "alcohol: Cannot store measurement in null variable.\n");
         return -1;
     }
-    if (mikrobus_index != MIKROBUS_1
-    &&  mikrobus_index != MIKROBUS_2) {
+    if (check_valid_mikrobus(mikrobus_index) < 0) {
         fprintf(stderr, "alcohol: Invalid mikrobus index.\n");
         return -1;
     }

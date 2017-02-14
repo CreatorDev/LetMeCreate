@@ -76,20 +76,12 @@ int thermo3_click_set_alarm(uint8_t mikrobus_index, float threshold, void(*callb
         return -1;
     }
 
-    switch (mikrobus_index) {
-    case MIKROBUS_1:
-        alarm_pin = MIKROBUS_1_INT;
-        break;
-    case MIKROBUS_2:
-        alarm_pin = MIKROBUS_2_INT;
-        break;
-    default:
-        fprintf(stderr, "thermo3: Invalid mikrobus index.\n");
+    if (gpio_get_pin(mikrobus_index, TYPE_INT, &alarm_pin) < 0) {
+        fprintf(stderr, "thermo3: Could not find pin\n");
         return -1;
     }
 
-    if (gpio_init(alarm_pin) < 0
-    ||  gpio_set_direction(alarm_pin, GPIO_INPUT) < 0) {
+    if (gpio_init(alarm_pin) < 0) {
         fprintf(stderr, "thermo3: Failed to configure alert pin as an input.\n");
         return -1;
     }

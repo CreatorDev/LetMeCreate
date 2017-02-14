@@ -9,6 +9,10 @@
 #ifndef __LETMECREATE_CORE_UART_H__
 #define __LETMECREATE_CORE_UART_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdint.h>
 #include <letmecreate/core/export.h>
 
@@ -22,9 +26,6 @@ enum UART_BAUDRATE {
     UART_BD_38400   = 38400,
     UART_BD_57600   = 57600
 };
-
-/** Special timeout value to disable it. Make uart_read blocking */
-#define UART_TIMEOUT_NEVER      (0)
 
 /**
  * @brief Initialise all UART devices.
@@ -77,7 +78,7 @@ int LETMECREATE_CORE_EXPORT uart_get_baudrate(uint32_t *baudrate);
  *
  * @param[in] buffer Array of bytes
  * @param[in] count Number of bytes to send
- * @return 0 if successful, -1 otherwise
+ * @return @p count if successful, -1 otherwise
  */
 int LETMECREATE_CORE_EXPORT uart_send(const uint8_t *buffer, uint32_t count);
 
@@ -86,7 +87,7 @@ int LETMECREATE_CORE_EXPORT uart_send(const uint8_t *buffer, uint32_t count);
  *
  * @param[out] buffer Array of bytes
  * @param[in] count Number of bytes to receive
- * @return 0 if successful, -1 otherwise
+ * @return @p count if successful, -1 otherwise
  */
 int LETMECREATE_CORE_EXPORT uart_receive(uint8_t *buffer, uint32_t count);
 
@@ -100,7 +101,7 @@ uint32_t LETMECREATE_CORE_EXPORT uart_get_timeout(void);
 /**
  * @brief Set timeout of currently selected UART bus.
  *
- * Pass UART_TIMEOUT_NEVER to disable timeout functionality.
+ * Pass NO_TIMEOUT (=0) to disable timeout functionality.
  *
  * @param[in] timeout Timeout in ms after which uart_receive will return, even if it does not read the request amount of bytes.
  */
@@ -114,5 +115,9 @@ void LETMECREATE_CORE_EXPORT uart_set_timeout(uint32_t timeout);
  * @return 0 if successful, -1 otherwise
  */
 int LETMECREATE_CORE_EXPORT uart_release(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

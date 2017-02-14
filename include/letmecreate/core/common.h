@@ -9,21 +9,35 @@
 #ifndef __LETMECREATE_CORE_COMMON_H__
 #define __LETMECREATE_CORE_COMMON_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdint.h>
+#include <letmecreate/core/export.h>
 
 /** Maximum string length when opening device file
  *  for I2C, SPI, GPIO, PWM...
  */
 #define MAX_STR_LENGTH          (255)
 
-/** Number of MIKROBUS on Ci40 */
-#define MIKROBUS_COUNT          (2)
+/** Special timeout value to disable it. Make uart_read blocking */
+#define NO_TIMEOUT              (0)
 
 /** Index of Mikrobus interfaces */
 enum MIKROBUS_INDEX {
     MIKROBUS_1,
-    MIKROBUS_2
+    MIKROBUS_2,
+    MIKROBUS_COUNT
 };
+
+/**
+ * @brief Checks if mikrobus exists
+ *
+ * @param[in] mikrobus_index Mikrobus to check
+ * @return 0 if successful, -1 otherwise
+ */
+int LETMECREATE_CORE_EXPORT check_valid_mikrobus(uint8_t mikrobus_index);
 
 /**
  * @brief Write a string to a device file.
@@ -79,5 +93,9 @@ int export_pin(const char *dir_path, uint32_t pin_no);
  * @return 0 if successful, -1 otherwise
  */
 int unexport_pin(const char *dir_path, uint32_t pin_no);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -10,6 +10,10 @@
 #ifndef __LETMECREATE_CLICK_COLOR2_H__
 #define __LETMECREATE_CLICK_COLOR2_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdint.h>
 #include <letmecreate/click/export.h>
 
@@ -36,5 +40,9 @@ int LETMECREATE_CLICK_EXPORT color2_click_get_color(uint16_t *red, uint16_t *gre
  * @return 0 if successful, otherwise it returns -1.
  */
 int LETMECREATE_CLICK_EXPORT color2_click_disable(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -1,7 +1,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
-#include <time.h>
+#include <letmecreate/click/common.h>
 #include <letmecreate/click/oled.h>
 #include <letmecreate/core/common.h>
 #include <letmecreate/core/gpio.h>
@@ -157,17 +157,6 @@ static int oled_click_cmd(uint8_t cmd)
         return i2c_write_register(SSD1306_ADDRESS, 0, cmd);
 }
 
-static void sleep_50ms(void)
-{
-    struct timespec rem, req = {
-        .tv_nsec = 50000000,
-        .tv_sec = 0
-    };
-
-    while (nanosleep(&req, &rem))
-        req = rem;
-}
-
 static int oled_click_set_page_addr(uint8_t pageno)
 {
     if (pageno >= SSD1306_PAGE_COUNT) {
@@ -192,28 +181,14 @@ int oled_click_enable(uint8_t mikrobus_index)
 {
     uint8_t reset_pin = 0 , sa0_pin = 0;
 
-    switch (mikrobus_index) {
-        case MIKROBUS_1:
-            reset_pin = MIKROBUS_1_RST;
-            if (use_spi)
-                dc_pin = MIKROBUS_1_PWM;
-            else
-                sa0_pin = MIKROBUS_1_PWM;
-            break;
-        case MIKROBUS_2:
-            reset_pin = MIKROBUS_2_RST;
-            if (use_spi)
-                dc_pin = MIKROBUS_2_PWM;
-            else
-                sa0_pin = MIKROBUS_2_PWM;
-            break;
-        default:
-            fprintf(stderr, "oled: Invalid mikrobus index.\n");
-            return -1;
+    if (gpio_get_pin(mikrobus_index, TYPE_RST, &reset_pin) < 0) {
+        fprintf(stderr, "oled: Could not find pin type\n");
+        return -1;
     }
 
     if (use_spi) {
-        if (gpio_init(dc_pin) < 0
+        if (gpio_get_pin(mikrobus_index, TYPE_PWM, &dc_pin) < 0
+        ||  gpio_init(dc_pin) < 0
         ||  gpio_set_direction(dc_pin, GPIO_OUTPUT) < 0
         ||  gpio_set_value(dc_pin, 0) < 0) {
             fprintf(stderr, "oled: Failed to set D/C pin to 0.\n");
@@ -223,7 +198,8 @@ int oled_click_enable(uint8_t mikrobus_index)
         /* Set SA0 (the least significant bit of the slave address) to 0.
          * It ensures that the address of the device is 0x3C.
          */
-        if (gpio_init(sa0_pin) < 0
+        if (gpio_get_pin(mikrobus_index, TYPE_PWM, &sa0_pin) < 0
+        || gpio_init(sa0_pin) < 0
         ||  gpio_set_direction(sa0_pin, GPIO_OUTPUT) < 0
         ||  gpio_set_value(sa0_pin, 0) < 0) {
             fprintf(stderr, "oled: Failed to set SA0 to 0.\n");
@@ -239,7 +215,7 @@ int oled_click_enable(uint8_t mikrobus_index)
         return -1;
     }
 
-    sleep_50ms();
+    sleep_ms(50);
 
     if (gpio_set_value(reset_pin, 1) < 0) {
         fprintf(stderr, "oled: Failed to reset device.\n");

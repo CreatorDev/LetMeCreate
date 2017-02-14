@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 #include <unistd.h>
+#include <letmecreate/click/common.h>
 #include <letmecreate/click/eve.h>
 #include <letmecreate/click/ft800_defs.h>
 #include <letmecreate/core/common.h>
@@ -28,16 +28,6 @@ static bool use_timeout = true;
 
 static void (*touch_callback)(uint16_t, uint16_t) = NULL;
 static void (*touch_event_callback)(void) = NULL;
-
-static void sleep_ms(unsigned int ms)
-{
-    struct timespec rem, req;
-    req.tv_sec = ms / 1000;
-    req.tv_nsec = (ms - req.tv_sec * 1000) * 1000000;
-
-    while (nanosleep(&req, &rem))
-        req = rem;
-}
 
 static int send_command(uint8_t cmd)
 {
@@ -298,7 +288,7 @@ static int parse_display_list_cmd(uint32_t cmd, va_list args)
 
 static int parse_display_list_vcmd(uint32_t cmd, ...)
 {
-    int ret = -1;
+    int ret;
     va_list args;
 
     va_start(args, cmd);
@@ -665,7 +655,7 @@ static int parse_coprocessor_cmd(uint32_t opcode, va_list args)
 
 static int parse_coprocessor_vcmd(uint32_t opcode, ...)
 {
-    int ret = -1;
+    int ret;
     va_list args;
     va_start(args, opcode);
     ret = parse_coprocessor_cmd(opcode, args);
@@ -865,16 +855,8 @@ static int attach_interrupt_handler(uint8_t mikrobus_index)
 {
     uint8_t int_pin;
 
-    switch(mikrobus_index) {
-    case MIKROBUS_1:
-        int_pin = MIKROBUS_1_INT;
-        break;
-    case MIKROBUS_2:
-        int_pin = MIKROBUS_2_INT;
-        break;
-    default:
+    if (gpio_get_pin(mikrobus_index, TYPE_INT, &int_pin) < 0)
         return -1;
-    }
 
     if (gpio_init(int_pin) < 0
     ||  gpio_monitor_init() < 0)
@@ -890,16 +872,8 @@ static int detach_interrupt_handler(uint8_t mikrobus_index)
 {
     uint8_t int_pin;
 
-    switch(mikrobus_index) {
-    case MIKROBUS_1:
-        int_pin = MIKROBUS_1_INT;
-        break;
-    case MIKROBUS_2:
-        int_pin = MIKROBUS_2_INT;
-        break;
-    default:
+    if (gpio_get_pin(mikrobus_index, TYPE_INT, &int_pin) < 0)
         return -1;
-    }
 
     if (int_callback_id < 0)
         return 0;
@@ -926,16 +900,8 @@ static int ft800_power(uint8_t bus_index, bool enable)
 {
     uint8_t pd_n_pin;
 
-    switch (bus_index) {
-    case MIKROBUS_1:
-        pd_n_pin = MIKROBUS_1_RST;
-        break;
-    case MIKROBUS_2:
-        pd_n_pin = MIKROBUS_2_RST;
-        break;
-    default:
+    if (gpio_get_pin(bus_index, TYPE_RST, &pd_n_pin) < 0)
         return -1;
-    }
 
     if (gpio_init(pd_n_pin) < 0
     || gpio_set_direction(pd_n_pin, GPIO_OUTPUT) < 0
@@ -951,16 +917,8 @@ static int ft800_use_spi(uint8_t bus_index)
 {
     uint8_t mode_pin;
 
-    switch (bus_index) {
-    case MIKROBUS_1:
-        mode_pin = MIKROBUS_1_AN;
-        break;
-    case MIKROBUS_2:
-        mode_pin = MIKROBUS_2_AN;
-        break;
-    default:
+    if (gpio_get_pin(bus_index, TYPE_AN, &mode_pin) < 0)
         return -1;
-    }
 
     if (gpio_init(mode_pin) < 0
     || gpio_set_direction(mode_pin, GPIO_OUTPUT) < 0
@@ -1544,6 +1502,7 @@ int eve_click_snapshot(uint32_t ptr, uint8_t *data)
 {
     uint32_t buffer[2];
     uint32_t total_bytes_to_read = 480 * 272 * 2;
+    uint32_t maximum_tranfer_length = 0;
 
     if (ft800_enabled == false)
         return -1;
@@ -1569,13 +1528,16 @@ int eve_click_snapshot(uint32_t ptr, uint8_t *data)
         return -1;
     }
 
-    /* Read in chunk of max 4092 bytes because SPI driver fails to do transfer
-     * of more than 4kB.
-     */
+    if (spi_get_maximum_tranfer_length(&maximum_tranfer_length) < 0)
+        maximum_tranfer_length = FIFO_SIZE;
+    else
+        maximum_tranfer_length &= ~0x3;
+    maximum_tranfer_length -= FIFO_CMD_SIZE;
+
     while (total_bytes_to_read > 0) {
         uint32_t count = total_bytes_to_read;
-        if (count > (FIFO_SIZE - FIFO_CMD_SIZE))
-            count = FIFO_SIZE - FIFO_CMD_SIZE;
+        if (count > maximum_tranfer_length)
+            count = maximum_tranfer_length;
 
         if (memory_read(ptr, data, count) < 0)
             return -1;
@@ -1649,7 +1611,7 @@ void eve_click_attach_touch_event_callback(void (*callback)(void))
 
 int eve_click_calibrate(void)
 {
-    bool prev_buffering = true;
+    bool prev_buffering = eve_click_is_buffering_enabled();
     bool calibration_failure = false;
     uint16_t offset = 0;
     uint32_t result = 0;
@@ -1657,7 +1619,6 @@ int eve_click_calibrate(void)
     /* Discard any previous content in cmds */
     cmd_cnt = 0;
 
-    prev_buffering = eve_click_is_buffering_enabled();
     eve_click_enable_buffering();
 
     if (parse_coprocessor_vcmd(FT800_DLSTART) < 0

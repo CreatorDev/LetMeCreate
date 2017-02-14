@@ -174,7 +174,7 @@ int led_configure_timer_mode(uint8_t mask)
         }
     }
 
-    return led_set_delay(ALL_LEDS, 0, 500);
+    return led_set_delay(mask, 0, 500);
 }
 
 int led_get_mode(uint8_t led_index, uint8_t *led_mode)
@@ -255,6 +255,10 @@ int led_set_delay(uint8_t mask, uint32_t delay_on, uint32_t delay_off)
 int led_release(void)
 {
     int i = 0;
+
+    /* Ensure that all LED's are in on/off mode before calling switch_off */
+    if (led_configure_on_off_mode(ALL_LEDS) < 0)
+        return -1;
 
     for (; i < LED_CNT; ++i) {
         if (fds[i] < 0)

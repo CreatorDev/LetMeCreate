@@ -12,36 +12,27 @@
 #define UART_1_DEVICE_FILE      "/dev/ttySC0"
 #define UART_2_DEVICE_FILE      "/dev/ttySC1"
 
-static int fds[2] = { -1, -1 };
-static uint32_t timeout_for_bus[2] = {UART_TIMEOUT_NEVER, UART_TIMEOUT_NEVER};
-static struct termios old_pts[2];
+static int fds[MIKROBUS_COUNT] = { -1, -1 };
+static uint32_t timeout_for_bus[MIKROBUS_COUNT] = {NO_TIMEOUT, NO_TIMEOUT};
+static struct termios old_pts[MIKROBUS_COUNT];
 static uint8_t current_mikrobus_index = MIKROBUS_1;
-
-static bool check_mikrobus_index(uint8_t mikrobus_index)
-{
-    if (mikrobus_index == MIKROBUS_1)
-        return true;
-    if (mikrobus_index == MIKROBUS_2)
-        return true;
-
-    fprintf(stderr, "uart: Invalid mikrobus_index\n.");
-    return false;
-}
 
 static int uart_init_bus(uint8_t mikrobus_index)
 {
     char *device_file = NULL;
     struct termios pts;
 
-    if (!check_mikrobus_index(mikrobus_index))
+    if (check_valid_mikrobus(mikrobus_index) < 0) {
+        fprintf(stderr, "uart: Invalid mikrobus_index\n.");
         return -1;
+    }
 
     if (fds[mikrobus_index] >= 0)
         return 0;
 
     if (mikrobus_index == MIKROBUS_1)
         device_file = UART_1_DEVICE_FILE;
-    else
+    else if (mikrobus_index == MIKROBUS_2)
         device_file = UART_2_DEVICE_FILE;
 
     if ((fds[mikrobus_index] = open(device_file, O_RDWR)) < 0) {
@@ -66,6 +57,7 @@ static int uart_init_bus(uint8_t mikrobus_index)
     pts.c_lflag = 0;
     pts.c_oflag = 0;
     pts.c_iflag &= ~(IXON | IXOFF | IXANY);
+    pts.c_iflag &= ~(IGNCR | INLCR | ICRNL);
     pts.c_cc[VMIN] = 1;
     pts.c_cc[VTIME] = 0;
 
@@ -83,15 +75,17 @@ static int uart_init_bus(uint8_t mikrobus_index)
         return -1;
     }
 
-    timeout_for_bus[mikrobus_index] = UART_TIMEOUT_NEVER;
+    timeout_for_bus[mikrobus_index] = NO_TIMEOUT;
 
     return 0;
 }
 
 static int uart_release_bus(uint8_t mikrobus_index)
 {
-    if (!check_mikrobus_index(mikrobus_index))
+    if (check_valid_mikrobus(mikrobus_index) < 0) {
+        fprintf(stderr, "uart: Invalid mikrobus_index\n.");
         return -1;
+    }
 
     if (fds[mikrobus_index] < 0)
         return 0;
@@ -277,14 +271,6 @@ int uart_send(const uint8_t *buffer, uint32_t count)
     return sent_cnt;
 }
 
-uint32_t uart_get_timeout() {
-    return timeout_for_bus[current_mikrobus_index];
-}
-
-void uart_set_timeout(uint32_t timeout) {
-    timeout_for_bus[current_mikrobus_index] = timeout;
-}
-
 int uart_receive(uint8_t *buffer, uint32_t count)
 {
     uint32_t received_cnt = 0;
@@ -305,7 +291,7 @@ int uart_receive(uint8_t *buffer, uint32_t count)
     uint32_t timeout = timeout_for_bus[current_mikrobus_index];
     while (received_cnt < count) {
         int ret;
-        if (timeout != UART_TIMEOUT_NEVER) {
+        if (timeout != NO_TIMEOUT) {
             fd_set set;
             struct timeval tmp_timeout;
             tmp_timeout.tv_sec = timeout / 1000;
@@ -333,6 +319,16 @@ int uart_receive(uint8_t *buffer, uint32_t count)
     }
 
     return received_cnt;
+}
+
+uint32_t uart_get_timeout(void)
+{
+    return timeout_for_bus[current_mikrobus_index];
+}
+
+void uart_set_timeout(uint32_t timeout)
+{
+    timeout_for_bus[current_mikrobus_index] = timeout;
 }
 
 int uart_release(void)

@@ -283,8 +283,8 @@ int gpio_monitor_add_callback(uint8_t gpio_pin, uint8_t event_mask, void(*callba
 {
     struct gpio_watch *watch = NULL;
 
-    if (event_mask == 0) {
-        fprintf(stderr, "gpio_monitor: event_mask is invalid (must not be zero).\n");
+    if ((event_mask & GPIO_EDGE) == 0) {
+        fprintf(stderr, "gpio_monitor: event_mask is invalid.\n");
         return -1;
     }
 

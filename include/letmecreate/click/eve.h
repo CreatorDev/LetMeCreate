@@ -13,6 +13,10 @@
 #ifndef __LETMECREATE_CLICK_EVE_H__
 #define __LETMECREATE_CLICK_EVE_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdbool.h>
 #include <stdint.h>
 #include <letmecreate/click/ft800_defs.h>
@@ -427,4 +431,9 @@ int LETMECREATE_CLICK_EXPORT eve_click_get_calibration_matrix(uint32_t *a, uint3
  */
 int LETMECREATE_CLICK_EXPORT eve_click_set_calibration_matrix(uint32_t a, uint32_t b, uint32_t c,
                                                               uint32_t d, uint32_t e, uint32_t f);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

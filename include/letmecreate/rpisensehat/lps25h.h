@@ -8,6 +8,10 @@
 #ifndef __LETMECREATE_RPISENSEHAT_LPS25H_H__
 #define __LETMECREATE_RPISENSEHAT_LPS25H_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 /**
  * @brief Enable sensor.
  *
@@ -31,5 +35,9 @@ int lps25h_get_pressure_measure(float *pressure);
  * @return 0 if successful, -1 otherwise
  */
 int lps25h_disable(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

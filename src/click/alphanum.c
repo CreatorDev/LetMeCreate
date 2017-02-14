@@ -1,9 +1,11 @@
 #include <ctype.h>
+#include <pthread.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 #include <letmecreate/click/alphanum.h>
+#include <letmecreate/click/common.h>
 #include <letmecreate/core/common.h>
 #include <letmecreate/core/gpio.h>
 #include <letmecreate/core/spi.h>
@@ -11,6 +13,9 @@
 static uint8_t gpio_pin_le2 = 0;
 static uint8_t gpio_pin_oe = 0;
 static uint8_t gpio_pin_oe2 = 0;
+static pthread_t thread;
+static pthread_mutex_t mutex;
+static volatile bool thread_running = false;
 
 /*
  * Translation table between a character and a 14 segment display value.
@@ -72,6 +77,37 @@ static const uint16_t alphanum_click_char_table[51] = {
     0x0800,        // '_'
 };
 
+static void select_left_display(void)
+{
+    gpio_set_value(gpio_pin_oe, 1);
+    gpio_set_value(gpio_pin_oe2, 0);
+}
+
+static void select_right_display(void)
+{
+    gpio_set_value(gpio_pin_oe2, 1);
+    gpio_set_value(gpio_pin_oe, 0);
+}
+
+static void* refresh_display(void __attribute__ ((unused))*arg)
+{
+    thread_running = true;
+
+    while (thread_running) {
+        pthread_mutex_lock(&mutex);
+        select_left_display();
+        pthread_mutex_unlock(&mutex);
+        sleep_ms(5);
+
+        pthread_mutex_lock(&mutex);
+        select_right_display();
+        pthread_mutex_unlock(&mutex);
+        sleep_ms(5);
+    }
+
+    return NULL;
+}
+
 /*
  * Convert char to 14 segment display value.
  */
@@ -97,60 +133,79 @@ int alphanum_click_get_char(char c, uint16_t *value)
  */
 int alphanum_click_raw_write(uint16_t a, uint16_t b)
 {
+    int ret = 0;
+
+    /* Acquire lock to ensure that the display is not refreshed when writing
+     * new characters.
+     */
+    pthread_mutex_lock(&mutex);
+
     /* Set all GPIO to 1 */
     if (gpio_set_value(gpio_pin_le2, 1) < 0
     ||  gpio_set_value(gpio_pin_oe, 1) < 0
-    ||  gpio_set_value(gpio_pin_oe2, 1) < 0)
-        return -1;
+    ||  gpio_set_value(gpio_pin_oe2, 1) < 0) {
+        ret = -1;
+        goto alphanum_click_raw_write_end;
+    }
 
     /* Write b */
     if (spi_transfer((uint8_t *) &b, NULL, sizeof(b)) < 0) {
         fprintf(stderr, "alphanum: spi write register failed.\n");
-        return -1;
+        ret = -1;
+        goto alphanum_click_raw_write_end;
     }
 
     /* Enable output A */
     if (gpio_set_value(gpio_pin_oe, 0)) {
         fprintf(stderr, "alphanum: Cannot set value\n");
-        return -1;
+        ret = -1;
+        goto alphanum_click_raw_write_end;
     }
 
     /* Write a */
     if (spi_transfer((uint8_t *) &a, NULL, sizeof(a)) < 0) {
         fprintf(stderr, "spi write register failed.\n");
-        return -1;
+        ret = -1;
+        goto alphanum_click_raw_write_end;
     }
 
     /* Latch B */
     if (gpio_set_value(gpio_pin_le2, 0)) {
         fprintf(stderr, "alphanum: cannot set value\n");
-        return -1;
+        ret = -1;
+        goto alphanum_click_raw_write_end;
     }
 
     /* Disable Latch B */
     if (gpio_set_value(gpio_pin_le2, 1)) {
         fprintf(stderr, "alphanum: cannot set value\n");
-        return -1;
+        ret = -1;
+        goto alphanum_click_raw_write_end;
     }
 
     /* Enable, disable B */
     if (gpio_set_value(gpio_pin_oe2, 0)) {
         fprintf(stderr, "alphanum: cannot set value\n");
-        return -1;
+        ret = -1;
+        goto alphanum_click_raw_write_end;
     }
 
     if (gpio_set_value(gpio_pin_oe2, 1)) {
         fprintf(stderr, "alphanum: cannot set value\n");
-        return -1;
+        ret = -1;
+        goto alphanum_click_raw_write_end;
     }
 
     /* Enable a */
     if (gpio_set_value(gpio_pin_oe, 0)) {
         fprintf(stderr, "alphanum: cannot set value\n");
-        return -1;
+        ret = -1;
+        goto alphanum_click_raw_write_end;
     }
 
-    return 0;
+alphanum_click_raw_write_end:
+    pthread_mutex_unlock(&mutex);
+    return ret;
 }
 
 /*
@@ -173,22 +228,16 @@ int alphanum_click_write(char a, char b)
  */
 int alphanum_click_init(uint8_t bus)
 {
-    /* Setup GPIO */
-    switch(bus) {
-        case MIKROBUS_1:
-            gpio_pin_le2 = MIKROBUS_1_RST;
-            gpio_pin_oe = MIKROBUS_1_INT;
-            gpio_pin_oe2 = MIKROBUS_1_PWM;
-            break;
-        case MIKROBUS_2:
-            gpio_pin_le2 = MIKROBUS_2_RST;
-            gpio_pin_oe = MIKROBUS_2_INT;
-            gpio_pin_oe2 = MIKROBUS_2_PWM;
-            break;
-        default:
-            fprintf(stderr, "alphanum: Invalid mikrobus index.\n");
-            return -1;
+    if (check_valid_mikrobus(bus) < 0) {
+        fprintf(stderr, "alphanum: Invalid mikrobus index.\n");
+        return -1;
     }
+
+    /* Setup GPIO */
+    if (gpio_get_pin(bus, TYPE_RST, &gpio_pin_le2) < 0
+    ||  gpio_get_pin(bus, TYPE_INT, &gpio_pin_oe) < 0
+    ||  gpio_get_pin(bus, TYPE_PWM, &gpio_pin_oe2) < 0)
+        return -1;
 
     /* Init GPIO pins */
     if (gpio_init(gpio_pin_le2) < 0
@@ -202,23 +251,33 @@ int alphanum_click_init(uint8_t bus)
     ||  gpio_set_direction(gpio_pin_oe2, GPIO_OUTPUT) < 0)
         return -1;
 
-    return alphanum_click_select_left_display();
-}
-
-int alphanum_click_select_left_display(void)
-{
-    if (gpio_set_value(gpio_pin_oe, 1) < 0
-    ||  gpio_set_value(gpio_pin_oe2, 0) < 0)
+    if (pthread_mutex_init(&mutex, NULL) != 0) {
+        fprintf(stderr, "alphanum: Error while initialising mutex\n");
         return -1;
+    }
+
+    if (pthread_create(&thread, NULL, refresh_display, NULL) < 0) {
+        pthread_mutex_destroy(&mutex);
+        return -1;
+    }
 
     return 0;
 }
 
-int alphanum_click_select_right_display(void)
+int alphanum_click_release(void)
 {
-    if (gpio_set_value(gpio_pin_oe2, 1) < 0
-    ||  gpio_set_value(gpio_pin_oe, 0) < 0)
-        return -1;
+    int ret = 0;
 
-    return 0;
+    thread_running = false;
+    if (pthread_join(thread, NULL))
+        ret = -1;
+    if (pthread_mutex_destroy(&mutex) < 0)
+        ret = -1;
+
+    if (gpio_release(gpio_pin_le2) < 0
+    ||  gpio_release(gpio_pin_oe) < 0
+    ||  gpio_release(gpio_pin_oe2) < 0)
+        ret = -1;
+
+    return ret;
 }

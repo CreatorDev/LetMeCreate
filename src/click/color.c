@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <time.h>
 #include <letmecreate/click/common.h>
 #include <letmecreate/click/color.h>
 #include <letmecreate/core/i2c.h>
@@ -16,17 +15,6 @@
 #define INCREMENT_TRANSACTION   (0xA0) // successive reads read from successive registers
 #define RGBC_VALID_BIT          (0x01) // data is available
 
-void sleep_5ms(void)
-{
-    struct timespec req = {}, rem = {
-        .tv_sec = 0,
-        .tv_nsec = 5000000
-    };
-
-    while (nanosleep(&req, &rem))
-        req = rem;
-}
-
 int color_click_enable(void)
 {
     if (i2c_write_register(TCS3471_ADDRESS,
@@ -37,7 +25,7 @@ int color_click_enable(void)
     }
 
     /* Wait 5ms to ensure that device has at least 2.4ms before the first measurement request. */
-    sleep_5ms();
+    sleep_ms(5);
 
     return 0;
 }

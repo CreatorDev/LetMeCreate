@@ -28,6 +28,10 @@
 #ifndef __LETMECREATE_CLICK_WEATHER_H__
 #define __LETMECREATE_CLICK_WEATHER_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <letmecreate/click/export.h>
 
 /**
@@ -51,5 +55,9 @@ int LETMECREATE_CLICK_EXPORT weather_click_enable(void);
  * @return 0 if success otherwise -1
  */
 int LETMECREATE_CLICK_EXPORT weather_click_disable(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __LETMECREATE_CLICK_WEATHER_H__ */

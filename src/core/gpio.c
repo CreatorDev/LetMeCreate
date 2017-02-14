@@ -42,10 +42,16 @@
 #include <unistd.h>
 #include <letmecreate/core/gpio.h>
 #include <letmecreate/core/common.h>
+#include <letmecreate/core/pwm.h>
 
 #define GPIO_DIR_BASE_PATH      "/sys/class/gpio/"
 #define GPIO_PATH_FORMAT        "/sys/class/gpio/gpio%d/%s"
 
+
+static const uint8_t pin_lookup[MIKROBUS_COUNT][TYPE_COUNT] = {
+  { MIKROBUS_1_AN, MIKROBUS_1_RST, MIKROBUS_1_PWM, MIKROBUS_1_INT },
+  { MIKROBUS_2_AN, MIKROBUS_2_RST, MIKROBUS_2_PWM, MIKROBUS_2_INT }
+};
 
 static bool check_pin(uint8_t pin)
 {
@@ -159,6 +165,16 @@ int gpio_init(uint8_t gpio_pin)
     if (!check_pin(gpio_pin))
         return -1;
 
+    /* Ensure that PWM GPIO's are not used as PWM output at the same time */
+    switch (gpio_pin) {
+    case MIKROBUS_1_PWM:
+        pwm_release(MIKROBUS_1);
+        break;
+    case MIKROBUS_2_PWM:
+        pwm_release(MIKROBUS_2);
+        break;
+    }
+
     /* Export a GPIO by writing its index to file /sys/class/gpio/export. */
     if (!is_gpio_exported(gpio_pin)) {
         if (export_pin(GPIO_DIR_BASE_PATH, gpio_pin) < 0)
@@ -166,6 +182,58 @@ int gpio_init(uint8_t gpio_pin)
     }
 
     return gpio_set_direction(gpio_pin, GPIO_INPUT);
+}
+
+int gpio_get_pin(uint8_t mikrobus_index, uint8_t pin_type, uint8_t * pin)
+{
+    if (pin == NULL) {
+        fprintf(stderr, "gpio: Pin cannot be null\n");
+        return -1;
+    }
+
+    if (check_valid_mikrobus(mikrobus_index) < 0) {
+        fprintf(stderr, "gpio: Invalid mikrobus index\n");
+        return -1;
+    }
+
+    if (pin_type >= TYPE_COUNT) {
+        fprintf(stderr, "gpio: Invalid pin type\n");
+        return -1;
+    }
+
+    *pin = pin_lookup[mikrobus_index][pin_type];
+    return 0;
+}
+
+int gpio_get_type(uint8_t gpio_pin, uint8_t *pin_type)
+{
+    if (pin_type == NULL) {
+        fprintf(stderr, "gpio: Cannot store type using null pointer.\n");
+        return -1;
+    }
+
+    switch (gpio_pin) {
+    case MIKROBUS_1_AN:
+    case MIKROBUS_2_AN:
+        *pin_type = TYPE_AN;
+        break;
+    case MIKROBUS_1_RST:
+    case MIKROBUS_2_RST:
+        *pin_type = TYPE_RST;
+        break;
+    case MIKROBUS_1_PWM:
+    case MIKROBUS_2_PWM:
+        *pin_type = TYPE_PWM;
+        break;
+    case MIKROBUS_1_INT:
+    case MIKROBUS_2_INT:
+        *pin_type = TYPE_INT;
+        break;
+    default:
+        return -1;
+    }
+
+    return 0;
 }
 
 int gpio_set_direction(uint8_t gpio_pin, uint8_t dir)
@@ -179,6 +247,9 @@ int gpio_set_direction(uint8_t gpio_pin, uint8_t dir)
 
     /* Only strings "out" and "in" can be written to file /sys/class/gpio/gpioN/direction/ */
     if (dir == GPIO_OUTPUT) {
+        /* Remove any existing IRQ on gpio */
+        if (write_str_gpio_file(gpio_pin, "edge", "none") < 0)
+            return -1;
         strcpy(str, "out");
     } else if (dir == GPIO_INPUT) {
         strcpy(str, "in");

@@ -8,6 +8,10 @@
 #ifndef __LETMECREATE_CLICK_FAN_H__
 #define __LETMECREATE_CLICK_FAN_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdint.h>
 #include <letmecreate/click/export.h>
 
@@ -27,5 +31,9 @@ int LETMECREATE_CLICK_EXPORT fan_click_init(void);
  * @return 0 if successful, -1 otherwise
  */
 int LETMECREATE_CLICK_EXPORT fan_click_set_speed(uint16_t rpm);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

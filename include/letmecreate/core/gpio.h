@@ -1,6 +1,6 @@
 /**
  * @file gpio.h
- * @author Francois Berder
+ * @author Francois Berder, Michal Tusnio
  * @date 2016
  * @copyright 3-clause BSD
  */
@@ -9,8 +9,21 @@
 #ifndef __LETMECREATE_CORE_GPIO_H__
 #define __LETMECREATE_CORE_GPIO_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdint.h>
 #include <letmecreate/core/export.h>
+
+/** Mikrobus pin type */
+enum PIN_TYPE {
+    TYPE_AN,
+    TYPE_RST,
+    TYPE_PWM,
+    TYPE_INT,
+    TYPE_COUNT
+};
 
 /** GPIO pin number */
 enum GPIO_PIN {
@@ -85,6 +98,27 @@ enum GPIO_DIR {
 int LETMECREATE_CORE_EXPORT gpio_init(uint8_t gpio_pin);
 
 /**
+ * @brief Returns GPIO index of a pin on provided mikrobus
+ *
+ * @param[in] mikrobus_index Index of the Mikrobus
+ * @param[in] pin_type Type of the desired pin
+ * @param[out] pin Pointer to a variable awaiting the pin index
+ * @return 0 if successful, -1 otherwise
+ */
+int LETMECREATE_CORE_EXPORT gpio_get_pin(uint8_t mikrobus_index, uint8_t pin_type, uint8_t * pin);
+
+/**
+ * @brief Returns the type of a GPIO
+ *
+ * Note that not all GPIO's have an associated type. In that case, -1 is returned.
+ *
+ * @param[in] gpio_pin
+ * @param[out] pin_type Pointer to a variable awaiting the type of pin (see #PIN_TYPE)
+ * @return 0 if successful, -1 otherwise
+ */
+int LETMECREATE_CORE_EXPORT gpio_get_type(uint8_t gpio_pin, uint8_t *pin_type);
+
+/**
  * @brief Configure GPIO as input or output.
  *
  * @param[in] gpio_pin Index of the GPIO
@@ -131,5 +165,9 @@ int LETMECREATE_CORE_EXPORT gpio_get_value(uint8_t gpio_pin, uint8_t *value);
  * @return 0 if successful, -1 otherwise
  */
 int LETMECREATE_CORE_EXPORT gpio_release(uint8_t gpio_pin);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

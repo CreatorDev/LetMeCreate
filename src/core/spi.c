@@ -175,6 +175,16 @@ int spi_transfer(const uint8_t *tx_buffer, uint8_t *rx_buffer, uint32_t count)
     return 0;
 }
 
+int spi_get_maximum_tranfer_length(uint32_t *tranfer_length_limit)
+{
+    if (tranfer_length_limit == NULL) {
+        fprintf(stderr, "spi: Cannot store transfer length limit using null pointer\n");
+        return -1;
+    }
+
+    return read_int_file("/sys/module/spidev/parameters/bufsiz", tranfer_length_limit);
+}
+
 int spi_release(void)
 {
     if (spi_release_bus(MIKROBUS_1) < 0) {

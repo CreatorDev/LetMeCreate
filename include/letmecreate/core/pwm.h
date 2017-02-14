@@ -9,6 +9,10 @@
 #ifndef __LETMECREATE_CORE_PWM_H__
 #define __LETMECREATE_CORE_PWM_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdint.h>
 #include <letmecreate/core/export.h>
 
@@ -105,5 +109,9 @@ int LETMECREATE_CORE_EXPORT pwm_disable(uint8_t mikrobus_index);
  * @return 0 if successful, -1 otherwise
  */
 int LETMECREATE_CORE_EXPORT pwm_release(uint8_t mikrobus_index);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

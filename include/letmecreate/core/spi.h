@@ -9,6 +9,10 @@
 #ifndef __LETMECREATE_CORE_SPI_H__
 #define __LETMECREATE_CORE_SPI_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdint.h>
 #include <letmecreate/core/export.h>
 
@@ -91,10 +95,25 @@ uint8_t LETMECREATE_CORE_EXPORT spi_get_current_bus(void);
 int LETMECREATE_CORE_EXPORT spi_transfer(const uint8_t *tx_buffer, uint8_t *rx_buffer, uint32_t count);
 
 /**
+ * @brief Get the transfer length limit of spidev driver
+ *
+ * This function reads the bufsiz parameter of the spidev driver at
+ * /sys/module/spidev/parameters/bufsiz.
+ *
+ * @param[in] tranfer_length_limit (must not be null)
+ * @return 0 if successful, -1 otherwise
+ */
+int LETMECREATE_CORE_EXPORT spi_get_maximum_tranfer_length(uint32_t *tranfer_length_limit);
+
+/**
  * @brief Close all file descriptors.
  *
  * @return 0 if successful, otherwise it returns -1.
  */
 int LETMECREATE_CORE_EXPORT spi_release(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

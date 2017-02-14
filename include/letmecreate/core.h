@@ -9,6 +9,10 @@
 #ifndef __LETMECREATE_CORE_H__
 #define __LETMECREATE_CORE_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <letmecreate/core/adc.h>
 #include <letmecreate/core/common.h>
 #include <letmecreate/core/gpio.h>
@@ -19,5 +23,9 @@
 #include <letmecreate/core/spi.h>
 #include <letmecreate/core/switch.h>
 #include <letmecreate/core/uart.h>
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -5,10 +5,14 @@
  * This polling activity is executed in a different thread to avoid blocking the
  * rest of the application. This thread is called the monitoring thread.
  *
- * The monitoring thread waits for events being written to /dev/input/event1. To do
- * so, it relies on the poll function whose return value indicates if some data can
- * be read or not. Once an event is read, the monitoring thread iterates through
- * the list of callbacks and call those who subscribed to this event. Notice, that
+ * At initilisation, the wrapper reads /proc/bus/input/devices which contains
+ * the list of input devices and their associated file in /dev/input.
+ *
+ * The monitoring thread waits for events being written to one of the input
+ * file (typicall /dev/input/event0 or /dev/input/event1). To do so, it relies
+ * on the poll function whose return value indicates if some data can be read
+ * or not. Once an event is read, the monitoring thread iterates through the
+ * list of callbacks and call those who subscribed to this event. Notice, that
  * the monitoring thread never modifies (add/remove entries) the callback list.
  *
  * The rest of the code is executed in the main thread. To ensure that the
@@ -23,12 +27,13 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <letmecreate/core/common.h>
 #include <letmecreate/core/switch.h>
 
-#define DEVICE_FILE         "/dev/input/event0"
 #define TIMEOUT             (20)        /* 20 ms timeout while polling */
 #define SWITCH_1_CODE       (257)
 #define SWITCH_2_CODE       (258)
@@ -48,6 +53,50 @@ struct switch_callback
 };
 static struct switch_callback *callback_list_head = NULL;
 
+static int read_line(int fd, char *line)
+{
+    char c = 0;
+    while(read(fd, &c, 1) == 1) {
+        if (c == '\n') {
+            *line = '\0';
+            return 0;
+        }
+        *line = c;
+        ++line;
+    }
+
+    return -1;
+}
+
+static int find_file_descriptor(char *file_descriptor_path)
+{
+    int ret = 0;
+    char line[MAX_STR_LENGTH];
+    char file_descriptor_name[30];
+    bool found_gpio_keys_device = false;
+
+    if ((fd = open("/proc/bus/input/devices", O_RDONLY)) < 0) {
+        fprintf(stderr, "switch: Failed to open /proc/bus/input/devices.\n");
+        return -1;
+    }
+
+    while((ret = read_line(fd, line)) == 0) {
+        if (strstr(line, "N: Name=\"gpio_keys\"") != NULL)
+            found_gpio_keys_device = true;
+
+        if (found_gpio_keys_device
+        && sscanf(line, "H: Handlers=%29s", file_descriptor_name) == 1) {
+            if (sprintf(file_descriptor_path, "/dev/input/%s", file_descriptor_name) < 0)
+                ret = -1;
+            goto find_file_descriptor_end;
+        }
+    }
+
+find_file_descriptor_end:
+    close(fd);
+    return ret;
+}
+
 static void process_event(uint8_t switch_event)
 {
     struct switch_callback *cur = NULL;
@@ -65,7 +114,6 @@ static void process_event(uint8_t switch_event)
 
 static void* switch_update(void __attribute__ ((unused))*arg)
 {
-    int ret;
     struct input_event event[2];
     struct pollfd pfd;
     pfd.fd = fd;
@@ -73,8 +121,11 @@ static void* switch_update(void __attribute__ ((unused))*arg)
 
     running = true;
     while (running) {
+        int ret;
         /*
-         * Polls on file /dev/input/event1.
+         * Polls on file returned by function find_file_descriptor
+         * (typically /dev/input/event0 or /dev/input/event1).
+         *
          * The timeout is set to 20ms. Hence, the function will return after at most
          * 20ms. This is required to ensure that the boolean variable running
          * is checked frequently. If no timeout was given and no events detected,
@@ -119,10 +170,15 @@ static void* switch_update(void __attribute__ ((unused))*arg)
 
 int switch_init(void)
 {
+    char file_descriptor_path[MAX_STR_LENGTH];
+
     if (fd >= 0)
         return 0;
 
-    if ((fd = open(DEVICE_FILE, O_RDONLY)) < 0) {
+    if (find_file_descriptor(file_descriptor_path) < 0)
+        return -1;
+
+    if ((fd = open(file_descriptor_path, O_RDONLY)) < 0) {
         fprintf(stderr, "switch: Error while opening device file\n");
         return -1;
     }

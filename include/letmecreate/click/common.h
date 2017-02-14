@@ -8,6 +8,10 @@
 #ifndef __LETMECREATE_CLICK_COMMON_H__
 #define __LETMECREATE_CLICK_COMMON_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdint.h>
 
 
@@ -19,5 +23,16 @@
  * @return 0 if successful, -1 otherwise
  */
 int spi_write_register(uint8_t reg_address, uint8_t data);
+
+/**
+ * @brief Sleep during X ms
+ *
+ * @param[in] ms
+ */
+void sleep_ms(uint32_t ms);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

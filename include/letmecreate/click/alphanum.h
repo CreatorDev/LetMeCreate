@@ -10,13 +10,20 @@
 #ifndef __LETMECREATE_CLICK_ALPHANUM_H__
 #define __LETMECREATE_CLICK_ALPHANUM_H__
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdint.h>
 #include <letmecreate/click/export.h>
 
 /**
  * @brief Initialise the Alphanum Click.
  *
- * During initialisation, the left display is selected.
+ * During initialisation, a thread is spawned and is in charge of selecting
+ * left and right display in turns to give the illusion that both displays are
+ * used at the same time. The refresh rate is 100Hz: selecting left display
+ * during 5ms, then selecting right display during 5ms.
  *
  * @param[in] mikrobus_index Index of the mikrobus (see #MIKROBUS_INDEX)
  * @return 0 if successful, -1 otherwise
@@ -58,17 +65,14 @@ int LETMECREATE_CLICK_EXPORT alphanum_click_write(char a, char b);
 int LETMECREATE_CLICK_EXPORT alphanum_click_raw_write(uint16_t a, uint16_t b);
 
 /**
- * @brief Select the left display.
+ * @brief Stop refreshing both displays.
  *
  * @return 0 if successful, -1 otherwise
  */
-int LETMECREATE_CLICK_EXPORT alphanum_click_select_left_display(void);
+int LETMECREATE_CLICK_EXPORT alphanum_click_release(void);
 
-/**
- * @brief Select the right display.
- *
- * @return 0 if successful, -1 otherwise
- */
-int LETMECREATE_CLICK_EXPORT alphanum_click_select_right_display(void);
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -1,13 +1,19 @@
 /**
  * @file switch.h
  * @author Francois Berder
- * @date 2016
+ * @date 2017
  * @copyright 3-clause BSD
+ *
+ * @example switch/main.c
  */
 
 
 #ifndef __LETMECREATE_CORE_SWITCH_H__
 #define __LETMECREATE_CORE_SWITCH_H__
+
+#ifdef __cplusplus
+extern "C"{
+#endif
 
 #include <stdint.h>
 #include <letmecreate/core/export.h>
@@ -51,5 +57,9 @@ int LETMECREATE_CORE_EXPORT switch_remove_callback(int callback_ID);
  * @return 0 if successful, -1 otherwise
  */
 int LETMECREATE_CORE_EXPORT switch_release(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

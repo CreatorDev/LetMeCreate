@@ -9,6 +9,14 @@
 #include <letmecreate/core/common.h>
 
 
+int check_valid_mikrobus(uint8_t mikrobus_index)
+{
+    if (mikrobus_index >= MIKROBUS_COUNT)
+        return -1;
+
+    return 0;
+}
+
 int write_str_file(const char *path, const char *str)
 {
     int fd = -1;
