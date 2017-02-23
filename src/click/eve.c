@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include <letmecreate/click/common.h>
 #include <letmecreate/click/eve.h>
 #include <letmecreate/click/ft800_defs.h>

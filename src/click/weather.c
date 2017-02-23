@@ -23,7 +23,6 @@
 #include <letmecreate/bosch/bme280.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <unistd.h>
 #include <time.h>
 
 static struct bme280_t bme280;
