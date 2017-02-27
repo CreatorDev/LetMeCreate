@@ -74,17 +74,53 @@ static int find_event_type(uint8_t gpio_pin, uint8_t *event_type)
 static void call_callbacks(uint8_t gpio_pin, uint8_t event_type)
 {
     struct gpio_watch *cur = NULL;
+    struct callback_list {
+        struct callback_list *next;
+        void(*callback)(uint8_t);
+    };
+    struct callback_list *head = NULL, *current_callback = NULL;
 
-    /* Call callbacks */
+
+    /* Create list of callback which must be called */
     pthread_mutex_lock(&gpio_watch_mutex);
     cur = gpio_watch_list_head;
     while (cur) {
-        if (cur->gpio_pin == gpio_pin && cur->event_mask & event_type)
-            cur->callback(event_type);
+        if (cur->gpio_pin != gpio_pin || (cur->event_mask & event_type) == 0) {
+            cur = cur->next;
+            continue;
+        }
 
+        struct callback_list *entry = malloc(sizeof(struct callback_list));
+        if (entry == NULL) {
+            fprintf(stderr, "gpio_monitor: Failed to create callback list entry.\n");
+            cur = cur->next;
+            continue;
+        }
+        entry->callback = cur->callback;
+
+        /* Add entry at the beginning of the list */
+        if (head == NULL)
+            entry->next = NULL;
+        else
+            entry->next = head;
+        head = entry;
         cur = cur->next;
     }
     pthread_mutex_unlock(&gpio_watch_mutex);
+
+    /* Iterate through callbacks in the list */
+    current_callback = head;
+    while (current_callback) {
+        current_callback->callback(event_type);
+        current_callback = current_callback->next;
+    }
+
+    /* Free all elements of the list */
+    while (head) {
+        struct callback_list *tmp = head->next;
+        free(head);
+        head = tmp;
+    }
 }
 
 static void* monitor_gpio(void __attribute__ ((unused))*arg)
