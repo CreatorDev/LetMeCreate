@@ -100,16 +100,51 @@ find_file_descriptor_end:
 static void process_event(uint8_t switch_event)
 {
     struct switch_callback *cur = NULL;
+    struct switch_callback_list {
+        void (*callback)(void);
+        struct switch_callback_list *next;
+    };
+    struct switch_callback_list *head = NULL, *current_callback = NULL;
 
+    /* Create list of callback which must be called */
     pthread_mutex_lock(&mutex);
     cur = callback_list_head;
     while (cur) {
-        if (cur->event_mask & switch_event)
-            cur->f();
+        if ((cur->event_mask & switch_event) == 0) {
+            cur = cur->next;
+            continue;
+        }
+        struct switch_callback_list *entry = malloc(sizeof(struct switch_callback_list));
+        if (entry == NULL) {
+            fprintf(stderr, "switch: Failed to create callback list entry.\n");
+            cur = cur->next;
+            continue;
+        }
+        entry->callback = cur->f;
 
+        /* Add entry at the beginning of the list */
+        if (head == NULL)
+            entry->next = NULL;
+        else
+            entry->next = head;
+        head = entry;
         cur = cur->next;
     }
     pthread_mutex_unlock(&mutex);
+
+    /* Iterate through callbacks in the list */
+    current_callback = head;
+    while (current_callback) {
+        current_callback->callback();
+        current_callback = current_callback->next;
+    }
+
+    /* Free all elements of the list */
+    while (head) {
+        struct switch_callback_list *tmp = head->next;
+        free(head);
+        head = tmp;
+    }
 }
 
 static void* switch_update(void __attribute__ ((unused))*arg)
