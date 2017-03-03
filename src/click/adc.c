@@ -8,7 +8,7 @@
 
 int adc_click_get_raw_value(uint8_t channel, uint16_t *value)
 {
-    uint8_t tx_buffer[3], rx_buffer[3] = {};
+    uint8_t tx_buffer[3], rx_buffer[3];
 
     if (channel >= ADC_CLICK_CHANNEL_COUNT) {
         fprintf(stderr, "adc click: Invalid channel.\n");

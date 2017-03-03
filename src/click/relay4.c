@@ -25,7 +25,7 @@
 
 #define RELAY4_PIN_COUNT        (4)
 
-static uint8_t relay4_pins[RELAY4_PIN_COUNT] = {};
+static uint8_t relay4_pins[RELAY4_PIN_COUNT];
 
 static bool check_valid_pin_index(uint8_t pin_index)
 {

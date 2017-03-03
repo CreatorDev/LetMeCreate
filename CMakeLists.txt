@@ -5,12 +5,14 @@ project(LetMeCreate)
 
 set(LETMECREATE_MAJOR_VERSION 1)
 set(LETMECREATE_MINOR_VERSION 5)
-set(LETMECREATE_PATCH_VERSION 1)
+set(LETMECREATE_PATCH_VERSION 2)
 set(LETMECREATE_VERSION ${LETMECREATE_MAJOR_VERSION}.${LETMECREATE_MINOR_VERSION}.${LETMECREATE_PATCH_VERSION})
 set(PROJECT_VERSION ${LETMECREATE_VERSION})
 
 option(BUILD_EXAMPLES "Build examples" OFF)
 option(BUILD_TESTS "Build tests" OFF)
+option(BUILD_SHARED "Build shared libraries" ON)
+option(BUILD_STATIC "Build static libraries" ON)
 
 file(GLOB bosch_srcs src/bosch/*.c)
 file(GLOB core_srcs src/core/*.c)
@@ -25,30 +27,38 @@ file(GLOB rpisensehat_hdrs include/letmecreate/rpisensehat/*.h)
 include_directories(include)
 
 # Create targets
-add_library(letmecreate_core SHARED ${core_srcs} ${core_hdrs})
-add_library(letmecreate_click SHARED ${click_srcs} ${click_hdrs})
-add_library(letmecreate_bosch SHARED ${bosch_srcs} ${bosch_hdrs})
-add_library(letmecreate_rpisensehat SHARED ${rpisensehat_srcs} ${rpisensehat_hdrs})
-target_link_libraries(letmecreate_core pthread)
-target_link_libraries(letmecreate_click letmecreate_core letmecreate_bosch)
-target_link_libraries(letmecreate_rpisensehat letmecreate_core)
+if(BUILD_SHARED)
+    add_library(letmecreate_core SHARED ${core_srcs} ${core_hdrs})
+    add_library(letmecreate_click SHARED ${click_srcs} ${click_hdrs})
+    add_library(letmecreate_bosch SHARED ${bosch_srcs} ${bosch_hdrs})
+    add_library(letmecreate_rpisensehat SHARED ${rpisensehat_srcs} ${rpisensehat_hdrs})
+    target_link_libraries(letmecreate_core pthread)
+    target_link_libraries(letmecreate_click letmecreate_core letmecreate_bosch)
+    target_link_libraries(letmecreate_rpisensehat letmecreate_core)
+    # Export symbols
+    include(GenerateExportHeader)
+    generate_export_header(letmecreate_bosch EXPORT_FILE_NAME "include/letmecreate/bosch/export.h")
+    generate_export_header(letmecreate_core EXPORT_FILE_NAME "include/letmecreate/core/export.h")
+    generate_export_header(letmecreate_click EXPORT_FILE_NAME "include/letmecreate/click/export.h")
+    generate_export_header(letmecreate_rpisensehat EXPORT_FILE_NAME "include/letmecreate/rpisensehat/export.h")
+    set_target_properties(letmecreate_bosch PROPERTIES C_VISIBILITY_PRESET hidden)
+    set_target_properties(letmecreate_core PROPERTIES C_VISIBILITY_PRESET hidden)
+    set_target_properties(letmecreate_click PROPERTIES C_VISIBILITY_PRESET hidden)
+    set_target_properties(letmecreate_rpisensehat PROPERTIES C_VISIBILITY_PRESET hidden)
+endif()
 
-# Export symbols
-include(GenerateExportHeader)
-generate_export_header(letmecreate_bosch EXPORT_FILE_NAME "include/letmecreate/bosch/export.h")
-generate_export_header(letmecreate_core EXPORT_FILE_NAME "include/letmecreate/core/export.h")
-generate_export_header(letmecreate_click EXPORT_FILE_NAME "include/letmecreate/click/export.h")
-generate_export_header(letmecreate_rpisensehat EXPORT_FILE_NAME "include/letmecreate/rpisensehat/export.h")
-set_target_properties(letmecreate_bosch PROPERTIES C_VISIBILITY_PRESET hidden)
-set_target_properties(letmecreate_core PROPERTIES C_VISIBILITY_PRESET hidden)
-set_target_properties(letmecreate_click PROPERTIES C_VISIBILITY_PRESET hidden)
-set_target_properties(letmecreate_rpisensehat PROPERTIES C_VISIBILITY_PRESET hidden)
+if(BUILD_STATIC)
+    add_library(letmecreate_core_s STATIC ${core_srcs} ${core_hdrs})
+    add_library(letmecreate_click_s STATIC ${click_srcs} ${click_hdrs})
+    add_library(letmecreate_bosch_s STATIC ${bosch_srcs} ${bosch_hdrs})
+    add_library(letmecreate_rpisensehat_s STATIC ${rpisensehat_srcs} ${rpisensehat_hdrs})
+endif()
 
 # Enable warnings
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wextra -ggdb3")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wall -Wextra -O2")
 
-
+if(BUILD_SHARED)
 target_include_directories(
     letmecreate_core PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>"
@@ -69,6 +79,30 @@ target_include_directories(
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>"
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
 )
+endif()
+
+if(BUILD_STATIC)
+target_include_directories(
+    letmecreate_core_s PUBLIC
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>"
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
+)
+target_include_directories(
+    letmecreate_click_s PUBLIC
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>"
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
+)
+target_include_directories(
+    letmecreate_bosch_s PUBLIC
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>"
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
+)
+target_include_directories(
+    letmecreate_rpisensehat_s PUBLIC
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>"
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
+)
+endif()
 
 
 set(config_install_dir "lib/cmake/${PROJECT_NAME}")
@@ -94,6 +128,7 @@ configure_package_config_file(
     INSTALL_DESTINATION "${config_install_dir}"
 )
 
+if(BUILD_SHARED)
 install(
     TARGETS letmecreate_core letmecreate_click letmecreate_bosch letmecreate_rpisensehat
     EXPORT "${targets_export_name}"
@@ -102,6 +137,19 @@ install(
     RUNTIME DESTINATION "bin"
     INCLUDES DESTINATION "${include_install_dir}"
 )
+endif()
+
+if(BUILD_STATIC)
+install(
+    TARGETS letmecreate_core_s letmecreate_click_s letmecreate_bosch_s letmecreate_rpisensehat_s
+    EXPORT "${targets_export_name}"
+    LIBRARY DESTINATION "lib"
+    ARCHIVE DESTINATION "lib"
+    RUNTIME DESTINATION "bin"
+    INCLUDES DESTINATION "${include_install_dir}"
+)
+endif()
+
 
 install(
     DIRECTORY "include/letmecreate"
