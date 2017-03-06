@@ -24,6 +24,7 @@ extern "C"{
 #include <letmecreate/click/color.h>
 #include <letmecreate/click/color2.h>
 #include <letmecreate/click/common.h>
+#include <letmecreate/click/dc_motor.h>
 #include <letmecreate/click/eve.h>
 #include <letmecreate/click/fan.h>
 #include <letmecreate/click/gyro.h>
