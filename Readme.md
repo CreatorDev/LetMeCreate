@@ -30,14 +30,14 @@ MikroClick board supported:
 |7Seg|8x8R (Led Matrix)|Accel|
 |ADC|Air quality|Alcohol|
 |Alphanum|Bargraph|CO|
-|Color|Color2|EVE|
-|Fan|GYRO|IR distance|
-|IR eclipse|Joystick|Light|
-|LIN Hall|Lora|Motion|
-|OLED|Opto|Proximity|
-|Relay (partial support)|Relay2|Relay4 (partial support)|
-|RTC|Thermo3|UNI Hall|
-|Weather|||
+|Color|Color2|DC motor|
+|EVE|Fan|GYRO|
+|IR distance|IR eclipse|Joystick|
+|Light|LIN Hall|Lora|
+|Motion|OLED|Opto|
+|Proximity|Relay (partial support)|Relay2|
+|Relay4 (partial support)|RTC|Thermo3|
+|UNI Hall|Weather||
 
 The Raspberry PI sense Hat is supported by the library, except the EEPROM because the pins are not connected on the I2C bus. The atmel chip is confusing the I2C driver of the Ci40 which makes it sometimes impossible to communicate with the hat. Inserting the hat after the board finished booting often solves the issue (assuming it does not cause a reset of the Ci40 because of a brown-out reset).
 
