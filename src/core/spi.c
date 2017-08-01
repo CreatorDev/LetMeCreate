@@ -1,4 +1,5 @@
 #include <sys/ioctl.h>
+#include <linux/ioctl.h>
 #include <linux/spi/spidev.h>
 #include <fcntl.h>
 #include <errno.h>
